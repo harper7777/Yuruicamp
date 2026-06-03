@@ -2710,6 +2710,17 @@ hr {
    商品詳情頁 (Product Detail)
    ======================================== */
 
+/* 平均評分星星：進度條背景效果 */
+#productStars {
+  background: linear-gradient(90deg, #f59e0b var(--rating-percent, 0%), #e5e7eb var(--rating-percent, 0%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+}
+
 .product-detail-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -110,17 +110,27 @@ function renderProductInfo(product) {
   const nameEl = document.getElementById('productName');
   if (nameEl) nameEl.textContent = product.name || '';
 
-  // 評分星星（四捨五入到最近的 0.5）
-  // Rating stars (rounded to nearest 0.5)
-  const rating = product.rating || 0;
+  // 評分星星（根據 review-card 的星數平均）
+  // Rating stars (average of review-card star values)
+  const reviewRatings = getReviewCardRatings();
+  const averageRating = reviewRatings.length
+    ? reviewRatings.reduce((sum, value) => sum + value, 0) / reviewRatings.length
+    : null;
+  const rating = averageRating !== null ? averageRating : product.rating || 0;
+  const reviewCount = reviewRatings.length || product.reviews || 0;
+
   const starsEl = document.getElementById('productStars');
   if (starsEl) {
     starsEl.textContent = renderStars(rating);
+    starsEl.setAttribute('data-rating', rating.toFixed(2));
+    // 設定 CSS 變數以支援進度條背景
+    const ratingPercent = (rating / 5) * 100;
+    starsEl.style.setProperty('--rating-percent', `${ratingPercent}%`);
   }
   const ratingNumEl = document.getElementById('productRatingNum');
   if (ratingNumEl) ratingNumEl.textContent = rating.toFixed(1);
   const reviewCountEl = document.getElementById('productReviewCount');
-  if (reviewCountEl) reviewCountEl.textContent = `（${product.reviews || 0} 則評價）`;
+  if (reviewCountEl) reviewCountEl.textContent = `（${reviewCount} 則評價）`;
 
   // 現價 Current price
   const priceEl = document.getElementById('productPrice');
@@ -164,21 +174,63 @@ function renderProductInfo(product) {
 }
 
 /**
- * 把數字評分轉成星星字串
- * Convert numeric rating to star string
+ * 把數字評分轉成星星字串（純★☆格式）
+ * Convert numeric rating to star string (★ and ☆ only)
  * @param {number} rating - 評分（0~5）
- * @returns {string} - 星星字串，例：'★★★★☆'
+ * @returns {string} - 星星字串，例：'★★★☆☆'
  */
 function renderStars(rating) {
-  const fullStars = Math.floor(rating);      // 實心星星數
-  const hasHalfStar = rating % 1 >= 0.5;    // 是否有半顆星
-  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0); // 空心星星數
+  const filledStars = Math.round(rating);    // 四捨五入到整數星星數
+  const emptyStars = 5 - filledStars;        // 空心星星數
 
   return (
-    '★'.repeat(fullStars) +
-    (hasHalfStar ? '⭐' : '') +     // 半顆星用不同字元表示
+    '★'.repeat(filledStars) +
     '☆'.repeat(Math.max(0, emptyStars))
   );
+}
+
+/**
+ * 從 review-card 讀取星數，並回傳有效的 rating 陣列
+ * Read star values from review-card ratings and return an array of valid ratings
+ * @returns {number[]} review ratings
+ */
+function getReviewCardRatings() {
+  const ratingElements = document.querySelectorAll('.product-tab-panel[data-panel="reviews"] .review-card');
+  const ratings = [];
+
+  ratingElements.forEach(card => {
+    const starText = Array.from(card.querySelectorAll('*'))
+      .map(el => el.textContent || '')
+      .join(' ')
+      .match(/[★☆]+/g);
+
+    if (!starText || starText.length === 0) return;
+
+    const starString = starText.find(fragment => /★/.test(fragment));
+    if (!starString) return;
+
+    const ratingValue = parseStarString(starString);
+    if (ratingValue !== null) ratings.push(ratingValue);
+  });
+
+  return ratings;
+}
+
+/**
+ * 解析 review-card 的星星文字為數字評分
+ * Parse star text into numeric rating
+ * @param {string} starString
+ * @returns {number|null}
+ */
+function parseStarString(starString) {
+  let value = 0;
+
+  for (const char of starString) {
+    if (char === '★') value += 1;
+    if (char === '☆') value += 0;
+  }
+
+  return Number.isFinite(value) ? value : null;
 }
 
 // -----------------------------------------------
