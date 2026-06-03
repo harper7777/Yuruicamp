@@ -577,6 +577,78 @@ async function _handleAddToCart(productId) {
 }
 
 // ========================================
+// 廣告輪播初始化（抓取 NEW 商品）
+// ========================================
+function _initAdCarousel() {
+  const newProducts = _state.allProducts.filter(p => p.isNew);
+  if (!newProducts || newProducts.length === 0) {
+    // 如果沒有 NEW 商品，隱藏廣告輪播
+    const container = document.querySelector('.ad-carousel-container');
+    if (container) container.style.display = 'none';
+    return;
+  }
+
+  const slidesContainer = document.getElementById('adCarouselSlides');
+  const dotsContainer = document.getElementById('adCarouselDots');
+  
+  if (!slidesContainer || !dotsContainer) return;
+
+  let currentSlide = 0;
+
+  // 生成 slides 和 dots
+  slidesContainer.innerHTML = newProducts.map((product, idx) => `
+    <div class="ad-carousel-slide" data-product-id="${product.id}">
+      <div class="ad-carousel-content">
+        <span class="ad-carousel-badge">🆕 NEW</span>
+        <h3 class="ad-carousel-title">${product.name}</h3>
+        <p class="ad-carousel-desc">${product.brand}</p>
+        <p class="ad-carousel-price">NT$ ${product.price.toLocaleString('zh-TW')}</p>
+      </div>
+      <img src="${product.image}" alt="${product.name}" class="ad-carousel-image" loading="lazy" onerror="this.src='https://placehold.co/200x200/f2f2f2/999?text=Image'">
+    </div>
+  `).join('');
+
+  dotsContainer.innerHTML = newProducts.map((_, idx) => 
+    `<button class="ad-carousel-dot ${idx === 0 ? 'active' : ''}" data-slide="${idx}" title="第 ${idx + 1} 個廣告"></button>`
+  ).join('');
+
+  // 輪播邏輯
+  function goToSlide(n) {
+    if (n >= newProducts.length) currentSlide = 0;
+    else if (n < 0) currentSlide = newProducts.length - 1;
+    else currentSlide = n;
+
+    const offset = -currentSlide * 100;
+    slidesContainer.style.transform = `translateX(${offset}%)`;
+
+    // 更新 dots
+    document.querySelectorAll('.ad-carousel-dot').forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === currentSlide);
+    });
+  }
+
+  // 按鈕事件
+  document.getElementById('adCarouselPrev').addEventListener('click', () => goToSlide(currentSlide - 1));
+  document.getElementById('adCarouselNext').addEventListener('click', () => goToSlide(currentSlide + 1));
+
+  // Dots 點擊
+  document.querySelectorAll('.ad-carousel-dot').forEach(dot => {
+    dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.slide)));
+  });
+
+  // Slide 點擊進入商品詳情
+  slidesContainer.addEventListener('click', (e) => {
+    const slide = e.target.closest('.ad-carousel-slide');
+    if (slide) {
+      window.location.href = `product-detail.html?id=${slide.dataset.productId}`;
+    }
+  });
+
+  // 自動輪播（可選）
+  setInterval(() => goToSlide(currentSlide + 1), 5000);
+}
+
+// ========================================
 // 商品列表頁初始化入口
 // Product list page init entry point
 // ========================================
@@ -605,6 +677,9 @@ window.initProductListPage = async () => {
 
     // ④ 套用初始篩選（可能來自 URL 參數）並渲染
     _applyFilters();
+
+    // ⑤ 初始化廣告輪播（抓取 NEW 商品）
+    _initAdCarousel();
 
     console.log(`✓ 商品列表載入完成，共 ${_state.allProducts.length} 件商品`);
 

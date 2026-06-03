@@ -209,6 +209,23 @@
   </div>
 
   <!-- ===================================================
+       廣告輪播系統（抓取 NEW 商品）
+       Advertisement Carousel (NEW Products)
+       =================================================== -->
+  <div class="ad-carousel-container">
+    <div class="ad-carousel">
+      <div class="ad-carousel-slides" id="adCarouselSlides">
+        <!-- 由 JS 動態生成，抓取 .product-card-badge 為 NEW 的商品 -->
+      </div>
+      <button class="ad-carousel-btn ad-carousel-prev" id="adCarouselPrev" title="上一個" aria-label="上一個廣告">❮</button>
+      <button class="ad-carousel-btn ad-carousel-next" id="adCarouselNext" title="下一個" aria-label="下一個廣告">❯</button>
+      <div class="ad-carousel-dots" id="adCarouselDots">
+        <!-- 由 JS 動態生成 dot indicators -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================
        主內容：側邊欄 + 商品網格
        =================================================== -->
   <main style="padding: 0 0 4rem 0;">
