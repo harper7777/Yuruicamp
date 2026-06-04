@@ -1,0 +1,42 @@
+[
+  {
+    "code": "YURUIKAMP20",
+    "discount": 200,
+    "quantity": 50,
+    "used": 12,
+    "expiry": "2026-08-31",
+    "status": "active"
+  },
+  {
+    "code": "CAMPFUN50",
+    "discount": 50,
+    "quantity": 100,
+    "used": 87,
+    "expiry": "2026-07-15",
+    "status": "active"
+  },
+  {
+    "code": "SUMMER100",
+    "discount": 100,
+    "quantity": 80,
+    "used": 23,
+    "expiry": "2026-09-30",
+    "status": "active"
+  },
+  {
+    "code": "NEWCAMP300",
+    "discount": 300,
+    "quantity": 20,
+    "used": 5,
+    "expiry": "2026-10-01",
+    "status": "active"
+  },
+  {
+    "code": "OLDCAMP10",
+    "discount": 100,
+    "quantity": 30,
+    "used": 30,
+    "expiry": "2026-05-01",
+    "status": "disabled"
+  }
+]
