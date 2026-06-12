@@ -1,0 +1,114 @@
+[
+  {
+    "equipment_id": "E001",
+    "campground_id": "C001",
+    "name": "極限防水黑膠帳篷",
+    "image_url": "https://picsum.photos/seed/E001/400/280",
+    "terrain_tag": "常降雨區推薦",
+    "description": "3000mm 防水係數，雙層設計，暴風雨也不怕。適合高山多雨環境，搭建快速、收納方便。",
+    "pricing": {
+      "price_per_day_weekday": 500,
+      "price_per_day_holiday": 800,
+      "discount": 100
+    },
+    "stock": 5
+  },
+  {
+    "equipment_id": "E002",
+    "campground_id": "C001",
+    "name": "高山保暖睡袋 (-10°C)",
+    "image_url": "https://picsum.photos/seed/E002/400/280",
+    "terrain_tag": "高海拔必備",
+    "description": "適用溫度 -10°C，羽絨填充，壓縮後輕巧好攜帶，是高山低溫夜晚的最佳伴侶。",
+    "pricing": {
+      "price_per_day_weekday": 300,
+      "price_per_day_holiday": 450,
+      "discount": 0
+    },
+    "stock": 8
+  },
+  {
+    "equipment_id": "E003",
+    "campground_id": "C002",
+    "name": "兒童戲水漂浮套件",
+    "image_url": "https://picsum.photos/seed/E003/400/280",
+    "terrain_tag": "溪流旁野營推薦",
+    "description": "包含兒童救生衣、浮板、防水涼鞋，溪邊戲水安全又好玩，適合 3-10 歲孩童。",
+    "pricing": {
+      "price_per_day_weekday": 200,
+      "price_per_day_holiday": 350,
+      "discount": 50
+    },
+    "stock": 10
+  },
+  {
+    "equipment_id": "E004",
+    "campground_id": "C002",
+    "name": "攜帶式燒烤爐組",
+    "image_url": "https://picsum.photos/seed/E004/400/280",
+    "terrain_tag": "野炊推薦",
+    "description": "304 不鏽鋼烤爐、木炭、烤夾、鋁箔紙全套包含，一組搞定露營晚餐，享受野外烤肉的樂趣。",
+    "pricing": {
+      "price_per_day_weekday": 350,
+      "price_per_day_holiday": 500,
+      "discount": 0
+    },
+    "stock": 6
+  },
+  {
+    "equipment_id": "E005",
+    "campground_id": "C004",
+    "name": "天文觀星望遠鏡",
+    "image_url": "https://picsum.photos/seed/E005/400/280",
+    "terrain_tag": "夜間觀星推薦",
+    "description": "70mm 口徑折射式望遠鏡，可清楚看見月球坑洞與星雲。光害極低的草原是最佳觀測點。",
+    "pricing": {
+      "price_per_day_weekday": 400,
+      "price_per_day_holiday": 600,
+      "discount": 0
+    },
+    "stock": 4
+  },
+  {
+    "equipment_id": "E006",
+    "campground_id": "C005",
+    "name": "海上獨木舟（雙人）",
+    "image_url": "https://picsum.photos/seed/E006/400/280",
+    "terrain_tag": "海岸活動推薦",
+    "description": "充氣式雙人獨木舟，附划槳、救生衣，適合海岸平靜水域，體驗貼近海面的獨特視角。",
+    "pricing": {
+      "price_per_day_weekday": 600,
+      "price_per_day_holiday": 900,
+      "discount": 100
+    },
+    "stock": 3
+  },
+  {
+    "equipment_id": "E007",
+    "campground_id": "C006",
+    "name": "防潮帳篷地墊組",
+    "image_url": "https://picsum.photos/seed/E007/400/280",
+    "terrain_tag": "常降雨區推薦",
+    "description": "加厚防潮地墊加上帳篷防雨飛簷，讓霧氣與濕氣遠離你的帳篷，雲霧繚繞的環境中保持乾爽。",
+    "pricing": {
+      "price_per_day_weekday": 250,
+      "price_per_day_holiday": 400,
+      "discount": 0
+    },
+    "stock": 7
+  },
+  {
+    "equipment_id": "E008",
+    "campground_id": "C008",
+    "name": "溯溪裝備套組",
+    "image_url": "https://picsum.photos/seed/E008/400/280",
+    "terrain_tag": "溪流旁野營推薦",
+    "description": "溯溪鞋、防寒衣、安全帽一次租齊，武陵溪流水質清澈，是台灣最美麗的溯溪體驗地點之一。",
+    "pricing": {
+      "price_per_day_weekday": 450,
+      "price_per_day_holiday": 700,
+      "discount": 50
+    },
+    "stock": 5
+  }
+]
