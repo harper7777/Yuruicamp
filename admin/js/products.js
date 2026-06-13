@@ -7,6 +7,8 @@
  * 低庫存（stock < 5）的 <tr> 加上 table-danger class，整列顯示淡紅色背景
  */
 
+var PRODUCT_IMAGE_PLACEHOLDER = 'https://placehold.co/48x48/cccccc/555555?text=No+Image';
+
 window.initProducts = function () {
   $(document).off('.products');
 
@@ -19,6 +21,8 @@ window.initProducts = function () {
       '</td></tr>'
     );
   });
+
+  loadProductSpecOptions();
 
   // 庫存 inline editing：點擊鉛筆圖示進入編輯
   $(document).on('click.products', '.stock-edit-btn', function () {
@@ -98,12 +102,54 @@ window.initProducts = function () {
     window.showAdminToast('商品 ' + productId + ' 已更新為' + (isOnline ? '「上架中」' : '「已下架」'));
   });
 
+  // 新增規格欄位
+  $(document).on('click.products', '#addSpec', function () {
+    var specKey = $('#newProductSpec').val().trim();
+    if (!specKey) {
+      window.showAdminToast('請先輸入或選擇規格名稱', 'danger');
+      return;
+    }
+
+    var isDuplicate = $('#productSpecFields input[data-spec-key]').toArray().some(function (input) {
+      return input.id === specKey;
+    });
+
+    if (isDuplicate) {
+      window.showAdminToast('此規格欄位已存在', 'danger');
+      return;
+    }
+
+    var $field = $('<div>', { class: 'mb-2 product-spec-field' });
+    var $label = $('<label>', { class: 'form-label small text-muted mb-1' })
+      .attr('for', specKey)
+      .text(specKey);
+    var $input = $('<input>', {
+      type: 'text',
+      class: 'form-control form-control-sm'
+    })
+      .attr('id', specKey)
+      .attr('data-spec-key', specKey);
+
+    $field.append($label, $input);
+    $('#productSpecFields').append($field);
+    $('#newProductSpec').val('').trigger('focus');
+  });
+
   // 新增商品
   $(document).on('click.products', '#submitAddProduct', function () {
-    var name     = $('#newProductName').val().trim();
-    var price    = parseInt($('#newProductPrice').val(), 10) || 0;
-    var stock    = parseInt($('#newProductStock').val(), 10) || 0;
-    var category = $('#newProductCategory').val().trim();
+    var name               = $('#newProductName').val().trim();
+    var price              = parseInt($('#newProductPrice').val(), 10) || 0;
+    var stock              = parseInt($('#newProductStock').val(), 10) || 0;
+    var category           = $('#newProductCategory').val().trim();
+    var mainImageInput     = $('#newProductMainImage')[0];
+    var secondaryImageInput = $('#newProductImages')[0];
+    var mainImageFile      = mainImageInput && mainImageInput.files.length > 0
+      ? mainImageInput.files[0]
+      : null;
+    var secondaryImageFiles = secondaryImageInput
+      ? Array.prototype.slice.call(secondaryImageInput.files)
+      : [];
+    var specifications = getAddedSpecifications();
 
     if (!name || price <= 0) {
       window.showAdminToast('請填寫商品名稱和有效的價格', 'danger');
@@ -116,16 +162,30 @@ window.initProducts = function () {
       : '<span>' + stock + '</span>';
 
     var tempId = 'P-NEW-' + Date.now();
+    var newProduct = {
+      id: tempId,
+      thumbnail: mainImageFile ? URL.createObjectURL(mainImageFile) : PRODUCT_IMAGE_PLACEHOLDER,
+      name: name,
+      category: category || '其他',
+      price: price,
+      stock: stock,
+      status: 'active',
+      images: secondaryImageFiles.map(function (file) {
+        return file.name;
+      }),
+      specifications: specifications
+    };
+
     var newRow =
-      '<tr data-product-id="' + tempId + '"' + (isLow ? ' class="table-danger"' : '') + '>' +
-      '<td><img src="https://placehold.co/48x48/cccccc/555555?text=No+Image"' +
-      ' width="48" height="48" class="rounded object-fit-cover"></td>' +
-      '<td>' + name + '</td>' +
-      '<td><span class="badge bg-light text-dark border">' + (category || '其他') + '</span></td>' +
-      '<td>NT$ ' + price.toLocaleString() + '</td>' +
+      '<tr data-product-id="' + escapeHtml(newProduct.id) + '"' + (isLow ? ' class="table-danger"' : '') + '>' +
+      '<td><img src="' + escapeHtml(newProduct.thumbnail) + '" width="48" height="48" class="rounded object-fit-cover"' +
+      ' onerror="this.src=\'' + PRODUCT_IMAGE_PLACEHOLDER + '\'"></td>' +
+      '<td>' + escapeHtml(newProduct.name) + '</td>' +
+      '<td><span class="badge bg-light text-dark border">' + escapeHtml(newProduct.category) + '</span></td>' +
+      '<td>NT$ ' + newProduct.price.toLocaleString() + '</td>' +
       '<td class="stock-cell">' +
       qtyDisplay +
-      ' <button class="btn btn-link btn-sm p-0 ms-1 stock-edit-btn" data-qty="' + stock + '" title="編輯庫存">' +
+      ' <button class="btn btn-link btn-sm p-0 ms-1 stock-edit-btn" data-qty="' + newProduct.stock + '" title="編輯庫存">' +
       '<i class="fas fa-pencil-alt text-secondary"></i></button>' +
       '</td>' +
       '<td><span class="badge bg-success status-badge">上架中</span></td>' +
@@ -136,10 +196,72 @@ window.initProducts = function () {
 
     $('#productsTableBody').prepend($(newRow).hide().fadeIn(400));
     $('#addProductForm')[0].reset();
-    bootstrap.Modal.getInstance('#addProductModal').hide();
+    $('#productSpecFields').empty();
+
+    var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('addProductModal'));
+    modal.hide();
+
     window.showAdminToast('商品「' + name + '」已新增');
   });
 };
+
+/**
+ * 從前台 data/products.json 的 specifications 物件收集不重複 key，填入 datalist。
+ */
+function loadProductSpecOptions() {
+  var $specOptions = $('#productSpecOptions');
+  if ($specOptions.length === 0) {
+    return;
+  }
+
+  $.getJSON('../data/products.json', function (products) {
+    var keyMap = {};
+    (products || []).forEach(function (product) {
+      if (!product.specifications || typeof product.specifications !== 'object') {
+        return;
+      }
+
+      Object.keys(product.specifications).forEach(function (key) {
+        keyMap[key] = true;
+      });
+    });
+
+    var optionsHtml = Object.keys(keyMap).sort().map(function (key) {
+      return '<option value="' + escapeHtml(key) + '"></option>';
+    }).join('');
+
+    $specOptions.html(optionsHtml);
+  }).fail(function () {
+    window.showAdminToast('載入規格選項失敗', 'danger');
+  });
+}
+
+function getAddedSpecifications() {
+  var specifications = {};
+
+  $('#productSpecFields input[data-spec-key]').each(function () {
+    var key = $(this).attr('data-spec-key');
+    var value = $(this).val().trim();
+
+    if (key && value) {
+      specifications[key] = value;
+    }
+  });
+
+  return specifications;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, function (char) {
+    return {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char];
+  });
+}
 
 /**
  * 將 products 陣列渲染成 HTML 表格列，填入 #productsTableBody
@@ -169,13 +291,13 @@ function renderProductsTable(products) {
       ? '<span class="badge bg-success status-badge">上架中</span>'
       : '<span class="badge bg-secondary status-badge">已下架</span>';
 
-    var imgSrc = p.thumbnail || 'https://placehold.co/48x48/cccccc/555555?text=No+Image';
+    var imgSrc = p.thumbnail || PRODUCT_IMAGE_PLACEHOLDER;
 
-    return '<tr data-product-id="' + p.id + '"' + rowClass + '>' +
-      '<td><img src="' + imgSrc + '" width="48" height="48" class="rounded object-fit-cover"' +
-      ' onerror="this.src=\'https://placehold.co/48x48/cccccc/555555?text=No+Image\'"></td>' +
-      '<td class="fw-semibold">' + p.name + '</td>' +
-      '<td><span class="badge bg-light text-dark border">' + (p.category || '—') + '</span></td>' +
+    return '<tr data-product-id="' + escapeHtml(p.id) + '"' + rowClass + '>' +
+      '<td><img src="' + escapeHtml(imgSrc) + '" width="48" height="48" class="rounded object-fit-cover"' +
+      ' onerror="this.src=\'' + PRODUCT_IMAGE_PLACEHOLDER + '\'"></td>' +
+      '<td class="fw-semibold">' + escapeHtml(p.name) + '</td>' +
+      '<td><span class="badge bg-light text-dark border">' + escapeHtml(p.category || '—') + '</span></td>' +
       '<td>NT$ ' + p.price.toLocaleString() + '</td>' +
       '<td class="stock-cell">' +
       stockDisplay +

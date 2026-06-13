@@ -309,6 +309,20 @@
               <div class="invalid-feedback">請輸入商品名稱</div>
             </div>
 
+            <!-- 商品圖片 -->
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label fw-semibold" for="newProductMainImage">主要圖片</label>
+                <input type="file" class="form-control" id="newProductMainImage"
+                       accept="image/*">
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-semibold" for="newProductImages">次要圖片（可多選）</label>
+                <input type="file" class="form-control" id="newProductImages"
+                       accept="image/*" multiple>
+              </div>
+            </div>
+
             <!-- 分類 + 規格/顏色 -->
             <div class="row g-2 mb-3">
               <div class="col-6">
@@ -324,8 +338,13 @@
               </div>
               <div class="col-6">
                 <label class="form-label fw-semibold" for="newProductSpec">規格 / 顏色</label>
-                <input type="text" class="form-control" id="newProductSpec"
-                       placeholder="例：深橄欖綠">
+                <div class="input-group">
+                  <input type="text" class="form-control" id="newProductSpec"
+                         list="productSpecOptions" placeholder="例：weight">
+                  <button type="button" class="btn btn-outline-secondary" id="addSpec">新增</button>
+                </div>
+                <datalist id="productSpecOptions"></datalist>
+                <div id="productSpecFields" class="mt-2"></div>
               </div>
             </div>
 
