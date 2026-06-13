@@ -8,7 +8,10 @@
  */
 
 var PRODUCT_IMAGE_PLACEHOLDER = 'https://placehold.co/48x48/cccccc/555555?text=No+Image';
+<<<<<<< HEAD
 var adminProductsCache = [];
+=======
+>>>>>>> 9489ac4d690115f33aaa55281082eba388b9f6da
 
 window.initProducts = function () {
   $(document).off('.products');
@@ -26,11 +29,14 @@ window.initProducts = function () {
 
   loadProductSpecOptions();
 
+<<<<<<< HEAD
   // 從列表開啟新增商品 Modal 時，清空上一次編輯狀態
   $(document).on('click.products', '[data-bs-target="#addProductModal"]:not(.edit-product-btn)', function () {
     resetProductModalForm();
   });
 
+=======
+>>>>>>> 9489ac4d690115f33aaa55281082eba388b9f6da
   // 庫存 inline editing：點擊鉛筆圖示進入編輯
   $(document).on('click.products', '.stock-edit-btn', function () {
     var $cell = $(this).closest('.stock-cell');
@@ -109,6 +115,7 @@ window.initProducts = function () {
     window.showAdminToast('商品 ' + productId + ' 已更新為' + (isOnline ? '「上架中」' : '「已下架」'));
   });
 
+<<<<<<< HEAD
   // 編輯商品：使用同一個新增商品 Modal，並從 admin/data/products.json 帶入資料
   $(document).on('click.products', '.edit-product-btn', function () {
     var productId = $(this).closest('tr').data('product-id');
@@ -123,6 +130,8 @@ window.initProducts = function () {
     bootstrap.Modal.getOrCreateInstance(document.getElementById('addProductModal')).show();
   });
 
+=======
+>>>>>>> 9489ac4d690115f33aaa55281082eba388b9f6da
   // 新增規格欄位
   $(document).on('click.products', '#addSpec', function () {
     var specKey = $('#newProductSpec').val().trim();
@@ -171,11 +180,14 @@ window.initProducts = function () {
       ? Array.prototype.slice.call(secondaryImageInput.files)
       : [];
     var specifications = getAddedSpecifications();
+<<<<<<< HEAD
     var $form = $('#addProductForm');
     var editProductId = $form.data('edit-product-id');
     var existingThumbnail = $form.data('existing-thumbnail');
     var existingImages = $form.data('existing-images') || [];
     var existingStatus = $form.data('existing-status') || 'active';
+=======
+>>>>>>> 9489ac4d690115f33aaa55281082eba388b9f6da
 
     if (!name || price <= 0) {
       window.showAdminToast('請填寫商品名稱和有效的價格', 'danger');
@@ -199,6 +211,7 @@ window.initProducts = function () {
       specifications: specifications
     };
 
+<<<<<<< HEAD
     upsertAdminProductCache(newProduct);
 
     if (editProductId) {
@@ -209,11 +222,53 @@ window.initProducts = function () {
     }
 
     resetProductModalForm();
+=======
+    var tempId = 'P-NEW-' + Date.now();
+    var newProduct = {
+      id: tempId,
+      thumbnail: mainImageFile ? URL.createObjectURL(mainImageFile) : PRODUCT_IMAGE_PLACEHOLDER,
+      name: name,
+      category: category || '其他',
+      price: price,
+      stock: stock,
+      status: 'active',
+      images: secondaryImageFiles.map(function (file) {
+        return file.name;
+      }),
+      specifications: specifications
+    };
+
+    var newRow =
+      '<tr data-product-id="' + escapeHtml(newProduct.id) + '"' + (isLow ? ' class="table-danger"' : '') + '>' +
+      '<td><img src="' + escapeHtml(newProduct.thumbnail) + '" width="48" height="48" class="rounded object-fit-cover"' +
+      ' onerror="this.src=\'' + PRODUCT_IMAGE_PLACEHOLDER + '\'"></td>' +
+      '<td>' + escapeHtml(newProduct.name) + '</td>' +
+      '<td><span class="badge bg-light text-dark border">' + escapeHtml(newProduct.category) + '</span></td>' +
+      '<td>NT$ ' + newProduct.price.toLocaleString() + '</td>' +
+      '<td class="stock-cell">' +
+      qtyDisplay +
+      ' <button class="btn btn-link btn-sm p-0 ms-1 stock-edit-btn" data-qty="' + newProduct.stock + '" title="編輯庫存">' +
+      '<i class="fas fa-pencil-alt text-secondary"></i></button>' +
+      '</td>' +
+      '<td><span class="badge bg-success status-badge">上架中</span></td>' +
+      '<td><div class="form-check form-switch">' +
+      '<input class="form-check-input product-status-toggle" type="checkbox" checked>' +
+      '</div></td>' +
+      '</tr>';
+
+    $('#productsTableBody').prepend($(newRow).hide().fadeIn(400));
+    $('#addProductForm')[0].reset();
+    $('#productSpecFields').empty();
+>>>>>>> 9489ac4d690115f33aaa55281082eba388b9f6da
 
     var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('addProductModal'));
     modal.hide();
 
+<<<<<<< HEAD
     window.showAdminToast('商品「' + name + '」已' + (editProductId ? '更新' : '新增'));
+=======
+    window.showAdminToast('商品「' + name + '」已新增');
+>>>>>>> 9489ac4d690115f33aaa55281082eba388b9f6da
   });
 };
 
@@ -263,6 +318,7 @@ function getAddedSpecifications() {
   return specifications;
 }
 
+<<<<<<< HEAD
 function findAdminProductById(productId) {
   return (adminProductsCache || []).find(function (product) {
     return product.id === productId;
@@ -378,6 +434,8 @@ function escapeSelector(value) {
   return String(value).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 }
 
+=======
+>>>>>>> 9489ac4d690115f33aaa55281082eba388b9f6da
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, function (char) {
     return {
@@ -403,7 +461,43 @@ function renderProductsTable(products) {
   }
 
   var html = products.map(function (p) {
+<<<<<<< HEAD
     return buildProductRow(p);
+=======
+    var isLow    = p.stock < 5;
+    var isActive = p.status === 'active';
+
+    // 低庫存整列套用 Bootstrap table-danger（淡紅色背景）
+    var rowClass = isLow ? ' class="table-danger"' : '';
+
+    var stockDisplay = isLow
+      ? '<span class="text-danger fw-bold">' + p.stock +
+        ' <i class="fas fa-exclamation-triangle" title="低庫存警告"></i></span>'
+      : '<span>' + p.stock + '</span>';
+
+    var statusBadge = isActive
+      ? '<span class="badge bg-success status-badge">上架中</span>'
+      : '<span class="badge bg-secondary status-badge">已下架</span>';
+
+    var imgSrc = p.thumbnail || PRODUCT_IMAGE_PLACEHOLDER;
+
+    return '<tr data-product-id="' + escapeHtml(p.id) + '"' + rowClass + '>' +
+      '<td><img src="' + escapeHtml(imgSrc) + '" width="48" height="48" class="rounded object-fit-cover"' +
+      ' onerror="this.src=\'' + PRODUCT_IMAGE_PLACEHOLDER + '\'"></td>' +
+      '<td class="fw-semibold">' + escapeHtml(p.name) + '</td>' +
+      '<td><span class="badge bg-light text-dark border">' + escapeHtml(p.category || '—') + '</span></td>' +
+      '<td>NT$ ' + p.price.toLocaleString() + '</td>' +
+      '<td class="stock-cell">' +
+      stockDisplay +
+      ' <button class="btn btn-link btn-sm p-0 ms-1 stock-edit-btn" data-qty="' + p.stock + '" title="編輯庫存">' +
+      '<i class="fas fa-pencil-alt text-secondary"></i></button>' +
+      '</td>' +
+      '<td>' + statusBadge + '</td>' +
+      '<td><div class="form-check form-switch">' +
+      '<input class="form-check-input product-status-toggle" type="checkbox" ' + (isActive ? 'checked' : '') + '>' +
+      '</div></td>' +
+      '</tr>';
+>>>>>>> 9489ac4d690115f33aaa55281082eba388b9f6da
   }).join('');
 
   $('#productsTableBody').html(html);
