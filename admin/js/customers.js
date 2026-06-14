@@ -258,4 +258,8 @@ function renderCustomersAccordion(customers) {
       }, 300);
     }
   }
+
+  if (typeof window.applyEditPermission === 'function') {
+    window.applyEditPermission('customers', $('#contentArea'));
+  }
 }

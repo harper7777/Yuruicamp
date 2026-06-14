@@ -235,4 +235,8 @@ function renderCouponsTable(coupons) {
   }).join('');
 
   $('#couponsTableBody').html(html);
+
+  if (typeof window.applyEditPermission === 'function') {
+    window.applyEditPermission('discounts', $('#contentArea'));
+  }
 }

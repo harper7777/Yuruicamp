@@ -188,6 +188,10 @@ window.initBookings = function () {
 
     window.showAdminToast('預約 ' + bookingId + ' 已標記為完成');
   });
+
+  if (typeof window.applyEditPermission === 'function') {
+    window.applyEditPermission('bookings', $('#contentArea'));
+  }
 };
 
 // ═══════════════════════════════════════════════════════════════
@@ -290,6 +294,10 @@ function renderBookingsTable(bookings) {
 
   $('#bookingsTableBody').html(html);
   applyBookingFilters();
+
+  if (typeof window.applyEditPermission === 'function') {
+    window.applyEditPermission('bookings', $('#contentArea'));
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -433,6 +441,10 @@ function showBookingModal(booking) {
 
   // 開啟 Modal
   new bootstrap.Modal('#bookingDetailModal').show();
+
+  if (typeof window.applyEditPermission === 'function') {
+    window.applyEditPermission('bookings', $('#contentArea'));
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════

@@ -79,6 +79,15 @@
         <i class="fas fa-calendar-check"></i>
         <span>預約/租借管理</span>
       </a>
+
+      <!-- 分隔線：權限管理獨立區塊 -->
+      <hr style="border-color: rgba(255,255,255,0.15); margin: 8px 16px;">
+
+      <a href="#" class="sidebar-link"
+         data-section="permissions" data-title="權限管理">
+        <i class="fas fa-user-shield"></i>
+        <span>權限管理</span>
+      </a>
     </nav>
 
     <!-- 底部：管理員資訊 + 登出 -->
@@ -145,6 +154,14 @@
         <a href="#" class="sidebar-link"
            data-section="bookings" data-title="預約/租借管理">
           <i class="fas fa-calendar-check"></i><span>預約/租借管理</span>
+        </a>
+
+        <!-- 分隔線：權限管理獨立區塊 -->
+        <hr style="border-color: rgba(255,255,255,0.15); margin: 8px 16px;">
+
+        <a href="#" class="sidebar-link"
+           data-section="permissions" data-title="權限管理">
+          <i class="fas fa-user-shield"></i><span>權限管理</span>
         </a>
         <div class="sidebar-footer mt-auto">
           <a href="#" class="sidebar-logout-mobile d-flex align-items-center gap-2
@@ -572,7 +589,8 @@
   <!-- Chart.js 圖表庫 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- 後台自訂 JS（core.js 必須最先載入，其他模組才能正確初始化） -->
+  <!-- 後台自訂 JS（permissions.js 須在 core.js 之前，提供 ADMIN_SECTIONS 與員工資料） -->
+  <script src="js/permissions.js"></script>
   <script src="js/core.js"></script>
   <script src="js/analytics.js"></script>
   <script src="js/orders.js"></script>

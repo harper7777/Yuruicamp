@@ -917,6 +917,9 @@ function renderProductsTable(products) {
       buildMovementGenerateRow()
     );
     updateMovementGenerateButtonState();
+    if (typeof window.applyEditPermission === 'function') {
+      window.applyEditPermission('products', $('#contentArea'));
+    }
     return;
   }
 
@@ -926,6 +929,10 @@ function renderProductsTable(products) {
 
   $('#productsTableBody').html(html + buildMovementGenerateRow());
   updateMovementGenerateButtonState();
+
+  if (typeof window.applyEditPermission === 'function') {
+    window.applyEditPermission('products', $('#contentArea'));
+  }
 }
 
 function buildMovementGenerateRow() {
@@ -951,6 +958,10 @@ function renderRentalProductsTable(rentals) {
   }).join('');
 
   $('#rentalProductsTableBody').html(html);
+
+  if (typeof window.applyEditPermission === 'function') {
+    window.applyEditPermission('products', $('#contentArea'));
+  }
 }
 
 function renderRentalProductsTable(rentals) {
@@ -966,4 +977,8 @@ function renderRentalProductsTable(rentals) {
   }).join('');
 
   $('#rentalProductsTableBody').html(html);
+
+  if (typeof window.applyEditPermission === 'function') {
+    window.applyEditPermission('products', $('#contentArea'));
+  }
 }

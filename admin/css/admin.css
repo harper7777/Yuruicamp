@@ -81,6 +81,19 @@ body {
   font-weight: 600;
 }
 
+/* 無查看權限的 Sidebar 連結（灰階 + 不可點） */
+.sidebar-link.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* 無編輯權限時容器標記（各模組共用） */
+.permission-readonly .btn:not(.btn-close):not([data-bs-dismiss]),
+button[data-permission-disabled="true"] {
+  cursor: not-allowed;
+}
+
 /* Sidebar Icon 寬度固定，讓文字對齊 */
 .sidebar-link i {
   width: 18px;

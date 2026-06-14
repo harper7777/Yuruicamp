@@ -156,6 +156,11 @@ function renderOrdersTable(orders) {
   }).join('');
 
   $('#ordersTableBody').html(html);
+
+  // 依編輯權限停用出貨按鈕 / Disable ship buttons if no edit permission
+  if (typeof window.applyEditPermission === 'function') {
+    window.applyEditPermission('orders', $('#contentArea'));
+  }
 }
 
 /**

@@ -58,15 +58,15 @@
       <!-- 登入表單 -->
       <form id="loginForm" novalidate>
 
-        <!-- 帳號欄位 -->
+        <!-- 員工 ID 欄位 -->
         <div class="mb-3">
           <label class="form-label fw-semibold" for="username">
-            <i class="fas fa-user me-1 text-muted"></i>帳號
+            <i class="fas fa-id-badge me-1 text-muted"></i>員工 ID
           </label>
           <input type="text"
                  class="form-control"
                  id="username"
-                 placeholder="請輸入帳號"
+                 placeholder="例：01 或 02"
                  autocomplete="username">
           <!-- 錯誤提示（預設隱藏） -->
           <div class="invalid-feedback">請輸入帳號</div>
@@ -102,13 +102,16 @@
 
       </form>
 
-      <!-- 提示文字（Mock 說明） -->
+      <!-- 提示文字（Demo 說明） -->
       <div class="text-center mt-4">
         <small class="text-muted">
           <i class="fas fa-info-circle me-1"></i>
-          Demo 模式：任意輸入帳號密碼即可登入
+          Demo：員工 ID <code>01</code>（老闆）/ <code>02</code>（員工），密碼任意非空即可
         </small>
       </div>
+
+      <!-- 登入錯誤訊息區 -->
+      <div id="loginError" class="alert alert-danger mt-3 d-none small mb-0" role="alert"></div>
 
     </div>
   </div>
@@ -116,9 +119,20 @@
   <!-- ========== JavaScript ========== -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- 員工資料層（localStorage 種子 + 查詢） -->
+  <script src="js/permissions.js"></script>
 
   <script>
     $(document).ready(function () {
+
+      /** 顯示登入錯誤訊息 / Show login error message */
+      function showLoginError(message) {
+        $('#loginError').removeClass('d-none').text(message);
+      }
+
+      function hideLoginError() {
+        $('#loginError').addClass('d-none').text('');
+      }
 
       // === 顯示/隱藏密碼切換 ===
       $('#togglePassword').on('click', function () {
@@ -137,35 +151,47 @@
       });
 
       // === 登入表單送出事件 ===
-      // Mock 驗證邏輯：任意非空帳密皆視為成功
-      // 實際串接後端時，只需把下方 sessionStorage 寫入改為：
-      //   $.ajax({ url: '/api/admin/login', method: 'POST', data: { username, password } })
-      //   .done(function(res) { sessionStorage.setItem('adminLoggedIn', 'true'); ... })
+      // 驗證：員工 ID 須存在且啟用；密碼必填但不驗證內容
+      // API 預留：POST /api/admin/login
       $('#loginForm').on('submit', function (e) {
-        e.preventDefault(); // 阻止表單預設送出（不重整頁面）
+        e.preventDefault();
 
-        const username = $('#username').val().trim();
+        const employeeId = $('#username').val().trim();
         const password = $('#password').val().trim();
 
-        // 清除先前的錯誤狀態
         $('#username, #password').removeClass('is-invalid');
+        hideLoginError();
 
-        // 驗證：帳號或密碼為空則顯示錯誤
-        if (!username || !password) {
-          if (!username) $('#username').addClass('is-invalid');
-          if (!password) $('#password').addClass('is-invalid');
+        // 分開提示：帳號空 / 密碼空
+        if (!employeeId) {
+          $('#username').addClass('is-invalid');
+          showLoginError('請輸入帳號');
+          return;
+        }
+        if (!password) {
+          $('#password').addClass('is-invalid');
+          showLoginError('請輸入密碼');
           return;
         }
 
-        // Mock 成功：寫入 sessionStorage 後跳轉
+        // 查 localStorage 員工資料
+        const employee = window.findEmployeeById(employeeId);
+        if (!employee || !employee.isActive) {
+          showLoginError('帳號不存在或已停用');
+          return;
+        }
+
         const $btn = $('#loginBtn');
         $btn.prop('disabled', true)
             .html('<span class="spinner-border spinner-border-sm me-2"></span>登入中...');
 
-        // 模擬網路請求延遲（0.8 秒），讓 UX 更真實
         setTimeout(function () {
+          // 寫入 sessionStorage（5 個 key）
           sessionStorage.setItem('adminLoggedIn', 'true');
-          sessionStorage.setItem('adminName', username);
+          sessionStorage.setItem('adminId', employee.id);
+          sessionStorage.setItem('adminName', employee.displayName);
+          sessionStorage.setItem('isSuperAdmin', String(!!employee.isSuperAdmin));
+          sessionStorage.setItem('adminPermissions', JSON.stringify(employee.permissions || {}));
           window.location.href = 'dashboard.html';
         }, 800);
       });
@@ -173,6 +199,7 @@
       // === Input 取得焦點時移除錯誤樣式 ===
       $('#username, #password').on('focus', function () {
         $(this).removeClass('is-invalid');
+        hideLoginError();
       });
 
       // === 鍵盤 Enter 觸發登入 ===

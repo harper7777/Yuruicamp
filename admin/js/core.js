@@ -2,11 +2,190 @@
  * admin/js/core.js
  * 後台核心功能：
  *  1. Auth 守衛：未登入自動跳轉登入頁
- *  2. Sidebar 導覽點擊 → AJAX 載入對應 partial + 呼叫初始化函式
- *  3. Topbar 頁面標題動態更新
- *  4. 登出邏輯
- *  5. Toast 工廠函式（供所有模組呼叫）
+ *  2. 權限 helper：canView / canEdit / Sidebar 灰階 / 編輯按鈕 disabled
+ *  3. Sidebar 導覽點擊 → AJAX 載入對應 partial + 呼叫初始化函式
+ *  4. Topbar 頁面標題動態更新
+ *  5. 登出邏輯
+ *  6. Toast 工廠函式（供所有模組呼叫）
  */
+
+// ==========================================================
+// === 各模組「無 edit 權限」時需停用的選擇器 ===
+// ==========================================================
+var EDIT_PERMISSION_SELECTORS = {
+  orders: '.btn-ship-order',
+  products: '[data-bs-target="#addProductModal"]:not(.edit-product-btn), .edit-product-btn, .stock-confirm-btn, .stock-step-btn, #submitAddProduct',
+  customers: '.tier-edit-btn, .points-edit-btn, .coupons-edit-btn, .tier-save-btn, .tier-cancel-btn, .points-save-btn, .coupons-save-btn',
+  discounts: '#submitAddCoupon, .btn-toggle-coupon, .btn-delete-coupon, #generateCouponCode, #addCouponForm input, #addCouponForm select, #addCouponForm textarea, #addCouponForm button:not(.btn-close)',
+  reviews: '.btn-reply-toggle, .btn-submit-reply, .review-card textarea',
+  bookings: '.btn-confirm-booking, .btn-cancel-booking',
+  permissions: '#addEmployeeBtn, .btn-edit-employee, .btn-toggle-employee, #employeeModal input:not([readonly]), #employeeModal button:not(.btn-close):not([data-bs-dismiss]), #saveEmployeeBtn, .perm-view-cb, .perm-edit-cb, #empIsSuperAdmin',
+};
+
+/**
+ * 從 sessionStorage 解析權限物件
+ * Parse permissions JSON from sessionStorage
+ */
+window.getAdminPermissions = function () {
+  try {
+    var raw = sessionStorage.getItem('adminPermissions');
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+};
+
+/** 超級管理員擁有全部權限 / Super admin has full access */
+function isCurrentSuperAdmin() {
+  return sessionStorage.getItem('isSuperAdmin') === 'true';
+}
+
+/**
+ * 檢查某 section 是否有查看權限
+ * Check view permission for a section
+ */
+window.canView = function (section) {
+  if (isCurrentSuperAdmin()) return true;
+  var perms = window.getAdminPermissions();
+  return !!(perms[section] && perms[section].view);
+};
+
+/**
+ * 檢查某 section 是否有編輯權限
+ * Check edit permission for a section
+ */
+window.canEdit = function (section) {
+  if (isCurrentSuperAdmin()) return true;
+  var perms = window.getAdminPermissions();
+  return !!(perms[section] && perms[section].edit);
+};
+
+/**
+ * 依權限渲染 Sidebar（無 view 權限 → 灰色 disabled）
+ * Apply sidebar link enabled/disabled state from permissions
+ */
+window.applySidebarPermissions = function () {
+  $('.sidebar-link').each(function () {
+    var section = $(this).data('section');
+    if (!section) return;
+
+    if (window.canView(section)) {
+      $(this).removeClass('disabled');
+    } else {
+      $(this).addClass('disabled').removeClass('active');
+    }
+  });
+};
+
+/**
+ * 取得第一個可查看的 section（登入後預設首頁）
+ * First viewable section in sidebar order, or null if none
+ */
+window.getDefaultSection = function () {
+  var sections = window.ADMIN_SECTIONS || [];
+  for (var i = 0; i < sections.length; i++) {
+    if (window.canView(sections[i].key)) {
+      return sections[i].key;
+    }
+  }
+  return null;
+};
+
+/** 依 section 取得 Topbar 標題 / Get display title for section */
+function getSectionTitle(section) {
+  var sections = window.ADMIN_SECTIONS || [];
+  var found = sections.find(function (s) { return s.key === section; });
+  return found ? found.label : '後台管理';
+}
+
+/**
+ * 對容器內編輯元素套用 disabled（無 edit 權限時）
+ * Disable edit controls when user lacks edit permission
+ */
+window.applyEditPermission = function (section, $container) {
+  var $scope = $container && $container.length ? $container : $('#contentArea');
+  var selectors = EDIT_PERMISSION_SELECTORS[section];
+  var noEditTitle = '無編輯權限';
+
+  if (window.canEdit(section)) {
+    if (selectors) {
+      $scope.find(selectors).prop('disabled', false).removeAttr('data-permission-disabled');
+    }
+    // 商品新增 Modal 在 dashboard 全域
+    if (section === 'products') {
+      $('#submitAddProduct, #addProductForm input, #addProductForm select, #addProductForm textarea, #addProductForm button:not(.btn-close):not([data-bs-dismiss="modal"])')
+        .prop('disabled', false)
+        .removeAttr('data-permission-disabled');
+    }
+    // 預約 Modal 在 dashboard 全域，需另外還原
+    if (section === 'bookings') {
+      $('#btnCompleteBooking, #equipmentReturnedCheck, #confirmCancelBtn, #cancelReasonInput')
+        .prop('disabled', false)
+        .removeAttr('data-permission-disabled');
+    }
+    $scope.removeClass('permission-readonly');
+    return;
+  }
+
+  $scope.addClass('permission-readonly');
+
+  if (selectors) {
+    $scope.find(selectors).each(function () {
+      $(this).prop('disabled', true).attr('data-permission-disabled', 'true').attr('title', noEditTitle);
+    });
+  }
+
+  if (section === 'products') {
+    $('#submitAddProduct, #addProductForm input, #addProductForm select, #addProductForm textarea, #addProductForm button:not(.btn-close):not([data-bs-dismiss="modal"])')
+      .prop('disabled', true)
+      .attr('data-permission-disabled', 'true')
+      .attr('title', noEditTitle);
+  }
+
+  // 預約相關全域 Modal 控制項
+  if (section === 'bookings') {
+    $('#btnCompleteBooking, #equipmentReturnedCheck, #confirmCancelBtn, #cancelReasonInput')
+      .prop('disabled', true)
+      .attr('data-permission-disabled', 'true')
+      .attr('title', noEditTitle);
+  }
+};
+
+/** 無任何頁面權限時的提示畫面 / Empty state when no view permissions */
+function showNoPermissionPage() {
+  $('#contentArea').html(
+    '<div class="text-center py-5">' +
+    '<i class="fas fa-lock fa-3x text-muted mb-3"></i>' +
+    '<p class="text-muted fs-5">您目前沒有任何頁面權限，請聯絡管理員。</p>' +
+    '</div>'
+  );
+  $('#pageTitle').text('後台管理');
+}
+
+/** 載入預設首頁（第一個有 view 權限的 section） */
+function loadDefaultHomeSection() {
+  var defaultSection = window.getDefaultSection();
+
+  if (!defaultSection) {
+    showNoPermissionPage();
+    return;
+  }
+
+  var title = getSectionTitle(defaultSection);
+  $('#pageTitle').text(title);
+  $('.sidebar-link').removeClass('active');
+  $('.sidebar-link[data-section="' + defaultSection + '"]').addClass('active');
+  loadSection(defaultSection);
+}
+
+/** 登出時清除全部 session 資料（5 個 key） */
+function clearAdminSession() {
+  sessionStorage.removeItem('adminLoggedIn');
+  sessionStorage.removeItem('adminId');
+  sessionStorage.removeItem('adminName');
+  sessionStorage.removeItem('isSuperAdmin');
+  sessionStorage.removeItem('adminPermissions');
+}
 
 $(document).ready(function () {
 
@@ -32,9 +211,10 @@ $(document).ready(function () {
   $('#adminAvatarBtn').text(initial);
 
   // ==========================================================
-  // === 2. 預設載入分析報表 ===
+  // === 2. Sidebar 權限 + 預設載入第一個可查看頁面 ===
   // ==========================================================
-  loadSection('analytics');
+  window.applySidebarPermissions();
+  loadDefaultHomeSection();
 
   // ==========================================================
   // === 3. Sidebar 導覽點擊事件 ===
@@ -74,9 +254,8 @@ $(document).ready(function () {
   $(document).on('click', '#logoutBtn, #logoutBtnTopbar, .sidebar-logout-mobile', function (e) {
     e.preventDefault();
 
-    // 清除登入狀態
-    sessionStorage.removeItem('adminLoggedIn');
-    sessionStorage.removeItem('adminName');
+    // 清除登入狀態（5 個 sessionStorage key）
+    clearAdminSession();
 
     // 跳回登入頁
     window.location.href = 'login.html';
@@ -101,6 +280,12 @@ $(document).ready(function () {
  * 後端回傳動態 HTML 即可，其餘邏輯完全不變。
  */
 function loadSection(sectionName) {
+  // 1. 查看權限守衛：無 view 權限則阻擋
+  if (!window.canView(sectionName)) {
+    window.showAdminToast('您沒有「' + getSectionTitle(sectionName) + '」的查看權限', 'error');
+    return;
+  }
+
   // 本地 partial 路徑
   const url = `partials/${sectionName}.html`;
 
@@ -139,20 +324,24 @@ function loadSection(sectionName) {
     //       掛載到 window 上（window.initXxx = function(){}），
     //       這樣 core.js 就能統一用字典的方式呼叫，不需要 if/else 判斷
     const initFunctions = {
-      analytics: window.initAnalytics,
-      orders:    window.initOrders,
-      movement:  window.initMovement,
-      products:  window.initProducts,
-      customers: window.initCustomers,
-      discounts: window.initDiscounts,
-      reviews:   window.initReviews,
-      bookings:  window.initBookings,
+      analytics:   window.initAnalytics,
+      orders:      window.initOrders,
+      movement:    window.initMovement,
+      products:    window.initProducts,
+      customers:   window.initCustomers,
+      discounts:   window.initDiscounts,
+      reviews:     window.initReviews,
+      bookings:    window.initBookings,
+      permissions: window.initPermissions,
     };
 
     // 確認初始化函式存在後再呼叫
     if (typeof initFunctions[sectionName] === 'function') {
       initFunctions[sectionName]();
     }
+
+    // 3. 靜態元素套用編輯權限（動態渲染的由各自模組 render 後再呼叫）
+    window.applyEditPermission(sectionName, $('#contentArea'));
   });
 }
 
