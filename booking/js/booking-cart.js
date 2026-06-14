@@ -35,7 +35,13 @@ $(document).ready(function () {
   // Fix "back" link with campground_id
   $('#backToRentalLink').attr('href', './camp-rental.html');
 
-  // 步驟 4：綁定確認結帳按鈕 / Step 4: Bind checkout button
+  // 步驟 4：手風琴面板 / Step 4: Accordion panels
+  initAccordionPanels();
+
+  // 步驟 5：付款方式互動 / Step 5: Payment method interaction
+  initPaymentMethod();
+
+  // 步驟 6：綁定確認結帳按鈕 / Step 6: Bind checkout button
   $('#confirmPayBtn').on('click', function () {
     handleCheckout(bookingCart);
   });
@@ -130,6 +136,66 @@ function renderBookingCartPage(cart) {
 }
 
 // ============================================================
+// 手風琴面板
+// ============================================================
+
+function initAccordionPanels() {
+  $('.bk-panel__header').on('click', function () {
+    const $panel = $(this).closest('.bk-panel');
+    const $body  = $panel.find('> .bk-panel__body');
+    const isOpen = $panel.hasClass('is-open');
+
+    if (isOpen) {
+      $body.slideUp(200);
+      $panel.removeClass('is-open');
+    } else {
+      $body.slideDown(200);
+      $panel.addClass('is-open');
+    }
+  });
+}
+
+// ============================================================
+// 付款方式互動
+// ============================================================
+
+function initPaymentMethod() {
+
+  // 切換選取樣式 + 顯示/隱藏信用卡欄位
+  $('input[name="paymentMethod"]').on('change', function () {
+    const val = $(this).val();
+
+    $('#payOptCredit').toggleClass('is-selected', val === 'credit');
+    $('#payOptLine').toggleClass('is-selected',   val === 'linepay');
+
+    if (val === 'credit') {
+      $('#creditCardSection').slideDown(200);
+    } else {
+      $('#creditCardSection').slideUp(200);
+    }
+  });
+
+  // 卡號自動加空格（每 4 位）/ Auto-format card number with spaces
+  $('#cardNumber').on('input', function () {
+    let v = $(this).val().replace(/\D/g, '').substring(0, 16);
+    v = v.replace(/(.{4})/g, '$1 ').trim();
+    $(this).val(v);
+  });
+
+  // 到期日自動補斜線 MM / YY / Auto-format expiry MM / YY
+  $('#cardExpiry').on('input', function () {
+    let v = $(this).val().replace(/\D/g, '').substring(0, 4);
+    if (v.length >= 3) v = v.slice(0, 2) + ' / ' + v.slice(2);
+    $(this).val(v);
+  });
+
+  // CVV 只允許數字 / CVV digits only
+  $('#cardCvv').on('input', function () {
+    $(this).val($(this).val().replace(/\D/g, '').substring(0, 4));
+  });
+}
+
+// ============================================================
 // 送出結帳
 // ============================================================
 
@@ -159,11 +225,32 @@ function handleCheckout(cart) {
     return;
   }
 
+  // 付款方式驗證 / Payment validation
+  const paymentMethod = $('input[name="paymentMethod"]:checked').val();
+  if (paymentMethod === 'credit') {
+    const cardNum    = $('#cardNumber').val().replace(/\s/g, '');
+    const cardExpiry = $('#cardExpiry').val().trim();
+    const cardCvv    = $('#cardCvv').val().trim();
+    if (cardNum.length < 16) {
+      highlightError('#cardNumber', '請填寫完整的信用卡卡號（16 位）');
+      return;
+    }
+    if (!/^\d{2} \/ \d{2}$/.test(cardExpiry)) {
+      highlightError('#cardExpiry', '請填寫正確的到期日格式（MM / YY）');
+      return;
+    }
+    if (cardCvv.length < 3) {
+      highlightError('#cardCvv', '請填寫 CVV（3-4 位數字）');
+      return;
+    }
+  }
+
   // 準備送出的資料 / Prepare submission payload
   const payload = {
     ...cart,
-    contact: { name, phone, email },
-    submitted_at: new Date().toISOString()
+    contact:        { name, phone, email },
+    payment_method: paymentMethod,
+    submitted_at:   new Date().toISOString()
   };
 
   // 按鈕進入 loading 狀態 / Button loading state
