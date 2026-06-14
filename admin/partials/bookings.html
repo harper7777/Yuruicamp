@@ -1,0 +1,67 @@
+<!-- partials/bookings.html
+     預約/租借管理頁面
+     由 core.js 的 $.load() 注入到 #contentArea
+     表格數據由 bookings.js 的 $.getJSON() 動態產生
+-->
+
+<div class="card shadow-sm border-0">
+
+  <!-- 卡片頂部：標題 + 篩選 Select -->
+  <div class="card-header bg-white border-0
+              d-flex justify-content-between align-items-center py-3">
+    <h6 class="fw-semibold mb-0">
+      <i class="fas fa-calendar-check me-2 text-muted"></i>預約列表
+    </h6>
+
+    <!-- 雙篩選：訂單狀態 + 付款狀態（AND 邏輯，由 bookings.js applyBookingFilters 處理） -->
+    <div class="d-flex gap-2 flex-wrap">
+      <select class="form-select form-select-sm w-auto" id="bookingStatusFilter"
+              style="min-width: 130px;">
+        <option value="all">全部預約</option>
+        <option value="pending">待確認</option>
+        <option value="confirmed">已確認</option>
+        <option value="completed">已完成</option>
+        <option value="cancelled">已取消</option>
+      </select>
+      <select class="form-select form-select-sm w-auto" id="paymentStatusFilter"
+              style="min-width: 120px;">
+        <option value="all">全部付款</option>
+        <option value="paid">已付款</option>
+        <option value="refunded">已退款</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 表格容器 -->
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0" id="bookingsTable">
+        <thead class="table-light">
+          <tr>
+            <th>預約單號</th>
+            <th>下單日期</th>
+            <th>顧客姓名</th>
+            <th>入住・退營</th>
+            <th>營區</th>
+            <th>含租借</th>
+            <th>付款狀態</th>
+            <th>訂單狀態</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <!-- tbody 由 bookings.js 的 renderBookingsTable() 動態填入 -->
+        <tbody id="bookingsTableBody">
+          <!-- 初始顯示 Loading 提示 -->
+          <tr>
+            <td colspan="9" class="text-center py-4">
+              <div class="spinner-border spinner-border-sm me-2"
+                   style="color: var(--admin-brand-accent);"></div>
+              <span class="text-muted">載入預約資料中...</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div><!-- end card-body -->
+
+</div><!-- end card -->
