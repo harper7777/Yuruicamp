@@ -4,8 +4,11 @@
  * 使用 jQuery Event Namespace (.discounts) 防止重複導覽時事件堆疊
  *
  * 表單為 inline（非 Modal），欄位 ID：
- *   #newCouponCode, #newCouponDiscount, #newCouponQty, #newCouponExpiry
+ *   #newCouponCode, #newCouponDiscount, #newCouponQty
+ *   #newCouponStart, #newCouponEnd（起始/結束時間，datetime-local）
+ *   #discountTypeSwitch（折扣類型切換，checkbox form-switch）
  *   #generateCouponCode（隨機產生按鈕）, #submitAddCoupon（新增按鈕）
+ *   #setCouponStartNow（填入現在時間按鈕）
  */
 
 window.initDiscounts = function () {
@@ -19,6 +22,44 @@ window.initDiscounts = function () {
       '<i class="fas fa-exclamation-triangle me-2"></i>載入優惠券數據失敗' +
       '</td></tr>'
     );
+  });
+
+  // 折扣類型 Switch：切換「折扣金額」和「折數」模式
+  // Switch 勾選 = 折數模式；未勾選 = 折扣金額模式（預設）
+  $(document).on('change.discounts', '#discountTypeSwitch', function () {
+    var isPercent = $(this).is(':checked'); // true = 折數；false = 金額
+
+    if (isPercent) {
+      // 折數模式：輸入 0.1 ~ 9.9，step 0.1
+      $('#discountLabel').html('折數（幾折）<span class="text-danger">*</span>');
+      $('#newCouponDiscount')
+        .attr('placeholder', '例：8')
+        .attr('min', '0.1')
+        .attr('max', '9.9')
+        .attr('step', '0.1')
+        .val('');
+    } else {
+      // 折扣金額模式：輸入正整數，無上限
+      $('#discountLabel').html('折扣金額 (NT$) <span class="text-danger">*</span>');
+      $('#newCouponDiscount')
+        .attr('placeholder', '例：200')
+        .attr('min', '1')
+        .removeAttr('max')
+        .attr('step', '1')
+        .val('');
+    }
+  });
+
+  // 「現在」按鈕：將起始時間填入當下時間（精度到分鐘）
+  $(document).on('click.discounts', '#setCouponStartNow', function () {
+    var now    = new Date();
+    var year   = now.getFullYear();
+    var month  = String(now.getMonth() + 1).padStart(2, '0');
+    var day    = String(now.getDate()).padStart(2, '0');
+    var hour   = String(now.getHours()).padStart(2, '0');
+    var minute = String(now.getMinutes()).padStart(2, '0');
+    // datetime-local 格式必須是 "YYYY-MM-DDTHH:MM"
+    $('#newCouponStart').val(year + '-' + month + '-' + day + 'T' + hour + ':' + minute);
   });
 
   // 產生隨機優惠碼（8碼英數）
@@ -62,24 +103,75 @@ window.initDiscounts = function () {
 
   // 新增優惠券（inline form，無 Modal）
   $(document).on('click.discounts', '#submitAddCoupon', function () {
-    var code     = $('#newCouponCode').val().trim().toUpperCase();
-    var discount = parseInt($('#newCouponDiscount').val(), 10) || 0;
-    var quantity = parseInt($('#newCouponQty').val(), 10) || 50;
-    var expiry   = $('#newCouponExpiry').val();
+    var code       = $('#newCouponCode').val().trim().toUpperCase();
+    var discountRaw = parseFloat($('#newCouponDiscount').val()) || 0;
+    var quantity   = parseInt($('#newCouponQty').val(), 10) || 50;
+    var startVal   = $('#newCouponStart').val(); // "YYYY-MM-DDTHH:MM" 或空字串
+    var endVal     = $('#newCouponEnd').val();   // "YYYY-MM-DDTHH:MM" 或空字串
+    var isPercent  = $('#discountTypeSwitch').is(':checked'); // true = 折數
 
-    if (!code || discount <= 0) {
-      window.showAdminToast('請填寫優惠碼與有效的折扣金額', 'danger');
+    // --- 驗證 ---
+    if (!code) {
+      window.showAdminToast('請填寫優惠碼', 'danger');
       return;
     }
+    if (isPercent) {
+      // 折數須在 0 < x < 10 之間，且最多一位小數
+      if (discountRaw <= 0 || discountRaw >= 10) {
+        window.showAdminToast('折數須介於 0 到 10 之間（不含）', 'danger');
+        return;
+      }
+      // 確保最多一位小數（例如 8.55 不合法）
+      if (Math.round(discountRaw * 10) / 10 !== discountRaw) {
+        window.showAdminToast('折數最多輸入小數後一位，例如 8 或 8.5', 'danger');
+        return;
+      }
+    } else {
+      if (discountRaw <= 0) {
+        window.showAdminToast('請填寫有效的折扣金額', 'danger');
+        return;
+      }
+    }
 
+    // --- 折扣欄位顯示文字 ---
+    // 金額：折抵 NT$ 200；折數：8 折
+    var discountDisplay = isPercent
+      ? discountRaw + ' 折'
+      : '折抵 NT$ ' + Math.floor(discountRaw);
+
+    // --- 有效期限顯示文字 ---
+    // 將 "YYYY-MM-DDTHH:MM" 轉為 "YYYY/MM/DD HH:MM" 格式
+    function formatDatetime(val) {
+      if (!val) return '';
+      // val 格式："2026-06-14T18:00"
+      var parts = val.split('T');           // ["2026-06-14", "18:00"]
+      var datePart = parts[0].replace(/-/g, '/'); // "2026/06/14"
+      return datePart + ' ' + parts[1];    // "2026/06/14 18:00"
+    }
+
+    var startDisplay = formatDatetime(startVal);
+    var endDisplay   = formatDatetime(endVal);
+    var expiryDisplay;
+
+    if (startDisplay && endDisplay) {
+      expiryDisplay = startDisplay + ' ～ ' + endDisplay;
+    } else if (!startDisplay && endDisplay) {
+      expiryDisplay = '即日起 ～ ' + endDisplay;
+    } else if (startDisplay && !endDisplay) {
+      expiryDisplay = startDisplay + ' ～ 無限期';
+    } else {
+      expiryDisplay = '無限期';
+    }
+
+    // --- 組合新表格列 ---
     var newRow =
       '<tr data-coupon-code="' + code + '" data-coupon-status="active">' +
       '<td><code class="fw-bold">' + code + '</code></td>' +
-      '<td>折抵 NT$ ' + discount + '</td>' +
+      '<td>' + discountDisplay + '</td>' +
       '<td class="text-center">' + quantity + '</td>' +
       '<td class="text-center">0</td>' +
       '<td class="text-center">' + quantity + '</td>' +
-      '<td>' + (expiry || '無限期') + '</td>' +
+      '<td>' + expiryDisplay + '</td>' +
       '<td><span class="badge bg-success status-badge">啟用中</span></td>' +
       '<td>' +
       '<button class="btn btn-sm btn-outline-warning btn-toggle-coupon me-1">停用</button>' +
@@ -88,11 +180,14 @@ window.initDiscounts = function () {
 
     $('#couponsTableBody').prepend($(newRow).hide().fadeIn(400));
 
-    // 重設表單欄位
+    // --- 重設表單欄位 ---
     $('#newCouponCode').val('');
     $('#newCouponDiscount').val('');
     $('#newCouponQty').val('50');
-    $('#newCouponExpiry').val('');
+    $('#newCouponStart').val('');
+    $('#newCouponEnd').val('');
+    // Switch 重設回「折扣金額」模式
+    $('#discountTypeSwitch').prop('checked', false).trigger('change');
 
     window.showAdminToast('優惠券「' + code + '」已新增');
   });

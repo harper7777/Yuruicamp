@@ -70,6 +70,15 @@
         <i class="fas fa-star"></i>
         <span>評論管理</span>
       </a>
+
+      <!-- 分隔線：將預約管理獨立成新區塊 -->
+      <hr style="border-color: rgba(255,255,255,0.15); margin: 8px 16px;">
+
+      <a href="#" class="sidebar-link"
+         data-section="bookings" data-title="預約/租借管理">
+        <i class="fas fa-calendar-check"></i>
+        <span>預約/租借管理</span>
+      </a>
     </nav>
 
     <!-- 底部：管理員資訊 + 登出 -->
@@ -128,6 +137,14 @@
         <a href="#" class="sidebar-link"
            data-section="reviews" data-title="評論管理">
           <i class="fas fa-star"></i><span>評論管理</span>
+        </a>
+
+        <!-- 分隔線：將預約管理獨立成新區塊 -->
+        <hr style="border-color: rgba(255,255,255,0.15); margin: 8px 16px;">
+
+        <a href="#" class="sidebar-link"
+           data-section="bookings" data-title="預約/租借管理">
+          <i class="fas fa-calendar-check"></i><span>預約/租借管理</span>
         </a>
         <div class="sidebar-footer mt-auto">
           <a href="#" class="sidebar-logout-mobile d-flex align-items-center gap-2
@@ -293,6 +310,137 @@
   </div>
 
   <!-- ============================================================
+       全域 Modal：預約明細（靜態放在 dashboard，由 bookings.js 填入內容）
+       ============================================================ -->
+  <div class="modal fade" id="bookingDetailModal" tabindex="-1"
+       aria-labelledby="bookingDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="bookingDetailModalLabel">
+            預約明細 &mdash;
+            <span id="bkModalId" class="text-muted"></span>
+            &ensp;<span id="bkModalStatus"></span>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+
+          <!-- 訂購人資訊 -->
+          <h6 class="fw-semibold mb-2">
+            <i class="fas fa-user me-2 text-muted"></i>訂購人資訊
+          </h6>
+          <div class="row g-2 mb-3">
+            <div class="col-6 col-md-3">
+              <small class="text-muted d-block">姓名</small>
+              <span id="bkModalName" class="fw-semibold"></span>
+            </div>
+            <div class="col-6 col-md-3">
+              <small class="text-muted d-block">聯絡電話</small>
+              <span id="bkModalPhone"></span>
+            </div>
+            <div class="col-6 col-md-3">
+              <small class="text-muted d-block">Email</small>
+              <span id="bkModalEmail"></span>
+            </div>
+            <div class="col-6 col-md-3">
+              <small class="text-muted d-block">付款狀態</small>
+              <span id="bkModalPaymentStatus"></span>
+            </div>
+          </div>
+
+          <hr class="my-3">
+
+          <!-- 住宿明細 -->
+          <h6 class="fw-semibold mb-2">
+            <i class="fas fa-campground me-2 text-muted"></i>住宿明細
+          </h6>
+          <div id="bkModalStayDetail" class="mb-3"></div>
+
+          <hr class="my-3">
+
+          <!-- 裝備租借明細 -->
+          <h6 class="fw-semibold mb-2">
+            <i class="fas fa-toolbox me-2 text-muted"></i>裝備租借明細
+          </h6>
+          <div id="bkModalRentalDetail" class="mb-3"></div>
+
+          <hr class="my-3">
+
+          <!-- 費用明細 -->
+          <h6 class="fw-semibold mb-2">
+            <i class="fas fa-receipt me-2 text-muted"></i>費用明細
+          </h6>
+          <div id="bkModalCostBreakdown" class="mb-3"></div>
+
+          <hr class="my-3">
+
+          <!-- 裝備歸還確認（僅 confirmed + 有租借時顯示） -->
+          <div id="equipmentReturnSection" class="d-none mb-3">
+            <h6 class="fw-semibold mb-2">
+              <i class="fas fa-undo me-2 text-muted"></i>裝備歸還確認
+            </h6>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="equipmentReturnedCheck">
+              <label class="form-check-label" for="equipmentReturnedCheck">
+                確認裝備已全數歸還
+              </label>
+            </div>
+          </div>
+
+          <!-- 狀態紀錄時間軸 -->
+          <h6 class="fw-semibold mb-2">
+            <i class="fas fa-history me-2 text-muted"></i>狀態紀錄
+          </h6>
+          <ul id="bkModalHistory" class="list-unstyled small mb-0">
+            <!-- 由 bookings.js 的 showBookingModal() 動態填入 -->
+          </ul>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal">關閉</button>
+          <!-- 僅 confirmed 狀態顯示，由 bookings.js 控制 d-none -->
+          <button type="button" id="btnCompleteBooking"
+                  class="btn text-white d-none"
+                  style="background-color: var(--admin-brand-accent);">
+            <i class="fas fa-check-circle me-1"></i>標記已完成
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       全域 Modal：取消預約確認（靜態放在 dashboard，由 bookings.js 控制）
+       ============================================================ -->
+  <div class="modal fade" id="bookingCancelModal" tabindex="-1"
+       aria-labelledby="bookingCancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="bookingCancelModalLabel">
+            <i class="fas fa-exclamation-triangle me-2 text-danger"></i>取消預約確認
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted small mb-2">此操作無法復原，請填寫取消原因（選填）：</p>
+          <textarea class="form-control" id="cancelReasonInput" rows="3"
+                    placeholder="例：顧客臨時取消、天氣因素..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal">不取消</button>
+          <button type="button" id="confirmCancelBtn" class="btn btn-danger">
+            <i class="fas fa-times me-1"></i>確認取消
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
        全域 Modal：新增商品（靜態放在 dashboard，由 products.js 處理）
        ============================================================ -->
   <div class="modal fade" id="addProductModal" tabindex="-1"
@@ -433,6 +581,7 @@
   <script src="js/customers.js"></script>
   <script src="js/discounts.js"></script>
   <script src="js/reviews.js"></script>
+  <script src="js/bookings.js"></script>
 
 </body>
 </html>

@@ -92,7 +92,7 @@ $(document).ready(function () {
  *       載入完成後呼叫對應模組的初始化函式
  *
  * @param {string} sectionName - 模組名稱
- *   可選值：'analytics' | 'orders' | 'movement' | 'products' | 'customers' | 'discounts' | 'reviews'
+ *   可選值：'analytics' | 'orders' | 'movement' | 'products' | 'customers' | 'discounts' | 'reviews' | 'bookings'
  *
  * --- API 預留說明 ---
  * 目前從本地 partials/ 資料夾載入靜態 HTML。
@@ -146,6 +146,7 @@ function loadSection(sectionName) {
       customers: window.initCustomers,
       discounts: window.initDiscounts,
       reviews:   window.initReviews,
+      bookings:  window.initBookings,
     };
 
     // 確認初始化函式存在後再呼叫

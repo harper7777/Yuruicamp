@@ -76,5 +76,57 @@
     "coupons": 1,
     "tags": ["新會員"],
     "orders": ["#0005"]
+  },
+  {
+    "id": "U007",
+    "avatar": "../assets/images/avatar-01.jpg",
+    "name": "蔡佳玲",
+    "phone": "0978-901-234",
+    "email": "tsai@example.com",
+    "totalSpent": 0,
+    "tier": "一般",
+    "points": 0,
+    "coupons": 0,
+    "tags": ["新會員"],
+    "orders": []
+  },
+  {
+    "id": "U008",
+    "avatar": "../assets/images/avatar-02.jpg",
+    "name": "吳建宏",
+    "phone": "0989-012-345",
+    "email": "wu@example.com",
+    "totalSpent": 18600,
+    "tier": "VIP",
+    "points": 1860,
+    "coupons": 4,
+    "tags": ["VIP", "高消費"],
+    "orders": []
+  },
+  {
+    "id": "U009",
+    "avatar": "../assets/images/avatar-03.jpg",
+    "name": "劉雅婷",
+    "phone": "0990-123-456",
+    "email": "liu@example.com",
+    "totalSpent": 0,
+    "tier": "一般",
+    "points": 0,
+    "coupons": 0,
+    "tags": ["新會員"],
+    "orders": []
+  },
+  {
+    "id": "U010",
+    "avatar": "../assets/images/avatar-01.jpg",
+    "name": "許志明",
+    "phone": "0901-234-567",
+    "email": "hsu@example.com",
+    "totalSpent": 35800,
+    "tier": "SVIP",
+    "points": 3580,
+    "coupons": 8,
+    "tags": ["SVIP", "高消費"],
+    "orders": []
   }
 ]

@@ -14,8 +14,10 @@
   <div class="card-body">
     <div class="row g-3 align-items-end" id="addCouponForm">
 
+      <!-- ===== 第一列：優惠碼 / 折扣類型 / 發行數量 ===== -->
+
       <!-- 優惠碼 + 隨機生成按鈕 -->
-      <div class="col-md-3">
+      <div class="col-md-4">
         <label class="form-label small text-muted" for="newCouponCode">
           優惠碼 <span class="text-danger">*</span>
         </label>
@@ -29,17 +31,26 @@
         </div>
       </div>
 
-      <!-- 折扣金額 -->
-      <div class="col-md-2">
-        <label class="form-label small text-muted" for="newCouponDiscount">
+      <!-- 折扣類型 Switch + 輸入欄 -->
+      <div class="col-md-4">
+        <!-- Switch：切換「折扣金額」或「折數」 -->
+        <div class="form-check form-switch mb-1 d-flex align-items-center gap-2 ps-0">
+          <span class="small text-muted">折扣金額</span>
+          <input class="form-check-input ms-0" type="checkbox"
+                 role="switch" id="discountTypeSwitch">
+          <span class="small text-muted">折數</span>
+        </div>
+        <!-- 動態 label（由 JS 切換文字） -->
+        <label class="form-label small text-muted" for="newCouponDiscount" id="discountLabel">
           折扣金額 (NT$) <span class="text-danger">*</span>
         </label>
+        <!-- 動態 input（由 JS 切換 min/max/step/placeholder） -->
         <input type="number" class="form-control" id="newCouponDiscount"
-               placeholder="例：200" min="1">
+               placeholder="例：200" min="1" step="1">
       </div>
 
       <!-- 發行數量 -->
-      <div class="col-md-2">
+      <div class="col-md-4">
         <label class="form-label small text-muted" for="newCouponQty">
           發行數量
         </label>
@@ -47,17 +58,30 @@
                placeholder="例：50" min="1" max="999" value="50">
       </div>
 
-      <!-- 有效期限 -->
-      <div class="col-md-3">
-        <label class="form-label small text-muted" for="newCouponExpiry">
-          有效期限
-        </label>
-        <input type="date" class="form-control" id="newCouponExpiry">
+      <!-- ===== 第二列：有效期限（起始 + 結束各佔半行） ===== -->
+
+      <!-- 起始時間（含「有效期限」label） -->
+      <div class="col-md-6">
+        <label class="form-label small text-muted">有效期限</label>
+        <div class="input-group">
+          <span class="input-group-text px-2" style="font-size:0.85rem;">起</span>
+          <input type="datetime-local" class="form-control" id="newCouponStart">
+          <button class="btn btn-outline-secondary" type="button"
+                  id="setCouponStartNow" title="填入現在時間">現在</button>
+        </div>
       </div>
 
-      <!-- 新增按鈕 -->
-      <div class="col-md-2">
-        <button class="btn w-100 text-white fw-semibold" id="submitAddCoupon"
+      <!-- 結束時間（無 label，靠 align-items-end 自動對齊底部） -->
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-text px-2" style="font-size:0.85rem;">迄</span>
+          <input type="datetime-local" class="form-control" id="newCouponEnd">
+        </div>
+      </div>
+
+      <!-- ===== 第三列：新增按鈕靠右（ms-auto 推到最右側） ===== -->
+      <div class="col-auto ms-auto">
+        <button class="btn px-4 text-white fw-semibold" id="submitAddCoupon"
                 style="background-color: var(--admin-brand-accent);">
           <i class="fas fa-plus me-1"></i>新增
         </button>

@@ -24,6 +24,7 @@ window.initCustomers = function () {
   $(document).off('.customers');
 
   $.getJSON('data/customers.json', function (customers) {
+    window.customersCache = customers; // 供 bookings.js 查詢顧客姓名/電話/Email
     renderCustomersAccordion(customers);
   }).fail(function () {
     $('#customersAccordion').html(
@@ -229,4 +230,32 @@ function renderCustomersAccordion(customers) {
   }).join('');
 
   $('#customersAccordion').html(html);
+
+  // 若從預約管理的顧客連結跳轉過來，自動展開目標顧客的 Accordion 並滾動至該位置
+  // window.pendingCustomerId 由 bookings.js 的顧客連結點擊事件設定
+  if (window.pendingCustomerId) {
+    var targetId = window.pendingCustomerId;
+    window.pendingCustomerId = null; // 用完即清，防止下次進入客戶管理時重複觸發
+
+    var $target = $('#collapse-' + targetId);
+    if ($target.length) {
+      // 先把第一個預設展開的 Accordion 收起來（若目標不是第一筆）
+      var $firstCollapse = $('#customersAccordion .accordion-collapse.show').not($target);
+      if ($firstCollapse.length) {
+        new bootstrap.Collapse($firstCollapse[0], { toggle: false }).hide();
+        $firstCollapse.siblings('.accordion-header')
+                      .find('.accordion-button')
+                      .addClass('collapsed');
+      }
+      // 展開目標顧客
+      new bootstrap.Collapse($target[0], { toggle: false }).show();
+      $target.siblings('.accordion-header')
+             .find('.accordion-button')
+             .removeClass('collapsed');
+      // 300ms 後滾動至目標位置（等待展開動畫結束）
+      setTimeout(function () {
+        $target[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+    }
+  }
 }
