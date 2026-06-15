@@ -169,8 +169,4 @@ function renderReviewCards(reviews) {
     '</div>';
 
   $('#reviewsContainer').html(html);
-
-  if (typeof window.applyEditPermission === 'function') {
-    window.applyEditPermission('reviews', $('#contentArea'));
-  }
 }

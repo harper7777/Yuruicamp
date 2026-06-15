@@ -11,7 +11,7 @@
 // @returns {string} e.g. "-25%"
 // ----------------------------------------
 function _calcDiscount(original, current) {
-  if (!original || original <= current) return '';
+  if (!original || original <= current) return "";
   return `-${Math.round((1 - current / original) * 100)}%`;
 }
 
@@ -22,13 +22,13 @@ function _calcDiscount(original, current) {
 // @returns {string} HTML 字串
 // ----------------------------------------
 function _renderStars(rating) {
-  const full  = Math.floor(rating);       // 整顆星數量
-  const half  = rating - full >= 0.5;     // 半顆星？
+  const full = Math.floor(rating); // 整顆星數量
+  const half = rating - full >= 0.5; // 半顆星？
   const empty = 5 - full - (half ? 1 : 0); // 空星數量
 
-  let html = '';
-  for (let i = 0; i < full; i++)  html += '<span class="star">★</span>';
-  if (half)                        html += '<span class="star">⯨</span>';
+  let html = "";
+  for (let i = 0; i < full; i++) html += '<span class="star">★</span>';
+  if (half) html += '<span class="star">⯨</span>';
   for (let i = 0; i < empty; i++) html += '<span class="star empty">★</span>';
   return `<span class="star-rating">${html}</span>`;
 }
@@ -40,22 +40,22 @@ function _renderStars(rating) {
 // @param {string} badgeType - 'new' | 'hot' | ''（標籤類型）
 // @returns {string} HTML 字串
 // ----------------------------------------
-function _buildProductCard(product, badgeType = '') {
+function _buildProductCard(product, badgeType = "") {
   const discount = _calcDiscount(product.originalPrice, product.price);
 
   // 標籤文字（依據傳入類型）
   // Badge label based on type
-  let badgeHTML = '';
-  if (badgeType === 'new') {
+  let badgeHTML = "";
+  if (badgeType === "new") {
     badgeHTML = '<span class="product-card-badge badge-new">NEW</span>';
-  } else if (badgeType === 'hot') {
+  } else if (badgeType === "hot") {
     badgeHTML = '<span class="product-card-badge badge-hot">熱銷</span>';
   }
 
   // 格式化價格（加千分位）
-  const priceFormatted    = product.price.toLocaleString('zh-TW');
+  const priceFormatted = product.price.toLocaleString("zh-TW");
   const origPriceFormatted = product.originalPrice
-    ? product.originalPrice.toLocaleString('zh-TW')
+    ? product.originalPrice.toLocaleString("zh-TW")
     : null;
 
   return `
@@ -92,18 +92,16 @@ function _buildProductCard(product, badgeType = '') {
           <span>(${product.reviews})</span>
         </div>
 
-        <!-- 價格：現價 + 原價刪除線 -->
+        <!-- 價格：現價 + 原價刪除線 + 折扣百分比 -->
         <div class="product-card-price">
           <span class="price-current">NT$ ${priceFormatted}</span>
-          ${origPriceFormatted
-            ? `<span class="price-original">NT$ ${origPriceFormatted}</span>`
-            : ''}
+          ${
+            origPriceFormatted
+              ? `<span class="price-original">NT$ ${origPriceFormatted}</span>`
+              : ""
+          }
+          ${discount ? `<span class="price-discount">${discount}</span>` : ""}
         </div>
-        
-        <!-- 折扣百分比（獨立換行顯示） -->
-        ${discount
-          ? `<span class="price-discount">${discount}</span>`
-          : ''}
 
         <!-- 加入購物車按鈕 -->
         <button
@@ -124,13 +122,13 @@ function _buildProductCard(product, badgeType = '') {
 // @param {HTMLElement} container     - 目標容器 DOM
 // @param {string}      badgeType     - 'new' | 'hot' | ''
 // ----------------------------------------
-function _renderProducts(products, container, badgeType = '') {
+function _renderProducts(products, container, badgeType = "") {
   if (!container) return;
 
   if (products.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
-        <span class="empty-state-icon">🏕️</span>
+        <span class="empty-state-icon"><i class="bi bi-tent"></i></span>
         <p class="empty-state-title">目前沒有商品</p>
       </div>
     `;
@@ -138,7 +136,9 @@ function _renderProducts(products, container, badgeType = '') {
   }
 
   // 把每張卡片 HTML 拼接後一次寫入 DOM（效能優化）
-  container.innerHTML = products.map(p => _buildProductCard(p, badgeType)).join('');
+  container.innerHTML = products
+    .map((p) => _buildProductCard(p, badgeType))
+    .join("");
 }
 
 // ----------------------------------------
@@ -146,8 +146,8 @@ function _renderProducts(products, container, badgeType = '') {
 // Initialize product sections (new + bestsellers)
 // ----------------------------------------
 async function _initProductSections() {
-  const newRow        = document.getElementById('newProductsRow');
-  const bestsellerRow = document.getElementById('bestsellerProductsRow');
+  const newRow = document.getElementById("newProductsRow");
+  const bestsellerRow = document.getElementById("bestsellerProductsRow");
 
   if (!newRow && !bestsellerRow) return;
 
@@ -157,28 +157,29 @@ async function _initProductSections() {
     const allProducts = await window.API.products.getAll();
 
     // ── 最新商品：isNew = true 的前 6 筆 ──
-    const newProducts = allProducts
-      .filter(p => p.isNew === true)
-      .slice(0, 6);
+    const newProducts = allProducts.filter((p) => p.isNew === true).slice(0, 6);
 
     // ── 熱銷商品：isBestSeller = true，依評論數排序，前 6 筆 ──
     const bestsellerProducts = allProducts
-      .filter(p => p.isBestSeller === true)
+      .filter((p) => p.isBestSeller === true)
       .sort((a, b) => b.reviews - a.reviews)
       .slice(0, 6);
 
-    _renderProducts(newProducts, newRow, 'new');
-    _renderProducts(bestsellerProducts, bestsellerRow, 'hot');
+    _renderProducts(newProducts, newRow, "new");
+    _renderProducts(bestsellerProducts, bestsellerRow, "hot");
 
     // 綁定商品卡片點擊事件（購物車 + 詳情頁跳轉）
     _bindCardEvents();
-
   } catch (error) {
-    console.error('商品載入失敗 | Failed to load products:', error);
+    console.error("商品載入失敗 | Failed to load products:", error);
 
     // 若載入失敗，顯示錯誤提示
-    if (newRow) newRow.innerHTML = '<p class="text-muted text-center" style="padding:2rem;">商品載入失敗，請重新整理頁面</p>';
-    if (bestsellerRow) bestsellerRow.innerHTML = '<p class="text-muted text-center" style="padding:2rem;">商品載入失敗，請重新整理頁面</p>';
+    if (newRow)
+      newRow.innerHTML =
+        '<p class="text-muted text-center" style="padding:2rem;">商品載入失敗，請重新整理頁面</p>';
+    if (bestsellerRow)
+      bestsellerRow.innerHTML =
+        '<p class="text-muted text-center" style="padding:2rem;">商品載入失敗，請重新整理頁面</p>';
   }
 }
 
@@ -190,29 +191,31 @@ function _bindCardEvents() {
   // 使用事件委派（Event Delegation）：只在容器上監聽一次
   // Using event delegation: listen once on the parent
 
-  ['newProductsRow', 'bestsellerProductsRow'].forEach(rowId => {
+  ["newProductsRow", "bestsellerProductsRow"].forEach((rowId) => {
     const row = document.getElementById(rowId);
     if (!row) return;
 
-    row.addEventListener('click', async (e) => {
+    row.addEventListener("click", async (e) => {
       // ① 點擊「快速加入購物車」浮層按鈕
-      if (e.target.classList.contains('product-card-quick-add') ||
-          e.target.closest('.product-card-quick-add')) {
-        const btn = e.target.closest('.product-card-quick-add') || e.target;
+      if (
+        e.target.classList.contains("product-card-quick-add") ||
+        e.target.closest(".product-card-quick-add")
+      ) {
+        const btn = e.target.closest(".product-card-quick-add") || e.target;
         const productId = btn.dataset.productId;
         await _handleAddToCart(productId);
         return;
       }
 
       // ② 點擊「加入購物車」底部按鈕
-      if (e.target.classList.contains('product-card-add-btn')) {
+      if (e.target.classList.contains("product-card-add-btn")) {
         const productId = e.target.dataset.productId;
         await _handleAddToCart(productId);
         return;
       }
 
       // ③ 點擊卡片其他區域 → 跳轉商品詳情頁
-      const card = e.target.closest('.product-card');
+      const card = e.target.closest(".product-card");
       if (card) {
         const productId = card.dataset.productId;
         window.location.href = `product-detail.html?id=${productId}`;
@@ -232,24 +235,26 @@ async function _handleAddToCart(productId) {
     const product = await window.API.products.getById(productId);
 
     // 呼叫全局購物車功能（定義在 cart.js）
-    window.addToCart({
-      id:    product.id,
-      name:  product.name,
-      price: product.price,
-      image: product.image,
-      brand: product.brand,
-    }, 1);
+    window.addToCart(
+      {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        brand: product.brand,
+      },
+      1,
+    );
 
     // 購物車 Badge 動畫效果（透過 CSS class）
-    const badge = document.querySelector('.cart-badge');
+    const badge = document.querySelector(".cart-badge");
     if (badge) {
-      badge.classList.add('badge-bounce');
-      setTimeout(() => badge.classList.remove('badge-bounce'), 600);
+      badge.classList.add("badge-bounce");
+      setTimeout(() => badge.classList.remove("badge-bounce"), 600);
     }
-
   } catch (error) {
-    console.error('加入購物車失敗:', error);
-    window.showToast('加入失敗，請稍後再試', 'error');
+    console.error("加入購物車失敗:", error);
+    window.showToast("加入失敗，請稍後再試", "error");
   }
 }
 
@@ -258,14 +263,12 @@ async function _handleAddToCart(productId) {
 // Home page init entry point
 // ========================================
 window.initHomePage = async () => {
-  console.log('📌 首頁初始化中...');
+  console.log("📌 首頁初始化中...");
 
-  
   // 載入商品區塊
   await _initProductSections();
 
-  console.log('✓ 首頁初始化完成');
+  console.log("✓ 首頁初始化完成");
 };
 
-
-console.log('✓ home.js 已載入');
+console.log("✓ home.js 已載入");

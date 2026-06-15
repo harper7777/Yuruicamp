@@ -86,24 +86,7 @@ window.saveAppState = () => {
 };
 
 /**
- * 工具函數：執行登出操作
- * 設計說明：僅清除認證狀態，保留購物車與用戶偏好
- * 用於正常的登出流程
- */
-window.logout = () => {
-  window.AppState.isLoggedIn = false;
-  window.AppState.currentUser = null;
-  // 保留 cart 與 preferences
-  localStorage.setItem('isLoggedIn', 'false');
-  localStorage.removeItem('currentUser');
-  // 不清空 localStorage 中的 cart 和 preferences
-};
-
-/**
- * 工具函數：重置應用狀態（完全清除）
- * 設計說明：清除所有狀態與 localStorage，僅用於特殊場景
- * 注意：此函數會清空購物車，通常只在用戶明確要求或系統故障時使用
- * @deprecated 優先使用 logout() 而非此函數
+ * 工具函數：重置應用狀態
  */
 window.resetAppState = () => {
   window.AppState = {

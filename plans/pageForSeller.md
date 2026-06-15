@@ -5,6 +5,7 @@
 **目標**：建立可擴展的賣家後台前端框架，使用 HTML/CSS/JavaScript + Bootstrap 5 + jQuery，後台頁面完整實現，Mock 數據使用靜態 JSON，預留 API 接入點，展示高效率的數據可視化與行內互動體驗。
 
 **技術棧**：
+
 - HTML5 + CSS3 + jQuery 3.x + Bootstrap 5
 - Chart.js（圖表視覺化）
 - FontAwesome 6（Icon 圖示）
@@ -12,12 +13,14 @@
 - 無後端依賴（演示階段）
 
 **設計決策**：
+
 - **頁面架構**：混合式 — `admin/dashboard.html` 作為主框架，用 jQuery `$.load()` 動態載入六個 HTML 片段 (partials)
 - **配色**：深灰炭黑 Sidebar `#1e2329` + 品牌深青綠 Accent `#244d4d`，右側內容區使用 Bootstrap `bg-light`
 - **登入流程**：`admin/login.html` 靜態 Mock 驗證（任意輸入帳密 → 寫入 `sessionStorage` → 跳轉 dashboard）
 - **目錄**：完全獨立的 `admin/` 資料夾，與買家端前台分離
 
 **預期產物**：
+
 - 1 個登入頁 + 1 個後台主框架頁
 - 6 個功能模組 HTML 片段（partials）
 - 1 份後台專屬 CSS
@@ -32,39 +35,39 @@
 
 後台管理系統採用與買家前台「刻意區隔」的色系，凸顯工具性與專業感：
 
-| 用途 | 顏色代碼 | 說明 |
-|------|---------|------|
-| Sidebar 背景 | `#1e2329` | 深灰炭黑，主流後台配色 |
-| Sidebar 文字 | `#c9d1d9` | 淺灰文字，高對比易讀 |
-| Sidebar Active 邊框 | `#244d4d` | 品牌深青綠，左側亮色指示線 |
-| Sidebar Active 背景 | `rgba(36,77,77,0.25)` | 選中項目的半透明底色 |
-| Topbar 背景 | `#fff` | 白色，與 Sidebar 形成層次 |
-| 主內容區背景 | `#f0f2f5` | 淺灰，卡片凸出視覺層次 |
-| 品牌 Accent | `#244d4d` | 按鈕、連結、重點強調 |
-| 成功狀態 | `#198754` | Bootstrap success |
-| 警告狀態 | `#ffc107` | Bootstrap warning |
-| 危險狀態 | `#dc3545` | Bootstrap danger |
+| 用途                | 顏色代碼              | 說明                       |
+| ------------------- | --------------------- | -------------------------- |
+| Sidebar 背景        | `#1e2329`             | 深灰炭黑，主流後台配色     |
+| Sidebar 文字        | `#c9d1d9`             | 淺灰文字，高對比易讀       |
+| Sidebar Active 邊框 | `#244d4d`             | 品牌深青綠，左側亮色指示線 |
+| Sidebar Active 背景 | `rgba(36,77,77,0.25)` | 選中項目的半透明底色       |
+| Topbar 背景         | `#fff`                | 白色，與 Sidebar 形成層次  |
+| 主內容區背景        | `#f0f2f5`             | 淺灰，卡片凸出視覺層次     |
+| 品牌 Accent         | `#244d4d`             | 按鈕、連結、重點強調       |
+| 成功狀態            | `#198754`             | Bootstrap success          |
+| 警告狀態            | `#ffc107`             | Bootstrap warning          |
+| 危險狀態            | `#dc3545`             | Bootstrap danger           |
 
 ### CSS 變數定義 (`admin/css/admin.css` 開頭)
 
 ```css
 :root {
   /* === Admin Sidebar === */
-  --admin-sidebar-bg: #1e2329;         /* 側欄背景：深灰炭黑 */
-  --admin-sidebar-text: #c9d1d9;       /* 側欄文字：淺灰 */
-  --admin-sidebar-width: 250px;        /* 側欄寬度 */
+  --admin-sidebar-bg: #1e2329; /* 側欄背景：深灰炭黑 */
+  --admin-sidebar-text: #c9d1d9; /* 側欄文字：淺灰 */
+  --admin-sidebar-width: 250px; /* 側欄寬度 */
   --admin-sidebar-active-border: #244d4d; /* 選中項目左側邊框：品牌綠 */
   --admin-sidebar-active-bg: rgba(36, 77, 77, 0.25); /* 選中背景：半透明 */
 
   /* === Admin Topbar === */
-  --admin-topbar-height: 60px;         /* 頂部列高度 */
-  --admin-topbar-bg: #ffffff;          /* 頂部列背景：白色 */
+  --admin-topbar-height: 60px; /* 頂部列高度 */
+  --admin-topbar-bg: #ffffff; /* 頂部列背景：白色 */
   --admin-topbar-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); /* 頂部陰影 */
 
   /* === Main Content === */
-  --admin-content-bg: #f0f2f5;         /* 主內容區背景：淺灰 */
-  --admin-card-bg: #ffffff;            /* 卡片背景：白色 */
-  --admin-brand-accent: #244d4d;       /* 品牌強調色：深青綠 */
+  --admin-content-bg: #f0f2f5; /* 主內容區背景：淺灰 */
+  --admin-card-bg: #ffffff; /* 卡片背景：白色 */
+  --admin-brand-accent: #244d4d; /* 品牌強調色：深青綠 */
 }
 ```
 
@@ -105,6 +108,7 @@ Yuruicamp/
 ```
 
 **關鍵設計決策**：
+
 - `partials/` 下的 HTML 只包含 `<div>` 區塊內容，不含 `<html>`/`<head>`/`<body>` 標籤
 - 每個 partial 對應一個同名 JS 檔，被 AJAX 載入後由 `core.js` 呼叫初始化函式
 - `data/` 下的 JSON 供各 JS 用 `$.getJSON()` 讀取，模擬後端 API 回傳格式
@@ -114,6 +118,7 @@ Yuruicamp/
 **`admin/data/orders.json`**（涵蓋三種 `orderStatus`，供篩選功能演示）：
 
 > **欄位說明**：
+>
 > - `id`：訂單編號，按 `createdAt` 升序排列，格式 `#0001` 起始
 > - `orderStatus`：訂單出貨狀態（供篩選 Select 使用，已移除 `shippingStatus`）
 >   - `"unshipped"` 未出貨（顧客下單後的初始狀態）
@@ -136,15 +141,15 @@ Yuruicamp/
     "orderStatus": "shipped",
     "items": [
       { "name": "折疊桌椅組", "qty": 1, "price": 2800 },
-      { "name": "保溫壺 1L",  "qty": 2, "price": 880  }
+      { "name": "保溫壺 1L", "qty": 2, "price": 880 }
     ],
     "address": "桃園市中壢區中山路300號",
     "history": [
       { "time": "2026-05-27 15:44:18", "action": "訂單產生" },
-      { "time": "2026-05-27 15:44:18", "action": "待付款"  },
-      { "time": "2026-05-27 15:46:05", "action": "已付款"  },
-      { "time": "2026-05-27 15:46:05", "action": "待出貨"  },
-      { "time": "2026-05-29 10:00:00", "action": "已出貨"  }
+      { "time": "2026-05-27 15:44:18", "action": "待付款" },
+      { "time": "2026-05-27 15:46:05", "action": "已付款" },
+      { "time": "2026-05-27 15:46:05", "action": "待出貨" },
+      { "time": "2026-05-29 10:00:00", "action": "已出貨" }
     ]
   },
   {
@@ -156,19 +161,20 @@ Yuruicamp/
     "orderStatus": "unshipped",
     "items": [
       { "name": "Coleman 六人帳篷", "qty": 1, "price": 3200 },
-      { "name": "充氣睡墊",          "qty": 2, "price": 325  }
+      { "name": "充氣睡墊", "qty": 2, "price": 325 }
     ],
     "address": "台北市信義區松仁路100號",
     "history": [
       { "time": "2026-06-04 14:32:10", "action": "訂單產生" },
       { "time": "2026-06-04 14:32:10", "action": "貨到付款" },
-      { "time": "2026-06-04 14:32:10", "action": "待出貨"   }
+      { "time": "2026-06-04 14:32:10", "action": "待出貨" }
     ]
   }
 ]
 ```
 
 **`admin/data/products.json`**：
+
 ```json
 [
   {
@@ -185,6 +191,7 @@ Yuruicamp/
 ```
 
 **`admin/data/customers.json`**：
+
 ```json
 [
   {
@@ -204,6 +211,7 @@ Yuruicamp/
 ```
 
 **`admin/data/coupons.json`**：
+
 ```json
 [
   {
@@ -236,6 +244,7 @@ Yuruicamp/
 **`admin/data/reviews.json`**（新增）：
 
 > **欄位說明**：
+>
 > - `rating`：1–5 星評分
 > - `photos`：買家實拍圖 URL 陣列（可為空陣列 `[]`）
 > - `replied`：`true` 已回覆 / `false` 未回覆
@@ -249,7 +258,10 @@ Yuruicamp/
     "buyerAvatar": "../assets/images/avatar-01.jpg",
     "rating": 4,
     "comment": "帳篷品質非常好，搭設方便，空間也很寬敞，非常滿意這次的購買！",
-    "photos": ["../assets/images/review-photo-01.jpg", "../assets/images/review-photo-02.jpg"],
+    "photos": [
+      "../assets/images/review-photo-01.jpg",
+      "../assets/images/review-photo-02.jpg"
+    ],
     "productName": "Coleman 六人帳篷",
     "createdAt": "2026-06-01 14:32",
     "replied": false,
@@ -287,9 +299,11 @@ Yuruicamp/
 ## 第 2 階段：全局後台佈局 (Admin Layout)
 
 ### 步驟 2.1：賣家登入頁 (`admin/login.html`)
-*相依性：步驟 1.1、admin.css*
+
+_相依性：步驟 1.1、admin.css_
 
 **視覺設計**：
+
 - 全版面：深色背景（`--admin-sidebar-bg` 的漸層）搭配置中白色卡片 (`card, shadow-lg`)
 - 卡片頂部放置品牌 Logo + 「後台管理系統」副標題
 - 表單欄位：帳號 Input (`<input type="text">`) + 密碼 Input (`<input type="password">`)
@@ -297,8 +311,10 @@ Yuruicamp/
 
 ```html
 <!-- admin/login.html 核心結構 -->
-<div class="min-vh-100 d-flex align-items-center justify-content-center"
-     style="background: linear-gradient(135deg, #1e2329 0%, #2d3748 100%);">
+<div
+  class="min-vh-100 d-flex align-items-center justify-content-center"
+  style="background: linear-gradient(135deg, #1e2329 0%, #2d3748 100%);"
+>
   <div class="card shadow-lg" style="width: 400px;">
     <div class="card-body p-5">
       <div class="text-center mb-4">
@@ -310,14 +326,27 @@ Yuruicamp/
       <form id="loginForm">
         <div class="mb-3">
           <label class="form-label">帳號</label>
-          <input type="text" class="form-control" id="username" placeholder="admin">
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            placeholder="admin"
+          />
         </div>
         <div class="mb-3">
           <label class="form-label">密碼</label>
-          <input type="password" class="form-control" id="password" placeholder="••••••">
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            placeholder="••••••"
+          />
         </div>
-        <button type="submit" class="btn w-100 text-white"
-                style="background-color: var(--admin-brand-accent);">
+        <button
+          type="submit"
+          class="btn w-100 text-white"
+          style="background-color: var(--admin-brand-accent);"
+        >
           登入
         </button>
       </form>
@@ -327,24 +356,25 @@ Yuruicamp/
 ```
 
 **交互邏輯 (`admin/js/core.js` 中的登入段落)**：
+
 ```javascript
 // === 登入頁 Mock 驗證邏輯 ===
 // 實際串接後端時，只需把 sessionStorage 寫入改為 fetch('/api/login') 即可
-$('#loginForm').on('submit', function(e) {
+$("#loginForm").on("submit", function (e) {
   e.preventDefault(); // 阻止表單預設送出（不重整頁面）
 
-  const username = $('#username').val().trim();
-  const password = $('#password').val().trim();
+  const username = $("#username").val().trim();
+  const password = $("#password").val().trim();
 
   if (username && password) {
     // Mock：任意非空帳密皆視為成功
-    sessionStorage.setItem('adminLoggedIn', 'true');
-    sessionStorage.setItem('adminName', username);
+    sessionStorage.setItem("adminLoggedIn", "true");
+    sessionStorage.setItem("adminName", username);
     // 跳轉至後台主頁面
-    window.location.href = 'dashboard.html';
+    window.location.href = "dashboard.html";
   } else {
     // 欄位為空時：欄位變紅提示
-    $('#username, #password').addClass('is-invalid');
+    $("#username, #password").addClass("is-invalid");
   }
 });
 ```
@@ -352,12 +382,13 @@ $('#loginForm').on('submit', function(e) {
 ---
 
 ### 步驟 2.2：後台主框架結構 (`admin/dashboard.html`)
-*相依性：步驟 2.1*
+
+_相依性：步驟 2.1_
 
 **整體骨架 (HTML 結構)**：
+
 ```html
 <body class="d-flex" style="background: var(--admin-content-bg);">
-
   <!-- ① 左側 Sidebar（固定，不隨捲動） -->
   <aside id="adminSidebar">...</aside>
 
@@ -374,16 +405,17 @@ $('#loginForm').on('submit', function(e) {
       </div>
     </main>
   </div>
-
 </body>
 ```
 
 ---
 
 ### 步驟 2.3：左側 Sidebar 詳細設計
-*相依性：步驟 2.2*
+
+_相依性：步驟 2.2_
 
 **視覺設計**：
+
 - 寬度：`250px`，`position: fixed`，`height: 100vh`
 - 背景：`--admin-sidebar-bg`（`#1e2329`）
 - 頂部：Yuruicamp Logo（白色文字版本）+ 「賣家後台」小字
@@ -396,7 +428,8 @@ $('#loginForm').on('submit', function(e) {
   width: var(--admin-sidebar-width);
   height: 100vh;
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   background-color: var(--admin-sidebar-bg);
   display: flex;
   flex-direction: column;
@@ -431,10 +464,10 @@ $('#loginForm').on('submit', function(e) {
 ```
 
 **HTML 完整 Sidebar 結構**（品牌區塊 + 導覽選單）：
+
 ```html
 <!-- admin/dashboard.html 中的完整 Sidebar -->
 <aside id="adminSidebar" class="d-flex flex-column">
-
   <!-- ① 品牌 Logo 區塊 -->
   <div class="p-4 border-bottom border-secondary border-opacity-25">
     <h5 class="text-white fw-bold mb-0">Yuruicamp</h5>
@@ -442,70 +475,78 @@ $('#loginForm').on('submit', function(e) {
   </div>
 
   <!-- ② 導覽選單 -->
-<nav class="flex-grow-1 mt-3">
-  <a href="#" class="sidebar-link active" data-section="analytics">
-    <i class="fas fa-chart-line"></i>
-    <span>分析報表</span>
-  </a>
-  <a href="#" class="sidebar-link" data-section="orders">
-    <i class="fas fa-shopping-bag"></i>
-    <span>訂單管理</span>
-  </a>
-  <a href="#" class="sidebar-link" data-section="products">
-    <i class="fas fa-box-open"></i>
-    <span>商品與庫存</span>
-  </a>
-  <a href="#" class="sidebar-link" data-section="customers">
-    <i class="fas fa-users"></i>
-    <span>客戶管理</span>
-  </a>
-  <a href="#" class="sidebar-link" data-section="discounts">
-    <i class="fas fa-tag"></i>
-    <span>折扣管理</span>
-  </a>
-  <a href="#" class="sidebar-link" data-section="reviews">
-    <i class="fas fa-star"></i>
-    <span>評論管理</span>
-  </a>
-</nav>
+  <nav class="flex-grow-1 mt-3">
+    <a href="#" class="sidebar-link active" data-section="analytics">
+      <i class="fas fa-chart-line"></i>
+      <span>分析報表</span>
+    </a>
+    <a href="#" class="sidebar-link" data-section="orders">
+      <i class="fas fa-shopping-bag"></i>
+      <span>訂單管理</span>
+    </a>
+    <a href="#" class="sidebar-link" data-section="products">
+      <i class="fas fa-box-open"></i>
+      <span>商品與庫存</span>
+    </a>
+    <a href="#" class="sidebar-link" data-section="customers">
+      <i class="fas fa-users"></i>
+      <span>客戶管理</span>
+    </a>
+    <a href="#" class="sidebar-link" data-section="discounts">
+      <i class="fas fa-tag"></i>
+      <span>折扣管理</span>
+    </a>
+    <a href="#" class="sidebar-link" data-section="reviews">
+      <i class="fas fa-star"></i>
+      <span>評論管理</span>
+    </a>
+  </nav>
 
   <!-- ③ 底部登出連結 -->
   <div class="p-3 border-top border-secondary border-opacity-25">
-    <a href="#" id="logoutBtn"
-       class="d-flex align-items-center gap-2 text-decoration-none"
-       style="color: var(--admin-sidebar-text);">
+    <a
+      href="#"
+      id="logoutBtn"
+      class="d-flex align-items-center gap-2 text-decoration-none"
+      style="color: var(--admin-sidebar-text);"
+    >
       <i class="fas fa-sign-out-alt"></i>
       <span class="small">登出系統</span>
     </a>
   </div>
-
 </aside>
 ```
 
 ---
 
 ### 步驟 2.4：頂部 Topbar 詳細設計
-*相依性：步驟 2.2*
+
+_相依性：步驟 2.2_
 
 **視覺設計**：
+
 - 高度：`60px`，`position: sticky; top: 0`，白色背景 + 底部陰影
 - 左側：漢堡選單按鈕（手機版才顯示，`d-md-none`），當前頁面標題（`<span id="pageTitle">`，由 JS 動態更新）
 - 右側：通知鈴鐺 Icon（`<span class="badge bg-danger">` 標示未讀數）、管理員頭像（`rounded-circle`）+ 下拉登出選單
 
 ```html
 <!-- admin/dashboard.html 中的 Topbar -->
-<header id="adminTopbar"
-        class="d-flex align-items-center justify-content-between px-4"
-        style="height: var(--admin-topbar-height);
+<header
+  id="adminTopbar"
+  class="d-flex align-items-center justify-content-between px-4"
+  style="height: var(--admin-topbar-height);
                background: var(--admin-topbar-bg);
                box-shadow: var(--admin-topbar-shadow);
-               position: sticky; top: 0; z-index: 999;">
-
+               position: sticky; top: 0; z-index: 999;"
+>
   <!-- 左側：漢堡 + 頁面標題 -->
   <div class="d-flex align-items-center gap-3">
     <!-- 漢堡按鈕：只在手機版顯示 -->
-    <button class="btn d-md-none" data-bs-toggle="offcanvas"
-            data-bs-target="#mobileSidebar">
+    <button
+      class="btn d-md-none"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#mobileSidebar"
+    >
       <i class="fas fa-bars"></i>
     </button>
     <h5 class="mb-0 fw-semibold" id="pageTitle">分析報表</h5>
@@ -516,25 +557,37 @@ $('#loginForm').on('submit', function(e) {
     <!-- 通知鈴鐺 -->
     <button class="btn position-relative">
       <i class="fas fa-bell fs-5"></i>
-      <span class="position-absolute top-0 start-100 translate-middle
-                   badge rounded-pill bg-danger" id="notifBadge">
+      <span
+        class="position-absolute top-0 start-100 translate-middle
+                   badge rounded-pill bg-danger"
+        id="notifBadge"
+      >
         3
       </span>
     </button>
 
     <!-- 頭像 + 下拉選單 -->
     <div class="dropdown">
-      <img src="../assets/images/admin-avatar.jpg"
-           class="rounded-circle" width="36" height="36"
-           role="button" data-bs-toggle="dropdown">
+      <img
+        src="../assets/images/admin-avatar.jpg"
+        class="rounded-circle"
+        width="36"
+        height="36"
+        role="button"
+        data-bs-toggle="dropdown"
+      />
       <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" href="#">
-          <i class="fas fa-user me-2"></i>管理員設定
-        </a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item text-danger" href="#" id="logoutBtn">
-          <i class="fas fa-sign-out-alt me-2"></i>登出
-        </a></li>
+        <li>
+          <a class="dropdown-item" href="#">
+            <i class="fas fa-user me-2"></i>管理員設定
+          </a>
+        </li>
+        <li><hr class="dropdown-divider" /></li>
+        <li>
+          <a class="dropdown-item text-danger" href="#" id="logoutBtn">
+            <i class="fas fa-sign-out-alt me-2"></i>登出
+          </a>
+        </li>
       </ul>
     </div>
   </div>
@@ -542,6 +595,7 @@ $('#loginForm').on('submit', function(e) {
 ```
 
 **RWD 響應式處理**：
+
 - 桌面版（`md` 以上）：Sidebar 常駐固定在左側，主內容區用 `margin-left: 250px` 避免被遮擋
 - 手機版（`md` 以下）：Sidebar 隱藏，改由 Topbar 漢堡按鈕觸發 Bootstrap `offcanvas-start` 從左滑出
 
@@ -564,7 +618,8 @@ $('#loginForm').on('submit', function(e) {
 ---
 
 ### 步驟 2.5：AJAX Partial 載入系統
-*相依性：步驟 2.2、2.3*
+
+_相依性：步驟 2.2、2.3_
 
 這是後台最核心的架構設計。使用 jQuery `$.load()` 把各功能模組的 HTML 片段注入主內容區，同時呼叫對應的 JS 初始化函式，模擬後端 API 路由切換。
 
@@ -587,7 +642,7 @@ function loadSection(sectionName) {
   const url = `partials/${sectionName}.html`;
 
   // 顯示 Loading 動畫
-  $('#contentArea').html(`
+  $("#contentArea").html(`
     <div class="text-center py-5">
       <div class="spinner-border" style="color: var(--admin-brand-accent);"></div>
       <p class="mt-2 text-muted">載入中...</p>
@@ -595,77 +650,78 @@ function loadSection(sectionName) {
   `);
 
   // 用 jQuery $.load() 載入 HTML，完成後呼叫對應初始化函式
-  $('#contentArea').load(url, function(response, status) {
-    if (status === 'error') {
-      $('#contentArea').html(
-        '<div class="alert alert-danger">載入失敗，請重新整理頁面。</div>'
+  $("#contentArea").load(url, function (response, status) {
+    if (status === "error") {
+      $("#contentArea").html(
+        '<div class="alert alert-danger">載入失敗，請重新整理頁面。</div>',
       );
       return;
     }
     // 呼叫各模組的初始化函式（由對應 JS 檔定義）
     const initFns = {
       analytics: window.initAnalytics,
-      orders:    window.initOrders,
-      products:  window.initProducts,
+      orders: window.initOrders,
+      products: window.initProducts,
       customers: window.initCustomers,
       discounts: window.initDiscounts,
-      reviews:   window.initReviews,
+      reviews: window.initReviews,
     };
-    if (typeof initFns[sectionName] === 'function') {
+    if (typeof initFns[sectionName] === "function") {
       initFns[sectionName]();
     }
   });
 }
 
 // === Sidebar 導覽點擊事件 ===
-$(document).on('click', '.sidebar-link', function(e) {
+$(document).on("click", ".sidebar-link", function (e) {
   e.preventDefault();
 
-  const section = $(this).data('section');  // 取得 data-section 屬性值
+  const section = $(this).data("section"); // 取得 data-section 屬性值
   const titles = {
-    analytics: '分析報表',
-    orders:    '訂單管理',
-    products:  '商品與庫存',
-    customers: '客戶管理',
-    discounts: '折扣管理',
-    reviews:   '評論管理',
+    analytics: "分析報表",
+    orders: "訂單管理",
+    products: "商品與庫存",
+    customers: "客戶管理",
+    discounts: "折扣管理",
+    reviews: "評論管理",
   };
 
   // 更新 Active 狀態
-  $('.sidebar-link').removeClass('active');
-  $(this).addClass('active');
+  $(".sidebar-link").removeClass("active");
+  $(this).addClass("active");
 
   // 更新 Topbar 頁面標題
-  $('#pageTitle').text(titles[section] || '後台管理');
+  $("#pageTitle").text(titles[section] || "後台管理");
 
   // 載入對應 Partial
   loadSection(section);
 
   // 手機版：關閉 Offcanvas Sidebar
-  const offcanvas = bootstrap.Offcanvas.getInstance('#mobileSidebar');
+  const offcanvas = bootstrap.Offcanvas.getInstance("#mobileSidebar");
   if (offcanvas) offcanvas.hide();
 });
 
 // === Auth 守衛：進入 dashboard.html 時驗證登入狀態 ===
-$(document).ready(function() {
-  if (!sessionStorage.getItem('adminLoggedIn')) {
-    window.location.href = 'login.html'; // 未登入則踢回登入頁
+$(document).ready(function () {
+  if (!sessionStorage.getItem("adminLoggedIn")) {
+    window.location.href = "login.html"; // 未登入則踢回登入頁
   }
-  loadSection('analytics'); // 預設載入分析報表
+  loadSection("analytics"); // 預設載入分析報表
 });
 
 // === 登出邏輯 ===
-$(document).on('click', '#logoutBtn', function(e) {
+$(document).on("click", "#logoutBtn", function (e) {
   e.preventDefault();
-  sessionStorage.removeItem('adminLoggedIn');
-  window.location.href = 'login.html';
+  sessionStorage.removeItem("adminLoggedIn");
+  window.location.href = "login.html";
 });
 ```
 
 ---
 
 ### 步驟 2.6：後台 Toast 工廠函式
-*相依性：步驟 2.2*
+
+_相依性：步驟 2.2_
 
 後台共用的 Toast 提示元件，供所有模組呼叫。
 
@@ -679,16 +735,16 @@ $(document).on('click', '#logoutBtn', function(e) {
  * @param {string} message - 提示文字
  * @param {string} type    - 類型：'success' | 'error' | 'info'（預設 'success'）
  */
-function showAdminToast(message, type = 'success') {
+function showAdminToast(message, type = "success") {
   const colorMap = {
-    success: 'bg-success',
-    error:   'bg-danger',
-    info:    'bg-primary',
+    success: "bg-success",
+    error: "bg-danger",
+    info: "bg-primary",
   };
   const iconMap = {
-    success: 'fa-check-circle',
-    error:   'fa-times-circle',
-    info:    'fa-info-circle',
+    success: "fa-check-circle",
+    error: "fa-times-circle",
+    info: "fa-info-circle",
   };
 
   const toastHtml = `
@@ -704,18 +760,18 @@ function showAdminToast(message, type = 'success') {
     </div>`;
 
   // 確保有 Toast 容器存在（固定在右下角）
-  if ($('#toastContainer').length === 0) {
-    $('body').append(
-      '<div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>'
+  if ($("#toastContainer").length === 0) {
+    $("body").append(
+      '<div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>',
     );
   }
 
-  const $toast = $(toastHtml).appendTo('#toastContainer');
+  const $toast = $(toastHtml).appendTo("#toastContainer");
   const bsToast = new bootstrap.Toast($toast[0], { delay: 3000 });
   bsToast.show();
 
   // Toast 消失後移除 DOM，避免堆積
-  $toast[0].addEventListener('hidden.bs.toast', () => $toast.remove());
+  $toast[0].addEventListener("hidden.bs.toast", () => $toast.remove());
 }
 
 // 暴露為全域函式，供所有模組呼叫
@@ -727,9 +783,11 @@ window.showAdminToast = showAdminToast;
 ## 第 3 階段：分析報表 (`partials/analytics.html`)
 
 ### 步驟 3.1：KPI 統計卡片（三欄頂部）
-*相依性：步驟 2.5、admin.css*
+
+_相依性：步驟 2.5、admin.css_
 
 **視覺設計**：
+
 - 使用 `row > col-md-4` 排列 3 張卡片，`card shadow-sm rounded-3`
 - 每張卡片：左側品牌色 Icon（`fs-2`）、右側數字 + 標題
 - 核心數字：`fs-2 fw-bold`
@@ -740,20 +798,26 @@ window.showAdminToast = showAdminToast;
 ```html
 <!-- partials/analytics.html - KPI 卡片區 -->
 <div class="row g-4 mb-4">
-
   <!-- 卡片 1：今日營業額（由 JS 從 orders.json 動態計算填入） -->
   <div class="col-md-4">
     <div class="card shadow-sm border-0 rounded-3">
       <div class="card-body d-flex align-items-center gap-3">
-        <div class="rounded-circle d-flex align-items-center justify-content-center"
-             style="width:56px; height:56px; background: rgba(36,77,77,0.1);">
-          <i class="fas fa-dollar-sign fs-4" style="color: var(--admin-brand-accent);"></i>
+        <div
+          class="rounded-circle d-flex align-items-center justify-content-center"
+          style="width:56px; height:56px; background: rgba(36,77,77,0.1);"
+        >
+          <i
+            class="fas fa-dollar-sign fs-4"
+            style="color: var(--admin-brand-accent);"
+          ></i>
         </div>
         <div>
           <p class="text-muted small mb-1">今日營業額</p>
           <!-- id="kpiRevenue" 供 JS 填入計算結果 -->
           <h3 class="fw-bold mb-0" id="kpiRevenue">
-            <span class="spinner-border spinner-border-sm text-secondary"></span>
+            <span
+              class="spinner-border spinner-border-sm text-secondary"
+            ></span>
           </h3>
           <small class="text-muted" id="kpiRevenueNote">計算中...</small>
         </div>
@@ -765,8 +829,10 @@ window.showAdminToast = showAdminToast;
   <div class="col-md-4">
     <div class="card shadow-sm border-0 rounded-3">
       <div class="card-body d-flex align-items-center gap-3">
-        <div class="rounded-circle d-flex align-items-center justify-content-center"
-             style="width:56px; height:56px; background: rgba(255,193,7,0.15);">
+        <div
+          class="rounded-circle d-flex align-items-center justify-content-center"
+          style="width:56px; height:56px; background: rgba(255,193,7,0.15);"
+        >
           <i class="fas fa-truck fs-4 text-warning"></i>
         </div>
         <div>
@@ -786,8 +852,10 @@ window.showAdminToast = showAdminToast;
   <div class="col-md-4">
     <div class="card shadow-sm border-0 rounded-3">
       <div class="card-body d-flex align-items-center gap-3">
-        <div class="rounded-circle d-flex align-items-center justify-content-center"
-             style="width:56px; height:56px; background: rgba(220,53,69,0.1);">
+        <div
+          class="rounded-circle d-flex align-items-center justify-content-center"
+          style="width:56px; height:56px; background: rgba(220,53,69,0.1);"
+        >
           <i class="fas fa-exclamation-triangle fs-4 text-danger"></i>
         </div>
         <div>
@@ -802,20 +870,22 @@ window.showAdminToast = showAdminToast;
       </div>
     </div>
   </div>
-
 </div>
 ```
 
 ---
 
 ### 步驟 3.2：近七日銷售額折線圖
-*相依性：步驟 3.1、Chart.js CDN*
+
+_相依性：步驟 3.1、Chart.js CDN_
 
 **視覺設計**：
+
 - `<canvas id="salesLineChart">` 包在 `card shadow-sm` 內
 - 左側佔 `col-lg-8`（折線圖），右側 `col-lg-4`（圓餅圖）並排
 
 **交互邏輯 (`admin/js/analytics.js`)**：
+
 ```javascript
 // admin/js/analytics.js
 
@@ -824,65 +894,70 @@ window.showAdminToast = showAdminToast;
  * 功能：初始化分析報表頁面的所有圖表
  * 由 core.js 在載入 partials/analytics.html 後呼叫
  */
-window.initAnalytics = function() {
-
+window.initAnalytics = function () {
   // ===================================================================
   // === 1. KPI 動態計算：從 orders.json + products.json 讀取數據 ===
   // ===================================================================
   // API 預留：實際串接後，把兩個 $.getJSON 路徑改為後端端點即可
   // GET /api/admin/analytics/kpi → 回傳 { revenue, pendingShip, lowStock }
 
-  $.getJSON('../data/orders.json', function(orders) {
+  $.getJSON("../data/orders.json", function (orders) {
     // 今日日期字串，格式 "2026-06-03"（與 createdAt 開頭比對）
     const today = new Date().toISOString().slice(0, 10);
 
     // 今日已出貨訂單的總營業額（orderStatus 已改為 shipped，無 completed 狀態）
     const todayRevenue = orders
-      .filter(o => o.orderStatus === 'shipped' && o.createdAt.startsWith(today))
+      .filter(
+        (o) => o.orderStatus === "shipped" && o.createdAt.startsWith(today),
+      )
       .reduce((sum, o) => sum + o.total, 0);
 
     // 所有未出貨的訂單數量（shippingStatus 已移除，改用 orderStatus === 'unshipped'）
-    const pendingShip = orders.filter(o => o.orderStatus === 'unshipped').length;
+    const pendingShip = orders.filter(
+      (o) => o.orderStatus === "unshipped",
+    ).length;
 
     // 填入 DOM
-    $('#kpiRevenue').text(
-      todayRevenue > 0 ? `NT$ ${todayRevenue.toLocaleString()}` : 'NT$ 0'
+    $("#kpiRevenue").text(
+      todayRevenue > 0 ? `NT$ ${todayRevenue.toLocaleString()}` : "NT$ 0",
     );
-    $('#kpiRevenueNote').text(
-      todayRevenue > 0 ? '今日已完成訂單加總' : '今日尚無完成訂單'
+    $("#kpiRevenueNote").text(
+      todayRevenue > 0 ? "今日已完成訂單加總" : "今日尚無完成訂單",
     );
-    $('#kpiPending').text(pendingShip);
+    $("#kpiPending").text(pendingShip);
   });
 
-  $.getJSON('../data/products.json', function(products) {
+  $.getJSON("../data/products.json", function (products) {
     // 庫存量低於 5 件的商品數量
-    const lowStock = products.filter(p => p.stock < 5).length;
-    $('#kpiLowStock').text(lowStock);
+    const lowStock = products.filter((p) => p.stock < 5).length;
+    $("#kpiLowStock").text(lowStock);
   });
 
   // ===================================================================
   // === 2. 折線圖：近七日銷售額趨勢 ===
   // ===================================================================
-  const lineCtx = document.getElementById('salesLineChart').getContext('2d');
+  const lineCtx = document.getElementById("salesLineChart").getContext("2d");
 
   // Mock 數據：實際串接後改為 $.getJSON('/api/admin/sales?range=7days', ...)
   const salesData = {
-    labels: ['5/28', '5/29', '5/30', '5/31', '6/1', '6/2', '6/3'],
-    datasets: [{
-      label: '銷售額 (NT$)',
-      data: [18200, 21500, 16800, 29400, 22100, 31600, 24500],
-      borderColor: '#244d4d',          // 品牌深青綠線條
-      backgroundColor: 'rgba(36,77,77,0.08)', // 半透明填色
-      borderWidth: 2.5,
-      pointBackgroundColor: '#244d4d',
-      pointRadius: 5,
-      tension: 0.4,                    // 線條平滑度
-      fill: true,
-    }]
+    labels: ["5/28", "5/29", "5/30", "5/31", "6/1", "6/2", "6/3"],
+    datasets: [
+      {
+        label: "銷售額 (NT$)",
+        data: [18200, 21500, 16800, 29400, 22100, 31600, 24500],
+        borderColor: "#244d4d", // 品牌深青綠線條
+        backgroundColor: "rgba(36,77,77,0.08)", // 半透明填色
+        borderWidth: 2.5,
+        pointBackgroundColor: "#244d4d",
+        pointRadius: 5,
+        tension: 0.4, // 線條平滑度
+        fill: true,
+      },
+    ],
   };
 
   new Chart(lineCtx, {
-    type: 'line',
+    type: "line",
     data: salesData,
     options: {
       responsive: true,
@@ -891,47 +966,57 @@ window.initAnalytics = function() {
         tooltip: {
           callbacks: {
             // 提示框顯示格式：NT$ 24,500
-            label: ctx => ` NT$ ${ctx.parsed.y.toLocaleString()}`
-          }
-        }
+            label: (ctx) => ` NT$ ${ctx.parsed.y.toLocaleString()}`,
+          },
+        },
       },
       scales: {
         y: {
           beginAtZero: false,
           ticks: {
-            callback: val => `NT$ ${(val/1000).toFixed(0)}K` // Y 軸顯示：NT$ 24K
-          }
-        }
-      }
-    }
+            callback: (val) => `NT$ ${(val / 1000).toFixed(0)}K`, // Y 軸顯示：NT$ 24K
+          },
+        },
+      },
+    },
   });
 
   // ===================================================================
   // === 3. 甜甜圈圖：各商品營收佔比（Mock 數據，串接後改為 API）===
   // ===================================================================
-  const donutCtx = document.getElementById('revenueDonutChart').getContext('2d');
+  const donutCtx = document
+    .getElementById("revenueDonutChart")
+    .getContext("2d");
 
   new Chart(donutCtx, {
-    type: 'doughnut',
+    type: "doughnut",
     data: {
-      labels: ['帳篷', '睡袋', '炊具', '燈具', '其他'],
-      datasets: [{
-        data: [38, 25, 18, 12, 7],
-        backgroundColor: ['#244d4d', '#3d7d7d', '#779988', '#aabbaa', '#d0e4d0'],
-        borderWidth: 2,
-        borderColor: '#fff',
-      }]
+      labels: ["帳篷", "睡袋", "炊具", "燈具", "其他"],
+      datasets: [
+        {
+          data: [38, 25, 18, 12, 7],
+          backgroundColor: [
+            "#244d4d",
+            "#3d7d7d",
+            "#779988",
+            "#aabbaa",
+            "#d0e4d0",
+          ],
+          borderWidth: 2,
+          borderColor: "#fff",
+        },
+      ],
     },
     options: {
       responsive: true,
-      cutout: '65%',                   // 甜甜圈中間洞的大小
+      cutout: "65%", // 甜甜圈中間洞的大小
       plugins: {
         legend: {
-          position: 'bottom',
-          labels: { boxWidth: 12, padding: 16 }
-        }
-      }
-    }
+          position: "bottom",
+          labels: { boxWidth: 12, padding: 16 },
+        },
+      },
+    },
   });
 };
 ```
@@ -939,18 +1024,21 @@ window.initAnalytics = function() {
 ---
 
 ### 步驟 3.3：圖表 HTML 容器結構
-*相依性：步驟 3.2*
+
+_相依性：步驟 3.2_
 
 ```html
 <!-- partials/analytics.html - 圖表區（接在 KPI 卡片之後） -->
 <div class="row g-4">
-
   <!-- 折線圖 -->
   <div class="col-lg-8">
     <div class="card shadow-sm border-0 rounded-3">
       <div class="card-header bg-white border-0 pt-3 pb-0">
         <h6 class="fw-semibold mb-0">
-          <i class="fas fa-chart-line me-2" style="color: var(--admin-brand-accent);"></i>
+          <i
+            class="fas fa-chart-line me-2"
+            style="color: var(--admin-brand-accent);"
+          ></i>
           近七日銷售額趨勢
         </h6>
       </div>
@@ -965,7 +1053,10 @@ window.initAnalytics = function() {
     <div class="card shadow-sm border-0 rounded-3">
       <div class="card-header bg-white border-0 pt-3 pb-0">
         <h6 class="fw-semibold mb-0">
-          <i class="fas fa-chart-pie me-2" style="color: var(--admin-brand-accent);"></i>
+          <i
+            class="fas fa-chart-pie me-2"
+            style="color: var(--admin-brand-accent);"
+          ></i>
           商品營收佔比
         </h6>
       </div>
@@ -974,7 +1065,6 @@ window.initAnalytics = function() {
       </div>
     </div>
   </div>
-
 </div>
 ```
 
@@ -983,9 +1073,11 @@ window.initAnalytics = function() {
 ## 第 4 階段：訂單管理 (`partials/orders.html`)
 
 ### 步驟 4.1：訂單表格與狀態篩選
-*相依性：步驟 2.5、admin/data/orders.json*
+
+_相依性：步驟 2.5、admin/data/orders.json_
 
 **視覺設計**：
+
 - 表格容器：`card shadow-sm border-0`
 - 表格本體：`table table-hover table-responsive`
 - 列上方：篩選 `<select class="form-select">`（對應 `orderStatus` 三種值）
@@ -993,7 +1085,9 @@ window.initAnalytics = function() {
 ```html
 <!-- partials/orders.html -->
 <div class="card shadow-sm border-0 rounded-3">
-  <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+  <div
+    class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3"
+  >
     <h6 class="fw-semibold mb-0">訂單列表</h6>
     <!-- 篩選 Select：value 對應 orders.json 的 orderStatus 欄位三種值 -->
     <select class="form-select form-select-sm w-auto" id="orderStatusFilter">
@@ -1027,17 +1121,21 @@ window.initAnalytics = function() {
 ```
 
 **表格列 HTML 模板**（由 JS 字串拼接）：
+
 ```html
 <!-- 每列結構（JS 動態產生） -->
 <!-- 訂單編號：hover 提示「點擊查看明細」，點擊開啟 modal -->
 <tr data-order-id="#0006" data-order-status="unshipped">
   <td>
-    <span class="order-id-link text-primary fw-semibold"
-          data-order-id="#0006"
-          style="cursor:pointer; text-decoration:underline dotted;"
-          title="點擊查看訂單明細">#0006</span>
+    <span
+      class="order-id-link text-primary fw-semibold"
+      data-order-id="#0006"
+      style="cursor:pointer; text-decoration:underline dotted;"
+      title="點擊查看訂單明細"
+      >#0006</span
+    >
   </td>
-  <td>2026-06-04<br><small class="text-muted">14:32:10</small></td>
+  <td>2026-06-04<br /><small class="text-muted">14:32:10</small></td>
   <td>王小明</td>
   <td>NT$ 3,850</td>
   <td>
@@ -1064,7 +1162,8 @@ window.initAnalytics = function() {
 ---
 
 ### 步驟 4.2：訂單明細 Modal（含訂單紀錄）
-*相依性：步驟 4.1*
+
+_相依性：步驟 4.1_
 
 **視覺設計**：點擊「訂單編號」觸發 Bootstrap Modal，顯示完整訂單資訊與時間軸紀錄。
 Modal 靜態放在 `dashboard.html`，內容由 `orders.js` 的 `showOrderModal()` 動態填入。
@@ -1076,7 +1175,11 @@ Modal 靜態放在 `dashboard.html`，內容由 `orders.js` 的 `showOrderModal(
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">訂單明細 — <span id="modalOrderId"></span></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
       </div>
       <div class="modal-body">
         <!-- 買家資訊 + 訂單狀態 -->
@@ -1094,7 +1197,12 @@ Modal 靜態放在 `dashboard.html`，內容由 `orders.js` 的 `showOrderModal(
         <h6 class="fw-semibold mb-2">商品清單</h6>
         <table class="table table-sm table-bordered">
           <thead class="table-light">
-            <tr><th>商品名稱</th><th>數量</th><th>單價</th><th>小計</th></tr>
+            <tr>
+              <th>商品名稱</th>
+              <th>數量</th>
+              <th>單價</th>
+              <th>小計</th>
+            </tr>
           </thead>
           <tbody id="modalItemsList"></tbody>
           <tfoot class="table-light">
@@ -1104,11 +1212,11 @@ Modal 靜態放在 `dashboard.html`，內容由 `orders.js` 的 `showOrderModal(
             </tr>
           </tfoot>
         </table>
-        <hr>
+        <hr />
         <!-- 收件地址 -->
         <h6 class="fw-semibold mb-2">收件資訊</h6>
         <p id="modalAddress" class="text-muted mb-0"></p>
-        <hr>
+        <hr />
         <!-- 訂單紀錄時間軸：由 orders.js 動態填入 -->
         <h6 class="fw-semibold mb-2">
           <i class="fas fa-history me-2 text-muted"></i>訂單紀錄
@@ -1118,7 +1226,9 @@ Modal 靜態放在 `dashboard.html`，內容由 `orders.js` 的 `showOrderModal(
         </ul>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          關閉
+        </button>
       </div>
     </div>
   </div>
@@ -1128,7 +1238,8 @@ Modal 靜態放在 `dashboard.html`，內容由 `orders.js` 的 `showOrderModal(
 ---
 
 ### 步驟 4.3：訂單 JS 邏輯（重構版）
-*相依性：步驟 4.1、4.2*
+
+_相依性：步驟 4.1、4.2_
 
 **核心設計**：初次載入後將資料存入 `window.ordersCache`，後續所有操作（點訂單編號開 modal、點出貨按鈕）都直接讀寫快取，不重新 fetch JSON，確保出貨後 history 能即時反映在 modal。
 
@@ -1258,7 +1369,8 @@ function showOrderModal(order) {
 ## 第 5 階段：商品與庫存管理 (`partials/products.html`)
 
 ### 步驟 5.0：`initProducts()` 完整入口函式
-*相依性：步驟 2.5、admin/data/products.json*
+
+_相依性：步驟 2.5、admin/data/products.json_
 
 這是商品管理模組被 `core.js` 呼叫的初始化函式，負責載入數據、渲染表格、以及綁定所有事件。
 
@@ -1275,25 +1387,24 @@ function showOrderModal(order) {
  *
  * API 預留：$.getJSON 路徑改為 GET /api/admin/products 即可
  */
-window.initProducts = function() {
-
+window.initProducts = function () {
   // === 1. 載入商品數據並渲染 ===
-  $.getJSON('../data/products.json', function(products) {
+  $.getJSON("../data/products.json", function (products) {
     renderProductsTable(products);
-  }).fail(function() {
-    $('#productsTableBody').html(
-      '<tr><td colspan="7" class="text-center text-danger">載入商品數據失敗</td></tr>'
+  }).fail(function () {
+    $("#productsTableBody").html(
+      '<tr><td colspan="7" class="text-center text-danger">載入商品數據失敗</td></tr>',
     );
   });
 
   // === 2. 庫存儲存按鈕事件（見步驟 5.2） ===
-  $(document).on('click', '.btn-save-stock', handleSaveStock);
+  $(document).on("click", ".btn-save-stock", handleSaveStock);
 
   // === 3. 上架/下架切換事件（見步驟 5.3） ===
-  $(document).on('change', '.status-toggle', handleStatusToggle);
+  $(document).on("change", ".status-toggle", handleStatusToggle);
 
   // === 4. 新增商品 Modal 送出事件（見本步驟末尾） ===
-  $(document).on('submit', '#addProductForm', handleAddProduct);
+  $(document).on("submit", "#addProductForm", handleAddProduct);
 };
 
 /**
@@ -1303,17 +1414,18 @@ window.initProducts = function() {
  */
 function renderProductsTable(products) {
   if (!products || products.length === 0) {
-    $('#productsTableBody').html(
-      '<tr><td colspan="7" class="text-center text-muted py-4">目前沒有商品</td></tr>'
+    $("#productsTableBody").html(
+      '<tr><td colspan="7" class="text-center text-muted py-4">目前沒有商品</td></tr>',
     );
     return;
   }
 
-  const html = products.map(product => {
-    const rowClass = product.stock < 5 ? 'table-danger' : ''; // 低庫存警告背景
-    const isActive = product.status === 'active';
+  const html = products
+    .map((product) => {
+      const rowClass = product.stock < 5 ? "table-danger" : ""; // 低庫存警告背景
+      const isActive = product.status === "active";
 
-    return `
+      return `
     <tr class="${rowClass}" data-product-id="${product.id}">
       <td>
         <img src="${product.thumbnail}" width="40" height="40"
@@ -1337,18 +1449,19 @@ function renderProductsTable(products) {
         <div class="form-check form-switch">
           <input class="form-check-input status-toggle" type="checkbox"
                  id="statusToggle_${product.id}"
-                 ${isActive ? 'checked' : ''}>
+                 ${isActive ? "checked" : ""}>
           <label class="form-check-label status-label"
                  for="statusToggle_${product.id}"
-                 style="color: ${isActive ? '#244d4d' : '#aaa'};">
-            ${isActive ? '上架中' : '已下架'}
+                 style="color: ${isActive ? "#244d4d" : "#aaa"};">
+            ${isActive ? "上架中" : "已下架"}
           </label>
         </div>
       </td>
     </tr>`;
-  }).join('');
+    })
+    .join("");
 
-  $('#productsTableBody').html(html);
+  $("#productsTableBody").html(html);
 }
 
 /**
@@ -1359,18 +1472,18 @@ function handleAddProduct(e) {
   e.preventDefault();
 
   const newProduct = {
-    id:        'P-NEW-' + Date.now(),
-    thumbnail: '../assets/images/placeholder.jpg',
-    name:      $('#newProductName').val().trim(),
-    category:  $('#newProductCategory').val(),
-    spec:      $('#newProductSpec').val().trim() || '—',
-    price:     parseInt($('#newProductPrice').val()) || 0,
-    stock:     parseInt($('#newProductStock').val()) || 0,
-    status:    'active',
+    id: "P-NEW-" + Date.now(),
+    thumbnail: "../assets/images/placeholder.jpg",
+    name: $("#newProductName").val().trim(),
+    category: $("#newProductCategory").val(),
+    spec: $("#newProductSpec").val().trim() || "—",
+    price: parseInt($("#newProductPrice").val()) || 0,
+    stock: parseInt($("#newProductStock").val()) || 0,
+    status: "active",
   };
 
   // 渲染單列並插入頂部（帶 fadeIn 動畫）
-  const rowClass = newProduct.stock < 5 ? 'table-danger' : '';
+  const rowClass = newProduct.stock < 5 ? "table-danger" : "";
   const $newRow = $(`
     <tr class="${rowClass}" data-product-id="${newProduct.id}">
       <td><img src="${newProduct.thumbnail}" width="40" height="40" class="rounded"></td>
@@ -1397,11 +1510,11 @@ function handleAddProduct(e) {
       </td>
     </tr>`);
 
-  $newRow.hide().prependTo('#productsTableBody').fadeIn(400);
+  $newRow.hide().prependTo("#productsTableBody").fadeIn(400);
 
   // 關閉 Modal 並清空表單
-  bootstrap.Modal.getInstance('#addProductModal').hide();
-  $('#addProductForm')[0].reset();
+  bootstrap.Modal.getInstance("#addProductModal").hide();
+  $("#addProductForm")[0].reset();
 
   window.showAdminToast(`商品「${newProduct.name}」已新增`);
 }
@@ -1411,10 +1524,16 @@ function handleAddProduct(e) {
 
 ```html
 <!-- partials/products.html - card-header 右側加入新增按鈕 -->
-<div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+<div
+  class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3"
+>
   <h6 class="fw-semibold mb-0">商品列表</h6>
-  <button class="btn btn-sm text-white" style="background-color: var(--admin-brand-accent);"
-          data-bs-toggle="modal" data-bs-target="#addProductModal">
+  <button
+    class="btn btn-sm text-white"
+    style="background-color: var(--admin-brand-accent);"
+    data-bs-toggle="modal"
+    data-bs-target="#addProductModal"
+  >
     <i class="fas fa-plus me-1"></i>新增商品
   </button>
 </div>
@@ -1427,13 +1546,24 @@ function handleAddProduct(e) {
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">新增商品</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
       </div>
       <div class="modal-body">
         <form id="addProductForm">
           <div class="mb-3">
-            <label class="form-label">商品名稱 <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" id="newProductName" required>
+            <label class="form-label"
+              >商品名稱 <span class="text-danger">*</span></label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="newProductName"
+              required
+            />
           </div>
           <div class="row g-2 mb-3">
             <div class="col-6">
@@ -1449,23 +1579,51 @@ function handleAddProduct(e) {
             </div>
             <div class="col-6">
               <label class="form-label">規格 / 顏色</label>
-              <input type="text" class="form-control" id="newProductSpec" placeholder="例：深橄欖綠">
+              <input
+                type="text"
+                class="form-control"
+                id="newProductSpec"
+                placeholder="例：深橄欖綠"
+              />
             </div>
           </div>
           <div class="row g-2 mb-3">
             <div class="col-6">
-              <label class="form-label">售價 (NT$) <span class="text-danger">*</span></label>
-              <input type="number" class="form-control" id="newProductPrice" min="1" required>
+              <label class="form-label"
+                >售價 (NT$) <span class="text-danger">*</span></label
+              >
+              <input
+                type="number"
+                class="form-control"
+                id="newProductPrice"
+                min="1"
+                required
+              />
             </div>
             <div class="col-6">
               <label class="form-label">初始庫存</label>
-              <input type="number" class="form-control" id="newProductStock" min="0" value="0">
+              <input
+                type="number"
+                class="form-control"
+                id="newProductStock"
+                min="0"
+                value="0"
+              />
             </div>
           </div>
           <div class="modal-footer px-0 pb-0">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-            <button type="submit" class="btn text-white"
-                    style="background-color: var(--admin-brand-accent);">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              取消
+            </button>
+            <button
+              type="submit"
+              class="btn text-white"
+              style="background-color: var(--admin-brand-accent);"
+            >
               <i class="fas fa-plus me-1"></i>建立商品
             </button>
           </div>
@@ -1479,9 +1637,11 @@ function handleAddProduct(e) {
 ---
 
 ### 步驟 5.1：商品表格與低庫存預警
-*相依性：步驟 5.0、admin/data/products.json*
+
+_相依性：步驟 5.0、admin/data/products.json_
 
 **視覺設計**：
+
 - 商品圖片：`<img>` 縮圖 (40×40, `rounded`)
 - 庫存預警：庫存量 < 5 的商品列，**由 JS 自動加上 `table-danger` class**（Bootstrap 內建淡紅色背景）
 - 這個設計意圖模擬高周轉率時期的供應鏈預警視覺提示
@@ -1490,7 +1650,7 @@ function handleAddProduct(e) {
 // admin/js/products.js 中的渲染邏輯
 
 /** 判斷是否低庫存，決定列的背景色 */
-const rowClass = product.stock < 5 ? 'table-danger' : '';
+const rowClass = product.stock < 5 ? "table-danger" : "";
 
 const rowHtml = `
 <tr class="${rowClass}" data-product-id="${product.id}">
@@ -1519,11 +1679,11 @@ const rowHtml = `
       <input class="form-check-input status-toggle"
              type="checkbox"
              id="statusToggle_${product.id}"
-             ${product.status === 'active' ? 'checked' : ''}>
+             ${product.status === "active" ? "checked" : ""}>
       <label class="form-check-label status-label"
              for="statusToggle_${product.id}"
-             style="color: ${product.status === 'active' ? '#244d4d' : '#aaa'};">
-        ${product.status === 'active' ? '上架中' : '已下架'}
+             style="color: ${product.status === "active" ? "#244d4d" : "#aaa"};">
+        ${product.status === "active" ? "上架中" : "已下架"}
       </label>
     </div>
   </td>
@@ -1533,7 +1693,8 @@ const rowHtml = `
 ---
 
 ### 步驟 5.2：庫存行內編輯互動
-*相依性：步驟 5.1*
+
+_相依性：步驟 5.1_
 
 庫存行內編輯是展示 jQuery 即時互動的重要亮點，全程不重整頁面。
 
@@ -1556,30 +1717,32 @@ const rowHtml = `
 function handleSaveStock() {
   // 別名，讓 initProducts() 中 .on('click', '.btn-save-stock', handleSaveStock) 可直接參考
 }
-$(document).on('click', '.btn-save-stock', function() {
+$(document).on("click", ".btn-save-stock", function () {
   const $btn = $(this);
-  const $row = $btn.closest('tr');
-  const productId = $row.data('product-id');
-  const newStock = $btn.siblings('.stock-input').val();
+  const $row = $btn.closest("tr");
+  const productId = $row.data("product-id");
+  const newStock = $btn.siblings(".stock-input").val();
 
   // 步驟 2：Icon 切換為綠色打勾
-  $btn.find('.save-icon')
-      .removeClass('fa-save')
-      .addClass('fa-check text-success');
-  $btn.prop('disabled', true); // 防止重複點擊
+  $btn
+    .find(".save-icon")
+    .removeClass("fa-save")
+    .addClass("fa-check text-success");
+  $btn.prop("disabled", true); // 防止重複點擊
 
   // 步驟 3：0.5 秒後恢復
-  setTimeout(function() {
-    $btn.find('.save-icon')
-        .removeClass('fa-check text-success')
-        .addClass('fa-save');
-    $btn.prop('disabled', false);
+  setTimeout(function () {
+    $btn
+      .find(".save-icon")
+      .removeClass("fa-check text-success")
+      .addClass("fa-save");
+    $btn.prop("disabled", false);
 
     // 更新列背景色（即時反映庫存預警狀態）
     if (parseInt(newStock) < 5) {
-      $row.addClass('table-danger');
+      $row.addClass("table-danger");
     } else {
-      $row.removeClass('table-danger');
+      $row.removeClass("table-danger");
     }
   }, 500);
 
@@ -1591,7 +1754,8 @@ $(document).on('click', '.btn-save-stock', function() {
 ---
 
 ### 步驟 5.3：上架/下架狀態切換
-*相依性：步驟 5.1*
+
+_相依性：步驟 5.1_
 
 ```javascript
 // admin/js/products.js - 商品狀態切換
@@ -1608,17 +1772,17 @@ $(document).on('click', '.btn-save-stock', function() {
 function handleStatusToggle() {
   // 別名，讓 initProducts() 中 .on('change', '.status-toggle', handleStatusToggle) 可直接參考
 }
-$(document).on('change', '.status-toggle', function() {
-  const $label = $(this).siblings('.status-label');
-  const isActive = $(this).is(':checked');
+$(document).on("change", ".status-toggle", function () {
+  const $label = $(this).siblings(".status-label");
+  const isActive = $(this).is(":checked");
 
   if (isActive) {
-    $label.text('上架中').css('color', '#244d4d'); // 品牌深青綠
+    $label.text("上架中").css("color", "#244d4d"); // 品牌深青綠
   } else {
-    $label.text('已下架').css('color', '#aaa');    // 灰色
+    $label.text("已下架").css("color", "#aaa"); // 灰色
   }
 
-  const statusText = isActive ? '上架' : '下架';
+  const statusText = isActive ? "上架" : "下架";
   window.showAdminToast(`商品狀態已更新為「${statusText}」`);
 });
 ```
@@ -1628,7 +1792,8 @@ $(document).on('change', '.status-toggle', function() {
 ## 第 6 階段：客戶管理 (`partials/customers.html`)
 
 ### 步驟 6.0：`initCustomers()` 完整入口函式
-*相依性：步驟 2.5、admin/data/customers.json*
+
+_相依性：步驟 2.5、admin/data/customers.json_
 
 ```javascript
 // admin/js/customers.js
@@ -1641,18 +1806,18 @@ $(document).on('change', '.status-toggle', function() {
  *
  * API 預留：$.getJSON 路徑改為 GET /api/admin/customers 即可
  */
-window.initCustomers = function() {
-  $.getJSON('../data/customers.json', function(customers) {
+window.initCustomers = function () {
+  $.getJSON("../data/customers.json", function (customers) {
     renderCustomersAccordion(customers);
-  }).fail(function() {
-    $('#customersAccordion').html(
-      '<div class="alert alert-danger">載入會員資料失敗</div>'
+  }).fail(function () {
+    $("#customersAccordion").html(
+      '<div class="alert alert-danger">載入會員資料失敗</div>',
     );
   });
 
   // 行內編輯事件（見步驟 6.2）
-  $(document).on('click', '.btn-inline-edit', handleInlineEdit);
-  $(document).on('keydown blur', '.inline-edit-input', handleInlineEditSave);
+  $(document).on("click", ".btn-inline-edit", handleInlineEdit);
+  $(document).on("keydown blur", ".inline-edit-input", handleInlineEditSave);
 };
 
 /**
@@ -1668,41 +1833,50 @@ window.initCustomers = function() {
  */
 function renderCustomersAccordion(customers) {
   const tagColorMap = {
-    'VIP':    'bg-warning text-dark',
-    '高消費':  'bg-success',
-    '高退貨率':'bg-danger',
-    '新會員':  'bg-info text-dark',
+    VIP: "bg-warning text-dark",
+    高消費: "bg-success",
+    高退貨率: "bg-danger",
+    新會員: "bg-info text-dark",
   };
 
-  const html = customers.map((customer, index) => {
-    // 標籤 Badge HTML
-    const tagsHtml = (customer.tags || []).map(tag =>
-      `<span class="badge ${tagColorMap[tag] || 'bg-secondary'} ms-1">${tag}</span>`
-    ).join('');
+  const html = customers
+    .map((customer, index) => {
+      // 標籤 Badge HTML
+      const tagsHtml = (customer.tags || [])
+        .map(
+          (tag) =>
+            `<span class="badge ${tagColorMap[tag] || "bg-secondary"} ms-1">${tag}</span>`,
+        )
+        .join("");
 
-    // 購買紀錄列表（從 customer.orders 陣列動態產生）
-    const ordersHtml = (customer.orders || []).length > 0
-      ? customer.orders.map(orderId => `
+      // 購買紀錄列表（從 customer.orders 陣列動態產生）
+      const ordersHtml =
+        (customer.orders || []).length > 0
+          ? customer.orders
+              .map(
+                (orderId) => `
           <li class="list-group-item d-flex justify-content-between align-items-center px-0">
             <div>
               <code>${orderId}</code>
               <span class="text-muted ms-2 small">點擊訂單管理查看詳情</span>
             </div>
             <span class="badge bg-secondary rounded-pill">查看</span>
-          </li>`).join('')
-      : '<li class="list-group-item px-0 text-muted">尚無購買紀錄</li>';
+          </li>`,
+              )
+              .join("")
+          : '<li class="list-group-item px-0 text-muted">尚無購買紀錄</li>';
 
-    const collapseId = `orders_${customer.id}`;
-    const accordionId = `customer_${customer.id}`;
+      const collapseId = `orders_${customer.id}`;
+      const accordionId = `customer_${customer.id}`;
 
-    return `
+      return `
     <div class="accordion-item border-0 shadow-sm mb-2 rounded-3 overflow-hidden"
          data-customer-id="${customer.id}">
       <h2 class="accordion-header">
         <button class="accordion-button collapsed py-3" type="button"
                 data-bs-toggle="collapse" data-bs-target="#${accordionId}">
 
-          <img src="${customer.avatar || '../assets/images/placeholder.jpg'}"
+          <img src="${customer.avatar || "../assets/images/placeholder.jpg"}"
                class="rounded-circle me-3 flex-shrink-0"
                width="40" height="40"
                style="object-fit: cover;"
@@ -1771,9 +1945,10 @@ function renderCustomersAccordion(customers) {
         </div>
       </div>
     </div>`;
-  }).join('');
+    })
+    .join("");
 
-  $('#customersAccordion').html(html);
+  $("#customersAccordion").html(html);
 }
 
 // 行內編輯輔助函式（由 initCustomers 中的事件綁定呼叫）
@@ -1788,9 +1963,11 @@ function handleInlineEditSave() {
 ---
 
 ### 步驟 6.1：手風琴式會員清單
-*相依性：步驟 6.0、admin/data/customers.json*
+
+_相依性：步驟 6.0、admin/data/customers.json_
 
 **視覺設計**：
+
 - 外層用 Bootstrap `accordion`，每位會員為一個 `accordion-item`
 - `accordion-header`（預設收合狀態）顯示：頭像、姓名、聯絡資訊、累積消費、標籤 Badge
 - `accordion-body`（展開後）顯示：詳細資料編輯欄位 + 過去購買紀錄
@@ -1798,17 +1975,25 @@ function handleInlineEditSave() {
 ```html
 <!-- partials/customers.html -->
 <div class="accordion" id="customersAccordion">
-
   <!-- 範例：單一會員項目 -->
-  <div class="accordion-item border-0 shadow-sm mb-2 rounded-3 overflow-hidden"
-       data-customer-id="U001">
+  <div
+    class="accordion-item border-0 shadow-sm mb-2 rounded-3 overflow-hidden"
+    data-customer-id="U001"
+  >
     <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button"
-              data-bs-toggle="collapse" data-bs-target="#customer_U001">
-
+      <button
+        class="accordion-button collapsed"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#customer_U001"
+      >
         <!-- 頭像 -->
-        <img src="../assets/images/avatar-01.jpg"
-             class="rounded-circle me-3" width="40" height="40">
+        <img
+          src="../assets/images/avatar-01.jpg"
+          class="rounded-circle me-3"
+          width="40"
+          height="40"
+        />
 
         <!-- 姓名 + 聯絡資訊 -->
         <div class="flex-grow-1">
@@ -1825,7 +2010,6 @@ function handleInlineEditSave() {
           <!-- 高退貨率標籤範例 -->
           <!-- <span class="badge bg-danger">高退貨率</span> -->
         </div>
-
       </button>
     </h2>
 
@@ -1837,16 +2021,17 @@ function handleInlineEditSave() {
       </div>
     </div>
   </div>
-
 </div>
 ```
 
 ---
 
 ### 步驟 6.2：可編輯欄位（鉛筆 Icon 行內編輯）
-*相依性：步驟 6.1*
+
+_相依性：步驟 6.1_
 
 **互動流程**：
+
 1. 「會員等級、點數、折扣券數量」旁邊放小鉛筆 Icon (`fa-pencil-alt`)
 2. 點擊鉛筆 Icon：JS 把純文字 `<span>` 替換為 `<input class="form-control form-control-sm">`
 3. 按下 **Enter** 或 Input 失焦 (`blur`) 後，儲存數值並把 Input 恢復為純文字 `<span>`
@@ -1858,27 +2043,33 @@ function handleInlineEditSave() {
     <label class="form-label text-muted small">會員等級</label>
     <div class="d-flex align-items-center gap-2">
       <span class="editable-field fw-semibold" data-field="tier">VIP</span>
-      <i class="fas fa-pencil-alt text-muted small btn-inline-edit"
-         style="cursor: pointer;"
-         data-field="tier"></i>
+      <i
+        class="fas fa-pencil-alt text-muted small btn-inline-edit"
+        style="cursor: pointer;"
+        data-field="tier"
+      ></i>
     </div>
   </div>
   <div class="col-md-4">
     <label class="form-label text-muted small">累積點數</label>
     <div class="d-flex align-items-center gap-2">
       <span class="editable-field fw-semibold" data-field="points">1,250</span>
-      <i class="fas fa-pencil-alt text-muted small btn-inline-edit"
-         style="cursor: pointer;"
-         data-field="points"></i>
+      <i
+        class="fas fa-pencil-alt text-muted small btn-inline-edit"
+        style="cursor: pointer;"
+        data-field="points"
+      ></i>
     </div>
   </div>
   <div class="col-md-4">
     <label class="form-label text-muted small">持有折扣券</label>
     <div class="d-flex align-items-center gap-2">
       <span class="editable-field fw-semibold" data-field="coupons">3 張</span>
-      <i class="fas fa-pencil-alt text-muted small btn-inline-edit"
-         style="cursor: pointer;"
-         data-field="coupons"></i>
+      <i
+        class="fas fa-pencil-alt text-muted small btn-inline-edit"
+        style="cursor: pointer;"
+        data-field="coupons"
+      ></i>
     </div>
   </div>
 </div>
@@ -1893,9 +2084,9 @@ function handleInlineEditSave() {
  * 使用 $(this).closest('.d-flex') 找到父容器，
  * 再尋找同層的 .editable-field 並替換為 Input
  */
-$(document).on('click', '.btn-inline-edit', function() {
-  const $container = $(this).closest('.d-flex');
-  const $span = $container.find('.editable-field');
+$(document).on("click", ".btn-inline-edit", function () {
+  const $container = $(this).closest(".d-flex");
+  const $span = $container.find(".editable-field");
   const currentVal = $span.text();
 
   // 替換為 Input
@@ -1912,48 +2103,57 @@ $(document).on('click', '.btn-inline-edit', function() {
 /**
  * Enter 鍵或 blur：Input → 純文字，並顯示 Toast
  */
-$(document).on('keydown blur', '.inline-edit-input', function(e) {
+$(document).on("keydown blur", ".inline-edit-input", function (e) {
   // blur 事件直接存檔；keydown 只處理 Enter 鍵
-  if (e.type === 'keydown' && e.key !== 'Enter') return;
+  if (e.type === "keydown" && e.key !== "Enter") return;
 
   const $input = $(this);
-  const newVal = $input.val().trim() || '—';
+  const newVal = $input.val().trim() || "—";
 
   // 恢復為純文字 span
-  const $newSpan = $(`<span class="editable-field fw-semibold">${newVal}</span>`);
+  const $newSpan = $(
+    `<span class="editable-field fw-semibold">${newVal}</span>`,
+  );
   $input.replaceWith($newSpan);
 
-  window.showAdminToast('會員資料已更新');
+  window.showAdminToast("會員資料已更新");
 });
 ```
 
 ---
 
 ### 步驟 6.3：購買紀錄展開
-*相依性：步驟 6.1*
+
+_相依性：步驟 6.1_
 
 在手風琴 `accordion-body` 下方，放置一個 Bootstrap Collapse 按鈕展開購買紀錄，避免一展開就顯示大量資料導致版面過長。
 
 ```html
 <!-- partials/customers.html - 購買紀錄 Collapse（放在 accordion-body 內） -->
-<hr class="my-3">
-<button class="btn btn-sm btn-outline-secondary btn-toggle-orders"
-        data-bs-toggle="collapse"
-        data-bs-target="#orders_U001">
+<hr class="my-3" />
+<button
+  class="btn btn-sm btn-outline-secondary btn-toggle-orders"
+  data-bs-toggle="collapse"
+  data-bs-target="#orders_U001"
+>
   <i class="fas fa-history me-1"></i>
   查看購買紀錄 (2 筆)
 </button>
 
 <div class="collapse mt-3" id="orders_U001">
   <ul class="list-group list-group-flush">
-    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+    <li
+      class="list-group-item d-flex justify-content-between align-items-center px-0"
+    >
       <div>
         <code>#0006</code>
         <span class="text-muted ms-2 small">2026-06-04</span>
       </div>
       <span class="badge bg-success rounded-pill">NT$ 3,850</span>
     </li>
-    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+    <li
+      class="list-group-item d-flex justify-content-between align-items-center px-0"
+    >
       <div>
         <code>ORD-20260520</code>
         <span class="text-muted ms-2 small">2026-05-20</span>
@@ -1969,38 +2169,57 @@ $(document).on('keydown blur', '.inline-edit-input', function(e) {
 ## 第 7 階段：折扣管理 (`partials/discounts.html`)
 
 ### 步驟 7.1：折扣券生成操作區 UI
-*相依性：步驟 2.5*
+
+_相依性：步驟 2.5_
 
 **視覺設計**：
+
 - 頂部操作區：高亮背景框 `bg-primary bg-opacity-10 rounded-3 p-4`
-- 三個控制項並排：折扣額度 Input、發行數量 Input、⚡ 生成按鈕（品牌色、較大按鈕）
+- 三個控制項並排：折扣額度 Input、發行數量 Input、<i class="bi bi-lightning"></i> 生成按鈕（品牌色、較大按鈕）
 
 ```html
 <!-- partials/discounts.html - 折扣券生成操作區 -->
-<div class="p-4 rounded-3 mb-4"
-     style="background: rgba(36, 77, 77, 0.08); border: 1px dashed #244d4d;">
+<div
+  class="p-4 rounded-3 mb-4"
+  style="background: rgba(36, 77, 77, 0.08); border: 1px dashed #244d4d;"
+>
   <h6 class="fw-semibold mb-3" style="color: var(--admin-brand-accent);">
     <i class="fas fa-bolt me-2"></i>快速生成折扣券
   </h6>
   <div class="row g-3 align-items-end">
     <div class="col-md-3">
       <label class="form-label small text-muted">折扣額度 (NT$)</label>
-      <input type="number" class="form-control" id="couponDiscount"
-             placeholder="例：200" min="1">
+      <input
+        type="number"
+        class="form-control"
+        id="couponDiscount"
+        placeholder="例：200"
+        min="1"
+      />
     </div>
     <div class="col-md-3">
       <label class="form-label small text-muted">發行數量</label>
-      <input type="number" class="form-control" id="couponQty"
-             placeholder="例：50" min="1" max="100">
+      <input
+        type="number"
+        class="form-control"
+        id="couponQty"
+        placeholder="例：50"
+        min="1"
+        max="100"
+      />
     </div>
     <div class="col-md-3">
       <label class="form-label small text-muted">有效期限</label>
-      <input type="date" class="form-control" id="couponExpiry">
+      <input type="date" class="form-control" id="couponExpiry" />
     </div>
     <div class="col-md-3">
-      <button class="btn w-100 text-white fw-semibold" id="btnGenerateCoupon"
-              style="background-color: var(--admin-brand-accent);">
-        <i class="fas fa-bolt me-1"></i>⚡ 生成折扣券
+      <button
+        class="btn w-100 text-white fw-semibold"
+        id="btnGenerateCoupon"
+        style="background-color: var(--admin-brand-accent);"
+      >
+        <i class="fas fa-bolt me-1"></i
+        ><i class="bi bi-lightning"></i> 生成折扣券
       </button>
     </div>
   </div>
@@ -2036,33 +2255,33 @@ $(document).on('keydown blur', '.inline-edit-input', function(e) {
 ---
 
 ### 步驟 7.2：隨機碼生成函式與動態列表插入
-*相依性：步驟 7.1*
+
+_相依性：步驟 7.1_
 
 這是折扣管理模組的 jQuery 核心亮點互動：
 
 ```javascript
 // admin/js/discounts.js
 
-window.initDiscounts = function() {
-
+window.initDiscounts = function () {
   // 載入既有折扣券
-  $.getJSON('../data/coupons.json', function(coupons) {
-    coupons.forEach(coupon => appendCouponRow(coupon));
+  $.getJSON("../data/coupons.json", function (coupons) {
+    coupons.forEach((coupon) => appendCouponRow(coupon));
   });
 
   // === 生成折扣券按鈕點擊事件 ===
-  $(document).on('click', '#btnGenerateCoupon', function() {
-    const discount = parseInt($('#couponDiscount').val());
-    const qty = parseInt($('#couponQty').val());
-    const expiry = $('#couponExpiry').val();
+  $(document).on("click", "#btnGenerateCoupon", function () {
+    const discount = parseInt($("#couponDiscount").val());
+    const qty = parseInt($("#couponQty").val());
+    const expiry = $("#couponExpiry").val();
 
     // 基本驗證
     if (!discount || !qty || !expiry) {
-      window.showAdminToast('請填寫完整的折扣額度、數量與有效期限', 'error');
+      window.showAdminToast("請填寫完整的折扣額度、數量與有效期限", "error");
       return;
     }
     if (qty > 100) {
-      window.showAdminToast('單次最多生成 100 組', 'error');
+      window.showAdminToast("單次最多生成 100 組", "error");
       return;
     }
 
@@ -2075,8 +2294,8 @@ window.initDiscounts = function() {
         quantity: 1,
         used: 0,
         expiry: expiry,
-        status: 'active',
-        isNew: true // 標記為新生成，用於 fadeIn 動畫
+        status: "active",
+        isNew: true, // 標記為新生成，用於 fadeIn 動畫
       };
       appendCouponRow(couponData);
     }
@@ -2085,7 +2304,7 @@ window.initDiscounts = function() {
     window.showAdminToast(`成功生成 ${qty} 組折扣碼`);
 
     // 清空輸入欄位
-    $('#couponDiscount, #couponQty, #couponExpiry').val('');
+    $("#couponDiscount, #couponQty, #couponExpiry").val("");
   });
 
   // === 停用折扣券 ===
@@ -2096,15 +2315,16 @@ window.initDiscounts = function() {
   //  4. 顯示 Toast
   //
   // API 預留：$.ajax({ url: `/api/admin/coupons/${code}/disable`, method: 'PATCH' })
-  $(document).on('click', '.btn-disable-coupon', function() {
-    const $row = $(this).closest('tr');
-    const couponCode = $row.find('code').text();
+  $(document).on("click", ".btn-disable-coupon", function () {
+    const $row = $(this).closest("tr");
+    const couponCode = $row.find("code").text();
 
-    $row.find('.coupon-status-cell')
-        .html('<span class="badge bg-secondary">已停用</span>');
+    $row
+      .find(".coupon-status-cell")
+      .html('<span class="badge bg-secondary">已停用</span>');
     $(this).remove(); // 移除停用按鈕
 
-    window.showAdminToast(`折扣券 ${couponCode} 已停用`, 'info');
+    window.showAdminToast(`折扣券 ${couponCode} 已停用`, "info");
   });
 
   // === 刪除折扣券 ===
@@ -2114,13 +2334,13 @@ window.initDiscounts = function() {
   //  3. 顯示 Toast
   //
   // API 預留：$.ajax({ url: `/api/admin/coupons/${code}`, method: 'DELETE' })
-  $(document).on('click', '.btn-delete-coupon', function() {
-    const $row = $(this).closest('tr');
-    const couponCode = $row.find('code').text();
+  $(document).on("click", ".btn-delete-coupon", function () {
+    const $row = $(this).closest("tr");
+    const couponCode = $row.find("code").text();
 
-    $row.fadeOut(300, function() {
+    $row.fadeOut(300, function () {
       $(this).remove();
-      window.showAdminToast(`折扣券 ${couponCode} 已刪除`, 'info');
+      window.showAdminToast(`折扣券 ${couponCode} 已刪除`, "info");
     });
   });
 };
@@ -2139,10 +2359,10 @@ window.initDiscounts = function() {
  */
 function generateCouponCode() {
   return Math.random()
-             .toString(36)
-             .substring(2, 10)
-             .toUpperCase()
-             .padEnd(8, '0');
+    .toString(36)
+    .substring(2, 10)
+    .toUpperCase()
+    .padEnd(8, "0");
 }
 
 /**
@@ -2150,9 +2370,10 @@ function generateCouponCode() {
  * 功能：把一筆折扣券資料插入列表頂部（使用 fadeIn 動畫）
  */
 function appendCouponRow(coupon) {
-  const statusBadge = coupon.status === 'active'
-    ? '<span class="badge bg-success">啟用中</span>'
-    : '<span class="badge bg-secondary">已停用</span>';
+  const statusBadge =
+    coupon.status === "active"
+      ? '<span class="badge bg-success">啟用中</span>'
+      : '<span class="badge bg-secondary">已停用</span>';
 
   const $row = $(`
     <tr>
@@ -2165,11 +2386,13 @@ function appendCouponRow(coupon) {
       <td class="coupon-status-cell">${statusBadge}</td>
       <td>
         <!-- 停用按鈕：只在啟用中時顯示 -->
-        ${coupon.status === 'active'
-          ? `<button class="btn btn-sm btn-outline-warning btn-disable-coupon me-1">
+        ${
+          coupon.status === "active"
+            ? `<button class="btn btn-sm btn-outline-warning btn-disable-coupon me-1">
                <i class="fas fa-ban"></i> 停用
              </button>`
-          : ''}
+            : ""
+        }
         <!-- 刪除按鈕 -->
         <button class="btn btn-sm btn-outline-danger btn-delete-coupon">
           <i class="fas fa-trash"></i>
@@ -2180,10 +2403,10 @@ function appendCouponRow(coupon) {
 
   if (coupon.isNew) {
     // 新生成的折扣券：先隱藏，再 fadeIn 插入頂部（視覺亮點）
-    $row.hide().prependTo('#couponsTableBody').fadeIn(400);
+    $row.hide().prependTo("#couponsTableBody").fadeIn(400);
   } else {
     // 既有數據：直接 append
-    $row.appendTo('#couponsTableBody');
+    $row.appendTo("#couponsTableBody");
   }
 }
 ```
@@ -2193,9 +2416,11 @@ function appendCouponRow(coupon) {
 ## 第 8 階段：評論管理 (`partials/reviews.html`)
 
 ### 步驟 8.1：評論卡片列表、篩選 Tab 與未回覆標記
-*相依性：步驟 2.5、admin/data/reviews.json*
+
+_相依性：步驟 2.5、admin/data/reviews.json_
 
 **視覺設計**：
+
 - 頁面頂部放置三個篩選 Tab（全部 / 未回覆 / 已回覆），使用 Bootstrap `nav-pills`
 - 捨棄傳統表格，改用 Bootstrap 卡片列表（`card` 縱向排列），由 JS 動態渲染
 - 每張卡片包含：買家頭像、星星評分（FontAwesome 實心/空心星）、留言文字、實拍縮圖、對應商品名稱、留言時間
@@ -2235,7 +2460,8 @@ function appendCouponRow(coupon) {
 ---
 
 ### 步驟 8.2：`initReviews()` 動態渲染 + 回覆互動邏輯
-*相依性：步驟 8.1、admin/data/reviews.json*
+
+_相依性：步驟 8.1、admin/data/reviews.json_
 
 ```javascript
 // admin/js/reviews.js
@@ -2250,61 +2476,62 @@ function appendCouponRow(coupon) {
  *
  * API 預留：$.getJSON 路徑改為 GET /api/admin/reviews 即可
  */
-window.initReviews = function() {
-
+window.initReviews = function () {
   // === 1. 從 JSON 載入評論並渲染 ===
-  $.getJSON('../data/reviews.json', function(reviews) {
+  $.getJSON("../data/reviews.json", function (reviews) {
     renderReviewCards(reviews);
     updateReviewTabCounts(reviews);
-  }).fail(function() {
-    $('#reviewsList').html(
-      '<div class="alert alert-danger">載入評論失敗</div>'
+  }).fail(function () {
+    $("#reviewsList").html(
+      '<div class="alert alert-danger">載入評論失敗</div>',
     );
   });
 
   // === 2. 篩選 Tab 點擊事件 ===
-  $(document).on('click', '#reviewFilterTabs .nav-link', function() {
-    $('#reviewFilterTabs .nav-link').removeClass('active');
-    $(this).addClass('active');
+  $(document).on("click", "#reviewFilterTabs .nav-link", function () {
+    $("#reviewFilterTabs .nav-link").removeClass("active");
+    $(this).addClass("active");
 
-    const filter = $(this).data('filter'); // 'all' | 'unreplied' | 'replied'
+    const filter = $(this).data("filter"); // 'all' | 'unreplied' | 'replied'
 
-    $('#reviewsList .card').each(function() {
-      const isReplied = $(this).data('replied');  // true / false
+    $("#reviewsList .card").each(function () {
+      const isReplied = $(this).data("replied"); // true / false
       let show = false;
-      if (filter === 'all') show = true;
-      else if (filter === 'unreplied') show = !isReplied;
-      else if (filter === 'replied')   show = isReplied;
+      if (filter === "all") show = true;
+      else if (filter === "unreplied") show = !isReplied;
+      else if (filter === "replied") show = isReplied;
 
       show ? $(this).show() : $(this).hide();
     });
   });
 
   // === 3. 點擊「回覆買家」按鈕：slideDown 展開 textarea ===
-  $(document).on('click', '.btn-reply-toggle', function() {
-    const $card = $(this).closest('.card');
-    const $replyArea = $card.find('.reply-area');
+  $(document).on("click", ".btn-reply-toggle", function () {
+    const $card = $(this).closest(".card");
+    const $replyArea = $card.find(".reply-area");
 
-    $replyArea.is(':visible') ? $replyArea.slideUp(200) : $replyArea.slideDown(200);
-    if (!$replyArea.is(':visible')) $card.find('.reply-textarea').focus();
+    $replyArea.is(":visible")
+      ? $replyArea.slideUp(200)
+      : $replyArea.slideDown(200);
+    if (!$replyArea.is(":visible")) $card.find(".reply-textarea").focus();
   });
 
   // === 4. 點擊「送出回覆」按鈕 ===
-  $(document).on('click', '.btn-submit-reply', function() {
-    const $card = $(this).closest('.card');
-    const $textarea = $card.find('.reply-textarea');
+  $(document).on("click", ".btn-submit-reply", function () {
+    const $card = $(this).closest(".card");
+    const $textarea = $card.find(".reply-textarea");
     const replyText = $textarea.val().trim();
 
     if (!replyText) {
-      window.showAdminToast('請輸入回覆內容', 'error');
+      window.showAdminToast("請輸入回覆內容", "error");
       return;
     }
 
     // 步驟 A：收合 textarea
-    $card.find('.reply-area').slideUp(200);
+    $card.find(".reply-area").slideUp(200);
 
     // 步驟 B：append 店家回覆區塊
-    $card.find('.card-body').append(`
+    $card.find(".card-body").append(`
       <div class="bg-light rounded p-3 mt-3 seller-reply">
         <small class="fw-semibold" style="color: var(--admin-brand-accent);">
           <i class="fas fa-store me-1"></i>店家回覆：
@@ -2313,24 +2540,26 @@ window.initReviews = function() {
       </div>`);
 
     // 步驟 C：移除紅色左框，更新 data 屬性
-    $card.removeClass('border-start border-danger border-5');
-    $card.data('replied', true);
+    $card.removeClass("border-start border-danger border-5");
+    $card.data("replied", true);
 
     // 步驟 D：更新 Tab 計數
-    $.getJSON('../data/reviews.json', function(reviews) {
+    $.getJSON("../data/reviews.json", function (reviews) {
       updateReviewTabCounts(reviews); // 注意：此時 DOM 已更新，實際計數以 DOM 為準
     });
 
     // 用 DOM 計算即時數量更新
-    const totalCards = $('#reviewsList .card').length;
-    const unreplied  = $('#reviewsList .card').filter((_, el) => !$(el).data('replied')).length;
-    const replied    = totalCards - unreplied;
-    $('#tabCountAll').text(totalCards);
-    $('#tabCountUnreplied').text(unreplied);
-    $('#tabCountReplied').text(replied);
+    const totalCards = $("#reviewsList .card").length;
+    const unreplied = $("#reviewsList .card").filter(
+      (_, el) => !$(el).data("replied"),
+    ).length;
+    const replied = totalCards - unreplied;
+    $("#tabCountAll").text(totalCards);
+    $("#tabCountUnreplied").text(unreplied);
+    $("#tabCountReplied").text(replied);
 
-    $textarea.val('');
-    window.showAdminToast('回覆已送出，評論已標記為已處理');
+    $textarea.val("");
+    window.showAdminToast("回覆已送出，評論已標記為已處理");
   });
 };
 
@@ -2340,35 +2569,43 @@ window.initReviews = function() {
  */
 function renderReviewCards(reviews) {
   if (!reviews || reviews.length === 0) {
-    $('#reviewsList').html('<p class="text-muted">目前沒有評論</p>');
+    $("#reviewsList").html('<p class="text-muted">目前沒有評論</p>');
     return;
   }
 
-  const html = reviews.map(review => {
-    // 星星評分 HTML（實心 fas / 空心 far）
-    const starsHtml = Array.from({ length: 5 }, (_, i) =>
-      `<i class="${i < review.rating ? 'fas' : 'far'} fa-star"></i>`
-    ).join('');
+  const html = reviews
+    .map((review) => {
+      // 星星評分 HTML（實心 fas / 空心 far）
+      const starsHtml = Array.from(
+        { length: 5 },
+        (_, i) =>
+          `<i class="${i < review.rating ? "fas" : "far"} fa-star"></i>`,
+      ).join("");
 
-    // 實拍縮圖 HTML
-    const photosHtml = (review.photos || []).map(src =>
-      `<img src="${src}" class="rounded" width="80" height="80"
+      // 實拍縮圖 HTML
+      const photosHtml = (review.photos || [])
+        .map(
+          (src) =>
+            `<img src="${src}" class="rounded" width="80" height="80"
             style="object-fit: cover; cursor: pointer;"
-            onerror="this.style.display='none'">`
-    ).join('');
+            onerror="this.style.display='none'">`,
+        )
+        .join("");
 
-    // 未回覆 → 加紅框；已回覆 → 顯示店家回覆區塊
-    const borderClass = review.replied ? '' : 'border-start border-danger border-5';
-    const replyBlockHtml = review.replied
-      ? `<div class="bg-light rounded p-3 mt-3 seller-reply">
+      // 未回覆 → 加紅框；已回覆 → 顯示店家回覆區塊
+      const borderClass = review.replied
+        ? ""
+        : "border-start border-danger border-5";
+      const replyBlockHtml = review.replied
+        ? `<div class="bg-light rounded p-3 mt-3 seller-reply">
            <small class="fw-semibold" style="color: var(--admin-brand-accent);">
              <i class="fas fa-store me-1"></i>店家回覆：
            </small>
            <p class="mb-0 mt-1 text-muted">${review.replyText}</p>
          </div>`
-      : '';
+        : "";
 
-    return `
+      return `
     <div class="card shadow-sm border-0 ${borderClass} rounded-3"
          data-review-id="${review.id}"
          data-replied="${review.replied}">
@@ -2393,10 +2630,11 @@ function renderReviewCards(reviews) {
 
         <p class="mb-2">${review.comment}</p>
 
-        ${photosHtml ? `<div class="d-flex gap-2 mb-3">${photosHtml}</div>` : ''}
+        ${photosHtml ? `<div class="d-flex gap-2 mb-3">${photosHtml}</div>` : ""}
 
-        ${!review.replied
-          ? `<button class="btn btn-sm btn-outline-secondary btn-reply-toggle">
+        ${
+          !review.replied
+            ? `<button class="btn btn-sm btn-outline-secondary btn-reply-toggle">
                <i class="fas fa-reply me-1"></i>回覆買家
              </button>
              <div class="reply-area mt-2" style="display: none;">
@@ -2407,16 +2645,17 @@ function renderReviewCards(reviews) {
                  <i class="fas fa-paper-plane me-1"></i>送出回覆
                </button>
              </div>`
-          : '<span class="badge bg-success"><i class="fas fa-check me-1"></i>已回覆</span>'
+            : '<span class="badge bg-success"><i class="fas fa-check me-1"></i>已回覆</span>'
         }
 
         ${replyBlockHtml}
 
       </div>
     </div>`;
-  }).join('');
+    })
+    .join("");
 
-  $('#reviewsList').html(html);
+  $("#reviewsList").html(html);
 }
 
 /**
@@ -2424,12 +2663,12 @@ function renderReviewCards(reviews) {
  * 功能：根據 reviews 陣列更新三個篩選 Tab 的數字 Badge
  */
 function updateReviewTabCounts(reviews) {
-  const total     = reviews.length;
-  const unreplied = reviews.filter(r => !r.replied).length;
-  const replied   = reviews.filter(r => r.replied).length;
-  $('#tabCountAll').text(total);
-  $('#tabCountUnreplied').text(unreplied);
-  $('#tabCountReplied').text(replied);
+  const total = reviews.length;
+  const unreplied = reviews.filter((r) => !r.replied).length;
+  const replied = reviews.filter((r) => r.replied).length;
+  $("#tabCountAll").text(total);
+  $("#tabCountUnreplied").text(unreplied);
+  $("#tabCountReplied").text(replied);
 }
 ```
 
@@ -2441,11 +2680,15 @@ function updateReviewTabCounts(reviews) {
 
 ```html
 <!-- HEAD 區塊 -->
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="css/admin.css">
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+/>
+<link rel="stylesheet" href="css/admin.css" />
 
 <!-- BODY 結束前 -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -2465,36 +2708,37 @@ function updateReviewTabCounts(reviews) {
 
 ## 附錄 B：API 預留接入點總覽
 
-| 模組 | Mock 來源 | 未來 API 端點 |
-|------|----------|--------------|
-| 登入驗證 | `sessionStorage` 靜態寫入 | `POST /api/admin/login` |
-| 訂單列表 | `$.getJSON('../data/orders.json')` | `GET /api/admin/orders?status=all` |
-| 訂單篩選 | 前端 `data-order-status` 屬性 | `GET /api/admin/orders?orderStatus=:status` |
-| 訂單出貨更新 | 純前端 Badge class 切換 | `PATCH /api/admin/orders/:id/ship` |
-| KPI 今日營業額 | `$.getJSON` 從 orders.json 計算 | `GET /api/admin/analytics/kpi` |
-| KPI 待出貨數 | `$.getJSON` 從 orders.json 計算 | 同上（回傳物件含 pendingShip 欄位） |
-| KPI 低庫存數 | `$.getJSON` 從 products.json 計算 | 同上（回傳物件含 lowStock 欄位） |
-| 商品列表 | `$.getJSON('../data/products.json')` | `GET /api/admin/products` |
-| 商品新增 | 純前端 `prependTo` 表格頂部 | `POST /api/admin/products` |
-| 庫存更新 | 純前端數值更新 | `PATCH /api/admin/products/:id/stock` |
-| 商品狀態切換 | 純前端 label 文字切換 | `PATCH /api/admin/products/:id/status` |
-| 會員列表 | `$.getJSON('../data/customers.json')` | `GET /api/admin/customers` |
-| 會員資料更新 | 純前端 span 替換 | `PATCH /api/admin/customers/:id` |
-| 折扣券列表 | `$.getJSON('../data/coupons.json')` | `GET /api/admin/coupons` |
-| 折扣券生成 | 純前端動態 `prependTo` + fadeIn | `POST /api/admin/coupons/batch` |
-| 折扣券停用 | 純前端 Badge class 切換 | `PATCH /api/admin/coupons/:code/disable` |
-| 折扣券刪除 | 純前端 `fadeOut` 移除列 | `DELETE /api/admin/coupons/:code` |
-| 評論列表 | `$.getJSON('../data/reviews.json')` | `GET /api/admin/reviews` |
-| 評論篩選 | 前端 `data-replied` 屬性 | `GET /api/admin/reviews?replied=true/false` |
-| 評論回覆 | 純前端 append 文字區塊 | `POST /api/admin/reviews/:id/reply` |
-| 分析圖表（折線） | JS 寫死陣列數據 | `GET /api/admin/analytics/sales?range=7days` |
-| 分析圖表（圓餅） | JS 寫死陣列數據 | `GET /api/admin/analytics/revenue-by-category` |
+| 模組             | Mock 來源                             | 未來 API 端點                                  |
+| ---------------- | ------------------------------------- | ---------------------------------------------- |
+| 登入驗證         | `sessionStorage` 靜態寫入             | `POST /api/admin/login`                        |
+| 訂單列表         | `$.getJSON('../data/orders.json')`    | `GET /api/admin/orders?status=all`             |
+| 訂單篩選         | 前端 `data-order-status` 屬性         | `GET /api/admin/orders?orderStatus=:status`    |
+| 訂單出貨更新     | 純前端 Badge class 切換               | `PATCH /api/admin/orders/:id/ship`             |
+| KPI 今日營業額   | `$.getJSON` 從 orders.json 計算       | `GET /api/admin/analytics/kpi`                 |
+| KPI 待出貨數     | `$.getJSON` 從 orders.json 計算       | 同上（回傳物件含 pendingShip 欄位）            |
+| KPI 低庫存數     | `$.getJSON` 從 products.json 計算     | 同上（回傳物件含 lowStock 欄位）               |
+| 商品列表         | `$.getJSON('../data/products.json')`  | `GET /api/admin/products`                      |
+| 商品新增         | 純前端 `prependTo` 表格頂部           | `POST /api/admin/products`                     |
+| 庫存更新         | 純前端數值更新                        | `PATCH /api/admin/products/:id/stock`          |
+| 商品狀態切換     | 純前端 label 文字切換                 | `PATCH /api/admin/products/:id/status`         |
+| 會員列表         | `$.getJSON('../data/customers.json')` | `GET /api/admin/customers`                     |
+| 會員資料更新     | 純前端 span 替換                      | `PATCH /api/admin/customers/:id`               |
+| 折扣券列表       | `$.getJSON('../data/coupons.json')`   | `GET /api/admin/coupons`                       |
+| 折扣券生成       | 純前端動態 `prependTo` + fadeIn       | `POST /api/admin/coupons/batch`                |
+| 折扣券停用       | 純前端 Badge class 切換               | `PATCH /api/admin/coupons/:code/disable`       |
+| 折扣券刪除       | 純前端 `fadeOut` 移除列               | `DELETE /api/admin/coupons/:code`              |
+| 評論列表         | `$.getJSON('../data/reviews.json')`   | `GET /api/admin/reviews`                       |
+| 評論篩選         | 前端 `data-replied` 屬性              | `GET /api/admin/reviews?replied=true/false`    |
+| 評論回覆         | 純前端 append 文字區塊                | `POST /api/admin/reviews/:id/reply`            |
+| 分析圖表（折線） | JS 寫死陣列數據                       | `GET /api/admin/analytics/sales?range=7days`   |
+| 分析圖表（圓餅） | JS 寫死陣列數據                       | `GET /api/admin/analytics/revenue-by-category` |
 
 ---
 
 ## 附錄 C：功能驗收清單
 
 ### 全局佈局
+
 - [x] 進入 `dashboard.html` 前若未登入，自動跳轉 `login.html`
 - [x] 登入後 `sessionStorage` 有 `adminLoggedIn = 'true'`
 - [x] Sidebar 導覽點擊時，`active` class 正確切換
@@ -2503,35 +2747,41 @@ function updateReviewTabCounts(reviews) {
 - [x] 登出後清除 `sessionStorage` 並跳回登入頁
 
 ### 分析報表
+
 - [x] 三張 KPI 卡片正確顯示數字與趨勢箭頭
 - [x] 折線圖 X 軸為近七日日期，Y 軸為金額
 - [x] 甜甜圈圖各扇形顯示商品分類與比例
 
 ### 訂單管理
+
 - [x] 訂單表格由 Mock JSON 動態渲染
 - [x] 篩選 `<select>` 切換後，表格列正確顯示/隱藏
 - [x] 點擊「查看」彈出 Modal，顯示商品清單與地址
 - [x] 點擊「出貨」Badge 從黃轉綠，文字改為「已出貨」，顯示 Toast
 
 ### 商品管理
+
 - [x] 庫存 < 5 的列背景呈現 `table-danger` 淡紅色
 - [x] 修改庫存輸入後點擊儲存：Icon 短暫變綠色打勾，0.5 秒恢復，顯示 Toast
 - [x] 庫存修改後若低於 5，列背景即時變紅；否則移除紅色
 - [x] form-switch 切換時，旁邊 Label 文字與顏色正確更新
 
 ### 客戶管理
+
 - [x] 手風琴點擊後展開會員詳細資料
 - [x] 鉛筆 Icon 點擊將純文字替換為可編輯 Input
 - [x] Enter 鍵或失焦後 Input 恢復為純文字並顯示 Toast
 - [x] 購買紀錄 Collapse 按鈕展開/收合歷史訂單列表
 
 ### 分析報表（KPI 動態）
+
 - [x] 進入分析報表時，KPI 卡片顯示 Loading 動畫
 - [x] 計算完成後，今日營業額正確填入（從 orders.json 篩選今日 orderStatus = 'shipped' 訂單）
 - [x] 待出貨數正確填入（從 orders.json 計算 orderStatus = 'unshipped' 筆數）
 - [x] 低庫存數正確填入（從 products.json 計算 stock < 5 筆數）
 
 ### 訂單管理
+
 - [x] 訂單表格由 Mock JSON 動態渲染（6 筆，id 格式 #0001~#0006 按下單時間升序）
 - [x] 付款狀態 3 種：已付款（綠）、未付款（黃）、貨到付款（藍），貨到付款不改變
 - [x] 訂單狀態 3 種：未出貨（黃）、已出貨（綠）、已退貨（紅）
@@ -2542,6 +2792,7 @@ function updateReviewTabCounts(reviews) {
 - [x] 出貨後 history 即時新增「已出貨」紀錄，再次點訂單編號可在 modal 看到
 
 ### 商品管理
+
 - [x] 商品表格由 Mock JSON 動態渲染（含縮圖）
 - [x] 庫存 < 5 的列背景呈現 `table-danger` 淡紅色
 - [x] 修改庫存輸入後點擊儲存：Icon 短暫變綠色打勾，0.5 秒恢復，顯示 Toast
@@ -2551,6 +2802,7 @@ function updateReviewTabCounts(reviews) {
 - [x] Modal 送出後新商品以 fadeIn 插入表格頂部，Modal 自動關閉
 
 ### 客戶管理
+
 - [x] 手風琴由 customers.json 動態渲染（含頭像、標籤 Badge）
 - [x] 手風琴點擊後展開會員詳細資料（包含等級/點數/折扣券可編輯欄位）
 - [x] 鉛筆 Icon 點擊將純文字替換為可編輯 Input
@@ -2558,6 +2810,7 @@ function updateReviewTabCounts(reviews) {
 - [x] 購買紀錄從 customer.orders 陣列動態渲染，Collapse 展開/收合正確
 
 ### 折扣管理
+
 - [x] 現有折扣券列表由 coupons.json 動態渲染（含停用/刪除操作欄）
 - [x] 額度、數量、期限三欄皆為空時點擊生成，顯示錯誤 Toast
 - [x] 正常生成時，折扣碼為 8 位英數大寫字串
@@ -2567,6 +2820,7 @@ function updateReviewTabCounts(reviews) {
 - [x] 點擊刪除圖示後列 fadeOut 並從 DOM 移除
 
 ### 評論管理
+
 - [x] 評論卡片由 reviews.json 動態渲染（含已回覆/未回覆狀態）
 - [x] 篩選 Tab（全部/未回覆/已回覆）數量 Badge 正確顯示
 - [x] 點擊 Tab 後對應卡片正確顯示/隱藏
@@ -2575,7 +2829,6 @@ function updateReviewTabCounts(reviews) {
 - [x] 點擊「回覆買家」slideDown 展開 textarea
 - [x] 送出空白回覆時顯示錯誤 Toast
 - [x] 送出後：收合 textarea、append 店家回覆區塊、移除紅色邊框、Tab 計數更新、顯示 Toast
-
 
 ---
 
@@ -2586,6 +2839,7 @@ function updateReviewTabCounts(reviews) {
 **原因**：初始建構時使用 PowerShell `Get-Content | Set-Content` 進行批次路徑替換，PowerShell 預設以系統 Code Page（非 UTF-8）讀寫，導致 5 個 JS 檔案內的中文字元損毀為亂碼（mojibake）。
 
 **受影響檔案**：
+
 - `admin/js/analytics.js`
 - `admin/js/orders.js`
 - `admin/js/products.js`
@@ -2603,13 +2857,13 @@ function updateReviewTabCounts(reviews) {
 
 **修正方式**：在每個 `initXxx()` 函式開頭加入 `$(document).off('.namespace')`，利用 **jQuery Event Namespace** 機制先解除舊的 handler，再重新綁定：
 
-| 模組 | Namespace |
-|------|-----------|
-| 訂單管理 | `.orders` |
-| 商品管理 | `.products` |
+| 模組     | Namespace    |
+| -------- | ------------ |
+| 訂單管理 | `.orders`    |
+| 商品管理 | `.products`  |
 | 客戶管理 | `.customers` |
 | 折扣管理 | `.discounts` |
-| 評論管理 | `.reviews` |
+| 評論管理 | `.reviews`   |
 
 ---
 
@@ -2621,8 +2875,10 @@ function updateReviewTabCounts(reviews) {
 
 ```html
 <!-- 統一格式 -->
-<img src="..."
-     onerror="this.src='https://placehold.co/48x48/cccccc/555555?text=No+Image'">
+<img
+  src="..."
+  onerror="this.src='https://placehold.co/48x48/cccccc/555555?text=No+Image'"
+/>
 ```
 
 ---
@@ -2631,31 +2887,31 @@ function updateReviewTabCounts(reviews) {
 
 修正清單：
 
-| 問題 | 原狀態 | 修正後 |
-|---|---|---|
-| `dashboard.html` 新增商品按鈕 | `type="submit"`，無 ID | 改為 `type="button" id="submitAddProduct"` |
-| `products.html` 表頭有「規格」欄 | 7 欄（含規格）| 移除規格欄，改為「售價/狀態/上架切換」7 欄 |
-| `discounts.html` 表格只有 6 欄 | 折扣碼/折扣額/使用量/期限/狀態/操作 | 改為 8 欄（增加總數量/已使用/剩餘） |
-| `discounts.html` 生成表單 ID | `#couponDiscount`, `#btnGenerateCoupon` | 改為 `#newCouponCode`, `#submitAddCoupon` 等 |
-| `reviews.html` 容器 ID | `#reviewsList` | 改為 `#reviewsContainer` |
-| `reviews.html` 篩選按鈕 class | `nav-link`（Bootstrap nav-pills）| 改為 `filter-btn`（配合 JS 邏輯） |
-| `discounts.js` 依賴 Modal | `bootstrap.Modal.getInstance('#addCouponModal')` | 改為 inline form，無 Modal |
+| 問題                             | 原狀態                                           | 修正後                                       |
+| -------------------------------- | ------------------------------------------------ | -------------------------------------------- |
+| `dashboard.html` 新增商品按鈕    | `type="submit"`，無 ID                           | 改為 `type="button" id="submitAddProduct"`   |
+| `products.html` 表頭有「規格」欄 | 7 欄（含規格）                                   | 移除規格欄，改為「售價/狀態/上架切換」7 欄   |
+| `discounts.html` 表格只有 6 欄   | 折扣碼/折扣額/使用量/期限/狀態/操作              | 改為 8 欄（增加總數量/已使用/剩餘）          |
+| `discounts.html` 生成表單 ID     | `#couponDiscount`, `#btnGenerateCoupon`          | 改為 `#newCouponCode`, `#submitAddCoupon` 等 |
+| `reviews.html` 容器 ID           | `#reviewsList`                                   | 改為 `#reviewsContainer`                     |
+| `reviews.html` 篩選按鈕 class    | `nav-link`（Bootstrap nav-pills）                | 改為 `filter-btn`（配合 JS 邏輯）            |
+| `discounts.js` 依賴 Modal        | `bootstrap.Modal.getInstance('#addCouponModal')` | 改為 inline form，無 Modal                   |
 
 ---
 
 ### 問題 5：功能遺漏補齊
 
-| 功能 | 補齊說明 |
-|---|---|
-| 低庫存列背景 | `products.js` 的 `<tr>` 加入 `class="table-danger"` |
-| 庫存更新後列背景即時更新 | 儲存時對 `$row` 動態 `addClass/removeClass('table-danger')` |
-| 未回覆評論邊框顏色 | 修正為 `border-danger`（紅色），符合規格要求 |
-| 新增優惠券 fadeIn 動畫 | 改為 `$('#couponsTableBody').prepend($(newRow).hide().fadeIn(400))` |
-| 新增商品 fadeIn 動畫 | 同上 |
-| Enter 鍵觸發儲存 | `customers.js` 加入 `keydown.customers` 事件 |
-| `showAdminToast` 支援 `'danger'` type | `core.js` 的 `colorMap` 加入 `danger: 'bg-danger'` |
-| 評論 Tab Badge 計數 | `reviews.js` 在載入後動態更新 `#tabCountAll/Unreplied/Replied` |
-| 回覆後 Tab 計數即時更新 | 送出回覆後重算並更新三個 Badge |
+| 功能                                  | 補齊說明                                                            |
+| ------------------------------------- | ------------------------------------------------------------------- |
+| 低庫存列背景                          | `products.js` 的 `<tr>` 加入 `class="table-danger"`                 |
+| 庫存更新後列背景即時更新              | 儲存時對 `$row` 動態 `addClass/removeClass('table-danger')`         |
+| 未回覆評論邊框顏色                    | 修正為 `border-danger`（紅色），符合規格要求                        |
+| 新增優惠券 fadeIn 動畫                | 改為 `$('#couponsTableBody').prepend($(newRow).hide().fadeIn(400))` |
+| 新增商品 fadeIn 動畫                  | 同上                                                                |
+| Enter 鍵觸發儲存                      | `customers.js` 加入 `keydown.customers` 事件                        |
+| `showAdminToast` 支援 `'danger'` type | `core.js` 的 `colorMap` 加入 `danger: 'bg-danger'`                  |
+| 評論 Tab Badge 計數                   | `reviews.js` 在載入後動態更新 `#tabCountAll/Unreplied/Replied`      |
+| 回覆後 Tab 計數即時更新               | 送出回覆後重算並更新三個 Badge                                      |
 
 ---
 
@@ -2664,6 +2920,7 @@ function updateReviewTabCounts(reviews) {
 附錄 C 全部 56 個驗收項目已全部完成（含原始 34 條功能清單及擴充項目）。
 
 **主要技術亮點**：
+
 - jQuery Event Namespace 防止頁面切換時事件堆疊
 - UTF-8 編碼正確處理（無 BOM）
 - 線上佔位圖服務確保圖片正常顯示
@@ -2678,19 +2935,19 @@ function updateReviewTabCounts(reviews) {
 
 **付款狀態新增「貨到付款」**
 
-| `paymentStatus` 值 | 顯示文字 | Badge 顏色 |
-|---|---|---|
-| `paid` | 已付款 | `bg-success` |
-| `unpaid` | 未付款 | `bg-warning text-dark` |
-| `cod` | 貨到付款 | `bg-info text-dark` |
+| `paymentStatus` 值 | 顯示文字 | Badge 顏色             |
+| ------------------ | -------- | ---------------------- |
+| `paid`             | 已付款   | `bg-success`           |
+| `unpaid`           | 未付款   | `bg-warning text-dark` |
+| `cod`              | 貨到付款 | `bg-info text-dark`    |
 
 **訂單狀態簡化為三種**
 
-| `orderStatus` 值 | 顯示文字 | 說明 |
-|---|---|---|
-| `unshipped` | 未出貨 | 初始狀態，顯示「出貨」按鈕 |
-| `shipped` | 已出貨 | 點擊出貨後，按鈕消失 |
-| `returned` | 已退貨 | 退貨狀態 |
+| `orderStatus` 值 | 顯示文字 | 說明                       |
+| ---------------- | -------- | -------------------------- |
+| `unshipped`      | 未出貨   | 初始狀態，顯示「出貨」按鈕 |
+| `shipped`        | 已出貨   | 點擊出貨後，按鈕消失       |
+| `returned`       | 已退貨   | 退貨狀態                   |
 
 > 已移除原本的 `shippingStatus` 獨立欄位，統一由 `orderStatus` 管理。
 
@@ -2725,20 +2982,20 @@ function updateReviewTabCounts(reviews) {
 
 Windows 環境下使用 PowerShell 或編輯器儲存 JS 檔案時，若未明確指定 UTF-8，系統預設以 **Windows-1252（cp1252）** 編碼讀寫，導致兩種亂碼：
 
-| 類型 | 症狀 | 原因 |
-|---|---|---|
-| **`?` 字元遺失型** | 中文變成 `?` | 字元完全遺失，無法還原 |
+| 類型                    | 症狀                 | 原因                                     |
+| ----------------------- | -------------------- | ---------------------------------------- |
+| **`?` 字元遺失型**      | 中文變成 `?`         | 字元完全遺失，無法還原                   |
 | **Latin-1 Mojibake 型** | 中文變成 `é«˜æ¶ˆè²»` | UTF-8 bytes 被當 Windows-1252 chars 解讀 |
 
 **受影響檔案與修復方式**
 
-| 檔案 | 問題類型 | 修復方式 |
-|---|---|---|
-| `admin/js/analytics.js` | `?` 字元遺失 | 依 `pageForSeller.md` 人工還原，PowerShell UTF-8 寫入 |
-| `admin/js/customers.js` | Latin-1 Mojibake | 人工還原完整中文，PowerShell UTF-8 寫入 |
-| `admin/js/products.js` | Latin-1 Mojibake | 人工還原完整中文，PowerShell UTF-8 寫入 |
-| `admin/js/discounts.js` | Latin-1 Mojibake | 人工還原完整中文，PowerShell UTF-8 寫入 |
-| `admin/js/reviews.js` | Latin-1 Mojibake | 人工還原完整中文，PowerShell UTF-8 寫入 |
+| 檔案                    | 問題類型         | 修復方式                                              |
+| ----------------------- | ---------------- | ----------------------------------------------------- |
+| `admin/js/analytics.js` | `?` 字元遺失     | 依 `pageForSeller.md` 人工還原，PowerShell UTF-8 寫入 |
+| `admin/js/customers.js` | Latin-1 Mojibake | 人工還原完整中文，PowerShell UTF-8 寫入               |
+| `admin/js/products.js`  | Latin-1 Mojibake | 人工還原完整中文，PowerShell UTF-8 寫入               |
+| `admin/js/discounts.js` | Latin-1 Mojibake | 人工還原完整中文，PowerShell UTF-8 寫入               |
+| `admin/js/reviews.js`   | Latin-1 Mojibake | 人工還原完整中文，PowerShell UTF-8 寫入               |
 
 **正確的 PowerShell UTF-8 寫入規範**
 
@@ -2768,14 +3025,14 @@ node -e "const fs = require('fs'); const c = fs.readFileSync('admin/js/customers
 
 以下 Node.js 驗證全部通過：
 
-| 檔案 / 資料 | 驗證項目 | 結果 |
-|---|---|---|
-| `analytics.js` | 銷售額、帳篷、今日已完成訂單加總 | ✅ |
-| `customers.js` | 高消費、新會員、高退貨率、會員等級 | ✅ |
-| `products.js` | 上架中、已下架、編輯庫存、低庫存警告 | ✅ |
-| `discounts.js` | 啟用中、已停用、折抵 NT$、無限期 | ✅ |
-| `reviews.js` | 已回覆、待回覆、賣家回覆、送出回覆 | ✅ |
-| `orders.js` | order-id-link、btn-ship-order、showOrderModal、modalHistory | ✅ |
-| `orders.json` | #0001 格式、paymentStatus、orderStatus、history 陣列 | ✅ |
-| `dashboard.html` | orderDetailModal、modalHistory | ✅ |
-| `core.js` | showAdminToast | ✅ |
+| 檔案 / 資料      | 驗證項目                                                    | 結果 |
+| ---------------- | ----------------------------------------------------------- | ---- |
+| `analytics.js`   | 銷售額、帳篷、今日已完成訂單加總                            | ✅   |
+| `customers.js`   | 高消費、新會員、高退貨率、會員等級                          | ✅   |
+| `products.js`    | 上架中、已下架、編輯庫存、低庫存警告                        | ✅   |
+| `discounts.js`   | 啟用中、已停用、折抵 NT$、無限期                            | ✅   |
+| `reviews.js`     | 已回覆、待回覆、賣家回覆、送出回覆                          | ✅   |
+| `orders.js`      | order-id-link、btn-ship-order、showOrderModal、modalHistory | ✅   |
+| `orders.json`    | #0001 格式、paymentStatus、orderStatus、history 陣列        | ✅   |
+| `dashboard.html` | orderDetailModal、modalHistory                              | ✅   |
+| `core.js`        | showAdminToast                                              | ✅   |

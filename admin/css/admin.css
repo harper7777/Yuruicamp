@@ -81,19 +81,6 @@ body {
   font-weight: 600;
 }
 
-/* 無查看權限的 Sidebar 連結（灰階 + 不可點） */
-.sidebar-link.disabled {
-  opacity: 0.4;
-  pointer-events: none;
-  cursor: not-allowed;
-}
-
-/* 無編輯權限時容器標記（各模組共用） */
-.permission-readonly .btn:not(.btn-close):not([data-bs-dismiss]),
-button[data-permission-disabled="true"] {
-  cursor: not-allowed;
-}
-
 /* Sidebar Icon 寬度固定，讓文字對齊 */
 .sidebar-link i {
   width: 18px;
@@ -143,46 +130,6 @@ button[data-permission-disabled="true"] {
 
 .card-header {
   border-radius: 12px 12px 0 0 !important;
-}
-
-/* ===== 商品管理頁籤 ===== */
-.admin-product-tabs {
-  display: inline-flex;
-  gap: 4px;
-  padding: 4px;
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-}
-
-.admin-product-tabs .nav-link {
-  color: #6c757d;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  padding: 0.35rem 0.85rem;
-}
-
-.admin-product-tabs .nav-link.active {
-  background-color: var(--admin-brand-accent);
-  color: #ffffff;
-}
-
-/* ===== 商品庫存數量控制 ===== */
-.admin-stock-control {
-  width: 132px;
-  min-width: 132px;
-}
-
-.admin-stock-control .btn {
-  width: 32px;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.admin-stock-control .stock-input {
-  min-width: 52px;
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
 }
 
 /* ===== 表格樣式 ===== */

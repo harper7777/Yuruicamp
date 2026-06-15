@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://picsum.photos">
   <link rel="dns-prefetch" href="https://picsum.photos">
   <link rel="stylesheet" href="../css/main.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏕️</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22><i class="bi bi-tent"></i></text></svg>">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
@@ -22,7 +22,7 @@
        =================================================== -->
   <div class="page-banner">
     <div class="container">
-      <h1 class="page-banner-title">📍 實體門市 &amp; 合作夥伴</h1>
+      <h1 class="page-banner-title">實體門市 &amp; 合作夥伴</h1>
       <p class="page-banner-sub">全台三大門市，以及精選合作露營地，讓你的戶外夢想觸手可及</p>
     </div>
   </div>
@@ -35,11 +35,11 @@
 
       <!-- 左側：分店清單（由 JS 渲染）-->
       <div>
-        <h4 style="color:#244d4d;margin-bottom:1rem;">🏪 門市列表</h4>
+        <h4 style="color:#244d4d;margin-bottom:1rem;">門市列表</h4>
         <div class="branch-list" id="branchList">
           <!-- JS 渲染後會填入 .branch-card -->
           <div style="text-align:center;padding:2rem;color:#999;">
-            <div style="font-size:2rem;margin-bottom:0.5rem;">📍</div>
+            <div style="font-size:2rem;margin-bottom:0.5rem;"><i class="bi bi-geo-alt-fill"></i></div>
             載入分店資料中...
           </div>
         </div>
@@ -79,7 +79,7 @@
   <section class="partners-section">
     <div class="container">
       <div class="text-center" style="margin-bottom:2rem;">
-        <h2 style="color:#244d4d;font-size:1.75rem;">🤝 合作露營地 &amp; 店家</h2>
+        <h2 style="color:#244d4d;font-size:1.75rem;">合作露營地 &amp; 店家</h2>
         <p class="text-muted">持 Yuruicamp 會員卡，前往合作露營地享有專屬優惠</p>
       </div>
       <!-- 合作店家網格（由 JS 渲染）-->
@@ -113,13 +113,13 @@
         <p id="partnerModalDesc" style="font-size:0.875rem;color:#555;line-height:1.8;"></p>
         <!-- 優惠碼 -->
         <div style="background:#f6fbf6;border:1px dashed #c3dede;border-radius:10px;padding:1rem;margin-bottom:1rem;">
-          <div style="font-size:0.75rem;color:#244d4d;font-weight:700;margin-bottom:0.35rem;">🎁 Yuruicamp 會員專屬優惠</div>
+          <div style="font-size:0.75rem;color:#244d4d;font-weight:700;margin-bottom:0.35rem;">Yuruicamp 會員專屬優惠</div>
           <div id="partnerModalDiscount" style="font-size:1.1rem;font-weight:800;color:#244d4d;"></div>
         </div>
         <!-- 按鈕 -->
         <button class="btn btn-primary btn-block"
                 onclick="window.showToast && window.showToast('優惠已記錄！前往露營地時出示即可', 'success')">
-          ✅ 我要使用此優惠
+          我要使用此優惠
         </button>
       </div>
     </div>

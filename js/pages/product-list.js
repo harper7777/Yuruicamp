@@ -88,8 +88,8 @@ function _buildCard(product) {
         <div class="product-card-price">
           <span class="price-current">NT$ ${priceFormatted}</span>
           ${origPriceFormatted ? `<span class="price-original">NT$ ${origPriceFormatted}</span>` : ''}
+          ${discount ? `<span class="price-discount">${discount}</span>` : ''}
         </div>
-        ${discount ? `<span class="price-discount">${discount}</span>` : ''}
         <button class="product-card-add-btn" data-product-id="${product.id}">
           加入購物車
         </button>

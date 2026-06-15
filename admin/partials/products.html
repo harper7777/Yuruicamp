@@ -4,7 +4,7 @@
      表格數據由 products.js 的 $.getJSON() 動態產生
 -->
 
-<div class="card shadow-sm border-0" id="productsModuleCard">
+<div class="card shadow-sm border-0">
 
   <!-- 卡片頂部：標題 + 新增商品按鈕 -->
   <div class="card-header bg-white border-0
@@ -29,28 +29,8 @@
     </button>
   </div>
 
-  <!-- 商店 / 租借頁籤：由 products.js 控制下方 .card-body 顯示狀態 -->
-  <div class="px-3 pb-3 bg-white border-bottom">
-    <div class="nav nav-pills admin-product-tabs" role="tablist" aria-label="商品與租借切換">
-      <button type="button"
-              class="nav-link admin-product-tab active"
-              data-products-view="store"
-              role="tab"
-              aria-selected="true">
-        <i class="fas fa-store me-1"></i>商店
-      </button>
-      <button type="button"
-              class="nav-link admin-product-tab"
-              data-products-view="rental"
-              role="tab"
-              aria-selected="false">
-        <i class="fas fa-campground me-1"></i>租借
-      </button>
-    </div>
-  </div>
-
-  <!-- 商店表格容器 -->
-  <div class="card-body p-0 admin-products-panel" data-products-panel="store">
+  <!-- 表格容器 -->
+  <div class="card-body p-0">
     <div class="table-responsive">
       <table class="table table-hover mb-0" id="productsTable">
         <thead class="table-light">
@@ -58,18 +38,17 @@
             <th style="width: 60px;">圖片</th>
             <th>商品名稱</th>
             <th>分類</th>
-            <th>總庫存量</th>
-            <th>分店 A</th>
-            <th>分店 B</th>
-            <th>分店 C</th>
-            <th>操作</th>
+            <th>售價</th>
+            <th>庫存</th>
+            <th>狀態</th>
+            <th>上架切換</th>
           </tr>
         </thead>
         <!-- tbody 由 products.js 的 renderProductsTable() 動態填入 -->
-        <!-- 總庫存量 < 5 的列：JS 會自動加上 table-danger class（淡紅底色） -->
+        <!-- 庫存 < 5 的列：JS 會自動加上 table-danger class（淡紅底色） -->
         <tbody id="productsTableBody">
           <tr>
-            <td colspan="8" class="text-center py-4">
+            <td colspan="7" class="text-center py-4">
               <div class="spinner-border spinner-border-sm me-2"
                    style="color: var(--admin-brand-accent);"></div>
               <span class="text-muted">載入商品中...</span>
@@ -79,32 +58,5 @@
       </table>
     </div>
   </div><!-- end card-body -->
-
-  <!-- 租借表格容器：點擊租借頁籤後由 products.js 載入 admin/data/reantal.json -->
-  <div class="card-body p-0 admin-products-panel d-none" data-products-panel="rental">
-    <div class="table-responsive">
-      <table class="table table-hover mb-0 table-light2" id="rentalProductsTable">
-        <thead class="table-light">
-          <tr>
-            <th style="width: 60px;">圖片</th>
-            <th>商品名稱</th>
-            <th>分類</th>
-            <th>庫存</th>
-            <th>存放營地</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody id="rentalProductsTableBody">
-          <tr>
-            <td colspan="6" class="text-center py-4">
-              <div class="spinner-border spinner-border-sm me-2"
-                   style="color: var(--admin-brand-accent);"></div>
-              <span class="text-muted">請切換至租借頁籤載入資料</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div><!-- end rental card-body -->
 
 </div><!-- end card -->

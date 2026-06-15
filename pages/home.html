@@ -1,241 +1,371 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="zh-TW">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Yuruicamp 露營選物品牌 - 探索戶外，從這裡開始。精選露營裝備、登山背包、帳篷睡袋一次購足。">
-  <meta name="theme-color" content="#244d4d">
-  <title>首頁 - Yuruicamp 露營選物</title>
-  <!-- 預先連線外部資源，減少 DNS 查詢延遲 / Preconnect to reduce DNS lookup latency -->
-  <link rel="preconnect" href="https://picsum.photos">
-  <link rel="dns-prefetch" href="https://picsum.photos">
-  <link rel="stylesheet" href="../css/main.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏕️</text></svg>">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Yuruicamp 露營選物品牌 - 探索戶外，從這裡開始。精選露營裝備、登山背包、帳篷睡袋一次購足。"
+    />
+    <meta name="theme-color" content="#244d4d" />
+    <title>首頁 - Yuruicamp 露營選物</title>
+    <!-- 預先連線外部資源，減少 DNS 查詢延遲 / Preconnect to reduce DNS lookup latency -->
+    <link rel="preconnect" href="https://picsum.photos" />
+    <link rel="dns-prefetch" href="https://picsum.photos" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏕️</text></svg>"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="header"></div>
 
-  <div id="header"></div>
-
-  
-  <!-- ===================================================
+    <!-- ===================================================
        主要內容
        =================================================== -->
-  <main>
-
-    <!-- ================================================
+    <main>
+      <!-- ================================================
          步驟 4.1：Hero Banner
          - 全螢幕背景（漸層色，預留 video 位置）
          - 中央標題 + CTA 按鈕
          ================================================ -->
-    <section class="hero-banner" id="heroBanner">
-
-      <!-- 背景影片（檔案路徑：assets/videos/hero_video.mp4）
+      <section class="hero-banner" id="heroBanner">
+        <!-- 背景影片（檔案路徑：assets/videos/hero_video.mp4）
            影片載入前或不支援時，會顯示 .hero-banner 的漸層背景色作為備援 -->
-      <video autoplay loop muted playsinline>
-        <source src="../assets/videos/hero_video.mp4" type="video/mp4">
-      </video>
+        <video autoplay loop muted playsinline>
+          <source src="../assets/videos/hero_video.mp4" type="video/mp4" />
+        </video>
 
-      <div class="hero-content">
-        <p class="hero-tagline">探索台灣戶外</p>
-        <h1 class="hero-title">每次出走，<br>都是最好的選擇</h1>
-        <p class="hero-subtitle">精選頂級露營裝備、登山背包、帳篷睡袋<br>一站式購齊，讓冒險毫無後顧之憂</p>
-        <div class="hero-cta-group">
-          <a href="products.html" class="btn-hero-primary">立刻探索 →</a>
-          <a href="blog.html" class="btn-hero-outline">露營指南</a>
+        <div class="hero-content">
+          <p class="hero-tagline">探索台灣戶外</p>
+          <h1 class="hero-title">每次出走，<br />都是最好的選擇</h1>
+          <p class="hero-subtitle">
+            精選頂級露營裝備、登山背包、帳篷睡袋<br />一站式購齊，讓冒險毫無後顧之憂
+          </p>
+          <div class="hero-cta-group">
+            <a href="products.html" class="btn-hero-primary">立刻探索 →</a>
+            <a href="blog.html" class="btn-hero-outline">露營指南</a>
+          </div>
         </div>
-      </div>
+      </section>
 
-    </section>
-
-    <!-- ================================================
+      <!-- ================================================
          步驟 4.2：品牌輪播
          - CSS 跑馬燈無縫動畫
          - 8 個知名露營品牌
          ================================================ -->
-    <section class="brand-carousel-section">
-      <p class="brand-carousel-title">精選合作品牌</p>
-      <div class="brand-marquee-wrapper">
-        <!-- 複製兩次以實現無縫循環 -->
-        <div class="brand-marquee-track">
-          <!-- 第一組 -->
-          <div class="brand-logo-item">⛺ Snow Peak</div>
-          <div class="brand-logo-item">🏔️ Osprey</div>
-          <div class="brand-logo-item">🔥 MSR</div>
-          <div class="brand-logo-item">🌲 Coleman</div>
-          <div class="brand-logo-item">🌍 Patagonia</div>
-          <div class="brand-logo-item">🎒 Deuter</div>
-          <div class="brand-logo-item">💧 Sawyer</div>
-          <div class="brand-logo-item">⚡ Black Diamond</div>
-          <div class="brand-logo-item">🪑 Helinox</div>
-          <div class="brand-logo-item">☀️ Columbia</div>
-          <div class="brand-logo-item">🏕️ Ogawa</div>
-          <div class="brand-logo-item">🌟 Therm-a-Rest</div>
-          <!-- 第二組（複製，實現無縫銜接） -->
-          <div class="brand-logo-item">⛺ Snow Peak</div>
-          <div class="brand-logo-item">🏔️ Osprey</div>
-          <div class="brand-logo-item">🔥 MSR</div>
-          <div class="brand-logo-item">🌲 Coleman</div>
-          <div class="brand-logo-item">🌍 Patagonia</div>
-          <div class="brand-logo-item">🎒 Deuter</div>
-          <div class="brand-logo-item">💧 Sawyer</div>
-          <div class="brand-logo-item">⚡ Black Diamond</div>
-          <div class="brand-logo-item">🪑 Helinox</div>
-          <div class="brand-logo-item">☀️ Columbia</div>
-          <div class="brand-logo-item">🏕️ Ogawa</div>
-          <div class="brand-logo-item">🌟 Therm-a-Rest</div>
+      <section class="brand-carousel-section">
+        <p class="brand-carousel-title">精選合作品牌</p>
+        <div class="brand-marquee-wrapper">
+          <!-- 複製兩次以實現無縫循環 -->
+          <div class="brand-marquee-track">
+            <!-- 第一組 -->
+            <div class="brand-logo-item">
+              <i class="bi bi-tent"></i> Snow Peak
+            </div>
+            <div class="brand-logo-item">
+              <i class="bi bi-mountain"></i> Osprey
+            </div>
+            <div class="brand-logo-item"><i class="bi bi-fire"></i> MSR</div>
+            <div class="brand-logo-item">
+              <i class="bi bi-tree"></i> Coleman
+            </div>
+            <div class="brand-logo-item">
+              <i class="bi bi-globe"></i> Patagonia
+            </div>
+            <div class="brand-logo-item"><i class="bi bi-bag"></i> Deuter</div>
+            <div class="brand-logo-item">
+              <i class="bi bi-droplet"></i> Sawyer
+            </div>
+            <div class="brand-logo-item">
+              <i class="bi bi-lightning"></i> Black Diamond
+            </div>
+            <div class="brand-logo-item">
+              <i class="bi bi-grid"></i> Helinox
+            </div>
+            <div class="brand-logo-item">
+              <i class="bi bi-sun"></i> Columbia
+            </div>
+            <div class="brand-logo-item">
+              <i class="bi bi-flower1"></i> Ogawa
+            </div>
+            <div class="brand-logo-item">
+              <i class="bi bi-star"></i> Therm-a-Rest
+            </div>
+            <!-- 第二組（複製，實現無縫銜接） -->
+            <div class="brand-logo-item">
+              <i class="bi bi-tent"></i> Snow Peak
+            </div>
+            <div class="brand-logo-item">
+              <i class="bi bi-mountain"></i> Osprey
+            </div>
+            <div class="brand-logo-item"><i class="bi bi-fire"></i> MSR</div>
+            <div class="brand-logo-item">
+              <i class="bi bi-tree"></i> Coleman
+            </div>
+            <div class="brand-logo-item">
+              <i class="bi bi-globe"></i> Patagonia
+            </div>
+            <div class="brand-logo-item"><i class="bi bi-bag"></i> Deuter</div>
+            <div class="brand-logo-item">
+              <i class="bi bi-droplet"></i> Sawyer
+            </div>
+            <div class="brand-logo-item">
+              <i class="bi bi-lightning"></i> Black Diamond
+            </div>
+            <div class="brand-logo-item">
+              <i class="bi bi-grid"></i> Helinox
+            </div>
+            <div class="brand-logo-item">
+              <i class="bi bi-sun"></i> Columbia
+            </div>
+            <div class="brand-logo-item">
+              <i class="bi bi-flower1"></i> Ogawa
+            </div>
+            <div class="brand-logo-item">
+              <i class="bi bi-star"></i> Therm-a-Rest
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ================================================
+      <!-- ================================================
          步驟 4.3：精選商品 - 最新商品
          ================================================ -->
-    <section class="home-section" style="background-color: #ffffff;">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">最新商品</h2>
-          <a href="products.html?filter=new" class="section-link">查看更多 →</a>
+      <section class="home-section" style="background-color: #ffffff">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">最新商品</h2>
+            <a href="products.html?filter=new" class="section-link"
+              >查看更多 →</a
+            >
+          </div>
+          <!-- 商品卡片由 JS 動態生成，加載前顯示骨架屏 -->
+          <div class="products-scroll-row" id="newProductsRow">
+            <!-- 骨架屏加載佔位 -->
+            <div
+              class="skeleton-card"
+              style="min-width: 220px; max-width: 220px"
+            >
+              <div class="skeleton-img"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line long"></div>
+                <div class="skeleton-line price"></div>
+              </div>
+            </div>
+            <div
+              class="skeleton-card"
+              style="min-width: 220px; max-width: 220px"
+            >
+              <div class="skeleton-img"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line long"></div>
+                <div class="skeleton-line price"></div>
+              </div>
+            </div>
+            <div
+              class="skeleton-card"
+              style="min-width: 220px; max-width: 220px"
+            >
+              <div class="skeleton-img"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line long"></div>
+                <div class="skeleton-line price"></div>
+              </div>
+            </div>
+            <div
+              class="skeleton-card"
+              style="min-width: 220px; max-width: 220px"
+            >
+              <div class="skeleton-img"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line long"></div>
+                <div class="skeleton-line price"></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <!-- 商品卡片由 JS 動態生成，加載前顯示骨架屏 -->
-        <div class="products-scroll-row" id="newProductsRow">
-          <!-- 骨架屏加載佔位 -->
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
-            <div class="skeleton-img"></div>
-            <div class="skeleton-body">
-              <div class="skeleton-line short"></div>
-              <div class="skeleton-line long"></div>
-              <div class="skeleton-line price"></div>
-            </div>
-          </div>
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
-            <div class="skeleton-img"></div>
-            <div class="skeleton-body">
-              <div class="skeleton-line short"></div>
-              <div class="skeleton-line long"></div>
-              <div class="skeleton-line price"></div>
-            </div>
-          </div>
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
-            <div class="skeleton-img"></div>
-            <div class="skeleton-body">
-              <div class="skeleton-line short"></div>
-              <div class="skeleton-line long"></div>
-              <div class="skeleton-line price"></div>
-            </div>
-          </div>
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
-            <div class="skeleton-img"></div>
-            <div class="skeleton-body">
-              <div class="skeleton-line short"></div>
-              <div class="skeleton-line long"></div>
-              <div class="skeleton-line price"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ================================================
+      <!-- ================================================
          步驟 4.3：精選商品 - 熱銷商品
          ================================================ -->
-    <section class="home-section" style="background-color: #f6fbf6;">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">🔥 熱銷商品</h2>
-          <a href="products.html?filter=bestseller" class="section-link">查看更多 →</a>
+      <section class="home-section" style="background-color: #f6fbf6">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title"><i class="bi bi-fire"></i> 熱銷商品</h2>
+            <a href="products.html?filter=bestseller" class="section-link"
+              >查看更多 →</a
+            >
+          </div>
+          <div class="products-scroll-row" id="bestsellerProductsRow">
+            <!-- 骨架屏加載佔位 -->
+            <div
+              class="skeleton-card"
+              style="min-width: 220px; max-width: 220px"
+            >
+              <div class="skeleton-img"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line long"></div>
+                <div class="skeleton-line price"></div>
+              </div>
+            </div>
+            <div
+              class="skeleton-card"
+              style="min-width: 220px; max-width: 220px"
+            >
+              <div class="skeleton-img"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line long"></div>
+                <div class="skeleton-line price"></div>
+              </div>
+            </div>
+            <div
+              class="skeleton-card"
+              style="min-width: 220px; max-width: 220px"
+            >
+              <div class="skeleton-img"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line long"></div>
+                <div class="skeleton-line price"></div>
+              </div>
+            </div>
+            <div
+              class="skeleton-card"
+              style="min-width: 220px; max-width: 220px"
+            >
+              <div class="skeleton-img"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line long"></div>
+                <div class="skeleton-line price"></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="products-scroll-row" id="bestsellerProductsRow">
-          <!-- 骨架屏加載佔位 -->
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
-            <div class="skeleton-img"></div>
-            <div class="skeleton-body">
-              <div class="skeleton-line short"></div>
-              <div class="skeleton-line long"></div>
-              <div class="skeleton-line price"></div>
-            </div>
-          </div>
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
-            <div class="skeleton-img"></div>
-            <div class="skeleton-body">
-              <div class="skeleton-line short"></div>
-              <div class="skeleton-line long"></div>
-              <div class="skeleton-line price"></div>
-            </div>
-          </div>
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
-            <div class="skeleton-img"></div>
-            <div class="skeleton-body">
-              <div class="skeleton-line short"></div>
-              <div class="skeleton-line long"></div>
-              <div class="skeleton-line price"></div>
-            </div>
-          </div>
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
-            <div class="skeleton-img"></div>
-            <div class="skeleton-body">
-              <div class="skeleton-line short"></div>
-              <div class="skeleton-line long"></div>
-              <div class="skeleton-line price"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ================================================
+      <!-- ================================================
          品牌特色區塊（三個賣點 Icon + 文字）
          ================================================ -->
-    <section style="padding: 4rem 0; background-color: #244d4d; color: #fff;">
-      <div class="container">
-        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:2rem; text-align:center;">
-          <div>
-            <div style="font-size:2.5rem; margin-bottom:0.75rem;">🚚</div>
-            <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:0.5rem;">滿 NT$3,000 免運費</h3>
-            <p style="font-size:0.875rem; color:rgba(255,255,255,0.75); margin:0;">全台宅配，門市取貨也免費</p>
-          </div>
-          <div>
-            <div style="font-size:2.5rem; margin-bottom:0.75rem;">🏅</div>
-            <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:0.5rem;">品牌正品保證</h3>
-            <p style="font-size:0.875rem; color:rgba(255,255,255,0.75); margin:0;">直接品牌授權，每件附原廠保固</p>
-          </div>
-          <div>
-            <div style="font-size:2.5rem; margin-bottom:0.75rem;">🔄</div>
-            <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:0.5rem;">30 天無憂退換貨</h3>
-            <p style="font-size:0.875rem; color:rgba(255,255,255,0.75); margin:0;">不滿意免費退，保障您的購物體驗</p>
+      <section style="padding: 4rem 0; background-color: #244d4d; color: #fff">
+        <div class="container">
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              gap: 2rem;
+              text-align: center;
+            "
+          >
+            <div>
+              <div style="font-size: 2.5rem; margin-bottom: 0.75rem">
+                <i class="bi bi-truck"></i>
+              </div>
+              <h3
+                style="
+                  font-size: 1.1rem;
+                  font-weight: 700;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                滿 NT$3,000 免運費
+              </h3>
+              <p
+                style="
+                  font-size: 0.875rem;
+                  color: rgba(255, 255, 255, 0.75);
+                  margin: 0;
+                "
+              >
+                全台宅配，門市取貨也免費
+              </p>
+            </div>
+            <div>
+              <div style="font-size: 2.5rem; margin-bottom: 0.75rem">
+                <i class="bi bi-award"></i>
+              </div>
+              <h3
+                style="
+                  font-size: 1.1rem;
+                  font-weight: 700;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                品牌正品保證
+              </h3>
+              <p
+                style="
+                  font-size: 0.875rem;
+                  color: rgba(255, 255, 255, 0.75);
+                  margin: 0;
+                "
+              >
+                直接品牌授權，每件附原廠保固
+              </p>
+            </div>
+            <div>
+              <div style="font-size: 2.5rem; margin-bottom: 0.75rem">
+                <i class="bi bi-arrow-repeat"></i>
+              </div>
+              <h3
+                style="
+                  font-size: 1.1rem;
+                  font-weight: 700;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                30 天無憂退換貨
+              </h3>
+              <p
+                style="
+                  font-size: 0.875rem;
+                  color: rgba(255, 255, 255, 0.75);
+                  margin: 0;
+                "
+              >
+                不滿意免費退，保障您的購物體驗
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-    <!-- 手機版調整：3 欄改為 1 欄 -->
-    <style>
-      @media (max-width: 768px) {
-        section[style*="background-color: #244d4d"] .container > div {
-          grid-template-columns: 1fr !important;
+      </section>
+      <!-- 手機版調整：3 欄改為 1 欄 -->
+      <style>
+        @media (max-width: 768px) {
+          section[style*="background-color: #244d4d"] .container > div {
+            grid-template-columns: 1fr !important;
+          }
         }
-      }
-    </style>
+      </style>
+    </main>
 
-  </main>
+    <div id="footer"></div>
 
- <div id="footer"></div>
-
-
-  <!-- ===================================================
+    <!-- ===================================================
        JavaScript 載入（順序很重要！）
        =================================================== -->
-  <script src="../js/config.js" defer></script>
-  <script src="../js/api-mock.js" defer></script>
-  <script src="../js/components/toast.js" defer></script>
-  <script src="../js/components/modal.js" defer></script>
+    <script src="../js/config.js" defer></script>
+    <script src="../js/api-mock.js" defer></script>
+    <script src="../js/components/toast.js" defer></script>
+    <script src="../js/components/modal.js" defer></script>
 
-  <script src="../js/components/cart.js" defer></script>
-  <script src="../js/components/carousel.js" defer></script>
+    <script src="../js/components/cart.js" defer></script>
+    <script src="../js/components/carousel.js" defer></script>
 
-  <script src="../js/main.js" defer></script> 
-  <script src="../js/pages/home.js" defer></script>
-  
-
-</body>
+    <script src="../js/main.js" defer></script>
+    <script src="../js/pages/home.js" defer></script>
+  </body>
 </html>
-

@@ -182,14 +182,12 @@ function initFloatingActions() {
   floatingActions.innerHTML = `
     <a
       class="floating-line-btn"
-      href="https://line.me/R/ti/p/%40866acglg"
+      href="#"
       target="_blank"
       rel="noopener noreferrer"
-      aria-label=" Line 客服"
-      title="Line客服"
+      title="Line 客服"
     >
-      <span class="floating-line-label">Line客服</span>
-
+      
       <span class="floating-line-icon" aria-hidden="true">
         <i class="bi bi-chat-dots-fill"></i>
       </span>
