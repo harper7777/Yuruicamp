@@ -22,13 +22,14 @@
           <tr>
             <th>連結</th>
             <th>異動日期</th>
+            <th>負責員工 ID</th>
             <th>明細筆數</th>
           </tr>
         </thead>
         <!-- tbody 由 movement.js 的 renderMovementTable() 動態填入 -->
         <tbody id="movementTableBody">
           <tr>
-            <td colspan="3" class="text-center py-4">
+            <td colspan="4" class="text-center py-4">
               <div class="spinner-border spinner-border-sm me-2"
                    style="color: var(--admin-brand-accent);"></div>
               <span class="text-muted">載入庫存異動紀錄中...</span>
@@ -53,9 +54,15 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="mb-3">
-          <small class="text-muted d-block">異動日期</small>
-          <span id="modalMovementDate" class="fw-semibold"></span>
+        <div class="row g-3 mb-3">
+          <div class="col-sm-6">
+            <small class="text-muted d-block">異動日期</small>
+            <span id="modalMovementDate" class="fw-semibold"></span>
+          </div>
+          <div class="col-sm-6">
+            <small class="text-muted d-block">員工 ID</small>
+            <span id="modalMovementEmployeeId" class="fw-semibold"></span>
+          </div>
         </div>
         <div class="table-responsive">
           <table class="table table-sm table-bordered mb-0">

@@ -22,7 +22,7 @@ window.initMovement = function () {
       renderMovementTable(window.movementCache);
     }).fail(function () {
       $('#movementTableBody').html(
-        '<tr><td colspan="3" class="text-center text-danger py-4">' +
+        '<tr><td colspan="4" class="text-center text-danger py-4">' +
         '<i class="fas fa-exclamation-triangle me-2"></i>載入庫存異動紀錄失敗' +
         '</td></tr>'
       );
@@ -85,6 +85,7 @@ function normalizeMovementRecord(record) {
   return {
     id: (record && record.id) || 'MV-NEW-' + Date.now(),
     date: (record && record.date) || '',
+    employeeId: (record && (record.employeeId || record.adminId || record.staffId)) || '—',
     items: items.map(function (item) {
       return {
         productName: (item && item.productName) || '未命名商品',
@@ -99,7 +100,7 @@ function normalizeMovementRecord(record) {
 function renderMovementTable(records) {
   if (!records || records.length === 0) {
     $('#movementTableBody').html(
-      '<tr><td colspan="3" class="text-center text-muted py-4">目前沒有庫存異動紀錄</td></tr>'
+      '<tr><td colspan="4" class="text-center text-muted py-4">目前沒有庫存異動紀錄</td></tr>'
     );
     return;
   }
@@ -115,6 +116,7 @@ function renderMovementTable(records) {
       '</button>' +
       '</td>' +
       '<td>' + escapeMovementHtml(record.date) + '</td>' +
+      '<td>' + escapeMovementHtml(record.employeeId || '—') + '</td>' +
       '<td>' + itemCount + ' 筆</td>' +
       '</tr>';
   }).join('');
@@ -125,6 +127,7 @@ function renderMovementTable(records) {
 function showMovementDetailModal(record) {
   $('#modalMovementId').text(record.id);
   $('#modalMovementDate').text(record.date);
+  $('#modalMovementEmployeeId').text(record.employeeId || '—');
 
   var itemsHtml = (record.items || []).map(function (item) {
     return '<tr>' +

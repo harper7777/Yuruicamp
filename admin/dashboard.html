@@ -544,7 +544,10 @@
               <div class="col-6">
                 <label class="form-label fw-semibold" for="newProductStock">初始庫存</label>
                 <input type="number" class="form-control" id="newProductStock"
-                       min="0" value="0">
+                       min="0" value="0" aria-describedby="newProductStockHelp">
+                <div class="form-text" id="newProductStockHelp">
+                  租借商品會由各營地存放數量自動加總
+                </div>
               </div>
             </div>
 
@@ -557,9 +560,14 @@
                 </label>
               </div>
               <div class="mt-2 d-none" id="rentalCampField">
-                <label class="form-label fw-semibold" for="newRentalCamp">存放營地: </label>
-                <input type="text" class="form-control" id="newRentalCamp"
-                       placeholder="例：湖畔星空營地">
+                <!-- 租借商品營地清單：products.js 會依按鈕動態新增營地名稱與數量欄位 -->
+                <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+                  <label class="form-label fw-semibold mb-0" for="newRentalCamp">存放營地</label>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" id="addRentalCamp">
+                    <i class="fas fa-plus me-1"></i>新增營地
+                  </button>
+                </div>
+                <div id="rentalCampList" class="vstack gap-2"></div>
               </div>
             </div>
 

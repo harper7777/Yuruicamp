@@ -3,160 +3,240 @@
     "id": "R001",
     "image": "../assets/images/tent-01.jpg",
     "name": "Coleman 六人帳篷",
-    "quantity": 8,
     "category": "帳篷",
-    "camp": "湖畔星空營地"
+    "camp": [
+      { "name": "湖畔星空營地", "quantity": 3 },
+      { "name": "松林野營基地", "quantity": 2 },
+      { "name": "溪谷森林營地", "quantity": 3 }
+    ]
   },
   {
     "id": "R002",
     "image": "../assets/images/tent-01.jpg",
     "name": "MSR 超輕量帳篷",
-    "quantity": 5,
     "category": "帳篷",
-    "camp": "松林野營基地"
+    "camp": [
+      { "name": "松林野營基地", "quantity": 2 },
+      { "name": "湖畔星空營地", "quantity": 1 },
+      { "name": "海岸微風營地", "quantity": 2 }
+    ]
   },
   {
     "id": "R003",
     "image": "../assets/images/tent-01.jpg",
     "name": "Snow Peak 客廳帳",
-    "quantity": 6,
     "category": "帳篷",
-    "camp": "溪谷森林營地"
+    "camp": [
+      { "name": "溪谷森林營地", "quantity": 2 },
+      { "name": "湖畔星空營地", "quantity": 2 },
+      { "name": "雲海高原營地", "quantity": 1 },
+      { "name": "海岸微風營地", "quantity": 1 }
+    ]
   },
   {
     "id": "R004",
     "image": "../assets/images/tent-01.jpg",
     "name": "四季保暖睡袋",
-    "quantity": 18,
     "category": "睡袋",
-    "camp": "湖畔星空營地"
+    "camp": [
+      { "name": "湖畔星空營地", "quantity": 5 },
+      { "name": "松林野營基地", "quantity": 4 },
+      { "name": "溪谷森林營地", "quantity": 3 },
+      { "name": "雲海高原營地", "quantity": 3 },
+      { "name": "海岸微風營地", "quantity": 3 }
+    ]
   },
   {
     "id": "R005",
     "image": "../assets/images/tent-01.jpg",
     "name": "羽絨登山睡袋",
-    "quantity": 12,
     "category": "睡袋",
-    "camp": "雲海高原營地"
+    "camp": [
+      { "name": "雲海高原營地", "quantity": 4 },
+      { "name": "溪谷森林營地", "quantity": 3 },
+      { "name": "海岸微風營地", "quantity": 5 }
+    ]
   },
   {
     "id": "R006",
     "image": "../assets/images/tent-01.jpg",
     "name": "雙口瓦斯爐",
-    "quantity": 10,
     "category": "炊具",
-    "camp": "松林野營基地"
+    "camp": [
+      { "name": "松林野營基地", "quantity": 3 },
+      { "name": "湖畔星空營地", "quantity": 2 },
+      { "name": "溪谷森林營地", "quantity": 2 },
+      { "name": "海岸微風營地", "quantity": 3 }
+    ]
   },
   {
     "id": "R007",
     "image": "../assets/images/tent-01.jpg",
     "name": "不鏽鋼鍋具組",
-    "quantity": 15,
     "category": "炊具",
-    "camp": "海岸微風營地"
+    "camp": [
+      { "name": "海岸微風營地", "quantity": 4 },
+      { "name": "松林野營基地", "quantity": 4 },
+      { "name": "湖畔星空營地", "quantity": 3 },
+      { "name": "溪谷森林營地", "quantity": 2 },
+      { "name": "雲海高原營地", "quantity": 2 }
+    ]
   },
   {
     "id": "R008",
     "image": "../assets/images/tent-01.jpg",
     "name": "露營餐桌椅組",
-    "quantity": 20,
     "category": "桌椅",
-    "camp": "湖畔星空營地"
+    "camp": [
+      { "name": "湖畔星空營地", "quantity": 6 },
+      { "name": "松林野營基地", "quantity": 5 },
+      { "name": "溪谷森林營地", "quantity": 4 },
+      { "name": "雲海高原營地", "quantity": 5 }
+    ]
   },
   {
     "id": "R009",
     "image": "../assets/images/tent-01.jpg",
     "name": "折疊蛋捲桌",
-    "quantity": 14,
     "category": "桌椅",
-    "camp": "溪谷森林營地"
+    "camp": [
+      { "name": "溪谷森林營地", "quantity": 4 },
+      { "name": "湖畔星空營地", "quantity": 3 },
+      { "name": "松林野營基地", "quantity": 3 },
+      { "name": "海岸微風營地", "quantity": 4 }
+    ]
   },
   {
     "id": "R010",
     "image": "../assets/images/tent-01.jpg",
     "name": "高背月亮椅",
-    "quantity": 22,
     "category": "桌椅",
-    "camp": "雲海高原營地"
+    "camp": [
+      { "name": "雲海高原營地", "quantity": 6 },
+      { "name": "湖畔星空營地", "quantity": 5 },
+      { "name": "松林野營基地", "quantity": 4 },
+      { "name": "溪谷森林營地", "quantity": 4 },
+      { "name": "海岸微風營地", "quantity": 3 }
+    ]
   },
   {
     "id": "R011",
     "image": "../assets/images/tent-01.jpg",
     "name": "LED 露營燈",
-    "quantity": 30,
     "category": "燈具",
-    "camp": "海岸微風營地"
+    "camp": [
+      { "name": "海岸微風營地", "quantity": 8 },
+      { "name": "湖畔星空營地", "quantity": 6 },
+      { "name": "松林野營基地", "quantity": 5 },
+      { "name": "溪谷森林營地", "quantity": 6 },
+      { "name": "雲海高原營地", "quantity": 5 }
+    ]
   },
   {
     "id": "R012",
     "image": "../assets/images/tent-01.jpg",
     "name": "充電式頭燈",
-    "quantity": 26,
     "category": "燈具",
-    "camp": "松林野營基地"
+    "camp": [
+      { "name": "松林野營基地", "quantity": 7 },
+      { "name": "湖畔星空營地", "quantity": 5 },
+      { "name": "溪谷森林營地", "quantity": 5 },
+      { "name": "雲海高原營地", "quantity": 4 },
+      { "name": "海岸微風營地", "quantity": 5 }
+    ]
   },
   {
     "id": "R013",
     "image": "../assets/images/tent-01.jpg",
     "name": "45L 登山背包",
-    "quantity": 9,
     "category": "背包",
-    "camp": "雲海高原營地"
+    "camp": [
+      { "name": "雲海高原營地", "quantity": 3 },
+      { "name": "溪谷森林營地", "quantity": 2 },
+      { "name": "松林野營基地", "quantity": 4 }
+    ]
   },
   {
     "id": "R014",
     "image": "../assets/images/tent-01.jpg",
     "name": "65L 重裝背包",
-    "quantity": 7,
     "category": "背包",
-    "camp": "溪谷森林營地"
+    "camp": [
+      { "name": "溪谷森林營地", "quantity": 2 },
+      { "name": "湖畔星空營地", "quantity": 2 },
+      { "name": "雲海高原營地", "quantity": 1 },
+      { "name": "海岸微風營地", "quantity": 2 }
+    ]
   },
   {
     "id": "R015",
     "image": "../assets/images/tent-01.jpg",
     "name": "露營拖車",
-    "quantity": 6,
     "category": "搬運",
-    "camp": "湖畔星空營地"
+    "camp": [
+      { "name": "湖畔星空營地", "quantity": 2 },
+      { "name": "松林野營基地", "quantity": 2 },
+      { "name": "雲海高原營地", "quantity": 2 }
+    ]
   },
   {
     "id": "R016",
     "image": "../assets/images/tent-01.jpg",
     "name": "大型天幕",
-    "quantity": 11,
     "category": "遮陽",
-    "camp": "海岸微風營地"
+    "camp": [
+      { "name": "海岸微風營地", "quantity": 3 },
+      { "name": "湖畔星空營地", "quantity": 3 },
+      { "name": "溪谷森林營地", "quantity": 2 },
+      { "name": "松林野營基地", "quantity": 3 }
+    ]
   },
   {
     "id": "R017",
     "image": "../assets/images/tent-01.jpg",
     "name": "營柱與營繩組",
-    "quantity": 24,
     "category": "配件",
-    "camp": "松林野營基地"
+    "camp": [
+      { "name": "松林野營基地", "quantity": 6 },
+      { "name": "湖畔星空營地", "quantity": 5 },
+      { "name": "溪谷森林營地", "quantity": 5 },
+      { "name": "雲海高原營地", "quantity": 4 },
+      { "name": "海岸微風營地", "quantity": 4 }
+    ]
   },
   {
     "id": "R018",
     "image": "../assets/images/tent-01.jpg",
     "name": "防潮睡墊",
-    "quantity": 16,
     "category": "睡眠",
-    "camp": "溪谷森林營地"
+    "camp": [
+      { "name": "溪谷森林營地", "quantity": 4 },
+      { "name": "湖畔星空營地", "quantity": 4 },
+      { "name": "松林野營基地", "quantity": 3 },
+      { "name": "雲海高原營地", "quantity": 5 }
+    ]
   },
   {
     "id": "R019",
     "image": "../assets/images/tent-01.jpg",
     "name": "行動電源站",
-    "quantity": 4,
     "category": "電源",
-    "camp": "雲海高原營地"
+    "camp": [
+      { "name": "雲海高原營地", "quantity": 1 },
+      { "name": "湖畔星空營地", "quantity": 1 },
+      { "name": "海岸微風營地", "quantity": 2 }
+    ]
   },
   {
     "id": "R020",
     "image": "../assets/images/tent-01.jpg",
     "name": "保冷冰桶 45L",
-    "quantity": 13,
     "category": "保冷",
-    "camp": "海岸微風營地"
+    "camp": [
+      { "name": "海岸微風營地", "quantity": 4 },
+      { "name": "湖畔星空營地", "quantity": 3 },
+      { "name": "松林野營基地", "quantity": 3 },
+      { "name": "溪谷森林營地", "quantity": 3 }
+    ]
   }
 ]

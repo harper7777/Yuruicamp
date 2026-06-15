@@ -42,9 +42,29 @@ window.initProducts = function () {
     resetProductModalForm();
   });
 
-  // 新增商品 Modal：切換租借商品時，顯示 / 隱藏存放營地欄位。
+  // 新增商品 Modal：切換租借商品時，顯示 / 隱藏多營地庫存欄位。
   $(document).on('change.products', '#newProductIsRental', function () {
     syncRentalFormState($(this).is(':checked'));
+  });
+
+  // 租借商品營地欄位：每次點擊都新增一列營地名稱與該營地存放數量。
+  $(document).on('click.products', '#addRentalCamp', function () {
+    appendRentalCampField('', 0);
+    updateRentalStockFromCampFields();
+  });
+
+  // 租借營地資料異動時，重新加總各營地數量並同步到唯讀庫存欄位。
+  $(document).on('input.products change.products', '.rental-camp-name-input, .rental-camp-quantity-input', function () {
+    updateRentalStockFromCampFields();
+  });
+
+  // 租借營地列可移除；移除後若沒有任何列，保留一列空白輸入方便繼續新增。
+  $(document).on('click.products', '.remove-rental-camp-btn', function () {
+    $(this).closest('.rental-camp-row').remove();
+    if ($('#rentalCampList .rental-camp-row').length === 0) {
+      appendRentalCampField('', 0);
+    }
+    updateRentalStockFromCampFields();
   });
 
   // 庫存數量步進：總庫存與分店庫存共用同一組事件。
@@ -58,7 +78,7 @@ window.initProducts = function () {
     $input.val(Math.max(nextQty, 0)).trigger('input');
   });
 
-  // 欄位資料有異動才啟用同列的確定按鈕。
+  // 欄位資料有異動才顯示同列的確定按鈕，未異動時維持隱藏。
   $(document).on('input.products change.products', '.stock-input', function () {
     syncStockConfirmState($(this).closest('tr'));
   });
@@ -108,12 +128,8 @@ window.initProducts = function () {
     delete product.stock;
 
     $row.toggleClass('table-danger', totalStock < 5);
-    $row.find('.stock-input').each(function () {
-      var $input = $(this);
-      var qty = getStockInputValue($input);
-      $input.val(qty).attr('data-original-qty', qty).data('original-qty', qty);
-    });
-    $button.prop('disabled', true);
+    setRowOriginalStockValues($row);
+    syncStockConfirmState($row);
 
     if (movementResult.items.length > 0) {
       pendingMovementItems = pendingMovementItems.concat(movementResult.items);
@@ -133,6 +149,7 @@ window.initProducts = function () {
     var record = {
       id: createMovementRecordId(),
       date: formatMovementDate(new Date()),
+      employeeId: getCurrentAdminId(),
       items: pendingMovementItems.slice()
     };
 
@@ -218,7 +235,7 @@ window.initProducts = function () {
     var stock              = parseInt($('#newProductStock').val(), 10) || 0;
     var category           = $('#newProductCategory').val().trim();
     var isRental           = $('#newProductIsRental').is(':checked');
-    var rentalCamp         = $('#newRentalCamp').val().trim();
+    var rentalCampState    = collectRentalCampFields();
     var mainImageInput     = $('#newProductMainImage')[0];
     var secondaryImageInput = $('#newProductImages')[0];
     var mainImageFile      = mainImageInput && mainImageInput.files.length > 0
@@ -240,23 +257,23 @@ window.initProducts = function () {
       return;
     }
 
-    if (isRental && !rentalCamp) {
-      window.showAdminToast('請填寫存放營地', 'danger');
+    if (isRental && !rentalCampState.valid) {
+      window.showAdminToast('請至少新增 1 個存放營地，並填寫營地名稱', 'danger');
       return;
     }
 
     if (isRental) {
       var rentalEditId = editType === 'rental' ? editProductId : null;
+      var rentalCamps = rentalCampState.camps;
       var rentalItem = {
         id: rentalEditId || 'R-NEW-' + Date.now(),
         image: mainImageFile ? URL.createObjectURL(mainImageFile) : (existingThumbnail || PRODUCT_IMAGE_PLACEHOLDER),
         name: name,
-        quantity: stock,
         category: category || '其他',
-        camp: rentalCamp
+        camp: rentalCamps
       };
 
-      upsertAdminRentalCache(rentalItem);
+      rentalItem = upsertAdminRentalCache(rentalItem);
 
       if (rentalEditId) {
         $('#rentalProductsTableBody tr[data-product-id="' + escapeSelector(rentalEditId) + '"]')
@@ -344,7 +361,7 @@ function loadRentalProducts() {
   }
 
   $('#rentalProductsTableBody').html(
-    '<tr><td colspan="6" class="text-center py-4">' +
+    '<tr><td colspan="5" class="text-center py-4">' +
     '<div class="spinner-border spinner-border-sm me-2" style="color: var(--admin-brand-accent);"></div>' +
     '<span class="text-muted">載入租借商品中...</span>' +
     '</td></tr>'
@@ -369,30 +386,34 @@ function loadRentalProducts() {
     renderRentalProductsTable(adminRentalsCache);
   }).fail(function () {
     $('#rentalProductsTableBody').html(
-      '<tr><td colspan="6" class="text-center text-danger py-4">' +
+      '<tr><td colspan="5" class="text-center text-danger py-4">' +
       '<i class="fas fa-exclamation-triangle me-2"></i>載入租借商品數據失敗' +
       '</td></tr>'
     );
   });
 }
 
+// 將租借商品資料統一成 camp 陣列，庫存由各營地 quantity 加總取得。
 function normalizeRentalItem(item) {
+  var camps = normalizeRentalCamps(item && (item.camp || item.storageCamp), item && item.quantity);
+
   return {
     id: item && item.id ? item.id : 'R-NEW-' + Date.now(),
     image: (item && (item.image || item.thumbnail)) || PRODUCT_IMAGE_PLACEHOLDER,
     name: (item && item.name) || '未命名租借商品',
-    quantity: normalizeStockValue(item && item.quantity),
     category: (item && item.category) || '其他',
-    camp: (item && (item.camp || item.storageCamp)) || ''
+    camp: camps
   };
 }
 
+// 依租借商品 ID 從目前快取中取出資料。
 function findAdminRentalById(rentalId) {
   return (adminRentalsCache || []).find(function (item) {
     return item.id === rentalId;
   });
 }
 
+// 新增或更新租借商品快取，保留與 reantal.json 相同的 camp 陣列格式。
 function upsertAdminRentalCache(rentalItem) {
   var normalizedItem = normalizeRentalItem(rentalItem);
   var index = adminRentalsCache.findIndex(function (item) {
@@ -408,6 +429,7 @@ function upsertAdminRentalCache(rentalItem) {
   return normalizedItem;
 }
 
+// 租借列表的快速庫存調整會改寫 camp 陣列總量，維持列表總庫存與營地明細一致。
 function confirmRentalStockChange($row, rentalId, $button) {
   var rental = findAdminRentalById(rentalId);
 
@@ -417,22 +439,153 @@ function confirmRentalStockChange($row, rentalId, $button) {
   }
 
   var quantity = getRowStockValue($row, 'quantity');
-  rental.quantity = quantity;
+  rental.camp = setRentalCampTotal(rental.camp, quantity);
 
   $row.toggleClass('table-danger', quantity < 5);
-  $row.find('.stock-input').each(function () {
-    var $input = $(this);
-    $input.val(quantity).attr('data-original-qty', quantity).data('original-qty', quantity);
-  });
-  $button.prop('disabled', true);
+  setRowOriginalStockValues($row);
+  syncStockConfirmState($row);
 
   window.showAdminToast('租借商品 ' + rentalId + ' 數量已更新');
 }
 
+// 切換租借模式時，顯示多營地欄位，並讓初始庫存改由營地數量加總決定。
 function syncRentalFormState(isRental) {
   $('#rentalCampField').toggleClass('d-none', !isRental);
-  $('#newRentalCamp').prop('required', isRental);
+  $('.rental-camp-name-input').prop('required', isRental);
   $('#newProductPrice').prop('required', !isRental);
+  $('#newProductStock')
+    .prop('readonly', isRental)
+    .toggleClass('bg-light', isRental);
+
+  if (isRental && $('#rentalCampList .rental-camp-row').length === 0) {
+    appendRentalCampField('', 0);
+  }
+
+  if (isRental) {
+    updateRentalStockFromCampFields();
+  }
+}
+
+// 產生一列租借營地輸入，第一列名稱欄位會保留 #newRentalCamp 供既有 selector 使用。
+function appendRentalCampField(campName, quantity) {
+  var shouldAssignId = $('#newRentalCamp').length === 0;
+  var $row = $('<div>', { class: 'input-group input-group-sm rental-camp-row' });
+  var $label = $('<span>', { class: 'input-group-text' }).text('營地');
+  var $nameInput = $('<input>', {
+    type: 'text',
+    class: 'form-control rental-camp-name-input',
+    placeholder: '例：湖畔星空營地'
+  }).val(campName || '');
+  var $quantityInput = $('<input>', {
+    type: 'number',
+    class: 'form-control rental-camp-quantity-input',
+    min: '0',
+    value: normalizeStockValue(quantity),
+    'aria-label': '營地存放數量'
+  });
+  var $removeButton = $('<button>', {
+    type: 'button',
+    class: 'btn btn-outline-danger remove-rental-camp-btn',
+    title: '移除營地'
+  }).html('<i class="fas fa-times"></i>');
+
+  if (shouldAssignId) {
+    $nameInput.attr('id', 'newRentalCamp');
+  }
+
+  if ($('#newProductIsRental').is(':checked')) {
+    $nameInput.prop('required', true);
+  }
+
+  $row.append($label, $nameInput, $quantityInput, $removeButton);
+  $('#rentalCampList').append($row);
+  ensureRentalCampInputId();
+  return $row;
+}
+
+// 移除或重建營地列後，確保第一個營地名稱欄位固定使用 #newRentalCamp。
+function ensureRentalCampInputId() {
+  var $inputs = $('#rentalCampList .rental-camp-name-input');
+  $inputs.removeAttr('id');
+  $inputs.first().attr('id', 'newRentalCamp');
+}
+
+// 將既有 camp 陣列回填到 Modal 的多營地輸入列。
+function populateRentalCampFields(camps) {
+  var normalizedCamps = normalizeRentalCamps(camps);
+
+  $('#rentalCampList').empty();
+
+  if (normalizedCamps.length === 0) {
+    appendRentalCampField('', 0);
+  } else {
+    normalizedCamps.forEach(function (camp) {
+      appendRentalCampField(camp.name, camp.quantity);
+    });
+  }
+
+  ensureRentalCampInputId();
+  updateRentalStockFromCampFields();
+}
+
+// 收集 Modal 內的營地資料，空白列不寫入 camp 陣列。
+function collectRentalCampFields() {
+  var camps = [];
+  var hasInvalidCamp = false;
+  var rowCount = $('#rentalCampList .rental-camp-row').length;
+
+  $('#rentalCampList .rental-camp-row').each(function () {
+    var $row = $(this);
+    var $nameInput = $row.find('.rental-camp-name-input');
+    var name = $nameInput.val().trim();
+    var quantity = normalizeStockValue($row.find('.rental-camp-quantity-input').val());
+    var isBlankExtraRow = !name && quantity === 0 && rowCount > 1;
+
+    $nameInput.toggleClass('is-invalid', !name && !isBlankExtraRow);
+
+    if (isBlankExtraRow) {
+      return;
+    }
+
+    if (!name) {
+      hasInvalidCamp = true;
+      return;
+    }
+
+    camps.push({
+      name: name,
+      quantity: quantity
+    });
+  });
+
+  return {
+    valid: !hasInvalidCamp && camps.length > 0,
+    camps: camps
+  };
+}
+
+// 依目前營地數量欄位加總，回填租借商品的唯讀初始庫存。
+function updateRentalStockFromCampFields() {
+  var total = 0;
+
+  $('#rentalCampList .rental-camp-quantity-input').each(function () {
+    total += normalizeStockValue($(this).val());
+  });
+
+  $('#newProductStock').val(total);
+}
+
+// 統一設定新增 / 編輯商品 Modal 的標題與送出按鈕文字。
+function setProductModalMode(mode) {
+  var isEdit = mode === 'edit';
+  var iconClass = isEdit ? 'fa-pen' : 'fa-plus';
+
+  $('#addProductModalLabel').html(
+    '<i class="fas ' + iconClass + ' me-2"></i>' + (isEdit ? '編輯商品' : '新增商品')
+  );
+  $('#submitAddProduct').html(
+    '<i class="fas ' + iconClass + ' me-1"></i>' + (isEdit ? '更新商品' : '建立商品')
+  );
 }
 
 function normalizeProductBranch(product) {
@@ -493,6 +646,90 @@ function getProductBranchStock(product, branchId) {
 function normalizeStockValue(value) {
   var qty = parseInt(value, 10);
   return isNaN(qty) ? 0 : Math.max(qty, 0);
+}
+
+// 正規化租借商品的 camp 欄位，支援新版陣列與舊版單一字串。
+function normalizeRentalCamps(campValue, legacyQuantity) {
+  var camps = [];
+
+  if (Array.isArray(campValue)) {
+    camps = campValue.map(function (camp) {
+      if (typeof camp === 'string') {
+        return { name: camp.trim(), quantity: 0 };
+      }
+
+      return {
+        name: (camp && (camp.name || camp.camp || camp.title)) || '',
+        quantity: normalizeStockValue(camp && camp.quantity !== undefined ? camp.quantity : camp && camp.stock)
+      };
+    });
+  } else if (campValue && typeof campValue === 'object') {
+    if (campValue.name || campValue.camp || campValue.title) {
+      camps = [{
+        name: campValue.name || campValue.camp || campValue.title,
+        quantity: normalizeStockValue(campValue.quantity !== undefined ? campValue.quantity : campValue.stock)
+      }];
+    } else {
+      camps = Object.keys(campValue).map(function (name) {
+        return {
+          name: name,
+          quantity: normalizeStockValue(campValue[name])
+        };
+      });
+    }
+  } else if (typeof campValue === 'string' && campValue.trim()) {
+    camps = [{
+      name: campValue.trim(),
+      quantity: normalizeStockValue(legacyQuantity)
+    }];
+  }
+
+  return camps.filter(function (camp) {
+    return camp.name;
+  }).map(function (camp) {
+    return {
+      name: String(camp.name).trim(),
+      quantity: normalizeStockValue(camp.quantity)
+    };
+  });
+}
+
+// 計算租借商品所有營地的庫存總量。
+function getRentalCampTotal(camps) {
+  return (camps || []).reduce(function (sum, camp) {
+    return sum + normalizeStockValue(camp && camp.quantity);
+  }, 0);
+}
+
+// 從租借商品物件計算列表要顯示的庫存總量。
+function getRentalTotalStock(rental) {
+  return getRentalCampTotal(normalizeRentalCamps(rental && rental.camp, rental && rental.quantity));
+}
+
+// 快速調整租借總量時，將差額寫回既有營地數量。
+function setRentalCampTotal(camps, nextTotal) {
+  var targetTotal = normalizeStockValue(nextTotal);
+  var normalizedCamps = normalizeRentalCamps(camps);
+
+  if (normalizedCamps.length === 0) {
+    return [{ name: '未指定營地', quantity: targetTotal }];
+  }
+
+  var currentTotal = getRentalCampTotal(normalizedCamps);
+  var delta = targetTotal - currentTotal;
+
+  if (delta > 0) {
+    normalizedCamps[0].quantity += delta;
+  } else if (delta < 0) {
+    var remaining = Math.abs(delta);
+    for (var index = normalizedCamps.length - 1; index >= 0 && remaining > 0; index -= 1) {
+      var reducibleQty = Math.min(normalizedCamps[index].quantity, remaining);
+      normalizedCamps[index].quantity -= reducibleQty;
+      remaining -= reducibleQty;
+    }
+  }
+
+  return normalizedCamps;
 }
 
 function getBranchTotal(branchStock) {
@@ -626,6 +863,7 @@ function getRowStockValue($row, fieldName) {
   return getStockInputValue($row.find('.stock-input[data-stock-field="' + fieldName + '"]'));
 }
 
+// 檢查同一列庫存欄位是否異動，並同步確定按鈕顯示狀態。
 function syncStockConfirmState($row) {
   var hasChanged = $row.find('.stock-input').toArray().some(function (input) {
     var $input = $(input);
@@ -633,11 +871,70 @@ function syncStockConfirmState($row) {
     return getStockInputValue($input) !== originalQty;
   });
 
-  $row.find('.stock-confirm-btn').prop('disabled', !hasChanged);
+  syncStockInputFeedback($row);
+  $row.find('.stock-confirm-btn')
+    .prop('disabled', !hasChanged)
+    .toggleClass('d-none', !hasChanged);
+}
+
+// 確認庫存後，將目前欄位值寫回原始值，作為下一次異動比較基準。
+function setRowOriginalStockValues($row) {
+  $row.find('.stock-input').each(function () {
+    var $input = $(this);
+    var qty = getStockInputValue($input);
+
+    $input
+      .val(qty)
+      .attr('data-original-qty', qty)
+      .data('original-qty', qty);
+  });
+
+  syncStockInputFeedback($row);
+}
+
+// 依變更方向標示庫存欄位顏色，總庫存欄位改以分店加總作為比較基準。
+function syncStockInputFeedback($row) {
+  var inventoryType = $row.data('inventory-type') || 'store';
+  var branchTotal = 0;
+
+  if (inventoryType === 'store') {
+    ADMIN_PRODUCT_BRANCH_IDS.forEach(function (branchId) {
+      branchTotal += getRowStockValue($row, branchId);
+    });
+  }
+
+  $row.find('.stock-input').each(function () {
+    var $input = $(this);
+    var currentQty = getStockInputValue($input);
+    var originalQty = normalizeStockValue($input.attr('data-original-qty'));
+    var fieldName = String($input.data('stock-field') || '');
+
+    $input.removeClass('stock-input-increase stock-input-decrease');
+
+    if (inventoryType === 'store' && fieldName === 'total-stock') {
+      if (currentQty < branchTotal) {
+        $input.addClass('stock-input-decrease');
+      } else if (currentQty > branchTotal) {
+        $input.addClass('stock-input-increase');
+      }
+      return;
+    }
+
+    if (currentQty > originalQty) {
+      $input.addClass('stock-input-increase');
+    } else if (currentQty < originalQty) {
+      $input.addClass('stock-input-decrease');
+    }
+  });
 }
 
 function updateMovementGenerateButtonState() {
   $('#generateMovementRecord').prop('disabled', pendingMovementItems.length === 0);
+}
+
+// 取得目前登入員工 ID，寫入新建立的庫存異動紀錄。
+function getCurrentAdminId() {
+  return sessionStorage.getItem('adminId') || '—';
 }
 
 function createMovementRecordId() {
@@ -741,8 +1038,10 @@ function findAdminProductById(productId) {
   });
 }
 
+// 將商店商品資料回填到新增商品 Modal，切換為編輯狀態。
 function fillProductModal(product) {
   resetProductModalForm();
+  setProductModalMode('edit');
 
   $('#addProductForm')
     .data('edit-product-id', product.id)
@@ -753,6 +1052,7 @@ function fillProductModal(product) {
 
   syncRentalFormState(false);
   $('#newProductIsRental').prop('checked', false);
+  $('#newProductStock').prop('readonly', false).removeClass('bg-light');
   $('#newProductName').val(product.name || '');
   $('#newProductCategory').val(product.category || '');
   $('#newProductSpec').val(product.spec || '');
@@ -766,8 +1066,10 @@ function fillProductModal(product) {
   }
 }
 
+// 將租借商品資料回填到新增商品 Modal，並帶入各營地庫存明細。
 function fillRentalModal(rental) {
   resetProductModalForm();
+  setProductModalMode('edit');
 
   $('#addProductForm')
     .data('edit-product-id', rental.id)
@@ -782,10 +1084,11 @@ function fillRentalModal(rental) {
   $('#newProductCategory').val(rental.category || '其他');
   $('#newProductSpec').val('');
   $('#newProductPrice').val('');
-  $('#newProductStock').val(normalizeStockValue(rental.quantity));
-  $('#newRentalCamp').val(rental.camp || '');
+  populateRentalCampFields(rental.camp);
+  $('#newProductStock').val(getRentalTotalStock(rental)).prop('readonly', true).addClass('bg-light');
 }
 
+// 重設新增商品 Modal 的欄位、暫存狀態與租借營地清單。
 function resetProductModalForm() {
   var form = $('#addProductForm')[0];
   if (form) {
@@ -799,8 +1102,10 @@ function resetProductModalForm() {
     .removeData('existing-images')
     .removeData('existing-status');
   $('#productSpecFields').empty();
+  $('#rentalCampList').empty();
   $('#newProductIsRental').prop('checked', false);
-  $('#newRentalCamp').val('');
+  $('#newProductStock').prop('readonly', false).removeClass('bg-light').val('0');
+  setProductModalMode('add');
   syncRentalFormState(false);
 }
 
@@ -857,7 +1162,7 @@ function buildProductRow(p) {
     '<button type="button" class="btn btn-sm btn-outline-secondary edit-product-btn" title="編輯商品">' +
     '<i class="fas fa-pen me-1"></i>編輯' +
     '</button>' +
-    '<button type="button" class="btn btn-sm btn-success stock-confirm-btn" title="確定庫存異動" disabled>' +
+    '<button type="button" class="btn btn-sm btn-success stock-confirm-btn d-none" title="確定庫存異動" disabled>' +
     '<i class="fas fa-check me-1"></i>確定' +
     '</button>' +
     '</div>' +
@@ -867,7 +1172,8 @@ function buildProductRow(p) {
 
 function buildRentalRow(item) {
   var rental = normalizeRentalItem(item);
-  var isLow = rental.quantity < 5;
+  var stock = getRentalTotalStock(rental);
+  var isLow = stock < 5;
   var rowClass = isLow ? ' class="table-danger"' : '';
 
   return '<tr data-product-id="' + escapeHtml(rental.id) + '" data-inventory-type="rental"' + rowClass + '>' +
@@ -875,14 +1181,13 @@ function buildRentalRow(item) {
     ' onerror="this.src=\'' + PRODUCT_IMAGE_PLACEHOLDER + '\'"></td>' +
     '<td class="fw-semibold">' + escapeHtml(rental.name) + '</td>' +
     '<td><span class="badge bg-light text-dark border">' + escapeHtml(rental.category || '其他') + '</span></td>' +
-    '<td class="stock-cell">' + buildStockControl('quantity', rental.quantity, '租借庫存') + '</td>' +
-    '<td>' + escapeHtml(rental.camp || '—') + '</td>' +
+    '<td class="stock-cell">' + buildStockControl('quantity', stock, '租借庫存') + '</td>' +
     '<td>' +
     '<div class="d-flex flex-wrap gap-1">' +
     '<button type="button" class="btn btn-sm btn-outline-secondary edit-product-btn" title="編輯商品">' +
     '<i class="fas fa-pen me-1"></i>編輯' +
     '</button>' +
-    '<button type="button" class="btn btn-sm btn-success stock-confirm-btn" title="確定庫存異動" disabled>' +
+    '<button type="button" class="btn btn-sm btn-success stock-confirm-btn d-none" title="確定庫存異動" disabled>' +
     '<i class="fas fa-check me-1"></i>確定' +
     '</button>' +
     '</div>' +
@@ -945,29 +1250,11 @@ function buildMovementGenerateRow() {
     '</tr>';
 }
 
+// 將租借商品快取渲染到租借表格，庫存欄位使用 camp 數量加總。
 function renderRentalProductsTable(rentals) {
   if (!rentals || rentals.length === 0) {
     $('#rentalProductsTableBody').html(
-      '<tr><td colspan="6" class="text-center text-muted py-4">目前沒有租借商品</td></tr>'
-    );
-    return;
-  }
-
-  var html = rentals.map(function (item) {
-    return buildRentalRow(item);
-  }).join('');
-
-  $('#rentalProductsTableBody').html(html);
-
-  if (typeof window.applyEditPermission === 'function') {
-    window.applyEditPermission('products', $('#contentArea'));
-  }
-}
-
-function renderRentalProductsTable(rentals) {
-  if (!rentals || rentals.length === 0) {
-    $('#rentalProductsTableBody').html(
-      '<tr><td colspan="6" class="text-center text-muted py-4">目前沒有租借商品</td></tr>'
+      '<tr><td colspan="5" class="text-center text-muted py-4">目前沒有租借商品</td></tr>'
     );
     return;
   }
