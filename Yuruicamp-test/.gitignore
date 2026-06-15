@@ -1,0 +1,47 @@
+# Git 忽略文件
+# Yuruicamp 專案
+
+# 依賴相關
+node_modules/
+package-lock.json
+yarn.lock
+
+# IDE 相關
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# 構建輸出
+dist/
+build/
+.cache/
+
+# 日誌文件
+*.log
+logs/
+
+# 環境變量
+.env
+.env.local
+.env.*.local
+
+# 臨時文件
+*.tmp
+temp/
+
+# 壓縮文件
+*.zip
+*.rar
+*.7z
+
+# 編譯產物
+*.css（若使用自動編譯 SCSS）
+# 保留 main.css 用於生產環境
+!css/main.css
+
+# 影片檔案
+assets/videos/hero_video.mp4

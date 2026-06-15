@@ -1,0 +1,105 @@
+<!-- partials/discounts.html
+     折扣管理頁面
+     由 core.js 的 $.load() 注入到 #contentArea
+     折扣券生成邏輯與列表渲染由 discounts.js 處理
+-->
+
+<!-- ===== 新增優惠券操作區 ===== -->
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-header bg-white border-0 py-3">
+    <h6 class="fw-semibold mb-0" style="color: var(--admin-brand-accent);">
+      <i class="fas fa-plus-circle me-2"></i>新增優惠券
+    </h6>
+  </div>
+  <div class="card-body">
+    <div class="row g-3 align-items-end" id="addCouponForm">
+
+      <!-- 優惠碼 + 隨機生成按鈕 -->
+      <div class="col-md-3">
+        <label class="form-label small text-muted" for="newCouponCode">
+          優惠碼 <span class="text-danger">*</span>
+        </label>
+        <div class="input-group">
+          <input type="text" class="form-control text-uppercase" id="newCouponCode"
+                 placeholder="例：CAMP200" maxlength="20">
+          <button class="btn btn-outline-secondary" type="button"
+                  id="generateCouponCode" title="隨機產生 8 碼優惠碼">
+            <i class="fas fa-dice"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- 折扣金額 -->
+      <div class="col-md-2">
+        <label class="form-label small text-muted" for="newCouponDiscount">
+          折扣金額 (NT$) <span class="text-danger">*</span>
+        </label>
+        <input type="number" class="form-control" id="newCouponDiscount"
+               placeholder="例：200" min="1">
+      </div>
+
+      <!-- 發行數量 -->
+      <div class="col-md-2">
+        <label class="form-label small text-muted" for="newCouponQty">
+          發行數量
+        </label>
+        <input type="number" class="form-control" id="newCouponQty"
+               placeholder="例：50" min="1" max="999" value="50">
+      </div>
+
+      <!-- 有效期限 -->
+      <div class="col-md-3">
+        <label class="form-label small text-muted" for="newCouponExpiry">
+          有效期限
+        </label>
+        <input type="date" class="form-control" id="newCouponExpiry">
+      </div>
+
+      <!-- 新增按鈕 -->
+      <div class="col-md-2">
+        <button class="btn w-100 text-white fw-semibold" id="submitAddCoupon"
+                style="background-color: var(--admin-brand-accent);">
+          <i class="fas fa-plus me-1"></i>新增
+        </button>
+      </div>
+
+    </div><!-- end row -->
+  </div>
+</div><!-- end card -->
+
+<!-- ===== 現有折扣券列表 ===== -->
+<div class="card shadow-sm border-0">
+  <div class="card-header bg-white border-0 py-3">
+    <h6 class="fw-semibold mb-0">
+      <i class="fas fa-list me-2 text-muted"></i>現有折扣券列表
+    </h6>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>折扣碼</th>
+            <th>折扣金額</th>
+            <th class="text-center">總數量</th>
+            <th class="text-center">已使用</th>
+            <th class="text-center">剩餘</th>
+            <th>有效期限</th>
+            <th>狀態</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <!-- tbody 由 discounts.js 的 renderCouponsTable() 動態填入 -->
+        <tbody id="couponsTableBody">
+          <tr>
+            <td colspan="8" class="text-center py-4">
+              <div class="spinner-border spinner-border-sm me-2"
+                   style="color: var(--admin-brand-accent);"></div>
+              <span class="text-muted">載入折扣券中...</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div><!-- end card -->

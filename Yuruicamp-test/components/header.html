@@ -1,0 +1,387 @@
+<!-- ========================================
+     Header Component
+     可在所有頁面中引用或複製
+     ======================================== -->
+<header class="header" id="header">
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+        <!-- Logo -->
+        <div class="navbar-brand">
+          <a
+            href="../pages/home.html"
+            class="logo-link"
+            aria-label="回到首頁"
+            style="text-decoration: none; color: inherit"
+            >Yuruicamp</a
+          >
+        </div>
+
+        <!-- 桌面版菜單 (PC) -->
+        <div class="navbar-menu hidden-mobile">
+          <ul class="navbar-items">
+            <li><a href="../pages/home.html">首頁</a></li>
+            <li><a href="../pages/products.html">商品</a></li>
+            <li><a href="../pages/blog.html">部落格</a></li>
+            <li><a href="../pages/branches.html">分店</a></li>
+            <li><a href="../pages/faq.html">常見問題</a></li>
+          </ul>
+        </div>
+
+        <!-- 右側操作按鈕 -->
+        <div class="navbar-actions">
+          <div class="navbar-search-wrapper hidden-mobile">
+            <form class="navbar-search-form" role="search">
+              <input
+                type="text"
+                class="navbar-search-input"
+                placeholder="搜尋商品、品牌..."
+                autocomplete="off"
+                aria-label="搜尋"
+              />
+              <button type="submit" class="navbar-search-btn" title="搜尋">
+                🔍
+              </button>
+            </form>
+            <div class="navbar-search-dropdown"></div>
+          </div>
+          <a href="cart.html" class="navbar-cart-btn" title="購物車">
+            🛒<span class="cart-badge" style="display: none">0</span>
+          </a>
+          <button
+            class="navbar-login-btn"
+            onclick="window.openModal('loginModal')"
+            title="登入"
+          >
+            登入
+          </button>
+          <div class="navbar-user-menu" style="display: none">
+            <div class="user-avatar" title="個人資料">?</div>
+            <span class="user-name">用戶</span>
+            <a
+              href="member-center.html"
+              title="會員中心"
+              style="font-size: 1.1rem; text-decoration: none"
+              >⚙️</a
+            >
+          </div>
+          <button class="navbar-hamburger hidden-desktop" title="展開菜單">
+            ☰
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========================================
+      Offcanvas 側邊欄（手機版菜單）
+      ======================================== -->
+  <div class="navbar-offcanvas">
+    <div class="offcanvas-header">
+      <h5 style="margin: 0; font-size: 1.125rem; font-weight: 600">菜單</h5>
+      <button
+        class="offcanvas-close"
+        style="
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          cursor: pointer;
+          color: #666;
+        "
+      >
+        ✕
+      </button>
+    </div>
+    <div class="offcanvas-body">
+      <ul class="navbar-items" style="flex-direction: column; gap: 0.5rem">
+        <li><a href="/pages/home.html">首頁</a></li>
+        <li><a href="/pages/products.html">商品</a></li>
+        <li><a href="/pages/blog.html">部落格</a></li>
+        <li><a href="/pages/branches.html">分店</a></li>
+        <li><a href="/pages/faq.html">常見問題</a></li>
+      </ul>
+    </div>
+  </div>
+  <!-- ===================================================
+       登入 Modal - 步驟 3.2
+       =================================================== -->
+  <div
+    id="loginModal"
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="loginModalTitle"
+  >
+    <div class="modal-content" style="max-width: 420px">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalTitle">
+          歡迎加入 <i class="bi bi-tent"></i>
+        </h5>
+        <button class="modal-close" title="關閉">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-tabs">
+          <button class="modal-tab-btn active" data-tab="login">登入</button>
+          <button class="modal-tab-btn" data-tab="register">免費註冊</button>
+        </div>
+        <div class="modal-tab-panel active" data-panel="login">
+          <form id="loginEmailForm" novalidate>
+            <div class="mb-md">
+              <label
+                for="loginEmail"
+                style="
+                  display: block;
+                  font-weight: 600;
+                  margin-bottom: 0.35rem;
+                  font-size: 0.875rem;
+                "
+                >電子郵件</label
+              >
+              <input
+                id="loginEmail"
+                type="email"
+                name="email"
+                placeholder="your@email.com"
+                required
+              />
+            </div>
+            <div class="mb-lg">
+              <label
+                for="loginPassword"
+                style="
+                  display: block;
+                  font-weight: 600;
+                  margin-bottom: 0.35rem;
+                  font-size: 0.875rem;
+                "
+                >密碼</label
+              >
+              <input
+                id="loginPassword"
+                type="password"
+                name="password"
+                placeholder="輸入密碼"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              登入
+            </button>
+          </form>
+          <div class="divider-or">或使用社群帳號登入</div>
+          <button class="btn-google-login" type="button">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"
+                fill="#4285F4"
+              />
+              <path
+                d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"
+                fill="#34A853"
+              />
+              <path
+                d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z"
+                fill="#FBBC05"
+              />
+              <path
+                d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z"
+                fill="#EA4335"
+              />
+            </svg>
+            使用 Google 登入
+          </button>
+          <button class="btn-line-login" type="button">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="#fff"
+            >
+              <path
+                d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386a.631.631 0 0 1-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016a.63.63 0 0 1-.63.629.622.622 0 0 1-.601-.452l-1.59-2.161v1.984a.629.629 0 1 1-1.258 0V8.108c0-.345.282-.63.63-.63.261 0 .487.162.592.397l1.598 2.162V8.108a.63.63 0 1 1 1.259 0v4.771zm-5.822 0a.631.631 0 0 1-1.261 0V8.108a.63.63 0 1 1 1.261 0v4.771zm-2.475.629H4.827a.631.631 0 0 1-.63-.629V8.108c0-.345.283-.63.63-.63a.63.63 0 0 1 .63.63v4.141h1.756a.63.63 0 0 1 0 1.259zM24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314z"
+              />
+            </svg>
+            使用 LINE 登入
+          </button>
+        </div>
+        <div class="modal-tab-panel" data-panel="register">
+          <form id="registerForm" novalidate>
+            <div class="mb-md">
+              <label
+                for="registerName"
+                style="
+                  display: block;
+                  font-weight: 600;
+                  margin-bottom: 0.35rem;
+                  font-size: 0.875rem;
+                "
+                >您的姓名</label
+              >
+              <input
+                id="registerName"
+                type="text"
+                name="name"
+                placeholder="露友小明"
+                required
+              />
+            </div>
+            <div class="mb-md">
+              <label
+                for="registerEmail"
+                style="
+                  display: block;
+                  font-weight: 600;
+                  margin-bottom: 0.35rem;
+                  font-size: 0.875rem;
+                "
+                >電子郵件</label
+              >
+              <input
+                id="registerEmail"
+                type="email"
+                name="email"
+                placeholder="your@email.com"
+                required
+              />
+            </div>
+            <div class="mb-lg">
+              <label
+                for="registerPassword"
+                style="
+                  display: block;
+                  font-weight: 600;
+                  margin-bottom: 0.35rem;
+                  font-size: 0.875rem;
+                "
+                >設定密碼</label
+              >
+              <input
+                id="registerPassword"
+                type="password"
+                name="password"
+                placeholder="至少 8 個字元"
+                minlength="8"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              立即註冊
+            </button>
+          </form>
+          <div class="divider-or">或使用社群帳號快速註冊</div>
+          <button class="btn-google-login" type="button">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"
+                fill="#4285F4"
+              />
+              <path
+                d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"
+                fill="#34A853"
+              />
+              <path
+                d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z"
+                fill="#FBBC05"
+              />
+              <path
+                d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z"
+                fill="#EA4335"
+              />
+            </svg>
+            使用 Google 快速註冊
+          </button>
+          <button class="btn-line-login" type="button">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="#fff"
+            >
+              <path
+                d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386a.631.631 0 0 1-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016a.63.63 0 0 1-.63.629.622.622 0 0 1-.601-.452l-1.59-2.161v1.984a.629.629 0 1 1-1.258 0V8.108c0-.345.282-.63.63-.63.261 0 .487.162.592.397l1.598 2.162V8.108a.63.63 0 1 1 1.259 0v4.771zm-5.822 0a.631.631 0 0 1-1.261 0V8.108a.63.63 0 1 1 1.261 0v4.771zm-2.475.629H4.827a.631.631 0 0 1-.63-.629V8.108c0-.345.283-.63.63-.63a.63.63 0 0 1 .63.63v4.141h1.756a.63.63 0 0 1 0 1.259zM24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314z"
+              />
+            </svg>
+            使用 LINE 快速註冊
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 個人化問卷 Modal - 步驟 3.3 -->
+  <div id="personalizationModal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content" style="max-width: 480px">
+      <div class="modal-header">
+        <h5 class="modal-title">告訴我們你的喜好 🎯</h5>
+        <button class="modal-close" title="跳過">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="stepper-header">
+          <div class="stepper-dot active" data-dot="1">1</div>
+          <div class="stepper-line"></div>
+          <div class="stepper-dot" data-dot="2">2</div>
+          <span class="stepper-text">1 / 2</span>
+        </div>
+        <div class="survey-step active" data-step="1">
+          <p class="survey-question">你喜歡哪種露營風格？</p>
+          <p class="survey-hint">可以選多個 😊</p>
+          <div class="survey-tags">
+            <span class="survey-tag" data-value="glamping">✨ 豪華露營</span>
+            <span class="survey-tag" data-value="baging"
+              ><i class="bi bi-bag"></i> 輕量背包客</span
+            >
+            <span class="survey-tag" data-value="family">👨‍👩‍👧 親子家庭</span>
+            <span class="survey-tag" data-value="solo">🧘 獨行俠</span>
+            <span class="survey-tag" data-value="hiking">⛰️ 登山健行</span>
+            <span class="survey-tag" data-value="car-camping">🚗 車頂帳</span>
+            <span class="survey-tag" data-value="ultralight">🪶 極輕量</span>
+            <span class="survey-tag" data-value="base-camp"
+              ><i class="bi bi-tent"></i> 基地營</span
+            >
+          </div>
+          <button id="surveyNextBtn" class="btn btn-primary btn-block">
+            下一步 →
+          </button>
+        </div>
+        <div class="survey-step" data-step="2">
+          <p class="survey-question">你最想添購哪類裝備？</p>
+          <p class="survey-hint">告訴我們，我們為你精準推薦 🛍️</p>
+          <div class="survey-tags">
+            <span class="survey-tag" data-value="tent"
+              ><i class="bi bi-tent"></i> 帳篷</span
+            >
+            <span class="survey-tag" data-value="sleeping-bag">🛏️ 睡袋</span>
+            <span class="survey-tag" data-value="bag"
+              ><i class="bi bi-bag"></i> 登山背包</span
+            >
+            <span class="survey-tag" data-value="cooking">🍳 炊具</span>
+            <span class="survey-tag" data-value="lighting">💡 照明設備</span>
+            <span class="survey-tag" data-value="clothing">🧥 戶外服飾</span>
+            <span class="survey-tag" data-value="grid"
+              ><i class="bi bi-grid"></i> 桌椅</span
+            >
+            <span class="survey-tag" data-value="safety">🩹 安全急救</span>
+          </div>
+          <button id="surveyFinishBtn" class="btn btn-primary btn-block">
+            完成設定 ✓
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 背景遮罩 -->
+  <div class="offcanvas-backdrop"></div>
+</header>
