@@ -4,12 +4,12 @@
  * 功能：
  *   1. updateBookingBadge()  — 讀取 localStorage.bookingCart，計算並更新背包 Badge
  *   2. checkLoginState()     — 讀取登入狀態，切換「登入按鈕 ↔ 用戶頭像」
- *   3. Offcanvas 開關邏輯   — 手機版漢堡選單展開 / 收起
- *   4. storage 事件監聽     — 跨頁面同步 Badge（在其他頁籤改動購物車時即時更新）
- *   5. setActiveNavLink()   — 根據目前頁面 URL，自動為對應導覽連結加上 active 樣式
- *
- * 注意：此檔案由 booking-header.html 內部引入，
- *       確保在 Header DOM 元素載入後才執行。
+ *   3. initOffcanvas()       — 手機版漢堡選單展開 / 收起
+ *   4. openPanel() / closePanels() — 共用 Slide Panel 開關
+ *   5. initLoginPanel()      — 登入 Slide Panel（右側滑入）
+ *   6. renderCartPanel()     — 渲染預約背包 Panel 內容
+ *   7. initCartPanel()       — 預約背包 Slide Panel（右側滑入）
+ *   8. setActiveNavLink()    — 根據目前頁面 URL，自動為對應導覽連結加上 active 樣式
  */
 
 (function () {
@@ -17,20 +17,14 @@
 
   /* ============================================================
      1. Badge 更新
-     讀取 localStorage 中的 bookingCart，
-     計算「已選營位數量 + 已選裝備數量」並顯示在 Badge 上。
      ============================================================ */
   function updateBookingBadge() {
-    // 找到桌機版 Badge（id="bookingBadge"）與手機版 Badge（id="bookingBadgeMobile"）
     var badge       = document.getElementById('bookingBadge');
     var badgeMobile = document.getElementById('bookingBadgeMobile');
 
-    // 如果 Badge 元素不存在，直接離開（避免錯誤）
     if (!badge && !badgeMobile) return;
 
     var stored = localStorage.getItem('bookingCart');
-
-    // 沒有購物車資料 → 隱藏 Badge
     if (!stored) {
       if (badge)       badge.style.display       = 'none';
       if (badgeMobile) badgeMobile.style.display = 'none';
@@ -38,40 +32,25 @@
     }
 
     var cart;
-    try {
-      cart = JSON.parse(stored);
-    } catch (e) {
-      // JSON 解析失敗 → 資料異常，隱藏 Badge
+    try { cart = JSON.parse(stored); } catch (e) {
       if (badge)       badge.style.display       = 'none';
       if (badgeMobile) badgeMobile.style.display = 'none';
       return;
     }
 
-    // 計算：已選營位數量（selected_zones 每筆 quantity 加總）
     var zoneCount = (cart.selected_zones || []).reduce(function (sum, zone) {
       return sum + (zone.quantity || 0);
     }, 0);
-
-    // 計算：已選租借裝備數量（selected_rentals 每筆 quantity 加總）
     var rentalCount = (cart.selected_rentals || []).reduce(function (sum, rental) {
       return sum + (rental.quantity || 0);
     }, 0);
-
     var total = zoneCount + rentalCount;
 
     if (total > 0) {
-      // 超過 9 筆顯示「9+」，避免數字太長
       var displayText = total > 9 ? '9+' : String(total);
-      if (badge) {
-        badge.textContent    = displayText;
-        badge.style.display  = 'inline-flex';
-      }
-      if (badgeMobile) {
-        badgeMobile.textContent   = displayText;
-        badgeMobile.style.display = 'inline-flex';
-      }
+      if (badge)       { badge.textContent       = displayText; badge.style.display       = 'inline-flex'; }
+      if (badgeMobile) { badgeMobile.textContent = displayText; badgeMobile.style.display = 'inline-flex'; }
     } else {
-      // 數量為 0 → 隱藏 Badge，不顯示 0
       if (badge)       badge.style.display       = 'none';
       if (badgeMobile) badgeMobile.style.display = 'none';
     }
@@ -79,48 +58,31 @@
 
   /* ============================================================
      2. 登入狀態判斷
-     讀取 localStorage.yuruiUser（JSON 字串），
-     已登入 → 顯示頭像 + 姓名；未登入 → 顯示「登入」按鈕。
      ============================================================ */
   function checkLoginState() {
-    var loginBtn  = document.getElementById('bkLoginBtn');
-    var userMenu  = document.getElementById('bkUserMenu');
+    var loginBtn   = document.getElementById('bkLoginBtn');
+    var userMenu   = document.getElementById('bkUserMenu');
     var userAvatar = document.getElementById('bkUserAvatar');
-    var userName  = document.getElementById('bkUserName');
+    var userName   = document.getElementById('bkUserName');
 
-    // 元素不存在時安全離開
     if (!loginBtn || !userMenu) return;
 
-    var storedUser = localStorage.getItem('yuruiUser');
     var user = null;
-
-    if (storedUser) {
-      try {
-        user = JSON.parse(storedUser);
-      } catch (e) {
-        user = null;
-      }
-    }
+    try { user = JSON.parse(localStorage.getItem('yuruiUser')); } catch (e) {}
 
     if (user && user.name) {
-      // 已登入：隱藏登入按鈕，顯示頭像區塊
-      loginBtn.style.display  = 'none';
-      userMenu.style.display  = 'flex';
-
-      // 顯示姓名首字作為頭像文字
+      loginBtn.style.display = 'none';
+      userMenu.style.display = 'flex';
       if (userAvatar) userAvatar.textContent = user.name.charAt(0).toUpperCase();
       if (userName)   userName.textContent   = user.name;
     } else {
-      // 未登入：顯示登入按鈕，隱藏頭像區塊
-      loginBtn.style.display  = 'inline-flex';
-      userMenu.style.display  = 'none';
+      loginBtn.style.display = 'inline-flex';
+      userMenu.style.display = 'none';
     }
   }
 
   /* ============================================================
      3. Offcanvas 開關邏輯（手機版漢堡選單）
-     點擊漢堡圖示 → 展開側邊選單
-     點擊 X 或背景遮罩 → 收起選單
      ============================================================ */
   function initOffcanvas() {
     var hamburger = document.getElementById('bkHamburger');
@@ -130,15 +92,13 @@
 
     if (!hamburger || !offcanvas) return;
 
-    // 展開 Offcanvas
     function openOffcanvas() {
       offcanvas.classList.add('is-open');
       if (backdrop) backdrop.classList.add('is-visible');
       hamburger.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden'; // 防止背景捲動
+      document.body.style.overflow = 'hidden';
     }
 
-    // 收起 Offcanvas
     function closeOffcanvas() {
       offcanvas.classList.remove('is-open');
       if (backdrop) backdrop.classList.remove('is-visible');
@@ -150,115 +110,250 @@
     if (closeBtn) closeBtn.addEventListener('click', closeOffcanvas);
     if (backdrop) backdrop.addEventListener('click', closeOffcanvas);
 
-    // 按下 Esc 鍵也可關閉
+    // Esc 關閉 offcanvas
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && offcanvas.classList.contains('is-open')) {
         closeOffcanvas();
       }
     });
+
+    // 手機版「預約背包」按鈕：關閉 offcanvas 再開啟 Cart Panel
+    var cartBtnMobile = document.getElementById('bkCartBtnMobile');
+    if (cartBtnMobile) {
+      cartBtnMobile.addEventListener('click', function () {
+        closeOffcanvas();
+        var cartPanel = document.getElementById('cartPanel');
+        if (cartPanel) {
+          renderCartPanel();
+          openPanel(cartPanel);
+        }
+      });
+    }
   }
 
   /* ============================================================
-     4. Modal 開關邏輯（登入 Modal）
+     4. 共用 Slide Panel 開關
      ============================================================ */
-  function initLoginModal() {
-    var loginBtn     = document.getElementById('bkLoginBtn');
-    var modalBackdrop = document.getElementById('bkModalBackdrop');
-    var modal        = document.getElementById('loginModal');
+  function openPanel(panelEl) {
+    panelEl.classList.add('is-open');
+    console.log('[BK] openPanel — id:', panelEl.id, 'right (computed):', getComputedStyle(panelEl).right);
+    var bd = document.getElementById('bkPanelBackdrop');
+    if (bd) bd.classList.add('is-visible');
+    document.body.style.overflow = 'hidden';
+  }
 
-    if (!modal) return;
+  function closePanels() {
+    var loginPanel = document.getElementById('loginModal');
+    var cartPanel  = document.getElementById('cartPanel');
+    if (loginPanel) loginPanel.classList.remove('is-open');
+    if (cartPanel)  cartPanel.classList.remove('is-open');
+    var bd = document.getElementById('bkPanelBackdrop');
+    if (bd) bd.classList.remove('is-visible');
+    document.body.style.overflow = '';
+  }
 
-    // 切換 Tab（登入 / 免費註冊）
-    var tabBtns   = modal.querySelectorAll('.modal-tab-btn');
-    var tabPanels = modal.querySelectorAll('.modal-tab-panel');
+  /* ============================================================
+     5. Login Slide Panel
+     ============================================================ */
+  function initLoginPanel() {
+    var loginBtn = document.getElementById('bkLoginBtn');
+    var panel    = document.getElementById('loginModal');
 
-    tabBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var target = btn.getAttribute('data-tab');
-        tabBtns.forEach(function (b) { b.classList.remove('active'); });
-        tabPanels.forEach(function (p) { p.classList.remove('active'); });
-        btn.classList.add('active');
-        var targetPanel = modal.querySelector('[data-panel="' + target + '"]');
-        if (targetPanel) targetPanel.classList.add('active');
-      });
-    });
+    if (!panel) return;
 
-    // 開啟 Modal
-    function openModal() {
-      modal.style.display = 'flex';
-      if (modalBackdrop) modalBackdrop.style.display = 'block';
-      document.body.style.overflow = 'hidden';
-    }
-
-    // 關閉 Modal
-    function closeModal() {
-      modal.style.display = 'none';
-      if (modalBackdrop) modalBackdrop.style.display = 'none';
-      document.body.style.overflow = '';
-    }
-
-    // 掛載全域方法，讓其他頁面也可呼叫 openModal('loginModal')
+    // 對外暴露：member-center.js / booking-cart.js 可呼叫 window.openModal('loginModal')
     window.openModal = function (modalId) {
-      if (modalId === 'loginModal') openModal();
+      if (modalId === 'loginModal') openPanel(panel);
     };
 
-    // 登入按鈕點擊事件（作為 onclick 的備用）
+    // Header 登入按鈕
     if (loginBtn) {
       loginBtn.addEventListener('click', function (e) {
         e.preventDefault();
-        openModal();
+        openPanel(panel);
       });
     }
 
-    // 點 X 關閉
-    var closeBtn = modal.querySelector('.modal-close');
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    // ✕ 關閉按鈕
+    var closeBtn = document.getElementById('loginPanelClose');
+    if (closeBtn) closeBtn.addEventListener('click', closePanels);
 
-    // 點背景遮罩關閉
-    if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
+    // OAuth 佔位邏輯（未來替換為真實 OAuth redirect）
+    function handleOAuth(provider) {
+      console.log('[OAuth] 準備使用', provider, '登入');
+      alert('【開發中】即將導向 ' + provider + ' 授權頁面');
+    }
 
-    // Esc 關閉
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && modal.style.display === 'flex') closeModal();
-    });
+    var btnGoogle   = document.getElementById('oauthGoogle');
+    var btnLine     = document.getElementById('oauthLine');
+    var btnFacebook = document.getElementById('oauthFacebook');
+    if (btnGoogle)   btnGoogle.addEventListener('click',   function () { handleOAuth('Google'); });
+    if (btnLine)     btnLine.addEventListener('click',     function () { handleOAuth('LINE'); });
+    if (btnFacebook) btnFacebook.addEventListener('click', function () { handleOAuth('Facebook'); });
   }
 
   /* ============================================================
-     5. Active 導覽連結標記
-     根據目前頁面的檔案名稱，為對應導覽連結加上 active class
-     例如：URL 含 camp-search.html → navSearch 加 active
+     6. 渲染 Cart Panel 內容（從 localStorage 讀取）
+     ============================================================ */
+  function renderCartPanel() {
+    var body   = document.getElementById('cartPanelBody');
+    var footer = document.getElementById('cartPanelFooter');
+    if (!body) return;
+
+    var stored = localStorage.getItem('bookingCart');
+    if (!stored) {
+      body.innerHTML = [
+        '<div class="cart-panel__empty">',
+        '  <i class="bi bi-bag-x"></i>',
+        '  <p>背包是空的</p>',
+        '  <a href="./camp-search.html" class="btn btn--outline" style="margin-top:0.75rem;">去探索營地</a>',
+        '</div>'
+      ].join('');
+      if (footer) footer.style.display = 'none';
+      return;
+    }
+
+    var cart;
+    try { cart = JSON.parse(stored); } catch (e) { return; }
+
+    var info    = cart.booking_info     || {};
+    var zones   = cart.selected_zones   || [];
+    var rentals = cart.selected_rentals || [];
+    var summary = cart.summary          || {};
+    var html    = '';
+
+    // ── 住宿區塊 ──
+    if (zones.length > 0) {
+      html += '<div class="cart-panel__section">';
+      html += '<div class="cart-panel__label">住宿</div>';
+      zones.forEach(function (z) {
+        html += '<div class="cart-panel__row">';
+        html += '<span>' + (info.campground_name || '') + '・' + (z.zone_type || '') + ' ×' + z.quantity + '</span>';
+        html += '<span>NT$' + ((z.subtotal || 0).toLocaleString()) + '</span>';
+        html += '</div>';
+      });
+      if (info.check_in) {
+        html += '<div class="cart-panel__meta">'
+              + '<i class="bi bi-calendar3"></i> '
+              + info.check_in + ' ～ ' + info.check_out
+              + '（' + (info.total_days || 0) + ' 晚）'
+              + '</div>';
+      }
+      if (info.guest_count) {
+        html += '<div class="cart-panel__meta">'
+              + '<i class="bi bi-people"></i> ' + info.guest_count + ' 人'
+              + (info.region ? '&nbsp;&nbsp;<i class="bi bi-geo-alt"></i> ' + info.region : '')
+              + '</div>';
+      }
+      html += '</div>';
+    }
+
+    // ── 裝備租借區塊 ──
+    if (rentals.length > 0) {
+      html += '<div class="cart-panel__section">';
+      html += '<div class="cart-panel__label">裝備租借</div>';
+      rentals.forEach(function (r) {
+        html += '<div class="cart-panel__row">';
+        html += '<span>' + (r.name || '') + ' ×' + r.quantity + '</span>';
+        html += '<span>NT$' + ((r.subtotal || 0).toLocaleString()) + '</span>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    // ── 合計 ──
+    if (summary.final_amount !== undefined) {
+      html += '<div class="cart-panel__total">'
+            + '<span>合計</span>'
+            + '<span>NT$' + summary.final_amount.toLocaleString() + '</span>'
+            + '</div>';
+    }
+
+    // ── 清除背包 ──
+    html += '<button class="cart-panel__clear" id="cartPanelClear">清除背包</button>';
+
+    body.innerHTML = html;
+    if (footer) footer.style.display = '';
+
+    // 清除背包按鈕
+    var clearBtn = document.getElementById('cartPanelClear');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function () {
+        if (window.confirm('確定清除背包中的所有預約資料？')) {
+          localStorage.removeItem('bookingCart');
+          updateBookingBadge();
+          renderCartPanel();
+        }
+      });
+    }
+  }
+
+  /* ============================================================
+     7. Cart Slide Panel 初始化
+     ============================================================ */
+  function initCartPanel() {
+    var cartBtn  = document.getElementById('bkCartBtn');
+    var panel    = document.getElementById('cartPanel');
+    var closeBtn = document.getElementById('cartPanelClose');
+
+    console.log('[BK] initCartPanel — cartBtn:', cartBtn, 'panel:', panel);
+    if (!cartBtn || !panel) return;
+
+    cartBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      console.log('[BK] cart button clicked');
+      try { renderCartPanel(); } catch (err) { console.error('[CartPanel] render error:', err); }
+      openPanel(panel);
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', closePanels);
+  }
+
+  /* ============================================================
+     8. Active 導覽連結標記
      ============================================================ */
   function setActiveNavLink() {
     var path = window.location.pathname;
-
-    // 對應表：[元素 id, 對應頁面關鍵字]
     var navMap = [
       ['navSearch',      'camp-search'],
       ['navRentalGuide', 'rental-guide'],
       ['navFaq',         'booking-faq'],
     ];
-
     navMap.forEach(function (item) {
       var el = document.getElementById(item[0]);
-      if (el && path.indexOf(item[1]) !== -1) {
-        el.classList.add('active');
-      }
+      if (el && path.indexOf(item[1]) !== -1) el.classList.add('active');
     });
   }
 
   /* ============================================================
-     初始化：頁面載入時執行一次，並監聽 storage 事件跨頁同步
+     初始化
      ============================================================ */
-  updateBookingBadge();  // 初始化 Badge
-  checkLoginState();     // 初始化登入狀態
-  initOffcanvas();       // 初始化 Offcanvas
-  initLoginModal();      // 初始化 Modal
-  setActiveNavLink();    // 標記目前頁面對應導覽連結
+  updateBookingBadge();
+  checkLoginState();
+  initOffcanvas();
+  initLoginPanel();
+  initCartPanel();
+  setActiveNavLink();
 
-  // 監聽 storage 事件：其他頁籤修改 bookingCart 或 yuruiUser 時即時同步
+  // 共用：點背景遮罩關閉所有 Panel
+  var panelBackdrop = document.getElementById('bkPanelBackdrop');
+  if (panelBackdrop) panelBackdrop.addEventListener('click', closePanels);
+
+  // 共用：Esc 鍵關閉所有 Panel
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closePanels();
+  });
+
+  // 監聽 storage 事件：跨頁籤同步 Badge 與登入狀態
   window.addEventListener('storage', function (e) {
     if (e.key === 'bookingCart') updateBookingBadge();
     if (e.key === 'yuruiUser')   checkLoginState();
   });
 
 })();
+
+// booking-header.html 以 jQuery.getScript 載入此檔後，通知頁面層級的 ready callback。
+// 目前僅 booking-cart.js 有定義 window.onBookingHeaderReady；其他頁面不存在，跳過。
+if (typeof window.onBookingHeaderReady === 'function') {
+  window.onBookingHeaderReady();
+}

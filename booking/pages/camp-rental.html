@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#244d4d">
+  <link rel="icon" href="../../assets/images/brand_icon.png" type="image/png">
+  <title>選擇租借裝備 | Yuruicamp 露營選物</title>
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/booking.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+
+  <!-- 預約系統專屬 Header / Booking header -->
+  <div id="booking-header"></div>
+
+  <main class="rental-page">
+
+    <!-- =====================================================
+         頂部預約摘要列 / Booking Summary Bar
+         顯示從上一頁帶來的營區 + 日期資訊
+         Displays camp + date info from previous page
+         ===================================================== -->
+    <div class="booking-summary-bar" id="bookingSummaryBar">
+      <i class="bi bi-info-circle"></i>
+      <span id="summaryText">載入預約資訊中...</span>
+      <a href="./camp-detail.html" id="summaryEditLink"
+         style="color:#fff;text-decoration:underline;margin-left:auto;font-size:.85rem;">
+        修改
+      </a>
+    </div>
+
+    <!-- =====================================================
+         情境推薦橫幅 / Context Recommendation Banner
+         依據營區環境特性動態顯示，告知使用者此營地的推薦裝備
+         Dynamically shown based on campground's environment tags
+         ===================================================== -->
+    <div class="recommendation-banner" id="recommendationBanner" style="display:none;"></div>
+
+    <!-- =====================================================
+         主內容：裝備列表 + 右側已選清單
+         Main: Equipment List + Right: Selected Rentals
+         ===================================================== -->
+    <div class="rental-layout">
+
+      <!-- 左側：可租借裝備 / Left: Available Equipment -->
+      <section class="rental-items-list">
+        <h2>
+          <i class="bi bi-bag-check"></i>
+          可租借裝備
+          <span style="font-size:.875rem;font-weight:400;color:#666;" id="rentalCount"></span>
+        </h2>
+
+        <!-- 裝備卡片 Grid（由 JS 動態填入）-->
+        <div class="rental-grid" id="rentalGrid">
+          <div class="loading-skeleton">
+            <i class="bi bi-hourglass-split"></i> 載入裝備中...
+          </div>
+        </div>
+      </section>
+
+      <!-- 右側：已選清單 + 費用 / Right: Cart + Cost -->
+      <aside class="rental-cart-sidebar">
+        <h3><i class="bi bi-cart3"></i> 已選裝備</h3>
+
+        <!-- 已選裝備清單 / Selected rental list -->
+        <div class="rental-cart-list" id="rentalCartList">
+          <p class="rental-cart-list__empty">尚未選擇任何裝備</p>
+        </div>
+
+        <!-- 裝備費小計 / Rental subtotal -->
+        <div class="rental-cost-summary">
+          裝備費小計：<span id="rentalSubtotal">NT$0</span>
+        </div>
+
+        <!-- 前往結帳 / Go to checkout -->
+        <button class="btn btn--primary btn--full" id="goToBookingCartBtn">
+          下一步：確認預約結帳 <i class="bi bi-arrow-right"></i>
+        </button>
+
+        <!-- 略過直接結帳 / Skip to checkout -->
+        <a href="./booking-cart.html" class="rental-skip-link" id="skipRentalLink">
+          略過裝備，直接前往結帳 →
+        </a>
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- 預約系統專屬 Footer / Booking footer -->
+  <div id="booking-footer"></div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function () {
+      // 載入預約系統專屬 Header / Footer（非買家端的 ../components/）
+      $('#booking-header').load('../components/booking-header.html', function () {
+        $.getScript('../js/booking-header.js');
+      });
+      $('#booking-footer').load('../components/booking-footer.html');
+    });
+  </script>
+  <script src="../js/camp-rental.js"></script>
+
+</body>
+</html>

@@ -61,7 +61,7 @@ function loadCampDetail(campId) {
   // Future backend endpoint: GET /api/campgrounds/{campId}
   // Response: { success: true, data: { campground } }
   $.ajax({
-    url: './data/campgrounds.json',
+    url: '../data/campgrounds.json',
     method: 'GET',
     dataType: 'json'
   })

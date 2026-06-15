@@ -2,7 +2,9 @@
      booking-header.html — 預約系統專屬 Header 元件
      背景色 #F2F0EB（大地米色），與買家端 #f6fbf6 做視覺區分
      ============================================================ -->
-<header class="booking-header" id="booking-header">
+<div class="bk-header-root">
+
+<header class="booking-header">
   <nav class="bk-navbar">
     <div class="bk-navbar__inner">
 
@@ -12,6 +14,7 @@
            ====================================================== -->
       <div class="bk-navbar__brand">
         <a href="./camp-search.html" class="bk-brand-link" aria-label="回到營區搜尋首頁">
+
           Yuruicamp
           <!-- 副標題：低彩度小字，讓使用者感受到「已切換頻道」 -->
           <span class="brand-sub">| 營地預約</span>
@@ -22,49 +25,47 @@
            中間：核心導覽列（桌機版顯示）
            ====================================================== -->
       <ul class="bk-navbar__menu bk-hidden-mobile">
-        <li><a href="./camp-search.html"   class="bk-nav-link" id="navSearch">探索營區</a></li>
+        <li><a href="./camp-search.html"    class="bk-nav-link" id="navSearch">探索營區</a></li>
         <li><a href="./rental-guide.html"  class="bk-nav-link" id="navRentalGuide">租借體驗說明</a></li>
         <li><a href="./booking-faq.html"   class="bk-nav-link" id="navFaq">常見問題</a></li>
+        <li><a href="./member-center.html" class="bk-nav-link" id="navMember">會員中心</a></li>
       </ul>
 
       <!-- ======================================================
-           右側：操作區（三個功能）
+           右側：操作區
            ====================================================== -->
       <div class="bk-navbar__actions">
 
         <!-- ① 系統切換鈕：前往裝備商城 -->
-        <a href="../pages/home.html"
+        <a href="../../pages/home.html"
            class="btn btn--primary bk-switch-btn"
            title="前往裝備商城">
-          🛍️ <span class="bk-switch-btn__text">前往裝備商城</span>
+          <span class="bk-switch-btn__text">前往裝備商城</span>
         </a>
 
-        <!-- ② 預約背包（Booking Cart）含動態 Badge -->
-        <a href="./booking-cart.html"
-           class="bk-cart-btn"
-           title="預約背包"
-           aria-label="預約背包">
+        <!-- ② 預約背包（Booking Cart）— 點擊開啟 Cart Slide Panel -->
+        <button id="bkCartBtn"
+                class="bk-cart-btn"
+                title="預約背包"
+                aria-label="預約背包">
           <i class="bi bi-bag-heart"></i>
-          <!-- Badge：JS 動態控制顯示/隱藏與數字 -->
           <span class="bk-badge" id="bookingBadge" style="display:none;">0</span>
-        </a>
+        </button>
 
-        <!-- ③ 會員登入按鈕（未登入狀態，登入後由 JS 切換為頭像）
-             onclick 由 booking-header.js 的 initLoginModal() 綁定，此處不加 onclick 避免重複觸發 -->
+        <!-- ③ 未登入：登入按鈕 — 點擊開啟 Login Slide Panel -->
         <button class="btn btn--outline bk-login-btn"
                 id="bkLoginBtn"
                 title="登入">
           登入
         </button>
 
-        <!-- ③ 已登入狀態：頭像 + 姓名（預設隱藏，登入後由 JS 顯示） -->
+        <!-- ③ 已登入：頭像 + 姓名（預設隱藏，登入後由 JS 顯示） -->
         <div class="bk-user-menu" id="bkUserMenu" style="display:none;">
           <div class="bk-user-avatar" id="bkUserAvatar">?</div>
           <span class="bk-user-name" id="bkUserName">用戶</span>
-          <!-- 點設定齒輪 → 會員中心，預設開啟「我的露營行程」頁籤 -->
-          <a href="../pages/member-center.html?tab=camping"
+          <a href="./member-center.html"
              class="bk-settings-btn"
-             title="會員中心 - 我的露營行程">
+             title="會員中心">
             <i class="bi bi-gear"></i>
           </a>
         </div>
@@ -83,7 +84,6 @@
 
   <!-- ============================================================
        Offcanvas 側邊選單（手機版）
-       展開時顯示 5 個連結
        ============================================================ -->
   <div class="bk-offcanvas" id="bkOffcanvas" role="dialog" aria-label="行動版選單">
     <div class="bk-offcanvas__header">
@@ -97,83 +97,102 @@
         <li><a href="./camp-search.html">探索營區</a></li>
         <li><a href="./rental-guide.html">租借體驗說明</a></li>
         <li><a href="./booking-faq.html">常見問題</a></li>
-        <!-- 分隔線 -->
+        <li><a href="./member-center.html">會員中心</a></li>
         <li class="bk-offcanvas__divider"></li>
         <li>
-          <a href="../pages/home.html" class="bk-offcanvas__switch">
-            🛍️ 前往裝備商城
+          <a href="../../pages/home.html" class="bk-offcanvas__switch">
+            前往裝備商城
           </a>
         </li>
         <li>
-          <a href="./booking-cart.html" class="bk-offcanvas__cart">
+          <!-- 手機版預約背包：點擊關閉 offcanvas 並開啟 Cart Panel -->
+          <button id="bkCartBtnMobile" class="bk-offcanvas__cart-btn">
             <i class="bi bi-bag-heart"></i> 預約背包
             <span class="bk-badge bk-badge--inline" id="bookingBadgeMobile" style="display:none;">0</span>
-          </a>
+          </button>
         </li>
       </ul>
     </nav>
   </div>
 
-  <!-- Offcanvas 背景遮罩 -->
+  <!-- Offcanvas 背景遮罩（手機版漢堡選單專用） -->
   <div class="bk-offcanvas-backdrop" id="bkBackdrop"></div>
-
-  <!-- 登入 Modal（共用與買家端相同結構） -->
-  <div id="loginModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="bkLoginModalTitle">
-    <div class="modal-content" style="max-width:420px;">
-      <div class="modal-header">
-        <h5 class="modal-title" id="bkLoginModalTitle">歡迎加入 🏕️</h5>
-        <button class="modal-close" title="關閉">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="modal-tabs">
-          <button class="modal-tab-btn active" data-tab="login">登入</button>
-          <button class="modal-tab-btn" data-tab="register">免費註冊</button>
-        </div>
-        <div class="modal-tab-panel active" data-panel="login">
-          <form id="bkLoginEmailForm" novalidate>
-            <div style="margin-bottom:1rem;">
-              <label for="bkLoginEmail" style="display:block;font-weight:600;margin-bottom:.35rem;font-size:.875rem;">電子郵件</label>
-              <input id="bkLoginEmail" type="email" name="email" placeholder="your@email.com" required
-                     style="width:100%;padding:.6rem .9rem;border:2px solid #d4e6e6;border-radius:6px;font-size:.95rem;">
-            </div>
-            <div style="margin-bottom:1.25rem;">
-              <label for="bkLoginPassword" style="display:block;font-weight:600;margin-bottom:.35rem;font-size:.875rem;">密碼</label>
-              <input id="bkLoginPassword" type="password" name="password" placeholder="輸入密碼" required
-                     style="width:100%;padding:.6rem .9rem;border:2px solid #d4e6e6;border-radius:6px;font-size:.95rem;">
-            </div>
-            <button type="submit" class="btn btn--primary" style="width:100%;">登入</button>
-          </form>
-        </div>
-        <div class="modal-tab-panel" data-panel="register">
-          <form id="bkRegisterForm" novalidate>
-            <div style="margin-bottom:1rem;">
-              <label for="bkRegisterName" style="display:block;font-weight:600;margin-bottom:.35rem;font-size:.875rem;">您的姓名</label>
-              <input id="bkRegisterName" type="text" name="name" placeholder="露友小明" required
-                     style="width:100%;padding:.6rem .9rem;border:2px solid #d4e6e6;border-radius:6px;font-size:.95rem;">
-            </div>
-            <div style="margin-bottom:1rem;">
-              <label for="bkRegisterEmail" style="display:block;font-weight:600;margin-bottom:.35rem;font-size:.875rem;">電子郵件</label>
-              <input id="bkRegisterEmail" type="email" name="email" placeholder="your@email.com" required
-                     style="width:100%;padding:.6rem .9rem;border:2px solid #d4e6e6;border-radius:6px;font-size:.95rem;">
-            </div>
-            <div style="margin-bottom:1.25rem;">
-              <label for="bkRegisterPassword" style="display:block;font-weight:600;margin-bottom:.35rem;font-size:.875rem;">設定密碼</label>
-              <input id="bkRegisterPassword" type="password" name="password" placeholder="至少 8 個字元" minlength="8" required
-                     style="width:100%;padding:.6rem .9rem;border:2px solid #d4e6e6;border-radius:6px;font-size:.95rem;">
-            </div>
-            <button type="submit" class="btn btn--primary" style="width:100%;">立即註冊</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Modal 背景遮罩 -->
-  <div class="bk-modal-backdrop" id="bkModalBackdrop"></div>
 
 </header>
 
 <!-- ============================================================
-     booking-header.js：Badge 更新 + 登入狀態 + Offcanvas 邏輯
-     必須在 Header HTML 載入後才引入，確保 DOM 元素存在
+     Login Slide Panel — 從右側滑入
+     置於 <header> 外，不受 sticky stacking context 限制
      ============================================================ -->
-<script src="./js/booking-header.js"></script>
+<div id="loginModal" class="bk-slide-panel" role="dialog" aria-modal="true" aria-labelledby="bkLoginPanelTitle">
+  <div class="bk-slide-panel__header">
+    <h5 class="bk-slide-panel__title" id="bkLoginPanelTitle">歡迎使用 Yuruicamp</h5>
+    <button class="bk-slide-panel__close" id="loginPanelClose" title="關閉" aria-label="關閉登入視窗">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+  <div class="bk-slide-panel__body">
+
+    <p class="oauth-desc">使用社群帳號快速登入 / 註冊</p>
+
+    <!-- Google -->
+    <button class="oauth-btn oauth-btn--google" id="oauthGoogle">
+      <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+      </svg>
+      使用 Google 帳號登入
+    </button>
+
+    <!-- LINE -->
+    <button class="oauth-btn oauth-btn--line" id="oauthLine">
+      <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#fff" aria-hidden="true">
+        <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+      </svg>
+      使用 LINE 帳號登入
+    </button>
+
+    <!-- Facebook -->
+    <button class="oauth-btn oauth-btn--facebook" id="oauthFacebook">
+      <i class="bi bi-facebook" style="font-size:1.2rem;"></i>
+      使用 Facebook 帳號登入
+    </button>
+
+    <p class="oauth-privacy">
+      登入即代表您同意 Yuruicamp 的
+      <a href="#">服務條款</a> 與 <a href="#">隱私政策</a>
+    </p>
+
+  </div>
+</div>
+
+<!-- ============================================================
+     Cart Slide Panel — 從右側滑入
+     ============================================================ -->
+<div id="cartPanel" class="bk-slide-panel" role="dialog" aria-modal="true" aria-label="預約背包">
+  <div class="bk-slide-panel__header">
+    <h5 class="bk-slide-panel__title">
+      <i class="bi bi-bag-heart"></i> 預約背包
+    </h5>
+    <button class="bk-slide-panel__close" id="cartPanelClose" title="關閉" aria-label="關閉預約背包">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+  <div class="bk-slide-panel__body" id="cartPanelBody">
+    <!-- 由 JS renderCartPanel() 動態填入 -->
+  </div>
+  <div class="bk-slide-panel__footer" id="cartPanelFooter" style="display:none;">
+    <a href="./booking-cart.html" class="btn btn--primary btn--full">
+      <i class="bi bi-arrow-right-circle"></i> 前往完成預約
+    </a>
+  </div>
+</div>
+
+<!-- 共用背景遮罩（Login Panel & Cart Panel 共用） -->
+<div class="bk-panel-backdrop" id="bkPanelBackdrop"></div>
+
+</div><!-- /.bk-header-root -->
+
+<!-- booking-header.js 由各頁面在 $.load() callback 中以 $.getScript() 載入 -->

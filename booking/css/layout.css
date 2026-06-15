@@ -1,0 +1,300 @@
+/* =========================
+   Floating Actions
+   Line icon button + Back to top
+========================= */
+
+.floating-actions {
+  position: fixed;
+  right: 28px;
+  bottom: 34px;
+  z-index: 1200;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+/* 綠色 Line 按鈕：預設只顯示 icon */
+.floating-line-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+
+  border-radius: 999px;
+  background-color: #5f9407;
+  color: #fff;
+
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+
+  transition:
+    width 0.35s ease,
+    padding 0.35s ease,
+    background-color 0.35s ease,
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.floating-line-btn:hover,
+.floating-line-btn:focus-visible {
+  width: 230px;
+  padding-left: 18px;
+  padding-right: 10px;
+  justify-content: flex-start;
+  background-color: #578804;
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+}
+
+.floating-line-label {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin-right: 0;
+
+  color: #fff;
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  line-height: 1;
+
+  transition:
+    max-width 0.35s ease,
+    opacity 0.25s ease,
+    margin-right 0.35s ease;
+}
+
+.floating-line-btn:hover .floating-line-label,
+.floating-line-btn:focus-visible .floating-line-label {
+  max-width: 150px;
+  opacity: 1;
+  margin-right: 10px;
+}
+
+.floating-line-icon {
+  flex: 0 0 60px;
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floating-line-icon i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: auto;
+  height: auto;
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+/* 黃色回到頂部按鈕 */
+.floating-top-btn {
+  width: 60px;
+  height: 60px;
+  border: 0;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #f7c62f;
+  color: #fff;
+  cursor: pointer;
+
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px) scale(0.92);
+
+  transition:
+    opacity 0.35s ease,
+    visibility 0.35s ease,
+    transform 0.35s ease,
+    background-color 0.35s ease;
+}
+
+.floating-top-btn.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.floating-top-btn:hover,
+.floating-top-btn:focus-visible {
+  background-color: #efba12;
+  transform: translateY(-2px) scale(1);
+}
+
+.floating-top-btn i {
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.bk-footer__payment-icons i {
+  font-size: 1.5rem;       /* 調整大小 */
+  color: #7a9494;          /* 改成符合你們 Footer 的低調優雅顏色 */
+  margin-right: 12px;
+  transition: color 0.2s;
+}
+.bk-footer__payment-icons i:hover {
+  color: #cde0e0;          /* 滑鼠懸停時微亮 */
+}
+
+/* ========================================
+   首頁 - Hero Banner
+   ======================================== */
+
+.hero-banner {
+  position: relative;
+  width: 100%;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a3838 0%, #244d4d 40%, #316868 70%, #4a7777 100%);
+}
+
+/* 背景影片：inset:0 = top/right/bottom/left 全部設為 0，讓影片撐滿整個 section */
+.hero-banner video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 等比例縮放填滿，不變形 */
+  z-index: 0;
+}
+
+/* 半透明遮罩，讓文字更易讀 */
+.hero-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+/* Hero 文字內容 */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #ffffff;
+  padding: 2rem 1.25rem;
+  max-width: 700px;
+}
+
+.hero-tagline {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 1rem;
+}
+
+.hero-title {
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.hero-cta-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-hero-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2.25rem;
+  background-color: #ffffff;
+  color: #244d4d;
+  border: 2px solid #ffffff;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 250ms ease;
+}
+
+.btn-hero-primary:hover {
+  background-color: transparent;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.btn-hero-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2.25rem;
+  background-color: transparent;
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 250ms ease;
+}
+
+.btn-hero-outline:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: #ffffff;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* Hero 底部滾動提示 */
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-align: center;
+  animation: bounceDown 2s infinite;
+}
+
+@keyframes bounceDown {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(8px); }
+}
+
+@media (max-width: 768px) {
+  .hero-banner { min-height: 75vh; }
+  .hero-title  { font-size: clamp(1.75rem, 8vw, 2.5rem); }
+  .hero-subtitle { font-size: 0.95rem; }
+  .btn-hero-primary, .btn-hero-outline { padding: 0.75rem 1.5rem; font-size: 0.9rem; }
+}

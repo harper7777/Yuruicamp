@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#244d4d">
+  <link rel="icon" href="../../assets/images/brand_icon.png" type="image/png">
+  <title>確認預約結帳 | Yuruicamp 露營選物</title>
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/booking.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <style>
+    /* ══ Checkout-style 兩欄佈局 ══ */
+    .bk-checkout-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 2rem;
+      align-items: start;
+      padding: 1.5rem 0 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── 手風琴面板 ── */
+    .bk-panel { margin-bottom: 0.75rem; }
+
+    .bk-panel__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 1.25rem;
+      cursor: pointer;
+      background: var(--bk-white);
+      border: 1px solid var(--bk-border);
+      border-radius: var(--bk-radius);
+      transition: background 0.15s;
+      user-select: none;
+    }
+
+    .bk-panel__header:hover { background: var(--bk-bg); }
+
+    .bk-panel.is-open .bk-panel__header {
+      border-radius: var(--bk-radius) var(--bk-radius) 0 0;
+    }
+
+    .bk-panel__title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--bk-text);
+    }
+
+    .bk-panel__num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bk-primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .bk-panel__body {
+      background: var(--bk-white);
+      border: 1px solid var(--bk-border);
+      border-top: none;
+      border-radius: 0 0 var(--bk-radius) var(--bk-radius);
+      padding: 1.5rem;
+    }
+
+    .bk-panel__arrow {
+      font-size: 1rem;
+      color: var(--bk-text-muted);
+      transition: transform 0.2s;
+    }
+
+    .bk-panel:not(.is-open) .bk-panel__arrow { transform: rotate(-90deg); }
+    .bk-panel.is-open       .bk-panel__arrow { transform: rotate(0deg); }
+
+    /* ── 右側 Sticky 摘要 ── */
+    .bk-checkout-summary-col {
+      position: sticky;
+      top: 5rem;
+    }
+
+    .bk-summary-card {
+      background: var(--bk-white);
+      border: 1px solid var(--bk-border);
+      border-radius: var(--bk-radius);
+      padding: 1.5rem;
+    }
+
+    .bk-summary-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--bk-primary);
+      margin: 0 0 1.25rem 0;
+    }
+
+    /* ── 付款方式 ── */
+    .payment-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.875rem;
+      padding: 0.875rem 1rem;
+      border: 2px solid var(--bk-border);
+      border-radius: var(--bk-radius);
+      cursor: pointer;
+      margin-bottom: 0.6rem;
+      background: var(--bk-white);
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .payment-option.is-selected {
+      border-color: var(--bk-primary);
+      background: var(--bk-primary-light, #edf5f5);
+    }
+
+    .payment-option input[type="radio"] {
+      margin-top: 0.15rem;
+      accent-color: var(--bk-primary);
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .payment-option__title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--bk-text);
+    }
+
+    .payment-option__desc {
+      font-size: 0.8rem;
+      color: var(--bk-text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* 信用卡輸入區 */
+    #creditCardSection {
+      margin-top: 0.75rem;
+      padding: 1.1rem;
+      background: var(--bk-bg, #f5f9f9);
+      border-radius: var(--bk-radius);
+      border: 1px solid var(--bk-border);
+    }
+
+    .cc-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--bk-primary);
+      margin-bottom: 0.3rem;
+    }
+
+    .cc-input {
+      width: 100%;
+      padding: 0.55rem 0.8rem;
+      border: 1.5px solid var(--bk-border);
+      border-radius: var(--bk-radius-sm);
+      font-size: 0.9rem;
+      color: var(--bk-text);
+      background: var(--bk-white);
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+      font-family: inherit;
+      letter-spacing: 0.03em;
+    }
+
+    .cc-input:focus { border-color: var(--bk-primary); }
+    .cc-field { margin-bottom: 0.75rem; }
+    .cc-field:last-child { margin-bottom: 0; }
+
+    .cc-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    /* 確認按鈕區 */
+    .bk-confirm-area { margin-top: 1.5rem; }
+
+    .bk-terms-note {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--bk-text-muted);
+      margin-top: 0.4rem;
+    }
+
+    .ssl-note {
+      font-size: 0.75rem;
+      color: var(--bk-text-muted);
+      text-align: center;
+      margin-top: 0.6rem;
+    }
+
+    /* 未登入提示橫幅 */
+    .bk-login-notice {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      padding: 0.875rem 1rem;
+      background: #fff8e1;
+      border: 1.5px solid #ffc107;
+      border-radius: var(--bk-radius);
+      font-size: 0.875rem;
+      color: #856404;
+      margin-bottom: 1rem;
+    }
+
+    .bk-login-notice__btn {
+      margin-left: auto;
+      padding: 0.35rem 0.9rem;
+      border: 1.5px solid var(--bk-primary);
+      background: var(--bk-white);
+      color: var(--bk-primary);
+      border-radius: var(--bk-radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .bk-login-notice__btn:hover {
+      background: var(--bk-primary);
+      color: #fff;
+    }
+
+    /* RWD */
+    @media (max-width: 900px) {
+      .bk-checkout-layout { grid-template-columns: 1fr; }
+      .bk-checkout-summary-col { position: static; order: -1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="booking-header"></div>
+
+  <main class="booking-cart-page">
+
+    <!-- 步驟進度列 / Step Progress Bar -->
+    <div class="step-progress" style="padding-top:1rem;">
+      <div class="step completed">
+        <span><i class="bi bi-check-lg"></i></span>
+        選擇營區
+      </div>
+      <div class="step completed">
+        <span><i class="bi bi-check-lg"></i></span>
+        選擇日期
+      </div>
+      <div class="step completed">
+        <span><i class="bi bi-check-lg"></i></span>
+        租借裝備
+      </div>
+      <div class="step active">
+        <span>4</span>
+        確認結帳
+      </div>
+    </div>
+
+    <!-- 兩欄佈局 / Two-column layout -->
+    <div class="bk-checkout-layout">
+
+      <!-- ══════════════════════════════
+           左側：手風琴面板
+      ══════════════════════════════ -->
+      <div class="bk-checkout-form-col">
+
+        <!-- ── Panel 1：預約明細（預設展開）── -->
+        <div class="bk-panel is-open" id="panelDetails">
+          <div class="bk-panel__header" data-panel="panelDetails">
+            <div class="bk-panel__title">
+              <span class="bk-panel__num">1</span>
+              <span>預約明細</span>
+            </div>
+            <span class="bk-panel__arrow">▼</span>
+          </div>
+          <div class="bk-panel__body">
+
+            <section class="cart-section" id="staySection">
+              <h3 class="cart-section__title">
+                <i class="bi bi-house-door"></i> 住宿資訊
+              </h3>
+              <div id="stayDetail">
+                <div class="loading-skeleton">
+                  <i class="bi bi-hourglass-split"></i> 載入中...
+                </div>
+              </div>
+            </section>
+
+            <section class="cart-section" id="rentalSection">
+              <h3 class="cart-section__title">
+                <i class="bi bi-bag"></i> 租借裝備
+              </h3>
+              <div id="rentalDetail">
+                <!-- 由 JS 動態填入 -->
+              </div>
+            </section>
+
+            <section class="cart-section" id="upsellSection" style="display:none;">
+              <h3 class="cart-section__title" style="color:var(--bk-gold);">
+                <i class="bi bi-star"></i> 喜歡這些裝備嗎？
+              </h3>
+              <p style="font-size:.9rem;color:#555;margin-bottom:1rem;">
+                租借體驗後，若想擁有自己的裝備，可至選物商店選購全新商品。
+              </p>
+              <a href="../../pages/products.html" class="btn btn--outline">
+                <i class="bi bi-shop"></i> 前往選購露營裝備
+              </a>
+            </section>
+
+          </div>
+        </div>
+
+        <!-- ── Panel 2：訂購人資訊 ── -->
+        <div class="bk-panel" id="panelContact">
+          <div class="bk-panel__header" data-panel="panelContact">
+            <div class="bk-panel__title">
+              <span class="bk-panel__num">2</span>
+              <span>訂購人資訊</span>
+            </div>
+            <span class="bk-panel__arrow">▼</span>
+          </div>
+          <div class="bk-panel__body" style="display:none;">
+            <div class="contact-form" style="padding:0;background:none;border:none;">
+              <input type="text"  id="contactName"  class="form-control"
+                     placeholder="訂購人姓名 *" required>
+              <input type="tel"   id="contactPhone" class="form-control"
+                     placeholder="手機號碼 *" required>
+              <input type="email" id="contactEmail" class="form-control"
+                     placeholder="電子信箱 *" required>
+              <p style="font-size:.78rem;color:#999;margin-top:.25rem;margin-bottom:0;">
+                * 確認信將寄送至此信箱
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Panel 3：付款方式 ── -->
+        <div class="bk-panel" id="panelPayment">
+          <div class="bk-panel__header" data-panel="panelPayment">
+            <div class="bk-panel__title">
+              <span class="bk-panel__num">3</span>
+              <span>付款方式</span>
+            </div>
+            <span class="bk-panel__arrow">▼</span>
+          </div>
+          <div class="bk-panel__body" style="display:none;">
+
+            <!-- 信用卡 -->
+            <label class="payment-option is-selected" id="payOptCredit">
+              <input type="radio" name="paymentMethod" value="credit" id="payCredit" checked>
+              <div>
+                <div class="payment-option__title">💳 信用卡付款</div>
+                <div class="payment-option__desc">支援 VISA / MasterCard / JCB，可分期</div>
+              </div>
+            </label>
+
+            <!-- LINE Pay -->
+            <label class="payment-option" id="payOptLine">
+              <input type="radio" name="paymentMethod" value="linepay" id="payLine">
+              <div>
+                <div class="payment-option__title">
+                  <span style="color:#00b900;font-weight:800;">LINE</span> Pay
+                </div>
+                <div class="payment-option__desc">使用 LINE Pay 電子錢包付款，快速便利</div>
+              </div>
+            </label>
+
+            <!-- 信用卡資訊欄位（選信用卡時顯示）-->
+            <div id="creditCardSection">
+              <div class="cc-field">
+                <label class="cc-label" for="cardNumber">卡號</label>
+                <input type="text" class="cc-input" id="cardNumber"
+                       placeholder="1234 5678 9012 3456" maxlength="19" inputmode="numeric">
+              </div>
+              <div class="cc-row">
+                <div class="cc-field">
+                  <label class="cc-label" for="cardExpiry">到期日</label>
+                  <input type="text" class="cc-input" id="cardExpiry"
+                         placeholder="MM / YY" maxlength="7" inputmode="numeric">
+                </div>
+                <div class="cc-field">
+                  <label class="cc-label" for="cardCvv">CVV</label>
+                  <input type="text" class="cc-input" id="cardCvv"
+                         placeholder="123" maxlength="4" inputmode="numeric">
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── 確認送出區 ── -->
+        <div class="bk-confirm-area">
+
+          <!-- 未登入提示（由 JS 控制顯示） -->
+          <div id="loginNotice" class="bk-login-notice" style="display:none;">
+            <i class="bi bi-person-exclamation"></i>
+            您尚未登入，登入後即可完成預約
+            <button type="button" id="loginNoticeBtn" class="bk-login-notice__btn">
+              立即登入 / 註冊
+            </button>
+          </div>
+
+          <button class="btn btn--primary btn--full" id="confirmPayBtn"
+                  style="font-size:1.05rem;padding:1rem;">
+            <i class="bi bi-lock-fill"></i> 確認預約並送出
+          </button>
+          <p class="bk-terms-note">
+            點擊確認即表示您同意 Yuruicamp 的服務條款與隱私政策
+          </p>
+          <p class="ssl-note"><i class="bi bi-shield-lock"></i> SSL 加密保護，安全付款</p>
+          <a href="./camp-rental.html" class="booking-cart-back-link" id="backToRentalLink">
+            ← 返回修改裝備選擇
+          </a>
+        </div>
+
+      </div>
+
+      <!-- ══════════════════════════════
+           右側：費用摘要（Sticky）
+      ══════════════════════════════ -->
+      <div class="bk-checkout-summary-col">
+        <div class="bk-summary-card">
+
+          <h3>費用明細</h3>
+
+          <!-- 費用逐項（由 JS 填入）-->
+          <div id="costBreakdown"></div>
+
+          <!-- 應付總金額 -->
+          <div class="cost-total">
+            <span>應付總金額</span>
+            <strong class="cost-total__amount" id="finalAmount">NT$0</strong>
+          </div>
+
+          <!-- 安全保障 -->
+          <div style="border-top:1px solid var(--bk-border);padding-top:1rem;margin-top:1rem;text-align:center;">
+            <p style="font-size:0.75rem;color:var(--bk-text-muted);margin:0 0 0.25rem 0;">
+              🔒 SSL 加密保護，安全付款
+            </p>
+            <p style="font-size:0.75rem;color:var(--bk-text-muted);margin:0;">
+              📋 預約確認信將寄送至您的信箱
+            </p>
+          </div>
+
+          <!-- 結帳後導購橫幅（預設隱藏）-->
+          <div class="upsell-banner" id="upsellBanner" style="display:none;margin-top:1rem;">
+            <p>🎉 預約已成功送出！</p>
+            <p style="font-size:.85rem;margin-bottom:.75rem;">
+              喜歡這次的裝備體驗嗎？前往選購屬於你的露營裝備。
+            </p>
+            <a href="../../pages/products.html" class="btn btn--outline btn--full">
+              <i class="bi bi-shop"></i> 前往選購新裝備
+            </a>
+            <a href="./camp-search.html"
+               class="rental-skip-link" style="margin-top:.5rem;display:block;text-align:center;">
+              再預約一次露營
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /bk-checkout-layout -->
+
+  </main>
+
+  <div id="booking-footer"></div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function () {
+      // Header 載入完成後，明確以 $.getScript 執行 booking-header.js，再呼叫登入守衛
+      $('#booking-header').load('../components/booking-header.html', function () {
+        $.getScript('../js/booking-header.js', function () {
+          if (typeof window.onBookingHeaderReady === 'function') {
+            window.onBookingHeaderReady();
+          }
+        });
+      });
+      $('#booking-footer').load('../components/booking-footer.html');
+    });
+  </script>
+  <script src="../js/booking-cart.js"></script>
+
+</body>
+</html>

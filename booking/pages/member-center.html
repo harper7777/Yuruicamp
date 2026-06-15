@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#244d4d">
+  <meta name="description" content="Yuruicamp 會員中心 - 管理預約紀錄、商城購買紀錄、個人資料">
+  <link rel="icon" href="../../assets/images/brand_icon.png" type="image/png">
+  <title>會員中心 | Yuruicamp 營地預約</title>
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/booking.css">
+  <link rel="stylesheet" href="../css/member-center.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+
+  <div id="booking-header"></div>
+
+  <!-- 未登入守衛畫面（預設顯示，登入後由 JS 隱藏） -->
+  <div id="mcLoginGuard" class="mc-login-guard">
+    <div class="mc-login-guard__box">
+      <div class="mc-login-guard__icon"><i class="bi bi-person-lock"></i></div>
+      <h2 class="mc-login-guard__title">請先登入</h2>
+      <p class="mc-login-guard__desc">
+        查看會員中心需要登入帳號，<br>
+        登入後即可管理您的預約與購買紀錄。
+      </p>
+      <button class="btn btn--primary mc-login-guard__btn" id="guardLoginBtn">
+        <i class="bi bi-box-arrow-in-right"></i> 立即登入
+      </button>
+      <a href="./camp-search.html" class="mc-login-guard__back">返回探索營地</a>
+    </div>
+  </div>
+
+  <main class="mc-page" id="mcPage" style="display:none;">
+    <div class="mc-container">
+
+      <!-- 手機版水平 Tab 列 -->
+      <div class="mc-tabs-mobile">
+        <button class="mc-tab-mobile active" data-tab="overview">🏠 總覽</button>
+        <button class="mc-tab-mobile" data-tab="profile">資料</button>
+        <button class="mc-tab-mobile" data-tab="records">購買紀錄</button>
+        <button class="mc-tab-mobile" data-tab="coupons">折價券</button>
+        <button class="mc-tab-mobile" data-tab="notifications">通知</button>
+      </div>
+
+      <div class="mc-layout">
+
+        <!-- ═══════════════════════════════
+             左側側邊欄
+        ═══════════════════════════════ -->
+        <aside class="mc-sidebar">
+          <div class="mc-sidebar-user">
+            <div class="mc-sidebar-avatar" id="mcAvatar">?</div>
+            <div>
+              <div class="mc-sidebar-name" id="mcName">會員</div>
+              <div class="mc-sidebar-email" id="mcEmail">載入中...</div>
+            </div>
+          </div>
+          <ul class="mc-nav-list">
+            <li class="mc-nav-item active" data-tab="overview">
+              <i class="bi bi-house"></i> 總覽
+            </li>
+            <li class="mc-nav-item" data-tab="profile">
+              <i class="bi bi-person"></i> 個人資料
+            </li>
+            <li class="mc-nav-item" data-tab="records">
+              <i class="bi bi-receipt"></i> 購買紀錄
+            </li>
+            <li class="mc-nav-item" data-tab="coupons">
+              <i class="bi bi-ticket-perforated"></i> 折價券
+            </li>
+            <li class="mc-nav-item" data-tab="notifications">
+              <i class="bi bi-bell"></i> 通知
+            </li>
+          </ul>
+        </aside>
+
+        <!-- ═══════════════════════════════
+             右側內容
+        ═══════════════════════════════ -->
+        <div class="mc-content">
+
+          <!-- ────────────────────────────
+               Panel 1：總覽
+          ──────────────────────────── -->
+          <div class="mc-panel active" data-panel="overview">
+
+            <!-- 數位會員卡 -->
+            <div class="mc-membership-card">
+              <div class="mc-membership-card__top">
+                <span class="mc-membership-card__brand">🏕️ Yuruicamp</span>
+                <span class="mc-membership-card__tier">探險家</span>
+              </div>
+              <div class="mc-membership-card__name" id="cardName">露友小明</div>
+              <div class="mc-membership-card__since" id="cardSince">加入日期：2026-01-01</div>
+              <div class="mc-membership-card__progress-label">
+                升等進度 — 距下一等級還差 <strong>NT$3,000</strong>
+              </div>
+              <div class="mc-membership-card__progress">
+                <div class="mc-membership-card__progress-bar" style="width:70%;"></div>
+              </div>
+            </div>
+
+            <!-- 快捷統計 -->
+            <div class="mc-stats">
+              <div class="mc-stat-card">
+                <div class="mc-stat-card__num" id="statOrders">1</div>
+                <div class="mc-stat-card__label">待處理訂單</div>
+              </div>
+              <div class="mc-stat-card">
+                <div class="mc-stat-card__num" id="statBookings">2</div>
+                <div class="mc-stat-card__label">即將出發預約</div>
+              </div>
+              <div class="mc-stat-card">
+                <div class="mc-stat-card__num danger" id="statUnread">2</div>
+                <div class="mc-stat-card__label">未讀通知</div>
+              </div>
+            </div>
+
+            <!-- 最近活動 -->
+            <div class="mc-card-box">
+              <h5><i class="bi bi-clock-history"></i> 最近活動</h5>
+              <div class="mc-activity-item">
+                
+                <div>
+                  <div class="mc-activity-item__title">合歡山露營區 預約確認</div>
+                  <div class="mc-activity-item__date">2026-06-10</div>
+                </div>
+              </div>
+              <div class="mc-activity-item">
+                
+                <div>
+                  <div class="mc-activity-item__title">訂單 #ORD-20260310 已出貨</div>
+                  <div class="mc-activity-item__date">2026-03-10</div>
+                </div>
+              </div>
+              <div class="mc-activity-item">
+                
+                <div>
+                  <div class="mc-activity-item__title">獲得折價券 CAMP100</div>
+                  <div class="mc-activity-item__date">2026-01-05</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ────────────────────────────
+               Panel 2：個人資料
+          ──────────────────────────── -->
+          <div class="mc-panel" data-panel="profile">
+            <div class="mc-card-box">
+              <h5><i class="bi bi-person"></i> 個人資料</h5>
+              <form id="profileForm" novalidate>
+                <div class="mc-form-grid">
+                  <div class="mc-form-group">
+                    <label for="profileName">姓名</label>
+                    <input type="text" id="profileName" placeholder="露友小明" value="露友小明">
+                  </div>
+                  <div class="mc-form-group">
+                    <label for="profilePhone">電話</label>
+                    <input type="tel" id="profilePhone" placeholder="0912-345-678" value="0912-345-678">
+                  </div>
+                  <div class="mc-form-group">
+                    <label for="profileEmail">電子郵件</label>
+                    <input type="email" id="profileEmail" placeholder="your@email.com" value="camper@example.com">
+                  </div>
+                  <div class="mc-form-group">
+                    <label for="profileBirthday">生日</label>
+                    <input type="date" id="profileBirthday" value="1990-06-15">
+                  </div>
+                  <div class="mc-form-group full">
+                    <label for="profileAddress">常用地址</label>
+                    <input type="text" id="profileAddress" placeholder="台北市信義區..." value="台北市信義區信義路五段100號">
+                  </div>
+                </div>
+                <div style="margin-top:1.25rem;">
+                  <button type="submit" class="btn btn--primary">
+                    <i class="bi bi-floppy"></i> 儲存修改
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- ────────────────────────────
+               Panel 3：購買紀錄（商城購買 / 預約紀錄）
+          ──────────────────────────── -->
+          <div class="mc-panel" data-panel="records">
+            <div class="mc-card-box">
+              <h5><i class="bi bi-receipt"></i> 購買紀錄</h5>
+
+              <!-- Sub-tab 切換列 -->
+              <div class="rec-tabs">
+                <button class="rec-tab active" data-rec="store">
+                  <i class="bi bi-bag"></i> 商城購買紀錄
+                </button>
+                <button class="rec-tab" data-rec="booking">
+                  <i class="bi bi-tent"></i> 預約紀錄
+                </button>
+              </div>
+
+              <!-- Sub-panel：商城購買紀錄 -->
+              <div class="rec-panel active" data-rec-panel="store">
+                <div class="rec-list">
+                  <div class="rec-item">
+                    <div class="rec-item__info">
+                      <div class="rec-item__title">輕量化露營帳篷 2人</div>
+                      <div class="rec-item__meta">#ORD-20260310 · 2026-03-10 · Snow Peak</div>
+                    </div>
+                    <div class="rec-item__right">
+                      <div class="rec-item__amount">NT$2,999</div>
+                      <span class="rec-item__status status--done">已完成</span>
+                    </div>
+                  </div>
+                  <div class="rec-item">
+                    <div class="rec-item__info">
+                      <div class="rec-item__title">四季防水睡袋 -5°C × 2</div>
+                      <div class="rec-item__meta">#ORD-20260215 · 2026-02-15 · Nightrest</div>
+                    </div>
+                    <div class="rec-item__right">
+                      <div class="rec-item__amount">NT$3,998</div>
+                      <span class="rec-item__status status--done">已完成</span>
+                    </div>
+                  </div>
+                  <div class="rec-item">
+                    <div class="rec-item__info">
+                      <div class="rec-item__title">戶外登山頭燈 350流明</div>
+                      <div class="rec-item__meta">#ORD-20260501 · 2026-05-01 · Black Diamond</div>
+                    </div>
+                    <div class="rec-item__right">
+                      <div class="rec-item__amount">NT$649</div>
+                      <span class="rec-item__status status--pending">處理中</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sub-panel：預約紀錄 -->
+              <div class="rec-panel" data-rec-panel="booking">
+                <div class="rec-list">
+                  <div class="rec-item">
+                    <div class="rec-item__info">
+                      <div class="rec-item__title">合歡山露營區 · 松景營位</div>
+                      <div class="rec-item__meta">#BK-20260620 · 入住 2026-07-10 ～ 07-12 · 2晚</div>
+                    </div>
+                    <div class="rec-item__right">
+                      <div class="rec-item__amount">NT$4,800</div>
+                      <span class="rec-item__status status--upcoming">即將出發</span>
+                    </div>
+                  </div>
+                  <div class="rec-item">
+                    <div class="rec-item__info">
+                      <div class="rec-item__title">太平山露營區 · 雲海營位</div>
+                      <div class="rec-item__meta">#BK-20260501 · 入住 2026-05-03 ～ 05-05 · 2晚</div>
+                    </div>
+                    <div class="rec-item__right">
+                      <div class="rec-item__amount">NT$3,600</div>
+                      <span class="rec-item__status status--done">已完成</span>
+                    </div>
+                  </div>
+                  <div class="rec-item">
+                    <div class="rec-item__info">
+                      <div class="rec-item__title">武陵農場露營區 · 桃花營位</div>
+                      <div class="rec-item__meta">#BK-20260110 · 入住 2026-01-15 ～ 01-16 · 1晚</div>
+                    </div>
+                    <div class="rec-item__right">
+                      <div class="rec-item__amount">NT$2,200</div>
+                      <span class="rec-item__status status--done">已完成</span>
+                    </div>
+                  </div>
+                  <div class="rec-item">
+                    <div class="rec-item__info">
+                      <div class="rec-item__title">奧萬大露營區 · 楓葉營位</div>
+                      <div class="rec-item__meta">#BK-20251205 · 入住 2025-12-10 ～ 12-11 · 1晚</div>
+                    </div>
+                    <div class="rec-item__right">
+                      <div class="rec-item__amount">NT$1,800</div>
+                      <span class="rec-item__status status--cancelled">已取消</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ────────────────────────────
+               Panel 4：折價券
+          ──────────────────────────── -->
+          <div class="mc-panel" data-panel="coupons">
+            <div class="mc-card-box">
+              <h5><i class="bi bi-ticket-perforated"></i> 我的折價券</h5>
+
+              <div class="coupon-tabs">
+                <button class="rec-tab active" data-coupon-tab="usable">可使用</button>
+                <button class="rec-tab" data-coupon-tab="expired">已失效</button>
+              </div>
+
+              <div id="usableCoupons">
+                <div class="coupon-grid">
+                  <div class="coupon-card active-coupon">
+                    
+                    <div>
+                      <div class="coupon-card__code">CAMP100</div>
+                      <div class="coupon-card__desc">全館折抵 NT$100</div>
+                      <div class="coupon-card__expire">有效期限：2026-12-31</div>
+                    </div>
+                  </div>
+                  <div class="coupon-card active-coupon">
+                    
+                    <div>
+                      <div class="coupon-card__code">BK200</div>
+                      <div class="coupon-card__desc">預約系統專用折抵 NT$200</div>
+                      <div class="coupon-card__expire">有效期限：2026-09-30</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="expiredCoupons" style="display:none;">
+                <div class="rec-empty">
+                  
+                  目前沒有已失效的折價券
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ────────────────────────────
+               Panel 5：通知
+          ──────────────────────────── -->
+          <div class="mc-panel" data-panel="notifications">
+            <div class="mc-card-box">
+              <div class="notif-header">
+                <h5><i class="bi bi-bell"></i> 通知中心</h5>
+                <button class="btn btn--outline" style="font-size:0.8rem;padding:0.3rem 0.75rem;" id="markAllReadBtn">
+                  全部標為已讀
+                </button>
+              </div>
+              <div id="notificationList">
+                <div class="notif-item">
+                  <div class="notif-item__dot"></div>
+                  <div>
+                    <div class="notif-item__title">預約確認通知</div>
+                    <div class="notif-item__body">您的合歡山露營區預約（#BK-20260620）已確認，請於入住前一天完成付款。</div>
+                    <div class="notif-item__date">2026-06-10</div>
+                  </div>
+                </div>
+                <div class="notif-item">
+                  <div class="notif-item__dot"></div>
+                  <div>
+                    <div class="notif-item__title">折價券到期提醒</div>
+                    <div class="notif-item__body">您的折價券 BK200 將於 2026-09-30 到期，趕快去使用吧！</div>
+                    <div class="notif-item__date">2026-06-08</div>
+                  </div>
+                </div>
+                <div class="notif-item">
+                  <div class="notif-item__dot read"></div>
+                  <div>
+                    <div class="notif-item__title">訂單出貨通知</div>
+                    <div class="notif-item__body">您的訂單 #ORD-20260215 已出貨，預計 3～5 個工作天到達。</div>
+                    <div class="notif-item__date">2026-02-16</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /mc-content -->
+      </div><!-- /mc-layout -->
+    </div><!-- /mc-container -->
+  </main>
+
+  <div id="booking-footer"></div>
+
+  <script src="../js/layout.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function () {
+      $('#booking-header').load('../components/booking-header.html', function () {
+        $.getScript('../js/booking-header.js');
+      });
+      $('#booking-footer').load('../components/booking-footer.html');
+    });
+  </script>
+  <script src="../js/member-center.js"></script>
+
+</body>
+</html>

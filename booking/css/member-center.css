@@ -1,0 +1,576 @@
+/* ============================================================
+   member-center.css — 預約系統 會員中心 專屬樣式
+============================================================ */
+
+/* ── 頁面容器 ── */
+.mc-page {
+  background: var(--bk-bg);
+  min-height: 100vh;
+  padding: 2rem 0 4rem;
+}
+
+.mc-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ── 版面：側邊欄 + 內容 ── */
+.mc-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* ============================================================
+   側邊欄
+============================================================ */
+.mc-sidebar {
+  background: var(--bk-white);
+  border-radius: var(--bk-radius);
+  box-shadow: var(--bk-shadow);
+  overflow: hidden;
+  position: sticky;
+  top: 80px;
+}
+
+.mc-sidebar-user {
+  background: var(--bk-primary);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mc-sidebar-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mc-sidebar-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.mc-sidebar-email {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 0.1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 130px;
+}
+
+.mc-nav-list { padding: 0.5rem 0; }
+
+.mc-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1.25rem;
+  font-size: 0.9rem;
+  color: var(--bk-text);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  border-left: 3px solid transparent;
+}
+
+.mc-nav-item:hover {
+  background: var(--bk-bg);
+  color: var(--bk-primary);
+}
+
+.mc-nav-item.active {
+  background: var(--bk-primary-light);
+  color: var(--bk-primary);
+  font-weight: 600;
+  border-left-color: var(--bk-primary);
+}
+
+/* ============================================================
+   手機版水平 Tab 列
+============================================================ */
+.mc-tabs-mobile {
+  display: none;
+  overflow-x: auto;
+  gap: 0.4rem;
+  padding: 0 1rem 1rem;
+  scrollbar-width: none;
+  margin-bottom: 1rem;
+}
+
+.mc-tabs-mobile::-webkit-scrollbar { display: none; }
+
+.mc-tab-mobile {
+  white-space: nowrap;
+  padding: 0.45rem 1rem;
+  border-radius: 20px;
+  border: 2px solid var(--bk-border);
+  background: #fff;
+  color: var(--bk-text);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: var(--bk-transition);
+  flex-shrink: 0;
+}
+
+.mc-tab-mobile.active {
+  background: var(--bk-primary);
+  border-color: var(--bk-primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ============================================================
+   Panel 切換
+============================================================ */
+.mc-panel { display: none; }
+.mc-panel.active { display: block; }
+
+/* ============================================================
+   卡片容器（通用）
+============================================================ */
+.mc-card-box {
+  background: var(--bk-white);
+  border-radius: var(--bk-radius);
+  box-shadow: var(--bk-shadow);
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.mc-card-box h5 {
+  color: var(--bk-primary);
+  font-size: 1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ============================================================
+   數位會員卡
+============================================================ */
+.mc-membership-card {
+  background: linear-gradient(135deg, var(--bk-primary) 0%, #316868 60%, #4a7777 100%);
+  border-radius: 14px;
+  padding: 1.5rem;
+  color: #fff;
+  margin-bottom: 1.25rem;
+}
+
+.mc-membership-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+.mc-membership-card__brand { font-weight: 700; letter-spacing: 0.05em; }
+
+.mc-membership-card__tier {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.2rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+}
+
+.mc-membership-card__name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.mc-membership-card__since {
+  font-size: 0.78rem;
+  opacity: 0.8;
+  margin-bottom: 1.25rem;
+}
+
+.mc-membership-card__progress-label {
+  font-size: 0.78rem;
+  opacity: 0.85;
+  margin-bottom: 0.4rem;
+}
+
+.mc-membership-card__progress {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.mc-membership-card__progress-bar {
+  height: 100%;
+  background: #fff;
+  border-radius: 3px;
+}
+
+/* ============================================================
+   統計方塊
+============================================================ */
+.mc-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.mc-stat-card {
+  background: var(--bk-white);
+  border-radius: var(--bk-radius);
+  box-shadow: var(--bk-shadow);
+  padding: 1rem;
+  text-align: center;
+}
+
+.mc-stat-card__num {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--bk-primary);
+}
+
+.mc-stat-card__num.danger { color: #c0392b; }
+
+.mc-stat-card__label {
+  font-size: 0.78rem;
+  color: var(--bk-text-muted);
+  margin-top: 0.2rem;
+}
+
+/* ============================================================
+   最近活動
+============================================================ */
+.mc-activity-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--bk-bg);
+  font-size: 0.85rem;
+}
+
+.mc-activity-item:last-child { border-bottom: none; }
+.mc-activity-item__icon { font-size: 1.1rem; flex-shrink: 0; }
+.mc-activity-item__title { font-weight: 600; color: var(--bk-text); }
+.mc-activity-item__date { font-size: 0.75rem; color: var(--bk-text-muted); margin-top: 0.1rem; }
+
+/* ============================================================
+   個人資料表單
+============================================================ */
+.mc-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.mc-form-grid .full { grid-column: 1 / -1; }
+
+.mc-form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--bk-primary);
+  margin-bottom: 0.35rem;
+}
+
+.mc-form-group input,
+.mc-form-group textarea {
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  border: 2px solid var(--bk-border);
+  border-radius: var(--bk-radius-sm);
+  font-size: 0.95rem;
+  color: var(--bk-text);
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+  background: var(--bk-white);
+}
+
+.mc-form-group input:focus,
+.mc-form-group textarea:focus { border-color: var(--bk-primary); }
+
+/* ============================================================
+   購買紀錄 Sub-tabs
+============================================================ */
+.rec-tabs {
+  display: flex;
+  border-bottom: 2px solid var(--bk-border);
+  margin-bottom: 1.25rem;
+}
+
+.rec-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--bk-text-muted);
+  cursor: pointer;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  background: none;
+  transition: color 0.2s, border-color 0.2s;
+  font-family: inherit;
+}
+
+.rec-tab:hover { color: var(--bk-primary); }
+
+.rec-tab.active {
+  color: var(--bk-primary);
+  border-bottom-color: var(--bk-primary);
+}
+
+.rec-panel { display: none; }
+.rec-panel.active { display: block; }
+
+/* ============================================================
+   紀錄列表
+============================================================ */
+.rec-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.rec-item {
+  border: 1px solid var(--bk-border);
+  border-radius: var(--bk-radius);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  transition: box-shadow 0.2s;
+}
+
+.rec-item:hover { box-shadow: var(--bk-shadow); }
+
+.rec-item__info { flex: 1; }
+
+.rec-item__title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--bk-primary);
+  margin-bottom: 0.25rem;
+}
+
+.rec-item__meta {
+  font-size: 0.78rem;
+  color: var(--bk-text-muted);
+}
+
+.rec-item__right { text-align: right; flex-shrink: 0; }
+
+.rec-item__amount {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--bk-primary);
+}
+
+.rec-item__status {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  margin-top: 0.25rem;
+}
+
+.status--done     { background: #e3f2e3; color: #2d6e2d; }
+.status--pending  { background: #fff3cd; color: #856404; }
+.status--cancelled{ background: #fdeaea; color: #c0392b; }
+.status--upcoming { background: var(--bk-primary-light); color: var(--bk-primary); }
+
+.rec-empty {
+  text-align: center;
+  padding: 2.5rem;
+  color: var(--bk-text-muted);
+  font-size: 0.9rem;
+}
+
+.rec-empty__icon { font-size: 2rem; margin-bottom: 0.5rem; }
+
+/* ============================================================
+   折價券
+============================================================ */
+.coupon-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.coupon-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.coupon-card {
+  border: 2px dashed var(--bk-border);
+  border-radius: var(--bk-radius);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.coupon-card.active-coupon { border-color: var(--bk-primary); }
+
+.coupon-card__icon { font-size: 1.5rem; flex-shrink: 0; }
+
+.coupon-card__code {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--bk-primary);
+}
+
+.coupon-card__desc {
+  font-size: 0.78rem;
+  color: var(--bk-text-muted);
+  margin-top: 0.15rem;
+}
+
+.coupon-card__expire {
+  font-size: 0.72rem;
+  color: var(--bk-text-muted);
+  margin-top: 0.25rem;
+}
+
+/* ============================================================
+   通知
+============================================================ */
+.notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.notif-header h5 { margin-bottom: 0; }
+
+.notif-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--bk-bg);
+  align-items: flex-start;
+}
+
+.notif-item:last-child { border-bottom: none; }
+
+.notif-item__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bk-primary);
+  margin-top: 0.4rem;
+  flex-shrink: 0;
+}
+
+.notif-item__dot.read { background: var(--bk-border); }
+
+.notif-item__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--bk-text);
+  margin-bottom: 0.15rem;
+}
+
+.notif-item__body {
+  font-size: 0.8rem;
+  color: var(--bk-text-muted);
+  line-height: 1.5;
+}
+
+.notif-item__date {
+  font-size: 0.72rem;
+  color: var(--bk-text-muted);
+  margin-top: 0.2rem;
+}
+
+/* ============================================================
+   登入守衛
+============================================================ */
+.mc-login-guard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 64px);
+  background: var(--bk-bg);
+  padding: 2rem 1rem;
+}
+
+.mc-login-guard__box {
+  background: var(--bk-white);
+  border-radius: var(--bk-radius-lg);
+  box-shadow: var(--bk-shadow-lg);
+  padding: 3rem 2.5rem;
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+}
+
+.mc-login-guard__icon {
+  font-size: 3.5rem;
+  color: var(--bk-primary);
+  margin-bottom: 1.25rem;
+}
+
+.mc-login-guard__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--bk-primary);
+  margin-bottom: 0.75rem;
+}
+
+.mc-login-guard__desc {
+  font-size: 0.95rem;
+  color: var(--bk-text-muted);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.mc-login-guard__btn {
+  width: 100%;
+  padding: 0.85rem;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.mc-login-guard__back {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--bk-text-muted);
+  text-decoration: none;
+}
+
+.mc-login-guard__back:hover { color: var(--bk-primary); }
+
+/* ============================================================
+   RWD（≤ 768px）
+============================================================ */
+@media (max-width: 768px) {
+  .mc-layout { grid-template-columns: 1fr; }
+  .mc-sidebar { display: none; }
+  .mc-tabs-mobile { display: flex; }
+  .mc-form-grid { grid-template-columns: 1fr; }
+  .mc-form-grid .full { grid-column: 1; }
+  .mc-stats { grid-template-columns: repeat(3, 1fr); }
+  .coupon-grid { grid-template-columns: 1fr; }
+}

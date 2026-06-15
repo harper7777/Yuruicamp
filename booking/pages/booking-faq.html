@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#244d4d">
+  <meta name="description" content="Yuruicamp 預約系統常見問題：預約付款、取消退款、裝備押金、入住退房、裝備送達等完整說明。">
+  <link rel="icon" href="../../assets/images/brand_icon.png" type="image/png">
+  <title>常見問題 | Yuruicamp 營地預約</title>
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/booking.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+  <style>
+    /* ======================================================
+       booking-faq.html 頁面專屬樣式
+       ====================================================== */
+    .faq-page {
+      background: #f6fbf6;
+      min-height: 100vh;
+      padding-bottom: 4rem;
+    }
+
+    /* ── 頁首橫幅 ── */
+    .faq-hero {
+      background: linear-gradient(135deg, #244d4d 0%, #316868 100%);
+      color: #fff;
+      padding: 4rem 1.5rem 3rem;
+      text-align: center;
+    }
+
+    .faq-hero__title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin-bottom: .75rem;
+    }
+
+    .faq-hero__subtitle {
+      font-size: 1rem;
+      color: rgba(255,255,255,.85);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ── 快速跳頁錨點導覽 ── */
+    .faq-nav {
+      max-width: 900px;
+      margin: 2rem auto 0;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      justify-content: center;
+    }
+
+    .faq-nav__link {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .5rem 1.1rem;
+      background: #fff;
+      border: 2px solid #d4e6e6;
+      border-radius: 20px;
+      font-size: .875rem;
+      color: #244d4d;
+      text-decoration: none;
+      transition: background .2s, border-color .2s;
+    }
+
+    .faq-nav__link:hover {
+      background: #244d4d;
+      border-color: #244d4d;
+      color: #fff;
+    }
+
+    /* ── FAQ 主內容區 ── */
+    .faq-content {
+      max-width: 900px;
+      margin: 3rem auto 0;
+      padding: 0 1.5rem;
+    }
+
+    /* ── 每個主題區塊 ── */
+    .faq-section {
+      margin-bottom: 3.5rem;
+      scroll-margin-top: 80px; /* sticky header 高度補償 */
+    }
+
+    .faq-section__header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding-bottom: .75rem;
+      border-bottom: 3px solid #244d4d;
+      margin-bottom: 1.5rem;
+    }
+
+    .faq-section__icon {
+      font-size: 1.5rem;
+    }
+
+    .faq-section__title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #244d4d;
+      margin: 0;
+    }
+
+    /* ── 問答 Accordion ── */
+    .faq-item {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(36,77,77,.08);
+      margin-bottom: .75rem;
+      overflow: hidden;
+    }
+
+    /* 問題按鈕 */
+    .faq-item__question {
+      width: 100%;
+      padding: 1.1rem 1.25rem;
+      background: none;
+      border: none;
+      text-align: left;
+      font-size: .95rem;
+      font-weight: 600;
+      color: #333;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      transition: background .15s;
+    }
+
+    .faq-item__question:hover { background: #f2f8f2; }
+
+    .faq-item__question.is-open {
+      color: #244d4d;
+      background: #e8f4f4;
+    }
+
+    /* 展開箭頭 */
+    .faq-item__arrow {
+      font-size: .8rem;
+      transition: transform .25s;
+      flex-shrink: 0;
+    }
+
+    .faq-item__question.is-open .faq-item__arrow {
+      transform: rotate(180deg);
+    }
+
+    /* 答案區塊（預設收合） */
+    .faq-item__answer {
+      display: none;
+      padding: 0 1.25rem 1.25rem;
+      font-size: .9rem;
+      color: #555;
+      line-height: 1.8;
+      border-top: 1px solid #e8f0f0;
+    }
+
+    .faq-item__answer.is-open { display: block; }
+
+    .faq-item__answer ul {
+      margin: .5rem 0 0;
+      padding-left: 1.25rem;
+    }
+
+    .faq-item__answer li { margin-bottom: .35rem; }
+
+    .faq-item__answer a {
+      color: #244d4d;
+      text-decoration: underline;
+    }
+
+    /* ── 底部 CTA ── */
+    .faq-cta {
+      max-width: 900px;
+      margin: 2rem auto 0;
+      padding: 0 1.5rem;
+      text-align: center;
+    }
+
+    .faq-cta__box {
+      background: linear-gradient(135deg, #244d4d, #316868);
+      border-radius: 16px;
+      padding: 2.5rem;
+      color: #fff;
+    }
+
+    .faq-cta__box h2 {
+      font-size: 1.4rem;
+      margin-bottom: .6rem;
+    }
+
+    .faq-cta__box p {
+      font-size: .9rem;
+      color: rgba(255,255,255,.85);
+      margin-bottom: 1.5rem;
+    }
+
+    .faq-cta__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .75rem 1.75rem;
+      background: #fff;
+      color: #244d4d;
+      font-weight: 700;
+      font-size: .95rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: transform .2s;
+    }
+
+    .faq-cta__btn:hover { transform: translateY(-2px); }
+
+    /* ── RWD ── */
+    @media (max-width: 768px) {
+      .faq-hero__title { font-size: 1.75rem; }
+    }
+  </style>
+</head>
+<body class="faq-page">
+
+  <!-- 預約系統專屬 Header -->
+  <div id="booking-header"></div>
+
+  <main>
+
+    <!-- =====================================================
+         頁首橫幅
+         ===================================================== -->
+    <section class="faq-hero">
+      <h1 class="faq-hero__title">常見問題</h1>
+      <p class="faq-hero__subtitle">
+        找不到答案？歡迎來信 support@yuruicamp.com 或致電 0800-123-456
+      </p>
+    </section>
+
+    <!-- =====================================================
+         快速跳頁導覽（錨點連結）
+         ===================================================== -->
+    <nav class="faq-nav" aria-label="常見問題分類">
+      <a class="faq-nav__link" href="#payment">
+        <i class="bi bi-credit-card"></i> 預約與付款
+      </a>
+      <a class="faq-nav__link" href="#cancellation">
+        <i class="bi bi-x-circle"></i> 取消與退款
+      </a>
+      <a class="faq-nav__link" href="#damage">
+        <i class="bi bi-exclamation-triangle"></i> 裝備損壞與押金
+      </a>
+      <a class="faq-nav__link" href="#checkin">
+        <i class="bi bi-house-door"></i> 入住與退房
+      </a>
+      <a class="faq-nav__link" href="#delivery">
+        <i class="bi bi-truck"></i> 裝備送達與取回
+      </a>
+    </nav>
+
+    <!-- =====================================================
+         FAQ 主內容
+         ===================================================== -->
+    <div class="faq-content">
+
+      <!-- ── ① 預約與付款方式 ── -->
+      <section class="faq-section" id="payment">
+        <div class="faq-section__header">
+          <span class="faq-section__icon"><i class="bi bi-credit-card"></i></span>
+          <h2 class="faq-section__title">預約與付款方式</h2>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            如何完成預約？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>搜尋並選擇喜愛的營地 → 選擇入住日期與營位 → 選填租借裝備 → 填寫聯絡資訊 → 確認並送出。
+            送出後系統會寄發確認信至您填寫的電子信箱。</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            支援哪些付款方式？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>目前支援以下付款方式：</p>
+            <ul>
+              <li>💳 信用卡（Visa / MasterCard / JCB）</li>
+              <li>📱 LINE Pay</li>
+              <li>📦 貨到付款（僅適用部分地區）</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            預約後可以修改日期嗎？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>入住日前 7 天（含）以前，可透過會員中心「我的露營行程」申請日期更改，需視該日期是否有空位而定。
+            入住前 7 天以內恕不受理日期更改，請直接辦理取消後重新預約。</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            可以選擇先不租借裝備，之後再加購嗎？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>可以。完成住宿預約後，您仍可在入住前 3 天（含）以前，透過會員中心補充或修改租借裝備清單。
+            入住前 3 天以內將鎖定裝備清單，無法再修改。</p>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── ② 取消與退款政策 ── -->
+      <section class="faq-section" id="cancellation">
+        <div class="faq-section__header">
+          <span class="faq-section__icon"><i class="bi bi-x-circle"></i></span>
+          <h2 class="faq-section__title">取消與退款政策</h2>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            取消訂單的退款比例是多少？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>依取消時間與入住日的距離，退款比例如下：</p>
+            <ul>
+              <li>入住前 <strong>14 天以上</strong>取消：退全額（100%）</li>
+              <li>入住前 <strong>7 ~ 13 天</strong>取消：退 70%</li>
+              <li>入住前 <strong>3 ~ 6 天</strong>取消：退 50%</li>
+              <li>入住前 <strong>3 天以內</strong>（含）取消：不退款</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            如何申請取消訂單？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>請登入會員中心 → 「我的露營行程」→ 選擇欲取消的訂單 → 點擊「取消訂單」並確認。
+            退款將於 5 個工作天內退回原付款帳戶。</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            因天候或營地因素臨時取消，可以全額退款嗎？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>若因颱風、地震等不可抗力因素導致營地宣告關閉，將全額退款，並以電子郵件通知。
+            如為個人因素（天氣不佳但營地正常營業），仍依標準退款政策處理。</p>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── ③ 裝備損壞與押金說明 ── -->
+      <section class="faq-section" id="damage">
+        <div class="faq-section__header">
+          <span class="faq-section__icon"><i class="bi bi-exclamation-triangle"></i></span>
+          <h2 class="faq-section__title">裝備損壞與押金說明</h2>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            押金如何計算與退還？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>押金依租借裝備的種類與數量計算（詳見結帳頁費用明細）。
+            退房並確認裝備完好後，押金將於 <strong>5 個工作天內</strong>退回原付款帳戶，無須額外申請。</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            什麼情況屬於「人為損壞」需要賠償？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>下列情況屬於人為損壞，需依市場價格賠償：</p>
+            <ul>
+              <li>帳篷布料割破、焚燒或嚴重污染</li>
+              <li>炊具燒焦或結構變形</li>
+              <li>睡袋大面積破損、嚴重髒污</li>
+              <li>照明設備浸水或跌落損壞</li>
+              <li>零件或配件遺失</li>
+            </ul>
+            <p style="margin-top:.75rem;">正常使用所致的輕微磨損屬合理耗損，不在賠償範圍內。</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            裝備遺失怎麼辦？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>裝備遺失需按市場全額賠償。如發生遺失，請第一時間聯絡客服（0800-123-456），
+            我們將告知賠償金額，金額將從押金中扣除，不足部分另行請款。</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            歸還時裝備應如何整理？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>請依以下方式整理後等候工作人員驗收：</p>
+            <ul>
+              <li>帳篷：摺疊後放回收納袋</li>
+              <li>睡袋：壓縮放回收納袋</li>
+              <li>炊具：清洗乾淨並確認配件齊全</li>
+              <li>照明：關閉電源並確認無外部損傷</li>
+            </ul>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── ④ 入住與退房規則 ── -->
+      <section class="faq-section" id="checkin">
+        <div class="faq-section__header">
+          <span class="faq-section__icon"><i class="bi bi-house-door"></i></span>
+          <h2 class="faq-section__title">入住與退房規則</h2>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            入住與退房時間是幾點？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>入住時間：<strong>下午 14:00</strong> 起<br>
+            退房時間：<strong>上午 11:00</strong> 前<br>
+            各營地可能略有差異，請以確認信或營地現場公告為準。</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            可以提早入住或延後退房嗎？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>提早入住或延後退房需視當日前後訂單情況而定，請提前聯絡客服或直接向營地管理員洽詢，
+            可能需支付額外費用。</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            入住當天未依時段辦理，訂單會被取消嗎？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>若入住當日晚上 22:00 前未辦理入住也未通知，系統將自動列為「未到場（No Show）」，
+            不退款且裝備押金亦不退還。若臨時無法到場，請務必提前聯絡客服。</p>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── ⑤ 裝備送達與取回方式 ── -->
+      <section class="faq-section" id="delivery">
+        <div class="faq-section__header">
+          <span class="faq-section__icon"><i class="bi bi-truck"></i></span>
+          <h2 class="faq-section__title">裝備送達與取回方式</h2>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            裝備什麼時候會送到營地？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>裝備將於入住當日 <strong>13:00 前</strong>送達指定營位，您抵達時即可使用。
+            若有特殊送達時間需求，請在備註欄填寫或提前聯絡客服。</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            裝備會送到哪裡？需要自取嗎？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>裝備會直接送到您預訂的<strong>指定營位</strong>，無需自取。
+            部分偏遠山區營地可能需至管理中心自取，確認信會載明配送方式。</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            退房時裝備如何取回？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>工作人員將於退房日 <strong>11:00</strong> 前至您的營位回收裝備，您只需整理好放置原位等候驗收即可，
+            無需自行運送。</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-item__question" aria-expanded="false">
+            裝備送達時我不在場怎麼辦？
+            <i class="bi bi-chevron-down faq-item__arrow"></i>
+          </button>
+          <div class="faq-item__answer">
+            <p>若您不在場，工作人員會將裝備放置在營位指定位置並拍照存證，
+            並發送 SMS 通知您。如有疑問，請撥打客服專線 0800-123-456。</p>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── 底部 CTA ── -->
+      <div class="faq-cta">
+        <div class="faq-cta__box">
+          <h2>還有其他問題？</h2>
+          <p>客服團隊週一至週日 10:00 – 20:00 隨時為您服務</p>
+          <a href="./camp-search.html" class="faq-cta__btn">
+            <i class="bi bi-compass"></i> 開始預約露營
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- 預約系統專屬 Footer -->
+  <div id="booking-footer"></div>
+
+  <!-- jQuery → 載入 Header / Footer + Accordion 互動邏輯 -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function () {
+      // 載入預約系統專屬 Header / Footer
+      $('#booking-header').load('../components/booking-header.html', function () {
+        $.getScript('../js/booking-header.js');
+      });
+      $('#booking-footer').load('../components/booking-footer.html');
+    });
+
+    /* ──────────────────────────────────────────────────────
+       FAQ Accordion 互動邏輯
+       點擊問題按鈕 → 展開 / 收合對應答案
+       同一個分類下每次只展開一個問答（Accordion 模式）
+    ────────────────────────────────────────────────────── */
+    document.querySelectorAll('.faq-item__question').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var answer    = this.nextElementSibling;   // 緊接的答案 div
+        var isOpen    = this.classList.contains('is-open');
+        var parentSec = this.closest('.faq-section');
+
+        // 收合同區塊內所有問答
+        parentSec.querySelectorAll('.faq-item__question').forEach(function (b) {
+          b.classList.remove('is-open');
+          b.setAttribute('aria-expanded', 'false');
+          b.nextElementSibling.classList.remove('is-open');
+        });
+
+        // 若原本是關閉狀態，展開目前這一個
+        if (!isOpen) {
+          this.classList.add('is-open');
+          this.setAttribute('aria-expanded', 'true');
+          answer.classList.add('is-open');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

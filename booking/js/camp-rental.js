@@ -92,7 +92,7 @@ function loadRentals(campId) {
   // Future backend endpoint: GET /api/rentals?campground_id=C001
   // Response: { success: true, data: [...rentals] }
   $.ajax({
-    url: './data/rentals.json',
+    url: '../data/rentals.json',
     method: 'GET',
     dataType: 'json'
   })

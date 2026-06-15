@@ -1514,87 +1514,243 @@
 .bk-offcanvas-backdrop.is-visible { display: block; }
 
 /* ============================================================
-   22-B. 登入 Modal 背景遮罩（預約系統版）
+   22-B. Slide-out Panels — 登入 & 預約背包
    ============================================================ */
-.bk-modal-backdrop {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 2999;
-}
 
-/* Modal 容器：置中顯示
-   background: transparent 覆蓋 main.css .modal 的半透明背景，
-   改由 bk-modal-backdrop 負責提供遮罩，避免雙層暗色疊加 */
-#loginModal {
-  display: none;
+/* 共用 Panel 容器：預設藏在右側外，transition 滑入 */
+.bk-slide-panel {
   position: fixed;
-  inset: 0;
-  z-index: 3000;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background: transparent;
-}
-
-.modal-content {
+  top: 0;
+  right: -480px;
+  width: 420px;
+  max-width: 92vw;
+  height: 100vh;
   background: #fff;
-  border-radius: 12px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 32px rgba(0, 0, 0, 0.18);
+  transition: right 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.modal-header {
+.bk-slide-panel.is-open { right: 0; }
+
+/* Panel Header */
+.bk-slide-panel__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bk-border);
+  flex-shrink: 0;
 }
 
-.modal-title { font-size: 1.1rem; font-weight: 700; color: #244d4d; margin: 0; }
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  color: #999;
-  transition: color 0.2s;
-}
-
-.modal-close:hover { color: #333; }
-
-.modal-body { padding: 1.5rem; }
-
-/* Tab 切換 */
-.modal-tabs {
+.bk-slide-panel__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--bk-primary);
+  margin: 0;
   display: flex;
-  gap: 0;
-  margin-bottom: 1.25rem;
-  border-bottom: 2px solid #eee;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.modal-tab-btn {
-  flex: 1;
-  padding: 0.6rem;
+.bk-slide-panel__close {
   background: none;
   border: none;
-  font-size: 0.9rem;
-  color: #999;
+  font-size: 1.15rem;
+  color: var(--bk-text-muted);
   cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  transition: color 0.2s, border-color 0.2s;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  line-height: 1;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
 }
 
-.modal-tab-btn.active { color: #244d4d; border-bottom-color: #244d4d; font-weight: 600; }
+.bk-slide-panel__close:hover {
+  background: rgba(36, 77, 77, 0.08);
+  color: var(--bk-primary);
+}
 
-.modal-tab-panel { display: none; }
-.modal-tab-panel.active { display: block; }
+/* Panel Body（可捲動） */
+.bk-slide-panel__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+/* Panel Footer（固定在底部） */
+.bk-slide-panel__footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--bk-border);
+  flex-shrink: 0;
+}
+
+/* 共用遮罩 */
+.bk-panel-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 2999;
+  backdrop-filter: blur(2px);
+}
+
+.bk-panel-backdrop.is-visible { display: block; }
+
+/* ── Cart Panel 內容元素 ── */
+.cart-panel__empty {
+  text-align: center;
+  padding: 3rem 0;
+  color: var(--bk-text-muted);
+}
+
+.cart-panel__empty i {
+  display: block;
+  font-size: 3rem;
+  color: var(--bk-border);
+  margin-bottom: 0.75rem;
+}
+
+.cart-panel__empty p { margin-bottom: 0.5rem; }
+
+.cart-panel__section {
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--bk-border);
+}
+
+.cart-panel__label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--bk-accent);
+  margin-bottom: 0.6rem;
+}
+
+.cart-panel__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: var(--bk-text);
+  margin-bottom: 0.3rem;
+}
+
+.cart-panel__row span:last-child {
+  font-weight: 700;
+  color: var(--bk-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cart-panel__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--bk-text-muted);
+  margin-top: 0.4rem;
+}
+
+.cart-panel__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0 0.5rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--bk-primary);
+  border-top: 2px solid var(--bk-primary);
+  margin-top: 0.25rem;
+}
+
+.cart-panel__clear {
+  display: block;
+  width: 100%;
+  padding: 0.4rem;
+  margin-top: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  color: var(--bk-text-muted);
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.15s;
+  text-align: center;
+  font-family: inherit;
+}
+
+.cart-panel__clear:hover { color: var(--bk-danger); }
+
+/* ── 手機版 offcanvas 內的背包 button（樣式對齊 list link） ── */
+.bk-offcanvas__cart-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.95rem;
+  color: #333;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.bk-offcanvas__cart-btn:hover {
+  background: rgba(36, 77, 77, 0.07);
+  color: #244d4d;
+}
+
+/* OAuth 登入按鈕 */
+.oauth-desc {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--bk-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.oauth-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  margin-bottom: 0.75rem;
+  transition: opacity 0.2s, transform 0.15s;
+  font-family: inherit;
+  text-decoration: none;
+}
+
+.oauth-btn:last-of-type { margin-bottom: 0; }
+.oauth-btn:hover  { opacity: 0.88; transform: translateY(-1px); }
+.oauth-btn:active { transform: translateY(0); }
+
+.oauth-btn--google   { background: #fff; border: 1.5px solid #dadce0; color: #3c4043; }
+.oauth-btn--line     { background: #00b900; color: #fff; }
+.oauth-btn--facebook { background: #1877f2; color: #fff; }
+
+.oauth-privacy {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--bk-text-muted);
+  margin-top: 1.25rem;
+  line-height: 1.6;
+}
+
+.oauth-privacy a { color: var(--bk-primary); text-decoration: underline; }
 
 /* ============================================================
    22-C. Header RWD（≤ 768px）
@@ -1675,7 +1831,7 @@
 
 .bk-footer__links a:hover { color: #fff; }
 
-/* 重要連結（⚠️ 取消退款等）加強調 */
+/* 重要連結（ 取消退款等）加強調 */
 .bk-footer__links a.important { color: #ffd580; }
 .bk-footer__links a.important:hover { color: #fff; }
 
@@ -1690,19 +1846,26 @@
 .bk-footer__contact-item strong { color: #cde0e0; }
 
 /* 社群連結 */
-.bk-footer__social {
+.social {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 18px;
 }
 
-.bk-footer__social a {
-  font-size: 0.875rem;
-  text-decoration: none;
-  transition: opacity 0.2s;
+.social a i {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+  padding: 20px;
 }
 
-.bk-footer__social a:hover { opacity: 0.85; }
+.social a i:hover {
+  color: #111;
+}
+
+.site-footer p {
+  margin-bottom: 10px;
+}
 
 /* 分隔線 */
 .bk-footer__divider {

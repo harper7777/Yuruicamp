@@ -15,6 +15,9 @@
 /** 原始營區資料快取，保留一份完整陣列供篩選時使用 */
 let allCampgrounds = [];
 
+/** 由 initPriceRangeSlider 填入，供重設按鈕呼叫 */
+let updatePriceSlider = function () {};
+
 // ============================================================
 // 頁面初始化 / Page Initialization
 // ============================================================
@@ -54,7 +57,7 @@ function loadCampgrounds() {
   // Query params: { region, environment_tags[], facility_tags[], check_in, check_out, guests }
   // Response format: { success: true, data: [...campgrounds] }
   $.ajax({
-    url: './data/campgrounds.json',
+    url: '../data/campgrounds.json',
     method: 'GET',
     dataType: 'json'
   })
@@ -178,11 +181,17 @@ function bindFilterEvents() {
   // 地區下拉選單變更時觸發 / Trigger on region dropdown change
   $('#regionFilter').on('change', filterCampgrounds);
 
+  // 雙滑塊價格篩選器 / Dual-thumb price slider
+  initPriceRangeSlider();
+
   // 重設按鈕 / Reset button
   $('#resetFilterBtn').on('click', function () {
     $('input[name="env"]').prop('checked', false);
     $('input[name="facility"]').prop('checked', false);
     $('#regionFilter').val('');
+    $('#priceMin').val(500);
+    $('#priceMax').val(5000);
+    updatePriceSlider();
     filterCampgrounds();
   });
 }
@@ -258,8 +267,78 @@ function filterCampgrounds() {
     const facilityMatch = checkedFacility.every(tag => camp.facility_tags.includes(tag));
     if (!facilityMatch) return false;
 
+    // 價格篩選：各 zone 最低平日價須落在 [minBudget, maxBudget] 區間內
+    const minBudget = parseInt($('#priceMin').val());
+    const maxBudget = parseInt($('#priceMax').val());
+    if (minBudget > 500 || maxBudget < 5000) {
+      const minWeekdayPrice = Math.min(...camp.zones.map(z => z.price_weekday));
+      if (minWeekdayPrice < minBudget || minWeekdayPrice > maxBudget) return false;
+    }
+
     return true; // 全部條件符合 / All conditions met
   });
 
   renderCampCards(filtered);
+}
+
+// ============================================================
+// 雙滑塊價格篩選器初始化
+// ============================================================
+
+/**
+ * 建立 dual-thumb range slider：
+ *   - #priceMin / #priceMax 兩個 <input type="range"> 疊加
+ *   - #priceRangeFill 依百分比定位，顯示選取區段
+ *   - #priceRangeDisplay 即時更新文字
+ */
+function initPriceRangeSlider() {
+  const $minEl    = $('#priceMin');
+  const $maxEl    = $('#priceMax');
+  const $fill     = $('#priceRangeFill');
+  const $label    = $('#priceRangeDisplay');
+  const TOTAL_MIN = 500;
+  const TOTAL_MAX = 5000;
+
+  function pct(val) {
+    return (val - TOTAL_MIN) / (TOTAL_MAX - TOTAL_MIN) * 100;
+  }
+
+  function update() {
+    const minVal = parseInt($minEl.val());
+    const maxVal = parseInt($maxEl.val());
+
+    // 填色軌道：left 從 minVal 開始，width 到 maxVal
+    $fill.css({
+      left:  pct(minVal) + '%',
+      width: (pct(maxVal) - pct(minVal)) + '%'
+    });
+
+    // 當 min thumb 到達最右時提高 z-index，確保可向左拖曳
+    $minEl.css('z-index', minVal >= TOTAL_MAX - 500 ? 5 : 3);
+
+    // 文字顯示
+    const maxLabel = maxVal >= TOTAL_MAX ? 'NT$5,000+' : 'NT$' + maxVal.toLocaleString();
+    $label.text('NT$' + minVal.toLocaleString() + ' - ' + maxLabel);
+  }
+
+  // 暴露給重設按鈕使用
+  updatePriceSlider = update;
+
+  $minEl.on('input', function () {
+    if (parseInt($minEl.val()) >= parseInt($maxEl.val())) {
+      $minEl.val(parseInt($maxEl.val()) - TOTAL_MIN); // 至少保留一格距離
+    }
+    update();
+    filterCampgrounds();
+  });
+
+  $maxEl.on('input', function () {
+    if (parseInt($maxEl.val()) <= parseInt($minEl.val())) {
+      $maxEl.val(parseInt($minEl.val()) + TOTAL_MIN);
+    }
+    update();
+    filterCampgrounds();
+  });
+
+  update(); // 初始渲染
 }

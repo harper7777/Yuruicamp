@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#244d4d">
+  <meta name="description" content="Yuruicamp 裝備租借體驗說明：無需自備裝備，選好營區後直接租借，送達營地。">
+  <link rel="icon" href="../../assets/images/brand_icon.png" type="image/png">
+  <title>租借體驗說明 | Yuruicamp 營地預約</title>
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/booking.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+  <style>
+    /* ======================================================
+       rental-guide.html 頁面專屬樣式
+       ====================================================== */
+
+    /* 整體頁面背景 */
+    .rental-guide-page {
+      background: #f6fbf6;
+      min-height: 100vh;
+      padding-bottom: 4rem;
+    }
+
+    /* ── Hero Banner ── */
+    .rg-hero {
+      background: linear-gradient(135deg, #244d4d 0%, #316868 100%);
+      color: #fff;
+      padding: 5rem 1.5rem 4rem;
+      text-align: center;
+    }
+
+    .rg-hero__title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      line-height: 1.25;
+    }
+
+    .rg-hero__subtitle {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.85);
+      max-width: 520px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+
+    .rg-hero__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .85rem 2rem;
+      background: #fff;
+      color: #244d4d;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .rg-hero__cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,.2);
+    }
+
+    /* ── 通用 Section ── */
+    .rg-section {
+      max-width: 1100px;
+      margin: 4rem auto 0;
+      padding: 0 1.5rem;
+    }
+
+    .rg-section__title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #244d4d;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .rg-section__desc {
+      text-align: center;
+      color: #666;
+      font-size: .95rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── 流程步驟 ── */
+    .rg-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .rg-step-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(36,77,77,.1);
+      padding: 2rem 1.25rem;
+      text-align: center;
+      position: relative;
+    }
+
+    /* 步驟數字圓圈 */
+    .rg-step-card__num {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #244d4d;
+      color: #fff;
+      font-size: 1.25rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .rg-step-card__icon {
+      font-size: 2rem;
+      margin-bottom: .75rem;
+    }
+
+    .rg-step-card__title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #244d4d;
+      margin-bottom: .5rem;
+    }
+
+    .rg-step-card__desc {
+      font-size: .875rem;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* 步驟之間的箭頭（偽元素） */
+    .rg-step-card:not(:last-child)::after {
+      content: '→';
+      position: absolute;
+      right: -1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      color: #aac8c8;
+      z-index: 1;
+    }
+
+    /* ── 裝備分類展示 ── */
+    .rg-equip-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+
+    .rg-equip-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(36,77,77,.1);
+      padding: 1.75rem 1.25rem;
+      text-align: center;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .rg-equip-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 24px rgba(36,77,77,.18);
+    }
+
+    .rg-equip-card__icon { font-size: 2.5rem; margin-bottom: .75rem; }
+
+    .rg-equip-card__name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #244d4d;
+      margin-bottom: .4rem;
+    }
+
+    .rg-equip-card__desc {
+      font-size: .8rem;
+      color: #888;
+      line-height: 1.5;
+    }
+
+    /* ── 押金說明區塊（特別強調） ── */
+    .rg-deposit-box {
+      background: #fffbec;
+      border: 2px solid #ffc107;
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .rg-deposit-box__title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #856404;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .rg-deposit-box ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .rg-deposit-box li {
+      color: #555;
+      font-size: .925rem;
+      line-height: 1.8;
+      margin-bottom: .25rem;
+    }
+
+    .rg-deposit-box__link {
+      display: inline-block;
+      margin-top: 1rem;
+      color: #244d4d;
+      font-size: .875rem;
+      text-decoration: underline;
+    }
+
+    .rg-deposit-box__link:hover { color: #316868; }
+
+    /* ── 底部 CTA ── */
+    .rg-cta-section {
+      background: linear-gradient(135deg, #244d4d 0%, #316868 100%);
+      padding: 4rem 1.5rem;
+      text-align: center;
+      margin-top: 4rem;
+    }
+
+    .rg-cta-section h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: .75rem;
+    }
+
+    .rg-cta-section p {
+      color: rgba(255,255,255,.85);
+      font-size: .95rem;
+      margin-bottom: 1.75rem;
+    }
+
+    /* ── RWD ── */
+    @media (max-width: 768px) {
+      .rg-hero__title { font-size: 1.75rem; }
+      .rg-steps       { grid-template-columns: repeat(2, 1fr); }
+      .rg-equip-grid  { grid-template-columns: repeat(2, 1fr); }
+
+      /* 手機版隱藏步驟箭頭 */
+      .rg-step-card::after { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .rg-steps      { grid-template-columns: 1fr; }
+      .rg-equip-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body class="rental-guide-page">
+
+  <!-- 預約系統專屬 Header -->
+  <div id="booking-header"></div>
+
+  <main>
+
+    <!-- =====================================================
+         Hero Banner：主視覺區
+         ===================================================== -->
+    <section class="rg-hero">
+      <h1 class="rg-hero__title">露營不用自備裝備</h1>
+      <p class="rg-hero__subtitle">
+        選好喜愛的營地，再挑選需要的裝備，<br>
+        Yuruicamp 直接送達你的營區現場，輕鬆出發！
+      </p>
+      <a href="./camp-search.html" class="rg-hero__cta">
+        <i class="bi bi-search"></i> 立即探索營區
+      </a>
+    </section>
+
+    <!-- =====================================================
+         4 步驟流程說明
+         ===================================================== -->
+    <section class="rg-section">
+      <h2 class="rg-section__title">4 步驟，超輕鬆出發</h2>
+      <p class="rg-section__desc">從預約到抵達，全程不用煩惱裝備問題</p>
+
+      <div class="rg-steps">
+
+        <!-- Step 1 -->
+        <div class="rg-step-card">
+          <div class="rg-step-card__num">1</div>
+          <div class="rg-step-card__icon">🔍</div>
+          <h3 class="rg-step-card__title">選擇營區</h3>
+          <p class="rg-step-card__desc">
+            瀏覽台灣各地精選營地，依環境特徵與設施條件篩選，找到最適合的營區。
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="rg-step-card">
+          <div class="rg-step-card__num">2</div>
+          <div class="rg-step-card__icon">🎒</div>
+          <h3 class="rg-step-card__title">選擇裝備</h3>
+          <p class="rg-step-card__desc">
+            挑選帳篷、睡袋、炊具、照明等裝備加入背包，按日計費，無需長期購置。
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="rg-step-card">
+          <div class="rg-step-card__num">3</div>
+          <div class="rg-step-card__icon">🚚</div>
+          <h3 class="rg-step-card__title">送達營地</h3>
+          <p class="rg-step-card__desc">
+            確認預約後，裝備將於入住當日送達指定營區，輕裝前往輕鬆紮營。
+          </p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="rg-step-card">
+          <div class="rg-step-card__num">4</div>
+          <div class="rg-step-card__icon">📦</div>
+          <h3 class="rg-step-card__title">退場歸還</h3>
+          <p class="rg-step-card__desc">
+            退房時按指示歸還裝備，無需自行運送，簡單完成整個露營體驗。
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================
+         常見裝備分類展示
+         ===================================================== -->
+    <section class="rg-section">
+      <h2 class="rg-section__title">可租借裝備分類</h2>
+      <p class="rg-section__desc">涵蓋露營所需的各類裝備，齊全到位，行李超輕省</p>
+
+      <div class="rg-equip-grid">
+
+        <div class="rg-equip-card">
+          <div class="rg-equip-card__icon">⛺</div>
+          <h3 class="rg-equip-card__name">帳篷</h3>
+          <p class="rg-equip-card__desc">2～8 人帳可選，含搭建說明，不會搭也沒關係</p>
+        </div>
+
+        <div class="rg-equip-card">
+          <div class="rg-equip-card__icon">🛏️</div>
+          <h3 class="rg-equip-card__name">睡袋</h3>
+          <p class="rg-equip-card__desc">依氣溫分輕薄款與保暖款，自動配對當季推薦</p>
+        </div>
+
+        <div class="rg-equip-card">
+          <div class="rg-equip-card__icon">🍳</div>
+          <h3 class="rg-equip-card__name">炊具</h3>
+          <p class="rg-equip-card__desc">瓦斯爐、鍋具、餐具組，一包齊備開伙零壓力</p>
+        </div>
+
+        <div class="rg-equip-card">
+          <div class="rg-equip-card__icon">💡</div>
+          <h3 class="rg-equip-card__name">照明</h3>
+          <p class="rg-equip-card__desc">露營燈、頭燈、太陽能燈，夜晚也溫暖明亮</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================
+         押金與損壞說明（特別強調區塊）
+         ===================================================== -->
+    <section class="rg-section">
+      <h2 class="rg-section__title">押金與損壞說明</h2>
+      <p class="rg-section__desc">租借前請務必閱讀，避免產生不必要的費用糾紛</p>
+
+      <div class="rg-deposit-box">
+        <h3 class="rg-deposit-box__title">
+          <i class="bi bi-exclamation-triangle-fill"></i> 重要須知
+        </h3>
+        <ul>
+          <li>每筆訂單依裝備數量與類別收取押金，歸還確認完好後全額退還。</li>
+          <li>人為損壞（刮傷、破損、污染等）依市價賠償，非人為損耗免責。</li>
+          <li>遺失裝備需按市場全額賠償，請妥善保管。</li>
+          <li>歸還時需原袋打包，若拆散配件請確認清點齊全。</li>
+          <li>押金將於退房後 5 個工作天內退回原付款帳戶。</li>
+        </ul>
+        <a href="./booking-faq.html#damage" class="rg-deposit-box__link">
+          查看完整裝備損壞與押金 FAQ →
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================
+       底部 CTA
+       ===================================================== -->
+  <section class="rg-cta-section">
+    <h2>準備好輕裝出發了嗎？</h2>
+    <p>選擇你的理想營地，讓我們幫你打點好所有裝備</p>
+    <a href="./camp-search.html" class="rg-hero__cta">
+      <i class="bi bi-compass"></i> 立即預約營地
+    </a>
+  </section>
+
+  <!-- 預約系統專屬 Footer -->
+  <div id="booking-footer"></div>
+
+  <!-- jQuery → 載入 Header / Footer -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $(function () {
+      // 載入預約系統專屬 Header / Footer（非買家端的 ../components/）
+      $('#booking-header').load('../components/booking-header.html', function () {
+        $.getScript('../js/booking-header.js');
+      });
+      $('#booking-footer').load('../components/booking-footer.html');
+    });
+  </script>
+
+</body>
+</html>

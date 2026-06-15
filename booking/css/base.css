@@ -1,0 +1,166 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-text: #222;
+  --color-muted: #666;
+  --color-light-muted: #8a8a8a;
+  --color-primary: #9a6a31;
+  --color-primary-dark: #5d3603;
+  --color-bg: #fff;
+  --color-bg-soft: #faf7f1;
+  --color-cta: #d8b98f;
+  --color-black: #000;
+  --font-main: "Noto Serif TC", serif;
+  --header-height: 70px;
+  --container-wide: min(1180px, 90%);
+  --transition-slow: 1.7s ease;
+  --transition-normal: 0.45s ease;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.8;
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+img,
+video {
+  display: block;
+  width: 100%;
+}
+
+main {
+  min-height: 60vh;
+}
+
+.section-subtitle {
+  color: var(--color-primary);
+  letter-spacing: 4px;
+  font-size: 0.82rem;
+  margin-bottom: 16px;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(70px);
+  transition: opacity 1.4s ease, transform 1.4s ease;
+}
+
+.reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.zoom-box {
+  overflow: hidden;
+}
+
+.zoom-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.18);
+  transition: transform var(--transition-slow);
+}
+
+.reveal.show .zoom-box img,
+.zoom-box.show img {
+  transform: scale(1);
+}
+
+.zoom-box:hover img {
+  transform: scale(1.09);
+}
+
+.scroll-down {
+  position: absolute;
+  z-index: 3;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  text-align: center;
+  letter-spacing: 3px;
+  font-size: 0.75rem;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 54px;
+  background-color: rgba(255, 255, 255, 0.42);
+  margin: 12px auto 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-line::after {
+  content: "";
+  position: absolute;
+  top: -24px;
+  left: 0;
+  width: 1px;
+  height: 24px;
+  background-color: #fff;
+  animation: scrollLineMove 1.8s infinite;
+}
+
+@keyframes scrollLineMove {
+  0% { top: -24px; opacity: 0; }
+  30% { opacity: 1; }
+  100% { top: 54px; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* =========================
+   Modal 基礎
+   booking-header.html 的 #loginModal 使用 class="modal"
+========================= */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1040;
+  align-items: center;
+  justify-content: center;
+}
+
