@@ -103,7 +103,7 @@
 
 ## 5-1. 折扣券一鍵生成 (Coupon Generator)
 
-- **UI 結構：** 畫面上方配置具備高亮背景 (bg-primary bg-opacity-10) 的操作區，包含：「折扣額度 Input」、「發行數量 Input」與大顆的「⚡ 生成折扣券」按鈕。
+- **UI 結構：** 畫面上方配置具備高亮背景 (bg-primary bg-opacity-10) 的操作區，包含：「折扣額度 Input」、「發行數量 Input」與大顆的「<i class="bi bi-lightning"></i> 生成折扣券」按鈕。
 - **動態生成邏輯 (jQuery 亮點)：**
   - 點擊按鈕後，讀取「發行數量」與「額度」。
   - 寫一隻 JS 函式產生指定長度的隨機英數大寫字串（例如：使用 Math.random().toString(36).substring(2, 10).toUpperCase() 產出類似 YURUI6O5 的字串）。

@@ -15,8 +15,8 @@
 window.openModal = (modalId) => {
   const modal = document.getElementById(modalId);
   if (modal) {
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden'; // 防止背景頁面滾動
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden"; // 防止背景頁面滾動
   }
 };
 
@@ -28,8 +28,8 @@ window.openModal = (modalId) => {
 window.closeModal = (modalId) => {
   const modal = document.getElementById(modalId);
   if (modal) {
-    modal.classList.remove('active');
-    document.body.style.overflow = ''; // 恢復頁面滾動
+    modal.classList.remove("active");
+    document.body.style.overflow = ""; // 恢復頁面滾動
   }
 };
 
@@ -46,24 +46,24 @@ window.closeModal = (modalId) => {
  */
 window.initModalListeners = () => {
   // 點擊 Modal 最外層（背景遮罩）→ 關閉
-  document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('modal')) {
+  document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("modal")) {
       window.closeModal(e.target.id);
     }
   });
 
   // 點擊 .modal-close 按鈕 → 關閉所在 Modal
-  document.querySelectorAll('.modal-close').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const modal = e.target.closest('.modal');
+  document.querySelectorAll(".modal-close").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const modal = e.target.closest(".modal");
       if (modal) window.closeModal(modal.id);
     });
   });
 
   // ESC 鍵 → 關閉當前開啟的 Modal
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      const activeModal = document.querySelector('.modal.active');
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      const activeModal = document.querySelector(".modal.active");
       if (activeModal) window.closeModal(activeModal.id);
     }
   });
@@ -84,31 +84,31 @@ window.initModalListeners = () => {
  * - LINE 社群登入（模擬）
  */
 function _initLoginModal() {
-  const loginModal = document.getElementById('loginModal');
+  const loginModal = document.getElementById("loginModal");
   if (!loginModal) return;
 
   // Google 登入按鈕（模擬）
-  const googleBtns = loginModal.querySelectorAll('.btn-google-login');
-  googleBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
+  const googleBtns = loginModal.querySelectorAll(".btn-google-login");
+  googleBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
       _handleLoginSuccess({
-        name: 'Google 用戶',
-        email: 'user@gmail.com',
+        name: "Google 用戶",
+        email: "user@gmail.com",
         avatar: null,
-        provider: 'google',
+        provider: "google",
       });
     });
   });
 
   // LINE 登入按鈕（模擬）
-  const lineBtns = loginModal.querySelectorAll('.btn-line-login');
-  lineBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
+  const lineBtns = loginModal.querySelectorAll(".btn-line-login");
+  lineBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
       _handleLoginSuccess({
-        name: 'LINE 用戶',
-        email: 'user@line.me',
+        name: "LINE 用戶",
+        email: "user@line.me",
         avatar: null,
-        provider: 'line',
+        provider: "line",
       });
     });
   });
@@ -134,7 +134,7 @@ function _handleLoginSuccess(user) {
   window.updateNavbarLoginState();
 
   // 3. 關閉登入 Modal
-  window.closeModal('loginModal');
+  window.closeModal("loginModal");
 
   // 4. 延遲 300ms 再開啟問卷（視覺上更流暢）
   setTimeout(() => {
@@ -150,7 +150,7 @@ function _handleLoginSuccess(user) {
 // 儲存用戶選擇的答案
 // Store user's selected answers
 let _surveyAnswers = {
-  styles: [],    // 問題 1：偏好風格
+  styles: [], // 問題 1：偏好風格
   equipment: [], // 問題 2：想添購的裝備
 };
 
@@ -165,7 +165,7 @@ window.openPersonalizationModal = () => {
   // 重置到第一步
   _goToSurveyStep(1);
 
-  window.openModal('personalizationModal');
+  window.openModal("personalizationModal");
 };
 
 /**
@@ -173,40 +173,50 @@ window.openPersonalizationModal = () => {
  * Initialize personalization survey interactions
  */
 window.initPersonalizationModal = () => {
-  const modal = document.getElementById('personalizationModal');
+  const modal = document.getElementById("personalizationModal");
   if (!modal) return;
 
   // 標籤（Tag）多選邏輯：點擊切換 active 狀態
   // Tag multi-select: toggle active class on click
-  modal.addEventListener('click', (e) => {
+  modal.addEventListener("click", (e) => {
     // 點擊選項標籤
-    if (e.target.classList.contains('survey-tag')) {
-      e.target.classList.toggle('active');
+    if (e.target.classList.contains("survey-tag")) {
+      e.target.classList.toggle("active");
     }
 
     // 點擊「下一步」按鈕（第一步 → 第二步）
-    if (e.target.id === 'surveyNextBtn') {
+    if (e.target.id === "surveyNextBtn") {
       // 收集第一步的選擇
-      const step1Tags = modal.querySelectorAll('[data-step="1"] .survey-tag.active');
-      _surveyAnswers.styles = Array.from(step1Tags).map(t => t.dataset.value);
+      const step1Tags = modal.querySelectorAll(
+        '[data-step="1"] .survey-tag.active',
+      );
+      _surveyAnswers.styles = Array.from(step1Tags).map((t) => t.dataset.value);
       _goToSurveyStep(2);
     }
 
     // 點擊「完成」按鈕（第二步 → 完成）
-    if (e.target.id === 'surveyFinishBtn') {
+    if (e.target.id === "surveyFinishBtn") {
       // 收集第二步的選擇
-      const step2Tags = modal.querySelectorAll('[data-step="2"] .survey-tag.active');
-      _surveyAnswers.equipment = Array.from(step2Tags).map(t => t.dataset.value);
+      const step2Tags = modal.querySelectorAll(
+        '[data-step="2"] .survey-tag.active',
+      );
+      _surveyAnswers.equipment = Array.from(step2Tags).map(
+        (t) => t.dataset.value,
+      );
 
       // 儲存偏好到全局狀態
       window.AppState.preferences = _surveyAnswers;
       window.saveAppState();
 
       // 關閉 Modal
-      window.closeModal('personalizationModal');
+      window.closeModal("personalizationModal");
 
       // 顯示成功 Toast
-      window.showToast('✓ 個人偏好已儲存！我們會為您推薦最適合的商品 🏕️', 'success', 4000);
+      window.showToast(
+        '✓ 個人偏好已儲存！我們會為您推薦最適合的商品 <i class="bi bi-tent"></i>',
+        "success",
+        4000,
+      );
     }
   });
 };
@@ -217,23 +227,23 @@ window.initPersonalizationModal = () => {
  * @param {number} step - 步驟編號（1 或 2）
  */
 function _goToSurveyStep(step) {
-  const modal = document.getElementById('personalizationModal');
+  const modal = document.getElementById("personalizationModal");
   if (!modal) return;
 
   // 切換步驟面板的顯示
-  modal.querySelectorAll('.survey-step').forEach(panel => {
-    panel.classList.toggle('active', parseInt(panel.dataset.step) === step);
+  modal.querySelectorAll(".survey-step").forEach((panel) => {
+    panel.classList.toggle("active", parseInt(panel.dataset.step) === step);
   });
 
   // 更新進度條的 active 狀態
-  modal.querySelectorAll('.stepper-dot').forEach((dot, index) => {
+  modal.querySelectorAll(".stepper-dot").forEach((dot, index) => {
     // 已完成或當前步驟都標為 active
-    dot.classList.toggle('active', index + 1 <= step);
+    dot.classList.toggle("active", index + 1 <= step);
   });
 
   // 更新步驟文字（如 1/2）
-  const stepIndicator = modal.querySelector('.stepper-text');
+  const stepIndicator = modal.querySelector(".stepper-text");
   if (stepIndicator) stepIndicator.textContent = `${step} / 2`;
 }
 
-console.log('✓ Modal 組件已初始化');
+console.log("✓ Modal 組件已初始化");

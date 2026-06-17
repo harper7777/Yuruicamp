@@ -1,342 +1,634 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="zh-TW">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Yuruicamp 會員中心 - 管理訂單、折價券、個人資料">
-  <meta name="theme-color" content="#244d4d">
-  <title>會員中心 - Yuruicamp 露營選物</title>
-  <!-- 預先連線外部資源，減少 DNS 查詢延遲 / Preconnect to reduce DNS lookup latency -->
-  <link rel="preconnect" href="https://picsum.photos">
-  <link rel="dns-prefetch" href="https://picsum.photos">
-  <link rel="stylesheet" href="../css/main.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏕️</text></svg>">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Yuruicamp 會員中心 - 管理訂單、折價券、個人資料"
+    />
+    <meta name="theme-color" content="#244d4d" />
+    <title>會員中心 - Yuruicamp 露營選物</title>
+    <!-- 預先連線外部資源，減少 DNS 查詢延遲 / Preconnect to reduce DNS lookup latency -->
+    <link rel="preconnect" href="https://picsum.photos" />
+    <link rel="dns-prefetch" href="https://picsum.photos" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22><i class="bi bi-tent"></i></text></svg>"
+    />
+  </head>
+  <body>
+    <div id="header"></div>
 
- <div id="header"></div>
-
-  <!-- ===================================================
+    <!-- ===================================================
        主要內容區
        =================================================== -->
-  <main>
-    <div class="container">
-      <!-- 手機版水平 Tab（手機才顯示，PC 隱藏）-->
-      <div class="member-tabs-mobile">
-        <button class="member-tab-mobile active" data-tab="overview">🏠 總覽</button>
-        <button class="member-tab-mobile" data-tab="profile">👤 資料</button>
-        <button class="member-tab-mobile" data-tab="orders">📦 訂單</button>
-        <button class="member-tab-mobile" data-tab="coupons">🎫 折價券</button>
-        <button class="member-tab-mobile" data-tab="notifications">🔔 通知</button>
-      </div>
+    <main>
+      <div class="container">
+        <!-- 手機版水平 Tab（手機才顯示，PC 隱藏）-->
+        <div class="member-tabs-mobile">
+          <button class="member-tab-mobile active" data-tab="overview">
+            <i class="bi bi-house"></i> 總覽
+          </button>
+          <button class="member-tab-mobile" data-tab="profile"><i class="bi bi-person-fill"></i> 資料</button>
+          <button class="member-tab-mobile" data-tab="orders"><i class="bi bi-box-fill"></i> 訂單</button>
+          <button class="member-tab-mobile" data-tab="coupons">
+            <i class="bi bi-ticket"></i> 折價券
+          </button>
+          <button class="member-tab-mobile" data-tab="notifications">
+            <i class="bi bi-bell"></i> 通知
+          </button>
+        </div>
 
-      <!-- 左右兩欄版面 -->
-      <div class="member-layout">
-
-        <!-- ──────────────────────────────────
+        <!-- 左右兩欄版面 -->
+        <div class="member-layout">
+          <!-- ──────────────────────────────────
              左側：固定側邊欄（PC 才顯示）
              ────────────────────────────────── -->
-        <aside class="member-sidebar">
-          <!-- 用戶頭像 + 姓名 + email -->
-          <div class="member-sidebar-user">
-            <div class="member-sidebar-avatar" id="sidebarAvatar">?</div>
-            <div>
-              <div class="member-sidebar-name" id="sidebarName">會員</div>
-              <div class="member-sidebar-email" id="sidebarEmail">loading...</div>
+          <aside class="member-sidebar">
+            <!-- 用戶頭像 + 姓名 + email -->
+            <div class="member-sidebar-user">
+              <div class="member-sidebar-avatar" id="sidebarAvatar">?</div>
+              <div>
+                <div class="member-sidebar-name" id="sidebarName">會員</div>
+                <div class="member-sidebar-email" id="sidebarEmail">
+                  loading...
+                </div>
+              </div>
             </div>
-          </div>
-          <!-- 導覽清單 -->
-          <ul class="member-nav-list">
-            <li class="member-nav-item active" data-tab="overview">
-              <span class="nav-icon">🏠</span> 總覽
-            </li>
-            <li class="member-nav-item" data-tab="profile">
-              <span class="nav-icon">👤</span> 個人資料
-            </li>
-            <li class="member-nav-item" data-tab="orders">
-              <span class="nav-icon">📦</span> 我的訂單
-            </li>
-            <li class="member-nav-item" data-tab="coupons">
-              <span class="nav-icon">🎫</span> 折價券
-            </li>
-            <li class="member-nav-item" data-tab="notifications">
-              <span class="nav-icon">🔔</span> 通知
-            </li>
-          </ul>
-        </aside>
+            <!-- 導覽清單 -->
+            <ul class="member-nav-list">
+              <li class="member-nav-item active" data-tab="overview">
+                <span class="nav-icon"><i class="bi bi-house"></i></span> 總覽
+              </li>
+              <li class="member-nav-item" data-tab="profile">
+                <span class="nav-icon"><i class="bi bi-person-fill"></i></span> 個人資料
+              </li>
+              <li class="member-nav-item" data-tab="orders">
+                <span class="nav-icon"><i class="bi bi-box-fill"></i></span> 我的訂單
+              </li>
+              <li class="member-nav-item" data-tab="coupons">
+                <span class="nav-icon"><i class="bi bi-ticket"></i></span> 折價券
+              </li>
+              <li class="member-nav-item" data-tab="notifications">
+                <span class="nav-icon"><i class="bi bi-bell"></i></span> 通知
+              </li>
+            </ul>
+          </aside>
 
-        <!-- ──────────────────────────────────
+          <!-- ──────────────────────────────────
              右側：各 Panel 內容
              ────────────────────────────────── -->
-        <div class="member-content">
-
-          <!-- ========================================
+          <div class="member-content">
+            <!-- ========================================
                Panel 1：總覽 (overview)
                ======================================== -->
-          <div class="member-panel active" data-panel="overview">
-
-            <!-- 數位會員卡 -->
-            <div class="member-card">
-              <div class="member-card-top">
-                <span class="member-card-brand">🏕️ Yuruicamp</span>
-                <span class="member-card-tier">探險家</span>
+            <div class="member-panel active" data-panel="overview">
+              <!-- 數位會員卡 -->
+              <div class="member-card">
+                <div class="member-card-top">
+                  <span class="member-card-brand"><i class="bi bi-tent"></i> Yuruicamp</span>
+                  <span class="member-card-tier">探險家</span>
+                </div>
+                <div class="member-card-name" id="cardName">露友小明</div>
+                <div class="member-card-since" id="cardSince">
+                  加入日期：2026-01-01
+                </div>
+                <div style="margin-top: 1.5rem">
+                  <div class="member-card-progress-label">
+                    升等進度 — 距下一等級還差 <strong>NT$3,000</strong>
+                  </div>
+                  <div class="member-card-progress">
+                    <div
+                      class="member-card-progress-bar"
+                      style="width: 70%"
+                    ></div>
+                  </div>
+                </div>
               </div>
-              <div class="member-card-name" id="cardName">露友小明</div>
-              <div class="member-card-since" id="cardSince">加入日期：2026-01-01</div>
-              <div style="margin-top:1.5rem;">
-                <div class="member-card-progress-label">升等進度 — 距下一等級還差 <strong>NT$3,000</strong></div>
-                <div class="member-card-progress">
-                  <div class="member-card-progress-bar" style="width:70%;"></div>
+
+              <!-- 快捷統計方塊 -->
+              <div class="row" style="gap: 0">
+                <div class="col-md-4 mb-md" style="padding: 0 0.5rem">
+                  <div
+                    class="card text-center"
+                    style="padding: 1.25rem; border-radius: 12px"
+                  >
+                    <div
+                      style="font-size: 2rem; font-weight: 800; color: #244d4d"
+                      id="statPendingOrders"
+                    >
+                      1
+                    </div>
+                    <div
+                      style="
+                        font-size: 0.8rem;
+                        color: #777;
+                        margin-top: 0.25rem;
+                      "
+                    >
+                      待處理訂單
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-md" style="padding: 0 0.5rem">
+                  <div
+                    class="card text-center"
+                    style="padding: 1.25rem; border-radius: 12px"
+                  >
+                    <div
+                      style="font-size: 2rem; font-weight: 800; color: #244d4d"
+                      id="statCoupons"
+                    >
+                      2
+                    </div>
+                    <div
+                      style="
+                        font-size: 0.8rem;
+                        color: #777;
+                        margin-top: 0.25rem;
+                      "
+                    >
+                      可用折價券
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-md" style="padding: 0 0.5rem">
+                  <div
+                    class="card text-center"
+                    style="padding: 1.25rem; border-radius: 12px"
+                  >
+                    <div
+                      style="font-size: 2rem; font-weight: 800; color: #e74c3c"
+                      id="statUnread"
+                    >
+                      2
+                    </div>
+                    <div
+                      style="
+                        font-size: 0.8rem;
+                        color: #777;
+                        margin-top: 0.25rem;
+                      "
+                    >
+                      未讀通知
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 最近活動 -->
+              <div class="card" style="margin-top: 0.5rem; border-radius: 12px">
+                <div class="card-body" style="padding: 1.25rem">
+                  <h6 style="margin-bottom: 1rem; color: #244d4d">最近活動</h6>
+                  <div id="recentActivity">
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        gap: 0.75rem;
+                        padding: 0.65rem 0;
+                        border-bottom: 1px solid #f0f0f0;
+                      "
+                    >
+                      <span style="font-size: 1.2rem"><i class="bi bi-box-fill"></i></span>
+                      <div>
+                        <div style="font-size: 0.85rem; font-weight: 600">
+                          訂單 #ORD-20260310 處理中
+                        </div>
+                        <div style="font-size: 0.75rem; color: #999">
+                          2026-03-10
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        gap: 0.75rem;
+                        padding: 0.65rem 0;
+                        border-bottom: 1px solid #f0f0f0;
+                      "
+                    >
+                      <span style="font-size: 1.2rem"><i class="bi bi-check-circle"></i></span>
+                      <div>
+                        <div style="font-size: 0.85rem; font-weight: 600">
+                          訂單 #ORD-20260215 已出貨
+                        </div>
+                        <div style="font-size: 0.75rem; color: #999">
+                          2026-02-15
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        display: flex;
+                        align-items: center;
+                        gap: 0.75rem;
+                        padding: 0.65rem 0;
+                      "
+                    >
+                      <span style="font-size: 1.2rem"><i class="bi bi-ticket"></i></span>
+                      <div>
+                        <div style="font-size: 0.85rem; font-weight: 600">
+                          獲得折價券 YURUI100
+                        </div>
+                        <div style="font-size: 0.75rem; color: #999">
+                          2026-01-05
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- 快捷統計方塊 -->
-            <div class="row" style="gap:0;">
-              <div class="col-md-4 mb-md" style="padding:0 0.5rem;">
-                <div class="card text-center" style="padding:1.25rem;border-radius:12px;">
-                  <div style="font-size:2rem;font-weight:800;color:#244d4d;" id="statPendingOrders">1</div>
-                  <div style="font-size:0.8rem;color:#777;margin-top:0.25rem;">待處理訂單</div>
-                </div>
-              </div>
-              <div class="col-md-4 mb-md" style="padding:0 0.5rem;">
-                <div class="card text-center" style="padding:1.25rem;border-radius:12px;">
-                  <div style="font-size:2rem;font-weight:800;color:#244d4d;" id="statCoupons">2</div>
-                  <div style="font-size:0.8rem;color:#777;margin-top:0.25rem;">可用折價券</div>
-                </div>
-              </div>
-              <div class="col-md-4 mb-md" style="padding:0 0.5rem;">
-                <div class="card text-center" style="padding:1.25rem;border-radius:12px;">
-                  <div style="font-size:2rem;font-weight:800;color:#e74c3c;" id="statUnread">2</div>
-                  <div style="font-size:0.8rem;color:#777;margin-top:0.25rem;">未讀通知</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 最近活動 -->
-            <div class="card" style="margin-top:0.5rem;border-radius:12px;">
-              <div class="card-body" style="padding:1.25rem;">
-                <h6 style="margin-bottom:1rem;color:#244d4d;">最近活動</h6>
-                <div id="recentActivity">
-                  <div style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0;border-bottom:1px solid #f0f0f0;">
-                    <span style="font-size:1.2rem;">📦</span>
-                    <div>
-                      <div style="font-size:0.85rem;font-weight:600;">訂單 #ORD-20260310 處理中</div>
-                      <div style="font-size:0.75rem;color:#999;">2026-03-10</div>
-                    </div>
-                  </div>
-                  <div style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0;border-bottom:1px solid #f0f0f0;">
-                    <span style="font-size:1.2rem;">✅</span>
-                    <div>
-                      <div style="font-size:0.85rem;font-weight:600;">訂單 #ORD-20260215 已出貨</div>
-                      <div style="font-size:0.75rem;color:#999;">2026-02-15</div>
-                    </div>
-                  </div>
-                  <div style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0;">
-                    <span style="font-size:1.2rem;">🎫</span>
-                    <div>
-                      <div style="font-size:0.85rem;font-weight:600;">獲得折價券 YURUI100</div>
-                      <div style="font-size:0.75rem;color:#999;">2026-01-05</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- ========================================
+            <!-- ========================================
                Panel 2：個人資料 (profile)
                ======================================== -->
-          <div class="member-panel" data-panel="profile">
-            <div class="card" style="border-radius:12px;">
-              <div class="card-body" style="padding:1.5rem;">
-                <h5 style="color:#244d4d;margin-bottom:1.5rem;">👤 個人資料</h5>
-                <form id="profileForm" novalidate>
-                  <div class="row">
-                    <div class="col-md-6 mb-md" style="padding:0 0.5rem;">
-                      <label style="display:block;font-weight:600;margin-bottom:0.35rem;font-size:0.875rem;">姓名</label>
-                      <input type="text" id="profileName" name="name" placeholder="露友小明" value="露友小明">
+            <div class="member-panel" data-panel="profile">
+              <div class="card" style="border-radius: 12px">
+                <div class="card-body" style="padding: 1.5rem">
+                  <h5 style="color: #244d4d; margin-bottom: 1.5rem">
+                    👤 個人資料
+                  </h5>
+                  <form id="profileForm" novalidate>
+                    <div class="row">
+                      <div class="col-md-6 mb-md" style="padding: 0 0.5rem">
+                        <label
+                          style="
+                            display: block;
+                            font-weight: 600;
+                            margin-bottom: 0.35rem;
+                            font-size: 0.875rem;
+                          "
+                          >姓名</label
+                        >
+                        <input
+                          type="text"
+                          id="profileName"
+                          name="name"
+                          placeholder="露友小明"
+                          value="露友小明"
+                        />
+                      </div>
+                      <div class="col-md-6 mb-md" style="padding: 0 0.5rem">
+                        <label
+                          style="
+                            display: block;
+                            font-weight: 600;
+                            margin-bottom: 0.35rem;
+                            font-size: 0.875rem;
+                          "
+                          >電話</label
+                        >
+                        <input
+                          type="tel"
+                          id="profilePhone"
+                          name="phone"
+                          placeholder="0912-345-678"
+                          value="0912-345-678"
+                        />
+                      </div>
+                      <div class="col-md-6 mb-md" style="padding: 0 0.5rem">
+                        <label
+                          style="
+                            display: block;
+                            font-weight: 600;
+                            margin-bottom: 0.35rem;
+                            font-size: 0.875rem;
+                          "
+                          >電子郵件</label
+                        >
+                        <input
+                          type="email"
+                          id="profileEmail"
+                          name="email"
+                          placeholder="your@email.com"
+                          value="camper@example.com"
+                        />
+                      </div>
+                      <div class="col-md-6 mb-md" style="padding: 0 0.5rem">
+                        <label
+                          style="
+                            display: block;
+                            font-weight: 600;
+                            margin-bottom: 0.35rem;
+                            font-size: 0.875rem;
+                          "
+                          >生日</label
+                        >
+                        <input
+                          type="date"
+                          id="profileBirthday"
+                          name="birthday"
+                          value="1990-06-15"
+                        />
+                      </div>
+                      <div class="col-12 mb-md" style="padding: 0 0.5rem">
+                        <label
+                          style="
+                            display: block;
+                            font-weight: 600;
+                            margin-bottom: 0.35rem;
+                            font-size: 0.875rem;
+                          "
+                          >常用地址</label
+                        >
+                        <input
+                          type="text"
+                          id="profileAddress"
+                          name="address"
+                          placeholder="台北市信義區信義路五段100號"
+                          value="台北市信義區信義路五段100號"
+                        />
+                      </div>
                     </div>
-                    <div class="col-md-6 mb-md" style="padding:0 0.5rem;">
-                      <label style="display:block;font-weight:600;margin-bottom:0.35rem;font-size:0.875rem;">電話</label>
-                      <input type="tel" id="profilePhone" name="phone" placeholder="0912-345-678" value="0912-345-678">
-                    </div>
-                    <div class="col-md-6 mb-md" style="padding:0 0.5rem;">
-                      <label style="display:block;font-weight:600;margin-bottom:0.35rem;font-size:0.875rem;">電子郵件</label>
-                      <input type="email" id="profileEmail" name="email" placeholder="your@email.com" value="camper@example.com">
-                    </div>
-                    <div class="col-md-6 mb-md" style="padding:0 0.5rem;">
-                      <label style="display:block;font-weight:600;margin-bottom:0.35rem;font-size:0.875rem;">生日</label>
-                      <input type="date" id="profileBirthday" name="birthday" value="1990-06-15">
-                    </div>
-                    <div class="col-12 mb-md" style="padding:0 0.5rem;">
-                      <label style="display:block;font-weight:600;margin-bottom:0.35rem;font-size:0.875rem;">常用地址</label>
-                      <input type="text" id="profileAddress" name="address" placeholder="台北市信義區信義路五段100號" value="台北市信義區信義路五段100號">
-                    </div>
-                  </div>
 
-                  <!-- 喜好標籤 -->
-                  <div class="mb-md" style="padding:0 0.5rem;">
-                    <label style="display:block;font-weight:600;margin-bottom:0.75rem;font-size:0.875rem;">露營喜好（可多選）</label>
-                    <div class="survey-tags" id="prefTags">
-                      <span class="survey-tag active" data-value="glamping">✨ 豪華露營</span>
-                      <span class="survey-tag" data-value="backpacking">🎒 背包客</span>
-                      <span class="survey-tag active" data-value="family">👨‍👩‍👧 親子家庭</span>
-                      <span class="survey-tag" data-value="survival">🌿 野外求生</span>
-                      <span class="survey-tag" data-value="fishing">🎣 釣魚露營</span>
+                    <!-- 喜好標籤 -->
+                    <div class="mb-md" style="padding: 0 0.5rem">
+                      <label
+                        style="
+                          display: block;
+                          font-weight: 600;
+                          margin-bottom: 0.75rem;
+                          font-size: 0.875rem;
+                        "
+                        >露營喜好（可多選）</label
+                      >
+                      <div class="survey-tags" id="prefTags">
+                        <span class="survey-tag active" data-value="glamping"
+                          >豪華露營</span
+                        >
+                        <span class="survey-tag" data-value="baging"
+                          >背包客</span
+                        >
+                        <span class="survey-tag active" data-value="family"
+                          >親子家庭</span
+                        >
+                        <span class="survey-tag" data-value="survival"
+                          >野外求生</span
+                        >
+                        <span class="survey-tag" data-value="fishing"
+                          >釣魚露營</span
+                        >
+                      </div>
                     </div>
-                  </div>
 
-                  <div style="padding:0 0.5rem;">
-                    <button type="submit" class="btn btn-primary">💾 儲存修改</button>
-                  </div>
-                </form>
+                    <div style="padding: 0 0.5rem">
+                      <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> 儲存修改
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- ========================================
+            <!-- ========================================
                Panel 3：我的訂單 (orders)
                ======================================== -->
-          <div class="member-panel" data-panel="orders">
-            <div class="card" style="border-radius:12px;">
-              <div class="card-body" style="padding:1.5rem;">
-                <h5 style="color:#244d4d;margin-bottom:1.25rem;">📦 我的訂單</h5>
+            <div class="member-panel" data-panel="orders">
+              <div class="card" style="border-radius: 12px">
+                <div class="card-body" style="padding: 1.5rem">
+                  <h5 style="color: #244d4d; margin-bottom: 1.25rem">
+                    <i class="bi bi-box-fill"></i> 我的訂單
+                  </h5>
 
-                <!-- 狀態篩選 Tab -->
-                <div class="order-status-tabs">
-                  <button class="order-status-tab active" data-filter="all">全部</button>
-                  <button class="order-status-tab" data-filter="processing">處理中</button>
-                  <button class="order-status-tab" data-filter="shipped">已出貨</button>
-                  <button class="order-status-tab" data-filter="delivered">已完成</button>
-                  <button class="order-status-tab" data-filter="cancelled">已取消</button>
+                  <!-- 狀態篩選 Tab -->
+                  <div class="order-status-tabs">
+                    <button class="order-status-tab active" data-filter="all">
+                      全部
+                    </button>
+                    <button class="order-status-tab" data-filter="processing">
+                      處理中
+                    </button>
+                    <button class="order-status-tab" data-filter="shipped">
+                      已出貨
+                    </button>
+                    <button class="order-status-tab" data-filter="delivered">
+                      已完成
+                    </button>
+                    <button class="order-status-tab" data-filter="cancelled">
+                      已取消
+                    </button>
+                  </div>
+
+                  <!-- 訂單清單（由 JS 動態渲染）-->
+                  <div id="ordersList">
+                    <div style="text-align: center; padding: 2rem; color: #999">
+                      <div style="font-size: 2rem; margin-bottom: 0.5rem">
+                        <i class="bi bi-box-fill"></i>
+                      </div>
+                      載入訂單中...
+                    </div>
+                  </div>
                 </div>
+              </div>
+            </div>
 
-                <!-- 訂單清單（由 JS 動態渲染）-->
-                <div id="ordersList">
-                  <div style="text-align:center;padding:2rem;color:#999;">
-                    <div style="font-size:2rem;margin-bottom:0.5rem;">📦</div>
-                    載入訂單中...
+            <!-- ========================================
+               Panel 4：折價券 (coupons)
+               ======================================== -->
+            <div class="member-panel" data-panel="coupons">
+              <div class="card" style="border-radius: 12px">
+                <div class="card-body" style="padding: 1.5rem">
+                  <h5 style="color: #244d4d; margin-bottom: 1.25rem">
+                    <i class="bi bi-ticket"></i> 我的折價券
+                  </h5>
+
+                  <!-- 折價券狀態切換 Tab -->
+                  <div class="order-status-tabs" style="margin-bottom: 1.5rem">
+                    <button
+                      class="order-status-tab active"
+                      data-coupon-tab="active"
+                    >
+                      可使用
+                    </button>
+                    <button class="order-status-tab" data-coupon-tab="expired">
+                      已失效
+                    </button>
+                  </div>
+
+                  <!-- 可使用折價券清單 -->
+                  <div id="activeCoupons">
+                    <!-- 由 JS 渲染 -->
+                  </div>
+
+                  <!-- 已失效折價券清單 -->
+                  <div id="expiredCoupons" style="display: none">
+                    <!-- 由 JS 渲染 -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ========================================
+               Panel 5：通知 (notifications)
+               ======================================== -->
+            <div class="member-panel" data-panel="notifications">
+              <div class="card" style="border-radius: 12px">
+                <div class="card-body" style="padding: 1.5rem">
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      margin-bottom: 1.25rem;
+                    "
+                  >
+                    <h5 style="color: #244d4d; margin-bottom: 0">
+                      <i class="bi bi-bell"></i> 通知中心
+                    </h5>
+                    <button
+                      class="btn btn-outline"
+                      style="font-size: 0.8rem; padding: 0.35rem 0.85rem"
+                      id="markAllReadBtn"
+                    >
+                      全部標為已讀
+                    </button>
+                  </div>
+
+                  <!-- 通知清單（由 JS 渲染）-->
+                  <div id="notificationList">
+                    <!-- 由 JS 渲染 -->
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          <!-- /member-content -->
+        </div>
+        <!-- /member-layout -->
+      </div>
+      <!-- /container -->
+    </main>
 
-          <!-- ========================================
-               Panel 4：折價券 (coupons)
-               ======================================== -->
-          <div class="member-panel" data-panel="coupons">
-            <div class="card" style="border-radius:12px;">
-              <div class="card-body" style="padding:1.5rem;">
-                <h5 style="color:#244d4d;margin-bottom:1.25rem;">🎫 我的折價券</h5>
-
-                <!-- 折價券狀態切換 Tab -->
-                <div class="order-status-tabs" style="margin-bottom:1.5rem;">
-                  <button class="order-status-tab active" data-coupon-tab="active">可使用</button>
-                  <button class="order-status-tab" data-coupon-tab="expired">已失效</button>
-                </div>
-
-                <!-- 可使用折價券清單 -->
-                <div id="activeCoupons">
-                  <!-- 由 JS 渲染 -->
-                </div>
-
-                <!-- 已失效折價券清單 -->
-                <div id="expiredCoupons" style="display:none;">
-                  <!-- 由 JS 渲染 -->
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- ========================================
-               Panel 5：通知 (notifications)
-               ======================================== -->
-          <div class="member-panel" data-panel="notifications">
-            <div class="card" style="border-radius:12px;">
-              <div class="card-body" style="padding:1.5rem;">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
-                  <h5 style="color:#244d4d;margin-bottom:0;">🔔 通知中心</h5>
-                  <button class="btn btn-outline" style="font-size:0.8rem;padding:0.35rem 0.85rem;" id="markAllReadBtn">全部標為已讀</button>
-                </div>
-
-                <!-- 通知清單（由 JS 渲染）-->
-                <div id="notificationList">
-                  <!-- 由 JS 渲染 -->
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div><!-- /member-content -->
-      </div><!-- /member-layout -->
-    </div><!-- /container -->
-  </main>
-
-  
-
-  <!-- ===================================================
+    <!-- ===================================================
        訂單詳情 Modal
        =================================================== -->
-  <div id="orderDetailModal" class="modal" role="dialog" aria-modal="true">
-    <div class="modal-content" style="max-width:540px;">
-      <div class="modal-header">
-        <h5 class="modal-title" id="orderDetailTitle">訂單詳情</h5>
-        <button class="modal-close">✕</button>
-      </div>
-      <div class="modal-body" id="orderDetailBody">
-        <!-- 由 JS 動態填充 -->
+    <div id="orderDetailModal" class="modal" role="dialog" aria-modal="true">
+      <div class="modal-content" style="max-width: 540px">
+        <div class="modal-header">
+          <h5 class="modal-title" id="orderDetailTitle">訂單詳情</h5>
+          <button class="modal-close">✕</button>
+        </div>
+        <div class="modal-body" id="orderDetailBody">
+          <!-- 由 JS 動態填充 -->
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- ===================================================
+    <!-- ===================================================
        寫評價 Modal
        =================================================== -->
-  <div id="reviewModal" class="modal" role="dialog" aria-modal="true">
-    <div class="modal-content" style="max-width:460px;">
-      <div class="modal-header">
-        <h5 class="modal-title">⭐ 商品評價</h5>
-        <button class="modal-close">✕</button>
-      </div>
-      <div class="modal-body">
-        <div id="reviewProductName" style="font-size:0.875rem;font-weight:600;color:#244d4d;margin-bottom:1rem;"></div>
-        <!-- 星星評分（CSS 技巧：direction:rtl 實現 hover 效果）-->
-        <div style="margin-bottom:1rem;">
-          <label style="display:block;font-weight:600;margin-bottom:0.5rem;font-size:0.875rem;">評分</label>
-          <div class="star-input-group" id="starInputGroup">
-            <input type="radio" name="reviewRating" id="star5" value="5"><label for="star5">★</label>
-            <input type="radio" name="reviewRating" id="star4" value="4"><label for="star4">★</label>
-            <input type="radio" name="reviewRating" id="star3" value="3"><label for="star3">★</label>
-            <input type="radio" name="reviewRating" id="star2" value="2"><label for="star2">★</label>
-            <input type="radio" name="reviewRating" id="star1" value="1"><label for="star1">★</label>
+    <div id="reviewModal" class="modal" role="dialog" aria-modal="true">
+      <div class="modal-content" style="max-width: 460px">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-star-fill"></i> 商品評價</h5>
+          <button class="modal-close">✕</button>
+        </div>
+        <div class="modal-body">
+          <div
+            id="reviewProductName"
+            style="
+              font-size: 0.875rem;
+              font-weight: 600;
+              color: #244d4d;
+              margin-bottom: 1rem;
+            "
+          ></div>
+          <!-- 星星評分（CSS 技巧：direction:rtl 實現 hover 效果）-->
+          <div style="margin-bottom: 1rem">
+            <label
+              style="
+                display: block;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+                font-size: 0.875rem;
+              "
+              >評分</label
+            >
+            <div class="star-input-group" id="starInputGroup">
+              <input
+                type="radio"
+                name="reviewRating"
+                id="star5"
+                value="5"
+              /><label for="star5">★</label>
+              <input
+                type="radio"
+                name="reviewRating"
+                id="star4"
+                value="4"
+              /><label for="star4">★</label>
+              <input
+                type="radio"
+                name="reviewRating"
+                id="star3"
+                value="3"
+              /><label for="star3">★</label>
+              <input
+                type="radio"
+                name="reviewRating"
+                id="star2"
+                value="2"
+              /><label for="star2">★</label>
+              <input
+                type="radio"
+                name="reviewRating"
+                id="star1"
+                value="1"
+              /><label for="star1">★</label>
+            </div>
           </div>
+          <div class="mb-md">
+            <label
+              style="
+                display: block;
+                font-weight: 600;
+                margin-bottom: 0.35rem;
+                font-size: 0.875rem;
+              "
+              >評論內容</label
+            >
+            <textarea
+              id="reviewContent"
+              rows="4"
+              placeholder="分享你的使用心得..."
+              style="
+                width: 100%;
+                padding: 0.65rem;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                font-size: 0.875rem;
+                resize: vertical;
+              "
+            ></textarea>
+          </div>
+          <button class="btn btn-primary btn-block" id="submitReviewBtn">
+            送出評價
+          </button>
         </div>
-        <div class="mb-md">
-          <label style="display:block;font-weight:600;margin-bottom:0.35rem;font-size:0.875rem;">評論內容</label>
-          <textarea id="reviewContent" rows="4" placeholder="分享你的使用心得..." style="width:100%;padding:0.65rem;border:1px solid #e0e0e0;border-radius:8px;font-size:0.875rem;resize:vertical;"></textarea>
-        </div>
-        <button class="btn btn-primary btn-block" id="submitReviewBtn">送出評價</button>
       </div>
     </div>
-  </div>
 
-   <div id="footer"></div>
-  <!-- ===================================================
+    <div id="footer"></div>
+    <!-- ===================================================
        Script 載入順序（順序很重要！）
        =================================================== -->
-  <script src="../js/config.js" defer></script>
-  <script src="../js/api-mock.js" defer></script>
-  <script src="../js/components/toast.js" defer></script>
-  <script src="../js/components/modal.js" defer></script>
-  <script src="../js/components/header.js" defer></script>
-  <script src="../js/components/cart.js" defer></script>
-  <script src="../js/pages/member-center.js" defer></script>
-  <script src="../js/main.js" defer></script>
-
-</body>
+    <script src="../js/config.js" defer></script>
+    <script src="../js/api-mock.js" defer></script>
+    <script src="../js/components/toast.js" defer></script>
+    <script src="../js/components/modal.js" defer></script>
+    <script src="../js/components/header.js" defer></script>
+    <script src="../js/components/cart.js" defer></script>
+    <script src="../js/pages/member-center.js" defer></script>
+    <script src="../js/main.js" defer></script>
+  </body>
 </html>
-
-

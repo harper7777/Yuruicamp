@@ -143,10 +143,10 @@
     "brand": "Helinox",
     "price": 799,
     "originalPrice": 1199,
-    "image": "https://picsum.photos/seed/chair1/400/300",
+    "image": "https://picsum.photos/seed/grid1/400/300",
     "images": [
-      "https://picsum.photos/seed/chair1/400/300",
-      "https://picsum.photos/seed/chair1b/400/300"
+      "https://picsum.photos/seed/grid1/400/300",
+      "https://picsum.photos/seed/grid1b/400/300"
     ],
     "description": "輕便舒適的戶外折疊椅，鋁合金骨架，承重 150kg，折疊後小巧易攜。",
     "specifications": {
@@ -484,7 +484,7 @@
       "waterproof": "3000mm",
       "poles": "附 280cm 主桿 x2"
     },
-    "colors":["沙漠棕", "炭灰"],
+    "colors": ["沙漠棕", "炭灰"],
     "stock": 15,
     "rating": 4.8,
     "reviews": 34,
