@@ -71,11 +71,6 @@ function _buildCard(product) {
           onerror="this.src='https://placehold.co/400x300/f2f2f2/999?text=${encodeURIComponent(product.name)}'"
         >
         ${badgeHTML}
-        <button
-          class="product-card-quick-add"
-          data-product-id="${product.id}"
-          aria-label="快速加入購物車 ${product.name}"
-        >🛒 快速加入</button>
       </div>
       <div class="product-card-body">
         <p class="product-card-brand">${product.brand}</p>
@@ -525,22 +520,14 @@ function _bindCardEvents() {
   grid.parentNode.replaceChild(newGrid, grid);
 
   newGrid.addEventListener('click', async (e) => {
-    // ① 快速加入購物車浮層按鈕
-    const quickAddBtn = e.target.closest('.product-card-quick-add');
-    if (quickAddBtn) {
-      e.stopPropagation();
-      await _handleAddToCart(quickAddBtn.dataset.productId);
-      return;
-    }
-
-    // ② 底部「加入購物車」按鈕
+    // ① 底部「加入購物車」按鈕
     if (e.target.classList.contains('product-card-add-btn')) {
       e.stopPropagation();
       await _handleAddToCart(e.target.dataset.productId);
       return;
     }
 
-    // ③ 點卡片其他區域 → 跳轉詳情頁
+    // ② 點卡片其他區域 → 跳轉詳情頁
     const card = e.target.closest('.product-card');
     if (card) {
       window.location.href = `product-detail.html?id=${card.dataset.productId}`;

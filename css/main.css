@@ -2056,29 +2056,6 @@ hr {
   color: #ffffff;
 }
 
-/* 快速加入購物車按鈕（hover 出現）*/
-.product-card-quick-add {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0.6rem 1rem;
-  background-color: rgba(36, 77, 77, 0.92);
-  color: #ffffff;
-  font-size: 0.85rem;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  opacity: 0;
-  transform: translateY(100%);
-  transition: opacity 250ms ease, transform 250ms ease;
-}
-
-.product-card:hover .product-card-quick-add {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 /* 商品卡片主體 */
 .product-card-body {
   padding: 1rem;
