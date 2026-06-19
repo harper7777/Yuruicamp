@@ -100,6 +100,17 @@ function _getStatusInfo(status) {
   return map[status] || { label: status, cls: '' };
 }
 
+function _getRentalStatusInfo(status) {
+  // 重點：租借訂單沿用購買訂單狀態色票，但改成租借流程用語。
+  const map = {
+    processing: { label: '預約成立', cls: 'status-processing' },
+    shipped:    { label: '待取件', cls: 'status-shipped' },
+    delivered:  { label: '已歸還', cls: 'status-delivered' },
+    cancelled:  { label: '已取消', cls: 'status-cancelled' }
+  };
+  return map[status] || _getStatusInfo(status);
+}
+
 /**
  * 付款方式對照表
  * Maps payment code to Chinese display text
@@ -113,6 +124,86 @@ function _getPaymentLabel(payment) {
     'cod':         '貨到付款'
   };
   return map[payment] || payment;
+}
+
+/**
+ * 取得訂單使用過的 coupon 清單
+ * 重點：優先讀取 data/orders.json 的 coupons 陣列，也相容單一 coupon 欄位，讓一張或多張折扣券都能顯示。
+ * @param {Object} order - 訂單資料
+ * @returns {Array} coupon 陣列
+ */
+function _getOrderCoupons(order) {
+  if (Array.isArray(order.coupons)) return order.coupons;
+  if (order.coupon) return [order.coupon];
+  return [];
+}
+
+/**
+ * 格式化訂單 coupon 顯示文字
+ * 重點：金額券顯示折抵 NT$ 金額，百分比券顯示折數 / 百分比，並補上實際折抵金額。
+ * @param {Object} coupon - 訂單 coupon 資料
+ * @returns {string} 顯示文字
+ */
+function _formatOrderCoupon(coupon) {
+  const code = coupon.code || '未命名折扣碼';
+
+  if (coupon.type === 'percent') {
+    const percentText = `${coupon.discount}%`;
+    const amountText = coupon.amount ? `，折抵 NT$ ${Number(coupon.amount).toLocaleString('zh-TW')}` : '';
+    return `${code}（${percentText}${amountText}）`;
+  }
+
+  const discountAmount = Number(coupon.amount || coupon.discount || 0).toLocaleString('zh-TW');
+  return `${code}（折抵 NT$ ${discountAmount}）`;
+}
+
+/**
+ * 建立訂單明細中的 coupon 列
+ * 重點：只有訂單資料存在 coupon 時才顯示「使用折扣卷：」，避免無折扣訂單出現空列。
+ * @param {Object} order - 訂單資料
+ * @returns {string} HTML 字串
+ */
+function _buildOrderCouponRow(order) {
+  const coupons = _getOrderCoupons(order);
+  if (coupons.length === 0) return '';
+
+  return `
+        <div style="display:flex;justify-content:space-between;gap:1rem;margin-bottom:0.35rem;color:#16a34a;">
+          <span style="white-space:nowrap;">使用折扣卷：</span>
+          <span style="text-align:right;">${coupons.map(_formatOrderCoupon).join('、')}</span>
+        </div>`;
+}
+
+/** 回饋點數比例：訂單商品小計 subtotal 的 10% */
+const REWARD_POINT_RATE = 0.1;
+
+/**
+ * 計算會員回饋點數
+ * 重點：只採計 data/orders.json 中 status 為 delivered 的訂單 subtotal，未完成或取消訂單不給點。
+ * @param {Array} orders - 訂單資料陣列
+ * @returns {number} subtotal 加總後的 10% 回饋點數
+ */
+function _calculateRewardPoints(orders) {
+  const deliveredSubtotal = (Array.isArray(orders) ? orders : []).reduce((sum, order) => {
+    if (order.status !== 'delivered') return sum;
+    return sum + (Number(order.subtotal) || 0);
+  }, 0);
+
+  // 重點：保留 10% 計算結果，最多顯示 1 位小數，避免浮點數尾差出現在畫面上。
+  return Number((deliveredSubtotal * REWARD_POINT_RATE).toFixed(1));
+}
+
+/**
+ * 更新會員卡上的回饋點數
+ * 重點：點數顯示跟訂單快取共用同一份資料，避免會員卡與訂單列表數字不同步。
+ * @param {Array} orders - 已載入的會員訂單資料
+ */
+function _renderMemberRewardPoints(orders) {
+  const pointsEl = document.getElementById('cardPoints');
+  if (!pointsEl) return;
+
+  const points = _calculateRewardPoints(orders);
+  pointsEl.textContent = `回饋點數：${points.toLocaleString('zh-TW', { maximumFractionDigits: 1 })} 點`;
 }
 
 // ============================================================
@@ -281,6 +372,54 @@ function initProfilePanel() {
  *  Current order data cache */
 let _ordersCache = null;
 
+/** 重點：租借訂單使用獨立快取，避免切換類型時重複讀取 data/reantalOrders.json。 */
+let _rentalOrdersCache = null;
+
+/** 重點：記錄目前顯示的訂單類型，讓狀態篩選只重繪當前清單。 */
+let _activeOrderType = 'purchase';
+
+function _buildOrderThumbsHTML(items) {
+  // 重點：購買與租借訂單共用縮圖邏輯，保持卡片顯示方式一致。
+  const safeItems = Array.isArray(items) ? items : [];
+  const thumbsHTML = safeItems.slice(0, 3).map(item => `
+      <img src="${item.image}" alt="${item.name}"
+           class="order-item-img"
+           title="${item.name} × ${item.quantity}"
+           onerror="this.src='https://picsum.photos/seed/fallback/80/80'">
+    `).join('');
+
+  const moreCount = safeItems.length - 3;
+  const moreHTML = moreCount > 0
+    ? `<div class="order-item-img" style="background:#f6fbf6;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#244d4d;">+${moreCount}</div>`
+    : '';
+
+  return `${thumbsHTML}${moreHTML}`;
+}
+
+function _getActiveOrderFilter() {
+  // 重點：購買 / 租借共用同一組狀態 Tab，切換類型時保留目前篩選條件。
+  return document.querySelector('.order-status-tab[data-filter].active')?.dataset.filter || 'all';
+}
+
+function _showOrderTypePanel(orderType) {
+  // 重點：只切換容器顯示，不重新建立 DOM，避免既有訂單事件遺失。
+  const normalizedType = orderType === 'rental' ? 'rental' : 'purchase';
+  _activeOrderType = normalizedType;
+
+  document.querySelectorAll('.order-type-tab[data-order-type]').forEach(tab => {
+    const isActive = tab.dataset.orderType === normalizedType;
+    tab.classList.toggle('active', isActive);
+    tab.setAttribute('aria-pressed', String(isActive));
+    tab.setAttribute('aria-selected', String(isActive));
+  });
+
+  document.querySelectorAll('.order-list-panel[data-order-panel]').forEach(panel => {
+    const shouldShow = panel.dataset.orderPanel === normalizedType;
+    panel.classList.toggle('active', shouldShow);
+    panel.hidden = !shouldShow;
+  });
+}
+
 /**
  * 渲染訂單卡片列表
  * Render order cards into #ordersList container
@@ -312,21 +451,7 @@ function renderOrders(orders, filter = 'all') {
   // Build HTML for each order
   container.innerHTML = filtered.map(order => {
     const { label, cls } = _getStatusInfo(order.status);
-
-    // 商品縮圖列（最多顯示 3 個）
-    // Product thumbnails (max 3)
-    const thumbsHTML = order.items.slice(0, 3).map(item => `
-      <img src="${item.image}" alt="${item.name}"
-           class="order-item-img"
-           title="${item.name} × ${item.quantity}"
-           onerror="this.src='https://picsum.photos/seed/fallback/80/80'">
-    `).join('');
-
-    // 如果商品數量超過 3 個，顯示 "+N" 提示
-    const moreCount = order.items.length - 3;
-    const moreHTML  = moreCount > 0
-      ? `<div class="order-item-img" style="background:#f6fbf6;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#244d4d;">+${moreCount}</div>`
-      : '';
+    const thumbsHTML = _buildOrderThumbsHTML(order.items);
 
     // 「寫評價」按鈕（只有 delivered 且 canReview 且 !reviewed 才顯示）
     const reviewBtnHTML = (order.status === 'delivered' && order.canReview && !order.reviewed)
@@ -347,7 +472,7 @@ function renderOrders(orders, filter = 'all') {
         <!-- 商品縮圖 -->
         <div class="order-card-body">
           <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-            ${thumbsHTML}${moreHTML}
+            ${thumbsHTML}
           </div>
         </div>
         <!-- 底部：金額 + 操作按鈕 -->
@@ -365,13 +490,71 @@ function renderOrders(orders, filter = 'all') {
 }
 
 /**
+ * 渲染租借訂單列表
+ * 重點：結構參照 renderOrders，但資料來源、狀態文案與明細事件改為租借訂單專用。
+ * @param {Array} orders - 租借訂單資料陣列
+ * @param {string} filter - 狀態篩選 (all/processing/shipped/delivered/cancelled)
+ */
+function renderRentalOrders(orders, filter = 'all') {
+  const container = document.getElementById('rentalOrdersList');
+  if (!container) return;
+
+  const safeOrders = Array.isArray(orders) ? orders : [];
+  const filtered = filter === 'all'
+    ? safeOrders
+    : safeOrders.filter(o => o.status === filter);
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:3rem;color:#999;">
+        <div style="font-size:3rem;margin-bottom:0.75rem;">⛺</div>
+        <div>沒有符合條件的租借訂單</div>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(order => {
+    const { label, cls } = _getRentalStatusInfo(order.status);
+    const thumbsHTML = _buildOrderThumbsHTML(order.items);
+
+    return `
+      <div class="order-card" data-rental-order-id="${order.id}">
+        <!-- 重點：租借卡片沿用訂單卡片結構，額外顯示租借期間與取還門市。 -->
+        <div class="order-card-header">
+          <div>
+            <div class="order-card-num">${order.orderNumber}</div>
+            <div class="order-card-date">${order.createdAt}</div>
+          </div>
+          <span class="order-status-badge ${cls}">${label}</span>
+        </div>
+        <div class="order-card-body">
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            ${thumbsHTML}
+          </div>
+          <div class="rental-order-meta">
+            租借期間：${order.rentalStart} ～ ${order.rentalEnd}<br>
+            取件 / 歸還：${order.pickupStore} / ${order.returnStore}
+          </div>
+        </div>
+        <div class="order-card-footer">
+          <span class="order-total">NT$ ${order.total.toLocaleString()}</span>
+          <button class="btn btn-primary" style="font-size:0.75rem;padding:0.3rem 0.75rem;"
+            onclick="openRentalOrderDetail('${order.id}')">查看明細</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+/**
  * 載入並渲染訂單
  * Fetch orders and render; uses cache to avoid duplicate fetches
  */
 async function loadOrders() {
   if (_ordersCache) {
     // 已有快取，直接渲染
-    renderOrders(_ordersCache);
+    renderOrders(_ordersCache, _getActiveOrderFilter());
+    _renderMemberRewardPoints(_ordersCache); // 同步更新會員卡回饋點數
     return;
   }
 
@@ -386,9 +569,11 @@ async function loadOrders() {
       const res = await fetch('../data/orders.json');
       _ordersCache = await res.json();
     }
-    renderOrders(_ordersCache);
+    renderOrders(_ordersCache, _getActiveOrderFilter());
+    _renderMemberRewardPoints(_ordersCache); // 訂單載入後依 delivered subtotal 更新點數
   } catch (err) {
     console.error('載入訂單失敗 / Failed to load orders:', err);
+    _renderMemberRewardPoints([]); // 載入失敗時顯示 0 點，避免停留在載入中
     const container = document.getElementById('ordersList');
     if (container) {
       container.innerHTML = `
@@ -398,6 +583,61 @@ async function loadOrders() {
         </div>`;
     }
   }
+}
+
+/**
+ * 載入租借訂單
+ * 重點：租借訂單固定讀取 data/reantalOrders.json，並使用獨立清單渲染避免覆蓋購買訂單。
+ */
+async function loadRentalOrders() {
+  if (_rentalOrdersCache) {
+    renderRentalOrders(_rentalOrdersCache, _getActiveOrderFilter());
+    return;
+  }
+
+  try {
+    const res = await fetch('../data/reantalOrders.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    _rentalOrdersCache = await res.json();
+    renderRentalOrders(_rentalOrdersCache, _getActiveOrderFilter());
+  } catch (err) {
+    console.error('載入租借訂單失敗 / Failed to load rental orders:', err);
+    const container = document.getElementById('rentalOrdersList');
+    if (container) {
+      container.innerHTML = `
+        <div style="text-align:center;padding:2rem;color:#e74c3c;">
+          <div style="font-size:2rem;margin-bottom:0.5rem;">⚠️</div>
+          載入租借訂單失敗，請稍後再試
+        </div>`;
+    }
+  }
+}
+
+/**
+ * 綁定購買 / 租借訂單切換按鈕
+ * 重點：切換後只顯示對應面板，租借資料在第一次點擊時才載入。
+ */
+function initOrderTypeTabs() {
+  document.querySelectorAll('.order-type-tab[data-order-type]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const orderType = tab.dataset.orderType === 'rental' ? 'rental' : 'purchase';
+      _showOrderTypePanel(orderType);
+
+      if (orderType === 'rental') {
+        loadRentalOrders();
+        return;
+      }
+
+      if (_ordersCache) {
+        renderOrders(_ordersCache, _getActiveOrderFilter());
+      } else {
+        loadOrders();
+      }
+    });
+  });
+
+  _showOrderTypePanel(_activeOrderType);
 }
 
 /**
@@ -412,6 +652,16 @@ function initOrderStatusTabs() {
       tab.classList.add('active');
 
       // 用快取資料重新渲染（如果已載入）
+      // 重點：狀態篩選依目前訂單類型重繪，避免租借 / 購買清單互相覆蓋。
+      if (_activeOrderType === 'rental') {
+        if (_rentalOrdersCache) {
+          renderRentalOrders(_rentalOrdersCache, tab.dataset.filter);
+        } else {
+          loadRentalOrders();
+        }
+        return;
+      }
+
       if (_ordersCache) {
         renderOrders(_ordersCache, tab.dataset.filter);
       }
@@ -431,6 +681,7 @@ window.openOrderDetail = function(orderId) {
   if (!order) return;
 
   const { label, cls } = _getStatusInfo(order.status);
+  const couponRowHTML = _buildOrderCouponRow(order);
 
   // 產生商品明細列表 HTML
   // Build items detail HTML
@@ -496,6 +747,7 @@ window.openOrderDetail = function(orderId) {
         <div style="display:flex;justify-content:space-between;margin-bottom:0.35rem;color:#e74c3c;">
           <span>折扣優惠</span><span>- NT$ ${order.discount.toLocaleString()}</span>
         </div>` : ''}
+        ${couponRowHTML}
         <div style="display:flex;justify-content:space-between;font-weight:700;font-size:0.95rem;color:#244d4d;margin-top:0.5rem;border-top:1px solid #f0f0f0;padding-top:0.5rem;">
           <span>訂單總計</span><span>NT$ ${order.total.toLocaleString()}</span>
         </div>
@@ -515,6 +767,89 @@ window.openOrderDetail = function(orderId) {
         <a href="https://line.me/R/ti/p/@yuruicamp" target="_blank" class="btn btn-outline btn-block"
            style="font-size:0.85rem;color:#06c755;border-color:#06c755;">
           💬 聯絡 LINE 客服詢問訂單
+        </a>
+      </div>
+    `;
+  }
+
+  window.openModal && window.openModal('orderDetailModal');
+};
+
+/**
+ * 開啟租借訂單詳情 Modal
+ * 重點：沿用既有 orderDetailModal，避免新增重複 Modal，並補上租借期間、押金與取還門市。
+ * @param {string} orderId - 租借訂單 ID
+ */
+window.openRentalOrderDetail = function(orderId) {
+  if (!_rentalOrdersCache) return;
+
+  const order = _rentalOrdersCache.find(o => o.id === orderId);
+  if (!order) return;
+
+  const { label, cls } = _getRentalStatusInfo(order.status);
+  const itemsHTML = (order.items || []).map(item => `
+    <div class="order-item-row">
+      <img src="${item.image}" alt="${item.name}"
+           class="order-item-img"
+           onerror="this.src='https://picsum.photos/seed/fallback/80/80'">
+      <div>
+        <div class="order-item-name">${item.name}</div>
+        <div class="order-item-qty">× ${item.quantity} &nbsp;｜&nbsp; NT$ ${(item.price * item.quantity).toLocaleString()}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const cancelReasonHTML = order.cancelReason
+    ? `<div style="font-size:0.8rem;color:#e74c3c;margin-top:0.75rem;">取消原因：${order.cancelReason}</div>`
+    : '';
+
+  const titleEl = document.getElementById('orderDetailTitle');
+  if (titleEl) titleEl.textContent = `租借訂單詳情 ${order.orderNumber}`;
+
+  const bodyEl = document.getElementById('orderDetailBody');
+  if (bodyEl) {
+    bodyEl.innerHTML = `
+      <!-- 重點：租借訂單明細在同一個 Modal 中呈現，但欄位改為租借流程資訊。 -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+        <div style="font-size:0.8rem;color:#999;">${order.createdAt}</div>
+        <span class="order-status-badge ${cls}">${label}</span>
+      </div>
+
+      <div style="margin-bottom:1rem;">
+        <div style="font-size:0.8rem;font-weight:700;color:#244d4d;margin-bottom:0.65rem;">租借裝備</div>
+        ${itemsHTML}
+      </div>
+
+      <hr style="margin:0.75rem 0;">
+
+      <div style="font-size:0.82rem;color:#555;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.35rem;">
+          <span>租借費用</span><span>NT$ ${order.subtotal.toLocaleString()}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.35rem;">
+          <span>押金</span><span>NT$ ${order.deposit.toLocaleString()}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-weight:700;font-size:0.95rem;color:#244d4d;margin-top:0.5rem;border-top:1px solid #f0f0f0;padding-top:0.5rem;">
+          <span>訂單總額</span><span>NT$ ${order.total.toLocaleString()}</span>
+        </div>
+      </div>
+
+      <div style="margin-top:0.75rem;font-size:0.8rem;color:#555;">
+        租借期間：${order.rentalStart} ～ ${order.rentalEnd}<br>
+        取件門市：${order.pickupStore}<br>
+        歸還門市：${order.returnStore}
+      </div>
+
+      <div style="margin-top:0.75rem;font-size:0.8rem;color:#777;">
+        💳 付款方式：${_getPaymentLabel(order.payment)}
+      </div>
+
+      ${cancelReasonHTML}
+
+      <div style="margin-top:1.25rem;">
+        <a href="https://line.me/R/ti/p/@yuruicamp" target="_blank" class="btn btn-outline btn-block"
+           style="font-size:0.85rem;color:#06c755;border-color:#06c755;">
+          聯繫 LINE 客服確認租借訂單
         </a>
       </div>
     `;
@@ -815,6 +1150,7 @@ window.initMemberCenterPage = function() {
   initTabSwitching();    // Tab 切換
   initOverviewPanel();   // 總覽
   initProfilePanel();    // 個人資料
+  initOrderTypeTabs();   // 重點：初始化購買 / 租借訂單切換面板
   loadOrders();          // 載入訂單
   initOrderStatusTabs(); // 訂單篩選 Tab
   renderCoupons();       // 渲染折價券

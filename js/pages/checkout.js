@@ -10,17 +10,15 @@
 // 6. 「帶入會員資料」按鈕
 // 7. 「確認結帳」按鈕：驗證 → 建立訂單 → 清空購物車 → 跳轉
 
-/**
- * 折扣碼設定（結帳頁也可套用）
- * Coupon code configuration
- */
-const CHECKOUT_COUPON_CODES = {
-  'WELCOME100': { discount: 100, label: '新會員首購折扣' },
-  'CAMP200':    { discount: 200, label: '露營季特惠' },
-};
-
 // 目前套用的折扣 Currently applied discount
 let checkoutDiscount = 0;
+
+/** 重點：結帳頁 coupon 清單與購物車頁共用 data/users.json，避免兩頁可用 code 不一致。 */
+let checkoutCouponCatalogPromise = null;
+let checkoutCouponCatalog = [];
+
+/** 重點：結帳頁保留多張已套用 coupon，讓使用者可從購物車帶入後再繼續套用。 */
+let appliedCheckoutCouponCodes = [];
 
 // 目前選擇的物流方式 Currently selected shipping method
 let selectedShippingMethod = 'delivery';
@@ -76,6 +74,40 @@ window.initCheckoutPage = () => {
   window._appComponentsInitialized = true;
 };
 
+async function loadCheckoutCouponCatalog() {
+  if (!checkoutCouponCatalogPromise) {
+    checkoutCouponCatalogPromise = window.YuruiCoupons.loadCoupons()
+      .then(coupons => {
+        checkoutCouponCatalog = coupons;
+        // 重點：checkoutCouponInput 的 datalist 選項全部來自 data/users.json 的 coupons.code。
+        window.YuruiCoupons.renderCouponOptions('checkoutCouponCodeOptions', coupons);
+        return coupons;
+      })
+      .catch(error => {
+        console.error('載入結帳折扣碼清單失敗 / Failed to load checkout coupon catalog:', error);
+        return [];
+      });
+  }
+
+  return checkoutCouponCatalogPromise;
+}
+
+function syncCheckoutAppliedCoupons() {
+  const subtotal = window.calculateCartTotal(window.AppState.cart);
+  const applied = window.YuruiCoupons.calculateAppliedCoupons(checkoutCouponCatalog, appliedCheckoutCouponCodes, subtotal);
+
+  checkoutDiscount = applied.totalDiscount;
+  appliedCheckoutCouponCodes = applied.items.map(item => item.code);
+  window.YuruiCoupons.renderAppliedCouponTexts('checkoutAppliedCouponTexts', applied.items);
+
+  // 重點：結帳頁新增的 coupon 也會回寫暫存，重新整理後仍能顯示在 input 下方。
+  if (appliedCheckoutCouponCodes.length > 0) {
+    window.YuruiCoupons.saveAppliedCouponCodes(appliedCheckoutCouponCodes);
+  } else {
+    window.YuruiCoupons.clearAppliedCouponCode();
+  }
+}
+
 // -----------------------------------------------
 // 渲染右側商品清單
 // Render checkout items list on the right side
@@ -124,6 +156,11 @@ function updateCheckoutSummary() {
   // 計算運費：依照選擇的物流方式
   // Calculate shipping fee based on selected method
   const shipping = window.calculateShippingFee(subtotal, selectedShippingMethod);
+
+  if (checkoutCouponCatalog.length > 0) {
+    syncCheckoutAppliedCoupons();
+  }
+
   const total = Math.max(subtotal - checkoutDiscount + shipping, 0);
 
   // 更新 DOM Update DOM
@@ -351,28 +388,18 @@ function initCheckoutCoupon() {
 
   if (!applyBtn || !couponInput) return;
 
-  applyBtn.addEventListener('click', () => {
-    const code = couponInput.value.trim().toUpperCase();
+  loadCheckoutCouponCatalog().then(async () => {
+    const carriedCodes = window.YuruiCoupons.getAppliedCouponCodes();
+    if (carriedCodes.length === 0) return;
 
-    if (!code) {
-      showMsg(couponMsg, '請輸入折扣碼', 'error');
-      return;
-    }
+    // 重點：若購物車頁已有正確 couponInput value，結帳頁會轉成 checkoutCouponInput 下方文字並同步折扣。
+    appliedCheckoutCouponCodes = carriedCodes;
+    syncCheckoutAppliedCoupons();
+    updateCheckoutSummary();
+  });
 
-    const coupon = CHECKOUT_COUPON_CODES[code];
-    if (coupon) {
-      checkoutDiscount = coupon.discount;
-      showMsg(couponMsg, `✅ 折抵 NT$${coupon.discount}（${coupon.label}）`, 'success');
-      applyBtn.textContent = '已套用 ✓';
-      applyBtn.disabled = true;
-      applyBtn.style.opacity = '0.6';
-      couponInput.disabled = true;
-      updateCheckoutSummary();
-    } else {
-      checkoutDiscount = 0;
-      showMsg(couponMsg, '❌ 折扣碼無效', 'error');
-      updateCheckoutSummary();
-    }
+  applyBtn.addEventListener('click', async () => {
+    await applyCheckoutCouponCode();
   });
 
   couponInput.addEventListener('keydown', (e) => {
@@ -381,6 +408,43 @@ function initCheckoutCoupon() {
       applyBtn.click();
     }
   });
+}
+
+async function applyCheckoutCouponCode({ showToast = true } = {}) {
+  const applyBtn = document.getElementById('checkoutApplyCouponBtn');
+  const couponInput = document.getElementById('checkoutCouponInput');
+  const couponMsg = document.getElementById('checkoutCouponMsg');
+
+  if (!applyBtn || !couponInput) return;
+
+  const code = couponInput.value.trim().toUpperCase();
+  const coupons = await loadCheckoutCouponCatalog();
+  const subtotal = window.calculateCartTotal(window.AppState.cart);
+  const result = window.YuruiCoupons.validateCoupon(coupons, code, subtotal);
+
+  if (!result.valid) {
+    // 重點：無效輸入只顯示錯誤，不影響已成功套用並顯示在 input 下方的 coupon。
+    showMsg(couponMsg, `❌ ${result.message}`, 'error');
+    updateCheckoutSummary();
+    return;
+  }
+
+  if (appliedCheckoutCouponCodes.includes(result.code)) {
+    showMsg(couponMsg, `「${result.code}」已套用，請選擇其他折扣碼`, 'error');
+    couponInput.value = '';
+    return;
+  }
+
+  appliedCheckoutCouponCodes.push(result.code);
+  syncCheckoutAppliedCoupons();
+  showMsg(couponMsg, `✅ 折抵 NT$${result.discount.toLocaleString('zh-TW')}（${result.label}）`, 'success');
+  // 重點：成功後清空 input，不停用欄位，讓 checkoutCouponInput 可繼續套用其他 coupon。
+  couponInput.value = '';
+  updateCheckoutSummary();
+
+  if (showToast && window.showToast) {
+    window.showToast(`折扣碼套用成功！折抵 NT$${result.discount.toLocaleString('zh-TW')}`, 'success');
+  }
 }
 
 /**
@@ -484,6 +548,8 @@ function initConfirmOrderBtn() {
 
       // Step 4: 清空購物車 Clear cart
       window.clearCart();
+      appliedCheckoutCouponCodes = [];
+      window.YuruiCoupons.clearAppliedCouponCode();
 
       // Step 5: 跳轉到成功頁，帶上訂單編號
       // Redirect to success page with order number

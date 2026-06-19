@@ -6,23 +6,20 @@
 // 2. 數量 Stepper（+ / -）即時更新金額
 // 3. 刪除商品（含 fadeOut 動畫）
 // 4. 清空購物車
-// 5. 折扣碼套用（WELCOME100 折 100 元）
+// 5. 折扣碼套用（選項與規則來自 data/users.json）
 // 6. 右側 Order Summary 即時更新
 // 7. 前往結帳按鈕的登入狀態檢查
-
-/**
- * 折扣碼設定
- * Coupon code configuration
- * 可以在這裡新增更多折扣碼
- */
-const COUPON_CODES = {
-  'WELCOME100': { discount: 100, label: '新會員首購折扣' },
-  'CAMP200':    { discount: 200, label: '露營季特惠' },
-};
 
 // 目前套用的折扣金額（模組作用域變數）
 // Currently applied discount amount (module-scoped variable)
 let currentDiscount = 0;
+
+/** 重點：購物車 coupon 清單只載入一次，供 datalist、套用按鈕與結帳前帶值共用。 */
+let cartCouponCatalogPromise = null;
+let cartCouponCatalog = [];
+
+/** 重點：已套用 coupon code 以陣列管理，讓同一張訂單可連續套用多張 coupon。 */
+let appliedCartCouponCodes = [];
 
 /**
  * 初始化購物車頁面
@@ -54,6 +51,40 @@ window.initCartPage = () => {
   // Flag to prevent double-initialization in main.js
   window._appComponentsInitialized = true;
 };
+
+async function loadCartCouponCatalog() {
+  if (!cartCouponCatalogPromise) {
+    cartCouponCatalogPromise = window.YuruiCoupons.loadCoupons()
+      .then(coupons => {
+        cartCouponCatalog = coupons;
+        // 重點：couponInput 的可選項全部來自 data/users.json 的 coupons.code。
+        window.YuruiCoupons.renderCouponOptions('cartCouponCodeOptions', coupons);
+        return coupons;
+      })
+      .catch(error => {
+        console.error('載入折扣碼清單失敗 / Failed to load coupon catalog:', error);
+        return [];
+      });
+  }
+
+  return cartCouponCatalogPromise;
+}
+
+function syncCartAppliedCoupons() {
+  const subtotal = window.calculateCartTotal(window.AppState.cart);
+  const applied = window.YuruiCoupons.calculateAppliedCoupons(cartCouponCatalog, appliedCartCouponCodes, subtotal);
+
+  currentDiscount = applied.totalDiscount;
+  appliedCartCouponCodes = applied.items.map(item => item.code);
+  window.YuruiCoupons.renderAppliedCouponTexts('appliedCouponTexts', applied.items);
+
+  // 重點：多張 coupon 以陣列暫存，讓 checkoutCouponInput 下方可還原相同已套用文字。
+  if (appliedCartCouponCodes.length > 0) {
+    window.YuruiCoupons.saveAppliedCouponCodes(appliedCartCouponCodes);
+  } else {
+    window.YuruiCoupons.clearAppliedCouponCode();
+  }
+}
 
 // -----------------------------------------------
 // 渲染整個購物車頁面
@@ -292,6 +323,11 @@ function updateSummary() {
   const cart = window.AppState.cart;
   const subtotal = window.calculateCartTotal(cart);
   const shipping = window.calculateShippingFee(subtotal);
+
+  if (cartCouponCatalog.length > 0) {
+    syncCartAppliedCoupons();
+  }
+
   const total = subtotal - currentDiscount + shipping;
 
   // 更新小計 Update subtotal
@@ -341,32 +377,37 @@ function initCouponBtn() {
 
   if (!applyBtn || !couponInput) return;
 
-  applyBtn.addEventListener('click', () => {
-    const code = couponInput.value.trim().toUpperCase();
+  loadCartCouponCatalog();
 
-    if (!code) {
-      showCouponMessage('請輸入折扣碼', 'error');
+  applyBtn.addEventListener('click', async () => {
+    const code = couponInput.value.trim().toUpperCase();
+    const coupons = await loadCartCouponCatalog();
+    const subtotal = window.calculateCartTotal(window.AppState.cart);
+    const result = window.YuruiCoupons.validateCoupon(coupons, code, subtotal);
+
+    if (!result.valid) {
+      // 重點：無效 code 不會帶到 checkoutCouponInput，避免結帳頁延續錯誤折扣碼。
+      currentDiscount = 0;
+      window.YuruiCoupons.clearAppliedCouponCode();
+      showCouponMessage(`❌ ${result.message}`, 'error');
+      updateSummary();
       return;
     }
 
-    const coupon = COUPON_CODES[code];
-
-    if (coupon) {
-      // 折扣碼有效 Valid coupon code
-      currentDiscount = coupon.discount;
-      showCouponMessage(`✅ 折扣碼「${code}」已套用！${coupon.label}，折抵 NT$${coupon.discount}`, 'success');
-      applyBtn.textContent = '已套用 ✓';
-      applyBtn.disabled = true;
-      applyBtn.style.opacity = '0.6';
-      couponInput.disabled = true;
-      updateSummary();
-      window.showToast(`折扣碼套用成功！折抵 NT$${coupon.discount}`, 'success');
-    } else {
-      // 折扣碼無效 Invalid coupon code
-      currentDiscount = 0;
-      showCouponMessage('❌ 折扣碼無效，請確認後再試', 'error');
-      updateSummary();
+    if (appliedCartCouponCodes.includes(result.code)) {
+      showCouponMessage(`「${result.code}」已套用，請選擇其他折扣碼`, 'error');
+      couponInput.value = '';
+      return;
     }
+
+    // 折扣碼有效 Valid coupon code
+    appliedCartCouponCodes.push(result.code);
+    syncCartAppliedCoupons();
+    showCouponMessage(`✅ ${result.message}！${result.label}，折抵 NT$${result.discount.toLocaleString('zh-TW')}`, 'success');
+    // 重點：成功後清空 input，不停用欄位，讓使用者可繼續輸入或選取下一張 coupon。
+    couponInput.value = '';
+    updateSummary();
+    window.showToast(`折扣碼套用成功！折抵 NT$${result.discount.toLocaleString('zh-TW')}`, 'success');
   });
 
   // 按 Enter 也能套用 Also apply on Enter key
@@ -376,6 +417,30 @@ function initCouponBtn() {
       applyBtn.click();
     }
   });
+}
+
+async function persistValidCouponInputForCheckout() {
+  const couponInput = document.getElementById('couponInput');
+  if (!couponInput || !couponInput.value.trim()) {
+    window.YuruiCoupons.clearAppliedCouponCode();
+    return;
+  }
+
+  const coupons = await loadCartCouponCatalog();
+  const subtotal = window.calculateCartTotal(window.AppState.cart);
+  const result = window.YuruiCoupons.validateCoupon(coupons, couponInput.value, subtotal);
+
+  // 重點：即使使用者只輸入 / 選取正確 code 尚未按套用，也會在前往結帳前把 value 帶到 checkoutCouponInput。
+  if (result.valid && !appliedCartCouponCodes.includes(result.code)) {
+    appliedCartCouponCodes.push(result.code);
+    couponInput.value = '';
+  }
+
+  syncCartAppliedCoupons();
+
+  if (appliedCartCouponCodes.length === 0) {
+    window.YuruiCoupons.clearAppliedCouponCode();
+  }
 }
 
 /**
@@ -401,7 +466,7 @@ function initCheckoutBtn() {
   const checkoutBtn = document.getElementById('checkoutBtn');
   if (!checkoutBtn) return;
 
-  checkoutBtn.addEventListener('click', () => {
+  checkoutBtn.addEventListener('click', async () => {
     const cart = window.AppState.cart;
 
     // 購物車為空時不能結帳 Cannot checkout with empty cart
@@ -419,6 +484,7 @@ function initCheckoutBtn() {
     } else {
       // 已登入：跳轉到結帳頁
       // Logged in: redirect to checkout page
+      await persistValidCouponInputForCheckout();
       window.location.href = 'checkout.html';
     }
   });
@@ -439,6 +505,9 @@ function initClearCartBtn() {
     if (confirm('確定要清空購物車嗎？')) {
       window.clearCart();
       currentDiscount = 0;
+      appliedCartCouponCodes = [];
+      window.YuruiCoupons.clearAppliedCouponCode();
+      window.YuruiCoupons.renderAppliedCouponTexts('appliedCouponTexts', []);
       renderCartPage();
       window.showToast('購物車已清空', 'info');
     }

@@ -30,6 +30,9 @@
     ],
     "subtotal": 4999,
     "shippingFee": 0,
+    "coupons": [
+      { "code": "CAMP200", "type": "fixed", "discount": 200 }
+    ],
     "discount": 200,
     "total": 4799,
     "status": "shipped",
@@ -51,8 +54,11 @@
     ],
     "subtotal": 4997,
     "shippingFee": 0,
-    "discount": 0,
-    "total": 4997,
+    "coupons": [
+      { "code": "SUMMER10", "type": "percent", "discount": 10, "amount": 500 }
+    ],
+    "discount": 500,
+    "total": 4497,
     "status": "processing",
     "shippingMethod": "delivery",
     "shippingAddress": "台北市信義區信義路五段100號",
@@ -92,8 +98,12 @@
     ],
     "subtotal": 3797,
     "shippingFee": 0,
-    "discount": 0,
-    "total": 3797,
+    "coupons": [
+      { "code": "WELCOME100", "type": "fixed", "discount": 100 },
+      { "code": "SUMMER10", "type": "percent", "discount": 10, "amount": 380 }
+    ],
+    "discount": 480,
+    "total": 3317,
     "status": "delivered",
     "shippingMethod": "store",
     "storeAddress": "台北市信義區信義路五段100號（台北門市）",

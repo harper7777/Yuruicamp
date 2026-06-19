@@ -296,9 +296,12 @@
             <div style="display:flex;gap:0.5rem;">
               <input type="text"
                      id="checkoutCouponInput"
-                     placeholder="輸入折扣碼"
+                     list="checkoutCouponCodeOptions"
+                     placeholder="輸入或選取折扣碼"
                      style="flex:1;padding:0.55rem 0.75rem;border:1px solid #d1d5db;border-radius:6px;font-size:0.875rem;outline:none;"
                      maxlength="20">
+              <!-- 重點：選項與購物車共用 data/users.json 的 coupons.code，確保兩頁可選 code 一致 -->
+              <datalist id="checkoutCouponCodeOptions"></datalist>
               <button id="checkoutApplyCouponBtn"
                       type="button"
                       class="btn btn-secondary"
@@ -306,6 +309,8 @@
                 套用
               </button>
             </div>
+            <!-- 重點：成功套用的 coupon 會轉成文字顯示於此，結帳頁仍可繼續套用其他 coupon -->
+            <div id="checkoutAppliedCouponTexts" style="font-size:0.8rem;margin-top:0.4rem;color:#16a34a;line-height:1.6;display:none;"></div>
             <div id="checkoutCouponMsg" style="font-size:0.8rem;margin-top:0.35rem;display:none;"></div>
           </div>
 
@@ -358,6 +363,7 @@
   <script src="../js/components/modal.js" defer></script>
   <script src="../js/components/header.js" defer></script>
   <script src="../js/components/cart.js" defer></script>
+  <script src="../js/components/coupons.js" defer></script>
   <script src="../js/pages/checkout.js" defer></script>
   <script src="../js/main.js" defer></script>
 

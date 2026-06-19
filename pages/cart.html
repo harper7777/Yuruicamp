@@ -77,9 +77,12 @@
             <div class="coupon-input-row" style="display:flex;gap:0.5rem;">
               <input type="text"
                      id="couponInput"
-                     placeholder="輸入折扣碼（試試 WELCOME100）"
+                     list="cartCouponCodeOptions"
+                     placeholder="輸入或選取折扣碼"
                      style="flex:1;padding:0.6rem 0.875rem;border:1px solid #d1d5db;border-radius:6px;font-size:0.875rem;outline:none;transition:border-color 0.2s;"
                      maxlength="20">
+              <!-- 重點：選項由 js/components/coupons.js 讀取 data/users.json 的 coupons.code 動態產生 -->
+              <datalist id="cartCouponCodeOptions"></datalist>
               <button id="applyCouponBtn"
                       type="button"
                       class="btn btn-secondary"
@@ -87,6 +90,8 @@
                 套用
               </button>
             </div>
+            <!-- 重點：成功套用的 coupon 會轉成文字顯示於此，input 保持可繼續輸入下一張 coupon -->
+            <div id="appliedCouponTexts" style="font-size:0.8rem;margin-top:0.45rem;color:#16a34a;line-height:1.6;display:none;"></div>
             <!-- 折扣碼結果提示 Coupon result message -->
             <div id="couponMessage" style="font-size:0.8rem;margin-top:0.4rem;display:none;"></div>
           </div>
@@ -167,6 +172,7 @@
   <script src="../js/components/modal.js" defer></script>
   <script src="../js/components/header.js" defer></script>
   <script src="../js/components/cart.js" defer></script>
+  <script src="../js/components/coupons.js" defer></script>
   <script src="../js/pages/cart.js" defer></script>
   <script src="../js/main.js" defer></script>
 

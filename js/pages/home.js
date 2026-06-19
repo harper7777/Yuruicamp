@@ -61,7 +61,7 @@ function _buildProductCard(product, badgeType = '') {
   return `
     <div class="product-card" data-product-id="${product.id}" role="article">
 
-      <!-- 商品圖片 + 標籤 + 快速加入按鈕 -->
+      <!-- 商品圖片 + 標籤 -->
       <div class="product-card-image-wrap">
         <img
           src="${product.image}"
@@ -70,14 +70,6 @@ function _buildProductCard(product, badgeType = '') {
           onerror="this.src='https://placehold.co/400x300/f2f2f2/999?text=圖片載入中'"
         >
         ${badgeHTML}
-        <!-- 滑鼠懸停時顯示的快速購物按鈕 -->
-        <button
-          class="product-card-quick-add"
-          data-product-id="${product.id}"
-          aria-label="快速加入購物車 ${product.name}"
-        >
-          🛒 快速加入購物車
-        </button>
       </div>
 
       <!-- 商品資訊 -->
@@ -195,23 +187,14 @@ function _bindCardEvents() {
     if (!row) return;
 
     row.addEventListener('click', async (e) => {
-      // ① 點擊「快速加入購物車」浮層按鈕
-      if (e.target.classList.contains('product-card-quick-add') ||
-          e.target.closest('.product-card-quick-add')) {
-        const btn = e.target.closest('.product-card-quick-add') || e.target;
-        const productId = btn.dataset.productId;
-        await _handleAddToCart(productId);
-        return;
-      }
-
-      // ② 點擊「加入購物車」底部按鈕
+      // ① 點擊「加入購物車」底部按鈕
       if (e.target.classList.contains('product-card-add-btn')) {
         const productId = e.target.dataset.productId;
         await _handleAddToCart(productId);
         return;
       }
 
-      // ③ 點擊卡片其他區域 → 跳轉商品詳情頁
+      // ② 點擊卡片其他區域 → 跳轉商品詳情頁
       const card = e.target.closest('.product-card');
       if (card) {
         const productId = card.dataset.productId;
