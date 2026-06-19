@@ -206,6 +206,12 @@
               <div class="card-body" style="padding:1.5rem;">
                 <h5 style="color:#244d4d;margin-bottom:1.25rem;">📦 我的訂單</h5>
 
+                <!-- 重點：購買 / 租借使用獨立清單面板，切換時只顯示目前選取的訂單類型。 -->
+                <div class="order-type-tabs" role="tablist" aria-label="訂單類型切換">
+                  <button class="order-type-tab active" type="button" role="tab" data-order-type="purchase" aria-selected="true" aria-pressed="true" aria-controls="purchaseOrdersPanel">購買訂單</button>
+                  <button class="order-type-tab" type="button" role="tab" data-order-type="rental" aria-selected="false" aria-pressed="false" aria-controls="rentalOrdersPanel">租借訂單</button>
+                </div>
+
                 <!-- 狀態篩選 Tab -->
                 <div class="order-status-tabs">
                   <button class="order-status-tab active" data-filter="all">全部</button>
@@ -216,10 +222,20 @@
                 </div>
 
                 <!-- 訂單清單（由 JS 動態渲染）-->
-                <div id="ordersList">
-                  <div style="text-align:center;padding:2rem;color:#999;">
-                    <div style="font-size:2rem;margin-bottom:0.5rem;">📦</div>
-                    載入訂單中...
+                <div id="purchaseOrdersPanel" class="order-list-panel active" data-order-panel="purchase">
+                  <div id="ordersList">
+                    <div style="text-align:center;padding:2rem;color:#999;">
+                      <div style="font-size:2rem;margin-bottom:0.5rem;">📦</div>
+                      載入訂單中...
+                    </div>
+                  </div>
+                </div>
+                <div id="rentalOrdersPanel" class="order-list-panel" data-order-panel="rental" hidden>
+                  <div id="rentalOrdersList">
+                    <div style="text-align:center;padding:2rem;color:#999;">
+                      <div style="font-size:2rem;margin-bottom:0.5rem;">⛺</div>
+                      載入租借訂單中...
+                    </div>
                   </div>
                 </div>
               </div>

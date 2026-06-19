@@ -3512,6 +3512,43 @@ hr {
 .member-card-progress { height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px; }
 .member-card-progress-bar { height: 6px; background: #fff; border-radius: 3px; }
 
+/* 重點：我的訂單新增購買 / 租借切換，按鈕可換行避免小螢幕超出容器。 */
+.order-type-tabs {
+  display: inline-flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  padding: 0.25rem;
+  border: 1px solid #dfecec;
+  border-radius: 10px;
+  background: #f6fbf6;
+}
+
+.order-type-tab {
+  padding: 0.45rem 0.9rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #5f6f6f;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 150ms, color 150ms, box-shadow 150ms;
+}
+
+.order-type-tab:hover,
+.order-type-tab.active {
+  background: #244d4d;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(36, 77, 77, 0.16);
+}
+
+/* 重點：購買與租借清單使用獨立面板，hidden 時強制不佔版面。 */
+.order-list-panel[hidden] {
+  display: none !important;
+}
+
 /* 訂單狀態 Tab */
 .order-status-tabs {
   display: flex;
@@ -3574,6 +3611,15 @@ hr {
 .status-cancelled  { background: #f8d7da; color: #721c24; }
 
 .order-card-body { padding: 1rem 1.1rem; }
+
+/* 重點：租借訂單額外顯示期間與取還門市，文字可換行避免撐開卡片。 */
+.rental-order-meta {
+  margin-top: 0.75rem;
+  color: #555;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
 
 .order-item-row {
   display: flex;
