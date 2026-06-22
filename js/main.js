@@ -215,8 +215,8 @@ function initFloatingActions() {
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const documentHeight = document.documentElement.scrollHeight;
 
-    // 核心修改：當向下捲動的距離超過「總頁面高度的 1/3」時，就顯示按鈕
-    const isScrolledOneThird = scrollTop >= (documentHeight / 5);
+    // 核心修改：當向下捲動的距離超過「總頁面高度的 1/5」時，就顯示按鈕
+    const isScrolledOneThird = scrollTop >= (window.innerHeight / 5);
 
     topButton.classList.toggle("is-visible", isScrolledOneThird);
   }
