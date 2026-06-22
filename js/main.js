@@ -4,8 +4,6 @@
 // 此文件初始化應用並設置全局事件監聽器
 // ===================================================
 
-
-
 // 用來記錄「全局組件是否已被初始化」的旗標
 // Guard flag: prevent double-initialization when page JS already called init functions
 window._appComponentsInitialized = false;
@@ -44,8 +42,6 @@ window.initApp = async () => {
   initFloatingActions(); // 懸浮按鈕
   window.initLazyLoadingFallback?.();
 
-
-
   // 第 13 階段：offcanvas 開啟時鎖住 body 捲動（iOS Safari 需要）
   // Stage 13: Lock body scroll when offcanvas is open (required for iOS Safari)
   window.initBodyScrollLock();
@@ -57,7 +53,6 @@ window.initApp = async () => {
   console.log('✓ 應用初始化完成');
   console.log('AppState:', window.AppState);
 };
-
 
 window.initGlobalListeners = () => { 
   // 記錄頁面卸載
@@ -95,7 +90,6 @@ window.initGlobalListeners = () => {
     }
   });
 };
-
 
 /**
  * 第 13 階段：Body Scroll Lock（鎖定 body 捲動）
@@ -186,7 +180,17 @@ function initFloatingActions() {
   const floatingActions = document.createElement("div");
   floatingActions.className = "floating-actions";
 
+  // 按鈕順序：回到頂部在上，Line客服在下
   floatingActions.innerHTML = `
+    <button
+      class="floating-top-btn"
+      type="button"
+      aria-label="回到頁面頂部"
+      title="回到頂部"
+    >
+      <i class="bi bi-chevron-up"></i>
+    </button>
+
     <a
       class="floating-line-btn"
       href="https://line.me"
@@ -201,15 +205,6 @@ function initFloatingActions() {
         <i class="bi bi-chat-dots-fill"></i>
       </span>
     </a>
-
-    <button
-      class="floating-top-btn"
-      type="button"
-      aria-label="回到頁面頂部"
-      title="回到頂部"
-    >
-      <i class="bi bi-chevron-up"></i>
-    </button>
   `;
 
   document.body.appendChild(floatingActions);
@@ -218,12 +213,12 @@ function initFloatingActions() {
 
   function toggleTopButton() {
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
 
-    const isNearBottom = scrollTop + windowHeight >= documentHeight - 280;
+    // 核心修改：當向下捲動的距離超過「總頁面高度的 1/3」時，就顯示按鈕
+    const isScrolledOneThird = scrollTop >= (documentHeight / 5);
 
-    topButton.classList.toggle("is-visible", isNearBottom);
+    topButton.classList.toggle("is-visible", isScrolledOneThird);
   }
 
   topButton.addEventListener("click", function () {
@@ -236,8 +231,10 @@ function initFloatingActions() {
   window.addEventListener("scroll", toggleTopButton, { passive: true });
   window.addEventListener("resize", toggleTopButton);
 
+  // 初始化時執行一次，確保重整網頁時狀態正確
   toggleTopButton();
 }
+
 async function initLayout() {
   await Promise.all([
     loadPartial("site-header", "./partials/header.html"),
@@ -251,6 +248,7 @@ async function initLayout() {
 }
 
 document.addEventListener("DOMContentLoaded", initLayout);
+
 /**
  * 應用啟動入口
  * 等待 DOM 完全加載後執行
