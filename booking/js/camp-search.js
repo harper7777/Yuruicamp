@@ -1,9 +1,9 @@
 /**
  * camp-search.js
  * 功能：搜尋頁邏輯
- *   ① 讀取 campgrounds.json（jQuery AJAX）
- *   ② 動態渲染營區卡片
- *   ③ Checkbox + 下拉選單即時篩選（AND 邏輯）
+ * ① 讀取 campgrounds.json（jQuery AJAX）
+ * ② 動態渲染營區卡片
+ * ③ Checkbox + 下拉選單即時篩選（AND 邏輯）
  *
  * Handles: data loading, card rendering, real-time filtering
  */
@@ -29,10 +29,10 @@ $(document).ready(function () {
   // 步驟 2：綁定篩選器事件 / Step 2: Bind filter events
   bindFilterEvents();
 
-  // 日期欄位限制 / Date range constraints
-  initDateRangeValidation();
+  // 步驟 3：初始化 Flatpickr 日期區間選擇器 (與 camp-detail.js 同步) / Init date range
+  initFlatpickrDateRange();
 
-  // 步驟 3：行動版篩選器展開/收合 / Step 3: Mobile filter toggle
+  // 步驟 4：行動版篩選器展開/收合 / Step 4: Mobile filter toggle
   $('#filterToggle').on('click', function () {
     const $body = $('#filterBody');
     const isOpen = $body.hasClass('is-open');
@@ -191,37 +191,31 @@ function bindFilterEvents() {
     $('#regionFilter').val('');
     $('#priceMin').val(500);
     $('#priceMax').val(5000);
+    
+    // 如果有選取日期，也可以一併清空
+    const datePicker = document.querySelector("#dateRange")._flatpickr;
+    if (datePicker) datePicker.clear();
+    
     updatePriceSlider();
     filterCampgrounds();
   });
 }
 
 /**
- * 讓結束日期不能早於預約日期。
- * Keep the end date from being earlier than the booking date.
+ * 初始化 Flatpickr 日期區間選擇器
+ * Initialize Flatpickr range datepicker
  */
-function initDateRangeValidation() {
-  const $checkInDate = $('#checkInDate');
-  const $checkOutDate = $('#checkOutDate');
-
-  function syncCheckOutMinDate() {
-    const checkInValue = $checkInDate.val();
-
-    if (checkInValue) {
-      $checkOutDate.attr('min', checkInValue);
-    } else {
-      $checkOutDate.removeAttr('min');
+function initFlatpickrDateRange() {
+  flatpickr("#dateRange", {
+    mode: "range",
+    minDate: "today",
+    locale: "zh_tw",
+    dateFormat: "Y-m-d",
+    onChange: function(selectedDates, dateStr, instance) {
+      // 可以在這裡加入針對日期選擇完成後的額外行為
+      // 若後續有綁定日期作為篩選條件，可在此呼叫 filterCampgrounds();
     }
-
-    if (checkInValue && $checkOutDate.val() && $checkOutDate.val() < checkInValue) {
-      $checkOutDate.val(checkInValue);
-    }
-  }
-
-  $checkInDate.on('change', syncCheckOutMinDate);
-  $checkOutDate.on('change', syncCheckOutMinDate);
-
-  syncCheckOutMinDate();
+  });
 }
 
 /**
@@ -229,12 +223,12 @@ function initDateRangeValidation() {
  * Core filter function: read all checked conditions, filter allCampgrounds
  *
  * 篩選規則（AND 邏輯）：
- *   - 勾選的「環境標籤」：每一項都必須存在於 camp.environment_tags
- *   - 勾選的「設施標籤」：每一項都必須存在於 camp.facility_tags
- *   - 選擇的「地區」：必須完全匹配 camp.region
+ * - 勾選的「環境標籤」：每一項都必須存在於 camp.environment_tags
+ * - 勾選的「設施標籤」：每一項都必須存在於 camp.facility_tags
+ * - 選擇的「地區」：必須完全匹配 camp.region
  *
  * Filter rule (AND logic):
- *   All selected env tags + facility tags + region must ALL match.
+ * All selected env tags + facility tags + region must ALL match.
  */
 function filterCampgrounds() {
 
@@ -287,9 +281,9 @@ function filterCampgrounds() {
 
 /**
  * 建立 dual-thumb range slider：
- *   - #priceMin / #priceMax 兩個 <input type="range"> 疊加
- *   - #priceRangeFill 依百分比定位，顯示選取區段
- *   - #priceRangeDisplay 即時更新文字
+ * - #priceMin / #priceMax 兩個 <input type="range"> 疊加
+ * - #priceRangeFill 依百分比定位，顯示選取區段
+ * - #priceRangeDisplay 即時更新文字
  */
 function initPriceRangeSlider() {
   const $minEl    = $('#priceMin');
