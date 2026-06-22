@@ -270,6 +270,48 @@
   padding: $spacing-lg;
 }
 
+#personalizationModal {
+  box-sizing: border-box;
+  padding: $spacing-md;
+}
+
+#personalizationModal .modal-content {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - #{$spacing-md * 2});
+  overflow: hidden;
+}
+
+#personalizationModal .modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+#personalizationModal .stepper-header {
+  flex-shrink: 0;
+}
+
+#personalizationModal .survey-step.active {
+  display: block;
+}
+
+#personalizationModal .survey-tags {
+  overflow: visible;
+}
+
+#personalizationModal #surveyNextBtn,
+#personalizationModal #surveyFinishBtn {
+  display: block;
+  margin-top: $spacing-sm;
+}
+
+@supports (height: 100dvh) {
+  #personalizationModal .modal-content {
+    max-height: calc(100dvh - #{$spacing-md * 2});
+  }
+}
+
 .modal-footer {
   padding: $spacing-lg;
   border-top: 1px solid $border-color;

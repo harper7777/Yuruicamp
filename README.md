@@ -73,8 +73,8 @@ Yuruicamp/
 │   ├── rental-guide.html         # 租借體驗說明頁
 │   ├── booking-faq.html          # 預約系統專屬 FAQ
 │   ├── components/
-│   │   ├── booking-header.html   # 預約系統專屬 Header（背景 #F2F0EB，禁止複用買家端）
-│   │   └── booking-footer.html   # 預約系統專屬 Footer
+│   │   ├── booking-header.partial # 預約系統專屬 Header fragment（避免 Live Server 注入破壞）
+│   │   └── booking-footer.partial # 預約系統專屬 Footer fragment
 │   ├── css/
 │   │   └── booking.css           # 預約系統專屬樣式
 │   ├── js/
@@ -140,8 +140,8 @@ Yuruicamp/
 │   └── faq.html                  # 常見問題
 │
 ├── components/                   # 可重用 HTML 片段（靜態範本）
-│   ├── header.html
-│   └── footer.html
+│   ├── header.partial             # 共用 Header fragment，由 js/main.js 載入
+│   └── footer.partial             # 共用 Footer fragment，由 js/main.js 載入
 │
 ├── assets/
 │   └── images/                   # 靜態圖片資源（brand_icon.png 等）
@@ -178,6 +178,8 @@ Yuruicamp/
 **方式 1：VS Code Live Server（推薦）**
 
 安裝 [Live Server 擴充套件](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)，在根目錄右鍵 → Open with Live Server。
+
+> 共用 Header / Footer 片段使用 `.partial` 副檔名，而不是 `.html`。這是為了避免 Live Server 對 HTML fragment 注入 live reload script，造成像 `components/header` 這類被 `fetch()` 載入的片段 response 截斷。
 
 **方式 2：Python 3**
 

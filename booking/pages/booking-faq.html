@@ -556,10 +556,10 @@
   <script>
     $(function () {
       // 載入預約系統專屬 Header / Footer
-      $('#booking-header').load('../components/booking-header.html', function () {
+      $('#booking-header').load('../components/booking-header.partial', function () {
         $.getScript('../js/booking-header.js');
       });
-      $('#booking-footer').load('../components/booking-footer.html');
+      $('#booking-footer').load('../components/booking-footer.partial');
     });
 
     /* ──────────────────────────────────────────────────────

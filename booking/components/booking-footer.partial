@@ -1,5 +1,7 @@
 <!-- ============================================================
-     booking-footer.html — 預約系統專屬 Footer 元件
+     Runtime fragment loaded by booking pages.
+     Keep this as .partial so Live Server does not inject reload scripts into it.
+     booking-footer.partial — 預約系統專屬 Footer 元件
      4 欄式資訊區塊 + 底部版權宣告
      背景色 #244d4d（深青綠，與買家端 footer 相同，維持品牌一致）
      ============================================================ -->

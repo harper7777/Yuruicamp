@@ -1,4 +1,6 @@
 <!-- ========================================
+     Runtime fragment loaded by js/main.js.
+     Keep this as .partial so Live Server does not inject reload scripts into it.
      頁腳組件 (Footer Component)
      可在所有頁面中引用或複製
      ======================================== -->

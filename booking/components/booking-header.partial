@@ -1,5 +1,7 @@
 <!-- ============================================================
-     booking-header.html — 預約系統專屬 Header 元件
+     Runtime fragment loaded by booking pages.
+     Keep this as .partial so Live Server does not inject reload scripts into it.
+     booking-header.partial — 預約系統專屬 Header 元件
      背景色 #F2F0EB（大地米色），與買家端 #f6fbf6 做視覺區分
      ============================================================ -->
 <div class="bk-header-root">

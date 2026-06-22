@@ -132,6 +132,9 @@ window.initBodyScrollLock = () => {
 // ===================================================
 
 // 輔助函式：載入局部 HTML
+// Shared layout fragments use `.partial` instead of `.html` because VS Code
+// Live Server injects reload scripts into HTML responses and can corrupt
+// fragment-only files that are fetched into the page.
 async function loadPartial(targetId, url) {
   const target = document.getElementById(targetId);
   if (!target) return;
@@ -159,8 +162,8 @@ function loadComponentScript(src) {
 async function initGlobalLayout() {
   // 1. 根據目錄樹，從 pages/* 往上找頂層的 components/
   await Promise.all([
-    loadPartial("header", "../components/header.html"),
-    loadPartial("footer", "../components/footer.html") 
+    loadPartial("header", "../components/header.partial"),
+    loadPartial("footer", "../components/footer.partial") 
   ]);
 
   // 2. 確定 HTML 結構長到網頁上後，才動態載入原本的互動 JS

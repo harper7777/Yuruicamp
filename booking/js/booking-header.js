@@ -386,7 +386,7 @@
 
 })();
 
-// booking-header.html 以 jQuery.getScript 載入此檔後，通知頁面層級的 ready callback。
+// booking-header.partial 以 jQuery.getScript 載入此檔後，通知頁面層級的 ready callback。
 // 目前僅 booking-cart.js 有定義 window.onBookingHeaderReady；其他頁面不存在，跳過。
 if (typeof window.onBookingHeaderReady === 'function') {
   window.onBookingHeaderReady();

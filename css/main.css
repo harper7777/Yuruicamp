@@ -526,6 +526,48 @@ hr {
   padding: 1.25rem;
 }
 
+#personalizationModal {
+  box-sizing: border-box;
+  padding: 1rem;
+}
+
+#personalizationModal .modal-content {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 2rem);
+  overflow: hidden;
+}
+
+#personalizationModal .modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+#personalizationModal .stepper-header {
+  flex-shrink: 0;
+}
+
+#personalizationModal .survey-step.active {
+  display: block;
+}
+
+#personalizationModal .survey-tags {
+  overflow: visible;
+}
+
+#personalizationModal #surveyNextBtn,
+#personalizationModal #surveyFinishBtn {
+  display: block;
+  margin-top: 0.75rem;
+}
+
+@supports (height: 100dvh) {
+  #personalizationModal .modal-content {
+    max-height: calc(100dvh - 2rem);
+  }
+}
+
 .modal-footer {
   padding: 1.25rem;
   border-top: 1px solid #e0e0e0;
@@ -1648,7 +1690,7 @@ hr {
   font-size: 0.875rem;
   color: #555;
   cursor: pointer;
-  user-select: none;          /* 防止選取文字 */
+  user-select: none;          /*防止選取文字*/
   transition: all 200ms;
 }
 

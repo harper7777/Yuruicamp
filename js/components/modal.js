@@ -126,6 +126,7 @@ function _initLoginModal() {
  */
 function _handleLoginSuccess(user) {
   // 1. 更新全局狀態
+  // 社群登入成功後必須標記為已登入，Navbar 才會顯示使用者頭像與名稱。
   window.AppState.isLoggedIn = true;
   window.AppState.currentUser = user;
   window.saveAppState();
