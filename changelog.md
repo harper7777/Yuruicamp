@@ -3,6 +3,42 @@
 本專案版本異動紀錄。README 底部保留最新摘要，完整紀錄以本檔為準。
 
 ---
+# [2026-06-22]
+### 預約頁面
+- 可直接點擊的測試用第三方登入
+- 1. `booking/css/member-center.css` — 新增三組樣式
+- [ ] **折價券票券外觀樣式**
+  - 包含類別：`.coupon-ticket` / `.coupon-left` / `.coupon-right` / `.copy-btn`
+- [ ] **狀態篩選按鈕樣式**
+  - 包含類別：`.order-status-tabs` / `.order-status-tab`
+- [ ] **訂單詳情 Modal 彈出視窗樣式**
+  - 包含類別：`.bk-modal-overlay` / `.bk-modal-box`
+
+ 2. `booking/pages/member-center.html` — 三處架構修改
+- [ ] **購買紀錄面板（Order Panel）優化**
+  - 為「商城商品」與「營區預約」各自規劃獨立的篩選標籤：
+    - **商城訂單標籤**：`全部` / `待付款` / `待出貨` / `已完成` / `退貨退款`
+    - **預約紀錄標籤**：`全部` / `待付款` / `即將入住` / `已完成` / `取消`
+  - 於每筆商城訂單結構中，新增「`查看明細`」操作按鈕。
+- [ ] **折價券面板（Coupon Panel）調整**
+  - 移除靜態結構，改由 JavaScript 動態渲染。
+  - 將切換分頁標籤（Tab）的屬性定義修改為 `data-coupon-tab="active"`。
+- [ ] **訂單詳情 Modal 埋設**
+  - 將 Modal 的 HTML 基礎結構加在頁面 `<footer>` 標籤之前。
+
+3. `booking/js/member-center.js` — 新增功能與邏輯控制
+- [ ] **本機模擬資料層（Mock Data）**
+  - `MOCK_COUPONS_MC`：配置折價券模擬資料。
+  - `MOCK_ORDERS_MC`：配置歷史訂單與預約模擬資料。
+- [ ] **核心函式與商業邏輯實作**
+  - `renderMcCoupons()`：動態渲染折價券票券卡片（如：`YURUI100`、`MEMBER10` 等）。
+  - `copyMcCouponCode()`：點擊「複製」按鈕時，自動複製折扣碼至剪貼簿，並觸發顯示 Toast 提示訊息。
+  - `openMcOrderDetail()`：點擊「查看明細」按鈕時，發起請求並開啟內含詳細商品清單的 Modal 視窗。
+  - `filterRecList()`：監聽分頁標籤切換，依據選取的狀態即時過濾並動態渲染購買紀錄列表項目。
+
+
+---
+
 # [2026-06-20]
 ### 預約頁面
 - alert改成toast

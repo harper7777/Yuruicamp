@@ -204,8 +204,16 @@
 
               <!-- Sub-panel：商城購買紀錄 -->
               <div class="rec-panel active" data-rec-panel="store">
-                <div class="rec-list">
-                  <div class="rec-item">
+                <!-- 商城訂單狀態篩選 -->
+                <div class="order-status-tabs">
+                  <button class="order-status-tab active" data-store-filter="all">全部</button>
+                  <button class="order-status-tab" data-store-filter="unpaid">待付款</button>
+                  <button class="order-status-tab" data-store-filter="shipped">待出貨</button>
+                  <button class="order-status-tab" data-store-filter="delivered">已完成</button>
+                  <button class="order-status-tab" data-store-filter="refund">退貨退款</button>
+                </div>
+                <div class="rec-list" id="storeRecList">
+                  <div class="rec-item" data-status="delivered">
                     <div class="rec-item__info">
                       <div class="rec-item__title">輕量化露營帳篷 2人</div>
                       <div class="rec-item__meta">#ORD-20260310 · 2026-03-10 · Snow Peak</div>
@@ -213,9 +221,10 @@
                     <div class="rec-item__right">
                       <div class="rec-item__amount">NT$2,999</div>
                       <span class="rec-item__status status--done">已完成</span>
+                      <button class="rec-item__detail-btn" onclick="openMcOrderDetail('ord-002')">查看明細</button>
                     </div>
                   </div>
-                  <div class="rec-item">
+                  <div class="rec-item" data-status="delivered">
                     <div class="rec-item__info">
                       <div class="rec-item__title">四季防水睡袋 -5°C × 2</div>
                       <div class="rec-item__meta">#ORD-20260215 · 2026-02-15 · Nightrest</div>
@@ -223,35 +232,61 @@
                     <div class="rec-item__right">
                       <div class="rec-item__amount">NT$3,998</div>
                       <span class="rec-item__status status--done">已完成</span>
+                      <button class="rec-item__detail-btn" onclick="openMcOrderDetail('ord-003')">查看明細</button>
                     </div>
                   </div>
-                  <div class="rec-item">
+                  <div class="rec-item" data-status="shipped">
                     <div class="rec-item__info">
                       <div class="rec-item__title">戶外登山頭燈 350流明</div>
                       <div class="rec-item__meta">#ORD-20260501 · 2026-05-01 · Black Diamond</div>
                     </div>
                     <div class="rec-item__right">
                       <div class="rec-item__amount">NT$649</div>
-                      <span class="rec-item__status status--pending">處理中</span>
+                      <span class="rec-item__status status--pending">待出貨</span>
+                      <button class="rec-item__detail-btn" onclick="openMcOrderDetail('ord-004')">查看明細</button>
                     </div>
                   </div>
+                  <div class="rec-item" data-status="cancelled">
+                    <div class="rec-item__info">
+                      <div class="rec-item__title">攜帶式淨水器、登山健行手杖（一對）</div>
+                      <div class="rec-item__meta">#ORD-20260401 · 2026-04-01</div>
+                    </div>
+                    <div class="rec-item__right">
+                      <div class="rec-item__amount">NT$2,258</div>
+                      <span class="rec-item__status status--cancelled">已取消</span>
+                      <button class="rec-item__detail-btn" onclick="openMcOrderDetail('ord-001')">查看明細</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="rec-empty" id="storeEmptyState" style="display:none;">
+                  <div class="rec-empty__icon"><i class="bi bi-bag-x"></i></div>
+                  沒有符合條件的訂單
                 </div>
               </div>
 
               <!-- Sub-panel：預約紀錄 -->
               <div class="rec-panel" data-rec-panel="booking">
-                <div class="rec-list">
-                  <div class="rec-item">
+                <!-- 預約狀態篩選 -->
+                <div class="order-status-tabs">
+                  <button class="order-status-tab active" data-booking-filter="all">全部</button>
+                  <button class="order-status-tab" data-booking-filter="unpaid">待付款</button>
+                  <button class="order-status-tab" data-booking-filter="upcoming">即將入住</button>
+                  <button class="order-status-tab" data-booking-filter="delivered">已完成</button>
+                  <button class="order-status-tab" data-booking-filter="cancelled">取消</button>
+                </div>
+                <div class="rec-list" id="bookingRecList">
+                  <div class="rec-item" data-status="upcoming">
                     <div class="rec-item__info">
                       <div class="rec-item__title">合歡山露營區 · 松景營位</div>
                       <div class="rec-item__meta">#BK-20260620 · 入住 2026-07-10 ～ 07-12 · 2晚</div>
                     </div>
                     <div class="rec-item__right">
                       <div class="rec-item__amount">NT$4,800</div>
-                      <span class="rec-item__status status--upcoming">即將出發</span>
+                      <span class="rec-item__status status--upcoming">即將入住</span>
+                      <button class="rec-item__detail-btn" onclick="openMcBookingDetail('bk-001')">查看明細</button>
                     </div>
                   </div>
-                  <div class="rec-item">
+                  <div class="rec-item" data-status="delivered">
                     <div class="rec-item__info">
                       <div class="rec-item__title">太平山露營區 · 雲海營位</div>
                       <div class="rec-item__meta">#BK-20260501 · 入住 2026-05-03 ～ 05-05 · 2晚</div>
@@ -259,9 +294,10 @@
                     <div class="rec-item__right">
                       <div class="rec-item__amount">NT$3,600</div>
                       <span class="rec-item__status status--done">已完成</span>
+                      <button class="rec-item__detail-btn" onclick="openMcBookingDetail('bk-002')">查看明細</button>
                     </div>
                   </div>
-                  <div class="rec-item">
+                  <div class="rec-item" data-status="delivered">
                     <div class="rec-item__info">
                       <div class="rec-item__title">武陵農場露營區 · 桃花營位</div>
                       <div class="rec-item__meta">#BK-20260110 · 入住 2026-01-15 ～ 01-16 · 1晚</div>
@@ -269,9 +305,10 @@
                     <div class="rec-item__right">
                       <div class="rec-item__amount">NT$2,200</div>
                       <span class="rec-item__status status--done">已完成</span>
+                      <button class="rec-item__detail-btn" onclick="openMcBookingDetail('bk-003')">查看明細</button>
                     </div>
                   </div>
-                  <div class="rec-item">
+                  <div class="rec-item" data-status="cancelled">
                     <div class="rec-item__info">
                       <div class="rec-item__title">奧萬大露營區 · 楓葉營位</div>
                       <div class="rec-item__meta">#BK-20251205 · 入住 2025-12-10 ～ 12-11 · 1晚</div>
@@ -279,8 +316,13 @@
                     <div class="rec-item__right">
                       <div class="rec-item__amount">NT$1,800</div>
                       <span class="rec-item__status status--cancelled">已取消</span>
+                      <button class="rec-item__detail-btn" onclick="openMcBookingDetail('bk-004')">查看明細</button>
                     </div>
                   </div>
+                </div>
+                <div class="rec-empty" id="bookingEmptyState" style="display:none;">
+                  <div class="rec-empty__icon"><i class="bi bi-tent-x"></i></div>
+                  沒有符合條件的預約紀錄
                 </div>
               </div>
 
@@ -295,37 +337,13 @@
               <h5><i class="bi bi-ticket-perforated"></i> 我的折價券</h5>
 
               <div class="coupon-tabs">
-                <button class="rec-tab active" data-coupon-tab="usable">可使用</button>
+                <button class="rec-tab active" data-coupon-tab="active">可使用</button>
                 <button class="rec-tab" data-coupon-tab="expired">已失效</button>
               </div>
 
-              <div id="usableCoupons">
-                <div class="coupon-grid">
-                  <div class="coupon-card active-coupon">
-                    
-                    <div>
-                      <div class="coupon-card__code">CAMP100</div>
-                      <div class="coupon-card__desc">全館折抵 NT$100</div>
-                      <div class="coupon-card__expire">有效期限：2026-12-31</div>
-                    </div>
-                  </div>
-                  <div class="coupon-card active-coupon">
-                    
-                    <div>
-                      <div class="coupon-card__code">BK200</div>
-                      <div class="coupon-card__desc">預約系統專用折抵 NT$200</div>
-                      <div class="coupon-card__expire">有效期限：2026-09-30</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div id="expiredCoupons" style="display:none;">
-                <div class="rec-empty">
-                  
-                  目前沒有已失效的折價券
-                </div>
-              </div>
+              <!-- 由 JS 渲染 -->
+              <div id="activeCoupons"></div>
+              <div id="expiredCoupons" style="display:none;"></div>
             </div>
           </div>
 
@@ -373,6 +391,17 @@
       </div><!-- /mc-layout -->
     </div><!-- /mc-container -->
   </main>
+
+  <!-- 訂單詳情 Modal -->
+  <div class="bk-modal-overlay" id="orderDetailOverlay">
+    <div class="bk-modal-box">
+      <div class="bk-modal-header">
+        <div class="bk-modal-title" id="orderDetailTitle">訂單詳情</div>
+        <button class="bk-modal-close" id="orderDetailClose">✕</button>
+      </div>
+      <div class="bk-modal-body" id="orderDetailBody"></div>
+    </div>
+  </div>
 
   <div id="booking-footer"></div>
 

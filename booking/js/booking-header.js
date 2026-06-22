@@ -218,10 +218,24 @@
       window.showToast('【開發中】即將導向 ' + provider + ' 授權頁面', 'info');
     }
 
+    // 測試用：Google 按鈕直接模擬登入，不走真實 OAuth
+    function handleGoogleTestLogin() {
+      var mockUser = {
+        name: 'Google 測試用戶',
+        email: 'test@gmail.com',
+        avatar: 'G',
+        provider: 'google'
+      };
+      localStorage.setItem('yuruiUser', JSON.stringify(mockUser));
+      closePanels();
+      checkLoginState();
+      window.showToast('已使用 Google 帳號登入（測試模式）', 'success');
+    }
+
     var btnGoogle   = document.getElementById('oauthGoogle');
     var btnLine     = document.getElementById('oauthLine');
     var btnFacebook = document.getElementById('oauthFacebook');
-    if (btnGoogle)   btnGoogle.addEventListener('click',   function () { handleOAuth('Google'); });
+    if (btnGoogle)   btnGoogle.addEventListener('click',   handleGoogleTestLogin);
     if (btnLine)     btnLine.addEventListener('click',     function () { handleOAuth('LINE'); });
     if (btnFacebook) btnFacebook.addEventListener('click', function () { handleOAuth('Facebook'); });
   }

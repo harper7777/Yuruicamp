@@ -563,6 +563,223 @@
 .mc-login-guard__back:hover { color: var(--bk-primary); }
 
 /* ============================================================
+   訂單狀態篩選 tabs
+============================================================ */
+.order-status-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.order-status-tab {
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  border: 2px solid var(--bk-border);
+  background: var(--bk-white);
+  color: var(--bk-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--bk-transition);
+  font-family: inherit;
+}
+
+.order-status-tab.active {
+  background: var(--bk-primary);
+  border-color: var(--bk-primary);
+  color: #fff;
+}
+
+/* ============================================================
+   查看明細按鈕
+============================================================ */
+.rec-item__detail-btn {
+  display: inline-block;
+  margin-top: 0.35rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--bk-radius-sm);
+  border: none;
+  background: var(--bk-primary);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s;
+}
+
+.rec-item__detail-btn:hover { opacity: 0.8; }
+
+/* ============================================================
+   折價券 Ticket 樣式
+============================================================ */
+.coupon-ticket {
+  display: flex;
+  align-items: stretch;
+  border-radius: var(--bk-radius);
+  overflow: hidden;
+  box-shadow: var(--bk-shadow);
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--bk-border);
+}
+
+.coupon-ticket.expired { opacity: 0.5; filter: grayscale(0.4); }
+
+.coupon-left {
+  background: var(--bk-primary);
+  color: #fff;
+  min-width: 82px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 0.5rem;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.coupon-discount-val  { font-size: 1.6rem; font-weight: 800; line-height: 1; }
+.coupon-discount-unit { font-size: 0.7rem; margin-top: 0.2rem; opacity: 0.9; }
+
+.coupon-sep {
+  width: 0;
+  border-left: 2px dashed rgba(0, 0, 0, 0.12);
+}
+
+.coupon-right {
+  flex: 1;
+  padding: 0.9rem 1rem;
+  background: var(--bk-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.coupon-title     { font-size: 0.9rem;  font-weight: 700; color: var(--bk-primary); margin-bottom: 0.15rem; }
+.coupon-condition { font-size: 0.75rem; color: var(--bk-text-muted); margin-bottom: 0.15rem; }
+.coupon-expiry    { font-size: 0.72rem; color: #e55a00; margin-bottom: 0.45rem; }
+.coupon-code-row  { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+
+.coupon-code {
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: var(--bk-bg);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  color: var(--bk-primary);
+  border: 1px solid var(--bk-border);
+}
+
+.copy-btn {
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid var(--bk-primary);
+  background: var(--bk-white);
+  color: var(--bk-primary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: var(--bk-transition);
+}
+
+.copy-btn:hover { background: var(--bk-primary); color: #fff; }
+
+/* ============================================================
+   訂單詳情 Modal
+============================================================ */
+.bk-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1050;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.bk-modal-overlay.is-open { display: flex; }
+
+.bk-modal-box {
+  background: var(--bk-white);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 520px;
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: bkModalIn 0.18s ease;
+}
+
+@keyframes bkModalIn {
+  from { transform: translateY(-14px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+.bk-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--bk-border);
+  position: sticky;
+  top: 0;
+  background: var(--bk-white);
+  z-index: 1;
+}
+
+.bk-modal-title { font-size: 1rem; font-weight: 700; color: var(--bk-primary); }
+
+.bk-modal-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bk-bg);
+  color: var(--bk-text);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--bk-transition);
+  line-height: 1;
+}
+
+.bk-modal-close:hover { background: var(--bk-border); }
+
+.bk-modal-body { padding: 1.25rem 1.5rem 1.5rem; }
+
+.bk-order-item-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--bk-bg);
+}
+
+.bk-order-item-row:last-child { border-bottom: none; }
+
+.bk-order-item-name { font-size: 0.875rem; font-weight: 600; color: var(--bk-text); }
+.bk-order-item-qty  { font-size: 0.78rem; color: var(--bk-text-muted); margin-top: 0.1rem; }
+
+.bk-status-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+}
+
+.bk-status-processing { background: #fff3cd; color: #856404; }
+.bk-status-shipped    { background: #dbeafe; color: #1d4ed8; }
+.bk-status-delivered  { background: #e3f2e3; color: #2d6e2d; }
+.bk-status-cancelled  { background: #fdeaea; color: #c0392b; }
+
+/* ============================================================
    RWD（≤ 768px）
 ============================================================ */
 @media (max-width: 768px) {
