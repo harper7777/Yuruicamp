@@ -35,6 +35,10 @@ window.initApp = async () => {
     window.initCartListeners();
     window.initPersonalizationModal();
     window._appComponentsInitialized = true;
+  } else {
+    // Header markup may be injected after a page script already ran init.
+    window.updateNavbarLoginState?.();
+    window.updateCartBadge?.();
   }
 
   initFloatingActions(); // 懸浮按鈕
