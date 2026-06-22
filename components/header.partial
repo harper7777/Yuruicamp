@@ -115,6 +115,7 @@
     <div class="modal-content" style="max-width:480px;">
       <div class="modal-header">
         <h5 class="modal-title" id="personalizationTitle">告訴我們你的喜好 🎯</h5>
+        <!-- personalizationModal 只能用此按鈕關閉；未完成時由 modal.js 顯示確認提示。 -->
         <button class="modal-close" title="跳過">✕</button>
       </div>
       <div class="modal-body">
@@ -137,6 +138,7 @@
             <span class="survey-tag" data-value="ultralight">🪶 極輕量</span>
             <span class="survey-tag" data-value="base-camp">⛺ 基地營</span>
           </div>
+          <!-- 下一步需至少選擇 2 個 step 1 標籤，由 modal.js 驗證。 -->
           <button id="surveyNextBtn" class="btn btn-primary btn-block">下一步 →</button>
         </div>
         <div class="survey-step" data-step="2">
@@ -154,6 +156,7 @@
             <span class="survey-tag" data-value="safety">🩹 安全急救</span>
             <span class="survey-tag" data-value="photography">📷 攝影器材</span>
           </div>
+          <!-- 完成需至少選擇 2 個 step 2 標籤，並同步到會員中心喜好標籤。 -->
           <button id="surveyFinishBtn" class="btn btn-primary btn-block">完成設定 ✓</button>
         </div>
       </div>

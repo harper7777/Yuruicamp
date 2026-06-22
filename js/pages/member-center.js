@@ -208,6 +208,66 @@ function _renderMemberRewardPoints(orders) {
 
 // ============================================================
 // Tab 切換邏輯
+/**
+ * Normalize survey preferences from either AppState object shape or profile array shape.
+ * @param {Array|string|Object} preferences - Survey preferences from modal or profile storage
+ * @returns {string[]} Flat preference value list
+ */
+function _normalizePreferenceValues(preferences) {
+  if (Array.isArray(preferences)) return preferences;
+  if (!preferences || typeof preferences !== 'object') return [];
+
+  // Survey modal stores step 1 and step 2 separately; member-center uses one flat tag list.
+  return [
+    ...(preferences.styles || []),
+    ...(preferences.equipment || []),
+  ];
+}
+
+/**
+ * Read saved preferences, preferring the freshly completed survey over profile storage.
+ * @returns {string[]} Selected preference values
+ */
+function _getStoredPreferenceValues() {
+  const savedProfile = JSON.parse(localStorage.getItem('yurui_profile') || '{}');
+  const appPrefs = _normalizePreferenceValues(window.AppState && window.AppState.preferences);
+  if (appPrefs.length > 0) return appPrefs;
+
+  return _normalizePreferenceValues(savedProfile.preferences);
+}
+
+/**
+ * Sync selected survey values into the member-center preference tag UI.
+ * @param {Array|string|Object} preferences - Survey selections to display
+ */
+window.syncMemberPreferenceTags = function(preferences) {
+  const selectedPrefs = _normalizePreferenceValues(preferences);
+  const selectedSet = new Set(selectedPrefs);
+
+  // Repaint each visible member-center tag based on completed survey choices.
+  document.querySelectorAll('#prefTags .survey-tag').forEach(tag => {
+    tag.classList.toggle('active', selectedSet.has(tag.dataset.value));
+  });
+
+  // Persist the flat list so member-center keeps the same active tags after reload.
+  const savedProfile = JSON.parse(localStorage.getItem('yurui_profile') || '{}');
+  savedProfile.preferences = selectedPrefs;
+  localStorage.setItem('yurui_profile', JSON.stringify(savedProfile));
+};
+
+/**
+ * Listen for completed personalization surveys from the shared header modal.
+ */
+function initMemberPreferenceSyncListener() {
+  if (window.__memberPreferenceSyncBound) return;
+  window.__memberPreferenceSyncBound = true;
+
+  // Event action: update member-center tags immediately after survey Finish.
+  window.addEventListener('yurui:preferences-updated', (event) => {
+    window.syncMemberPreferenceTags(event.detail || []);
+  });
+}
+
 // Tab switching logic
 // ============================================================
 
@@ -314,13 +374,16 @@ function initProfilePanel() {
 
   // 喜好標籤 toggle（點擊 → 加/移除 active class）
   // Preference tag toggle on click
-  const savedPrefs = saved.preferences || [];
+  const savedPrefs = _getStoredPreferenceValues();
   document.querySelectorAll('#prefTags .survey-tag').forEach(tag => {
     // 套用已儲存的選取狀態
     if (savedPrefs.includes(tag.dataset.value)) {
       tag.classList.add('active');
     }
+    if (tag.dataset.prefToggleBound === 'true') return;
+    tag.dataset.prefToggleBound = 'true';
     tag.addEventListener('click', () => {
+      // Manual profile action: let users fine-tune synced survey tags.
       tag.classList.toggle('active');
     });
   });
@@ -1149,6 +1212,7 @@ window.initMemberCenterPage = function() {
   // Initialize page-specific features
   initTabSwitching();    // Tab 切換
   initOverviewPanel();   // 總覽
+  initMemberPreferenceSyncListener(); // Listen for shared-header survey completion.
   initProfilePanel();    // 個人資料
   initOrderTypeTabs();   // 重點：初始化購買 / 租借訂單切換面板
   loadOrders();          // 載入訂單
