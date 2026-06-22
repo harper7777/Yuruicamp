@@ -88,8 +88,10 @@ function _initLoginModal() {
   if (!loginModal) return;
 
   // Google 登入按鈕（模擬）
-  const googleBtns = loginModal.querySelectorAll('.btn-google-login');
+  const googleBtns = loginModal.querySelectorAll('.btn-google-login, .btn-facebook-login');
   googleBtns.forEach(btn => {
+    if (btn.dataset.loginBound === 'true') return;
+    btn.dataset.loginBound = 'true';
     btn.addEventListener('click', () => {
       _handleLoginSuccess({
         name: 'Google 用戶',
@@ -103,6 +105,8 @@ function _initLoginModal() {
   // LINE 登入按鈕（模擬）
   const lineBtns = loginModal.querySelectorAll('.btn-line-login');
   lineBtns.forEach(btn => {
+    if (btn.dataset.loginBound === 'true') return;
+    btn.dataset.loginBound = 'true';
     btn.addEventListener('click', () => {
       _handleLoginSuccess({
         name: 'LINE 用戶',
