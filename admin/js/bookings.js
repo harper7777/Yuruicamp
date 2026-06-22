@@ -11,38 +11,95 @@
  *   6. 「取消」開啟取消確認 Modal（#bookingCancelModal），填寫原因後確認
  *   7. 「標記已完成」在明細 Modal 內，僅 confirmed 狀態顯示
  *   8. 顧客姓名連結：設定 window.pendingCustomerId 後觸發切換至客戶管理
+ *   9. KPI 導航：讀取 window.pendingNavFilter，預先套用日期 + 狀態篩選
+ *  10. 篩選：欄位標頭漏斗 icon（付款狀態/訂單狀態/含租借/地區）多選 checkbox Dropdown
+ *  11. 排序：預約單號、下單日期、訂單金額（可疊加，三段循環）
+ *  12. 日期：快速選鈕（近7天/近30天/本月/近3個月/自定義）+ flatpickr
  *
  * 使用 jQuery Event Namespace (.bookings) 防止重複導覽時事件堆疊
  */
 
+// ─────────────────────────────────────────────
+// 模組層級狀態變數（不掛 window，避免污染全域）
+// ─────────────────────────────────────────────
+
+/**
+ * 排序堆疊：依點擊時間順序排列
+ * 每個元素：{ key: 'id' | 'submitted_at' | 'final_amount', dir: 'asc' | 'desc' }
+ * 初始值設為下單日期降冪（最新預約在最上面）
+ */
+var bookingSortStack = [{ key: 'submitted_at', dir: 'desc' }];
+
+/**
+ * 篩選條件：各欄位目前勾選的值
+ * 空陣列 = 不篩選（顯示全部）
+ * dateStart / dateEnd 為 YYYY-MM-DD 字串，null = 不篩選
+ */
+var bookingFilterState = {
+  paymentStatus: [],   // e.g. ['paid', 'refunded']
+  bookingStatus: [],   // e.g. ['pending', 'confirmed']
+  hasRental:     [],   // e.g. ['true', 'false']
+  region:        [],   // e.g. ['北部', '中部']
+  dateStart:     null, // e.g. '2026-05-23'
+  dateEnd:       null  // e.g. '2026-06-22'
+};
+
+/**
+ * 日期快速選鈕狀態
+ * days: 7 | 30 | 90 | 'month' | 'custom' | 'all'
+ *   'all'    = 無日期限制（無任何按鈕 active）
+ *   'custom' = 由 flatpickr 自選
+ * startDate / endDate 為 Date 物件，供 updateBookingPeriodLabel 格式化文字使用
+ */
+var bookingDateState = { days: 30, startDate: null, endDate: null };
+
+// ─────────────────────────────────────────────
+// 初始化
+// ─────────────────────────────────────────────
+
 window.initBookings = function () {
   // 移除舊有事件，防止切換頁面時事件重複綁定
+  // 同時清除 orders 的事件：兩個模組共用 .sortable-th / .filter-icon / .filter-dropdown 選擇器，
+  // 若 orders 事件殘留，點擊漏斗 icon 會被雙重觸發（toggle 兩次 = 無效果）
+  $(document).off('.orders');
   $(document).off('.bookings');
 
-  // 確保 customersCache 已載入，再載入 bookings（顧客姓名查詢需要）
-  // 若 customersCache 不存在（直接進入預約管理而未經過客戶管理頁），先 fetch customers
-  function loadBookingsData() {
-    if (window.bookingsCache && window.bookingsCache.length > 0) {
-      renderBookingsTable(window.bookingsCache);
-    } else {
-      $.getJSON('data/bookings.json', function (bookings) {
-        window.bookingsCache = bookings;
-        renderBookingsTable(bookings);
-      }).fail(function () {
-        $('#bookingsTableBody').html(
-          '<tr><td colspan="9" class="text-center text-danger py-4">' +
-          '<i class="fas fa-exclamation-triangle me-2"></i>載入預約數據失敗' +
-          '</td></tr>'
-        );
-      });
-    }
-  }
+  // ── 每次進入預約頁重置排序與篩選狀態（還原預設：日期降冪） ──
+  bookingSortStack   = [{ key: 'submitted_at', dir: 'desc' }];
+  bookingFilterState = { paymentStatus: [], bookingStatus: [], hasRental: [], region: [], dateStart: null, dateEnd: null };
+  bookingDateState   = { days: 30, startDate: null, endDate: null };
 
+  // ── 初始化日期篩選器 UI ─────────────────────────
+  setupBookingPeriodFilter(); // 綁定快速選鈕點擊事件
+  initBookingFlatpickr();     // 初始化 flatpickr
+
+  // ── 讀取並消費 pendingNavFilter（從 KPI 卡片點擊跳來時） ──
+  if (window.pendingNavFilter && window.pendingNavFilter.section === 'bookings') {
+    var nav = window.pendingNavFilter;
+    // 單字串包裝成陣列，對應新的 filterState 陣列格式
+    if (nav.bookingStatus) bookingFilterState.bookingStatus = [nav.bookingStatus];
+    if (nav.paymentStatus) bookingFilterState.paymentStatus = [nav.paymentStatus];
+    window.pendingNavFilter = null; // 消費後立即清除，避免切換回來時重複套用
+
+    if (nav.dateStart && nav.dateEnd) {
+      // KPI 帶日期 → 自定義範圍
+      applyBookingCustomRange(nav.dateStart, nav.dateEnd);
+    } else {
+      // KPI 不帶日期 → 無日期限制，全部期間
+      applyBookingDayRange('all');
+    }
+  } else {
+    // 一般進入預約管理頁：預設顯示「近 30 天」
+    applyBookingDayRange(30);
+  }
+  // 注意：applyBookingDayRange / applyBookingCustomRange 內部已呼叫 applyBookingFiltersAndSort()
+  // 若快取尚未就緒，下面的資料載入 callback 會再呼叫一次 applyBookingFiltersAndSort()
+
+  // ── 確保 customersCache 已載入，再載入 bookings ──
+  // 顧客姓名查詢需要 customersCache；若直接進入預約管理頁則先 fetch
   if (window.customersCache && window.customersCache.length > 0) {
-    // customersCache 已有資料，直接渲染
     loadBookingsData();
   } else {
-    // 尚未載入客戶資料，先 fetch customers.json 再渲染 bookings
     $.getJSON('data/customers.json', function (customers) {
       window.customersCache = customers;
       loadBookingsData();
@@ -52,9 +109,67 @@ window.initBookings = function () {
     });
   }
 
-  // ── 雙篩選（訂單狀態 + 付款狀態，AND 邏輯）──────────────────
-  $(document).on('change.bookings', '#bookingStatusFilter, #paymentStatusFilter', function () {
-    applyBookingFilters();
+  // ── 排序：點擊 .sortable-th 標頭 ──────────────────
+  // 三段式循環：無排序 → asc ↑ → desc ↓ → 移除（回無排序）
+  $(document).on('click.bookings', '.sortable-th', function () {
+    var key = $(this).data('sort-key'); // 欄位 key：id / submitted_at / final_amount
+    var idx = bookingSortStack.findIndex(function (s) { return s.key === key; });
+
+    if (idx === -1) {
+      // 此欄尚未在排序堆疊中 → 加入，預設升冪
+      bookingSortStack.push({ key: key, dir: 'asc' });
+    } else if (bookingSortStack[idx].dir === 'asc') {
+      // 目前升冪 → 改為降冪
+      bookingSortStack[idx].dir = 'desc';
+    } else {
+      // 目前降冪 → 從堆疊移除（回無排序）
+      bookingSortStack.splice(idx, 1);
+    }
+
+    applyBookingFiltersAndSort();
+  });
+
+  // ── 篩選 Dropdown 開關：點擊漏斗 icon ──────────────
+  // 點擊 .filter-icon → 顯示/隱藏同一個 th 內的 .filter-dropdown
+  $(document).on('click.bookings', '.filter-icon', function (e) {
+    e.stopPropagation(); // 防止冒泡到 document，避免立即被關閉
+    var $th = $(this).closest('.filter-th');
+    var $dropdown = $th.find('.filter-dropdown');
+
+    // 先關閉所有其他已開啟的 Dropdown，再 toggle 當前的
+    $('.filter-dropdown').not($dropdown).addClass('d-none');
+    $dropdown.toggleClass('d-none');
+  });
+
+  // ── 點擊 Dropdown 內部（checkbox / label）時，阻止冒泡關閉 ──
+  $(document).on('click.bookings', '.filter-dropdown', function (e) {
+    e.stopPropagation();
+  });
+
+  // ── 點擊頁面其他地方 → 關閉所有 Dropdown ──────────
+  $(document).on('click.bookings', function () {
+    $('.filter-dropdown').addClass('d-none');
+  });
+
+  // ── 篩選 checkbox 勾選/取消 ────────────────────────
+  $(document).on('change.bookings', '.filter-dropdown input[type="checkbox"]', function () {
+    var $th  = $(this).closest('.filter-th');
+    var key  = $th.data('filter-key'); // 'paymentStatus' / 'bookingStatus' / 'hasRental' / 'region'
+
+    // 收集該欄位所有勾選中的 checkbox 值
+    var selected = [];
+    $th.find('input[type="checkbox"]:checked').each(function () {
+      selected.push($(this).val());
+    });
+
+    bookingFilterState[key] = selected;
+    applyBookingFiltersAndSort();
+  });
+
+  // ── 清除排序按鈕 ───────────────────────────────────
+  $(document).on('click.bookings', '#btnClearBookingSort', function () {
+    bookingSortStack = [{ key: 'submitted_at', dir: 'desc' }]; // 還原預設：日期降冪
+    applyBookingFiltersAndSort();
   });
 
   // ── 點擊預約單號 → 開啟明細 Modal ────────────────────────────
@@ -194,17 +309,375 @@ window.initBookings = function () {
   }
 };
 
+// ─────────────────────────────────────────────
+// 資料載入
+// ─────────────────────────────────────────────
+
+/**
+ * 載入 bookings.json（若快取已存在則不重新 fetch），載入後觸發管線
+ * 需在 customersCache 確認後呼叫
+ */
+function loadBookingsData() {
+  if (window.bookingsCache && window.bookingsCache.length > 0) {
+    applyBookingFiltersAndSort();
+  } else {
+    $.getJSON('data/bookings.json', function (bookings) {
+      window.bookingsCache = bookings;
+      applyBookingFiltersAndSort();
+    }).fail(function () {
+      $('#bookingsTableBody').html(
+        '<tr><td colspan="10" class="text-center text-danger py-4">' +
+        '<i class="fas fa-exclamation-triangle me-2"></i>載入預約數據失敗' +
+        '</td></tr>'
+      );
+    });
+  }
+}
+
+// ─────────────────────────────────────────────
+// 日期篩選器輔助函式（對齊 orders.js 架構）
+// ─────────────────────────────────────────────
+
+/**
+ * 將 Date 物件格式化為 "YYYY/MM/DD" 字串，供期間標籤顯示
+ * @param {Date} d
+ * @returns {string}
+ */
+function fmtBookingDate(d) {
+  if (!d) return '';
+  return d.getFullYear() + '/' +
+    String(d.getMonth() + 1).padStart(2, '0') + '/' +
+    String(d.getDate()).padStart(2, '0');
+}
+
+/**
+ * 將 Date 物件格式化為 "YYYY-MM-DD" 字串，供 filterState 使用
+ * @param {Date} d
+ * @returns {string|null}
+ */
+function fmtBookingDateISO(d) {
+  if (!d) return null;
+  return d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0');
+}
+
+/**
+ * 依 days 數值計算起迄日，更新 bookingDateState 和 filterState，
+ * 再刷新期間文字與表格資料
+ *
+ * @param {number|string} days - 7 | 30 | 90 | 'month' | 'all'
+ *   'all' = 清空日期（無限制，全部顯示）
+ */
+function applyBookingDayRange(days) {
+  if (days === 'all') {
+    // 清空日期限制
+    bookingDateState.days      = 'all';
+    bookingDateState.startDate = null;
+    bookingDateState.endDate   = null;
+    bookingFilterState.dateStart = null;
+    bookingFilterState.dateEnd   = null;
+  } else if (days === 'month') {
+    // 本月：從本月 1 日到今天
+    var now   = new Date();
+    var start = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    bookingDateState.days      = 'month';
+    bookingDateState.startDate = start;
+    bookingDateState.endDate   = new Date(now);
+    bookingFilterState.dateStart = fmtBookingDateISO(start);
+    bookingFilterState.dateEnd   = fmtBookingDateISO(new Date(now));
+  } else {
+    // 往前推 days-1 天（含今天共 days 天）
+    var now   = new Date();
+    var start = new Date(now);
+    start.setDate(start.getDate() - (days - 1));
+
+    bookingDateState.days      = days;
+    bookingDateState.startDate = start;
+    bookingDateState.endDate   = new Date(now);
+    bookingFilterState.dateStart = fmtBookingDateISO(start);
+    bookingFilterState.dateEnd   = fmtBookingDateISO(new Date(now));
+  }
+  // 非 custom 模式：收起 flatpickr input
+  if (days !== 'custom') {
+    $('#bookingDateRangePicker').hide();
+  }
+  updateBookingPeriodLabel();
+  applyBookingFiltersAndSort();
+}
+
+/**
+ * 接受兩個 YYYY-MM-DD 字串，設定為自定義日期範圍，
+ * 更新 bookingDateState 和 filterState，再刷新表格
+ *
+ * @param {string} dateStart - e.g. '2026-05-23'
+ * @param {string} dateEnd   - e.g. '2026-06-22'
+ */
+function applyBookingCustomRange(dateStart, dateEnd) {
+  bookingDateState.days      = 'custom';
+  bookingDateState.startDate = dateStart ? new Date(dateStart + 'T00:00:00') : null;
+  bookingDateState.endDate   = dateEnd   ? new Date(dateEnd   + 'T00:00:00') : null;
+  bookingFilterState.dateStart = dateStart || null;
+  bookingFilterState.dateEnd   = dateEnd   || null;
+  updateBookingPeriodLabel();
+  applyBookingFiltersAndSort();
+}
+
+/**
+ * 依 bookingDateState 更新期間文字標籤 #bookingPeriodLabel
+ * 以及 #bookingPeriodBtns 各按鈕的 active 樣式
+ */
+function updateBookingPeriodLabel() {
+  var days = bookingDateState.days;
+
+  // 更新按鈕群 active 狀態
+  $('#bookingPeriodBtns button').removeClass('active');
+  if (days !== 'all') {
+    $('#bookingPeriodBtns button[data-days="' + days + '"]').addClass('active');
+  }
+
+  // 更新期間文字標籤
+  if (days === 'all') {
+    $('#bookingPeriodLabel').text('全部期間');
+  } else if (bookingDateState.startDate && bookingDateState.endDate) {
+    $('#bookingPeriodLabel').text(
+      fmtBookingDate(bookingDateState.startDate) + ' ～ ' + fmtBookingDate(bookingDateState.endDate)
+    );
+  } else {
+    $('#bookingPeriodLabel').text('');
+  }
+}
+
+/**
+ * 初始化 #bookingDateRangePicker 的 flatpickr 日期範圍選擇器
+ * mode: range，繁體中文語系，格式 Y-m-d
+ */
+function initBookingFlatpickr() {
+  if (typeof flatpickr === 'undefined') return; // CDN 未載入時安全跳過
+
+  var locale = (flatpickr.l10ns && flatpickr.l10ns.zh_tw)
+    ? flatpickr.l10ns.zh_tw
+    : 'default';
+
+  flatpickr('#bookingDateRangePicker', {
+    mode: 'range',
+    dateFormat: 'Y-m-d',
+    locale: locale,
+    onClose: function (selectedDates) {
+      // 必須兩個日期都選完才觸發；只選一個就關閉時維持上一次狀態
+      if (selectedDates.length === 2) {
+        var start = fmtBookingDateISO(selectedDates[0]);
+        var end   = fmtBookingDateISO(selectedDates[1]);
+        applyBookingCustomRange(start, end);
+      }
+    }
+  });
+}
+
+/**
+ * 綁定 #bookingPeriodBtns 內按鈕的點擊事件
+ *
+ * 行為：
+ *  - 點擊「近 7 天 / 近 30 天 / 近 3 個月」：
+ *      • 若該按鈕已 active → toggle off，回到「全部期間」
+ *      • 否則 → 套用對應天數
+ *  - 點擊「本月」：已 active → 全部期間；否則 → 套用本月
+ *  - 點擊「自定義」：顯示 flatpickr input 並觸發開啟
+ */
+function setupBookingPeriodFilter() {
+  $(document).on('click.bookings', '#bookingPeriodBtns button[data-days]', function () {
+    var days = $(this).data('days');
+
+    if (days === 'custom') {
+      // 顯示 flatpickr input 並開啟選擇器
+      $('#bookingDateRangePicker').show().trigger('click');
+    } else if (days === 'month') {
+      if ($(this).hasClass('active')) {
+        applyBookingDayRange('all');
+      } else {
+        applyBookingDayRange('month');
+      }
+    } else if ($(this).hasClass('active')) {
+      // 再次點擊已 active 的按鈕 → 取消，回到「全部期間」
+      applyBookingDayRange('all');
+    } else {
+      applyBookingDayRange(parseInt(days, 10));
+    }
+  });
+}
+
+// ─────────────────────────────────────────────
+// 核心資料管線
+// ─────────────────────────────────────────────
+
+/**
+ * 依目前的 bookingFilterState 篩選、依 bookingSortStack 排序，再重新渲染表格
+ * 所有排序/篩選條件變動後都呼叫此函式
+ */
+function applyBookingFiltersAndSort() {
+  // 複製陣列，確保不改動 window.bookingsCache 原始資料
+  var data = (window.bookingsCache || []).slice();
+
+  // ── Step 1：篩選 ──────────────────────────────────
+
+  // 付款狀態篩選（OR）：有勾選時才篩；空陣列 = 顯示全部
+  if (bookingFilterState.paymentStatus.length > 0) {
+    data = data.filter(function (b) {
+      return bookingFilterState.paymentStatus.indexOf(b.payment_status) !== -1;
+    });
+  }
+
+  // 訂單狀態篩選（OR）：有勾選時才篩；空陣列 = 顯示全部
+  if (bookingFilterState.bookingStatus.length > 0) {
+    data = data.filter(function (b) {
+      return bookingFilterState.bookingStatus.indexOf(b.status) !== -1;
+    });
+  }
+
+  // 含租借篩選（OR）：比對 selected_rentals.length > 0
+  // checkbox value 為字串 'true'/'false'，需轉換後比對
+  if (bookingFilterState.hasRental.length > 0) {
+    data = data.filter(function (b) {
+      var hasRentalStr = (b.selected_rentals && b.selected_rentals.length > 0) ? 'true' : 'false';
+      return bookingFilterState.hasRental.indexOf(hasRentalStr) !== -1;
+    });
+  }
+
+  // 地區篩選（OR）：來自 booking_info.region
+  if (bookingFilterState.region.length > 0) {
+    data = data.filter(function (b) {
+      return bookingFilterState.region.indexOf(b.booking_info.region) !== -1;
+    });
+  }
+
+  // 日期範圍篩選：依 submitted_at 欄位（格式 YYYY-MM-DD 或 YYYY-MM-DD HH:MM:SS）
+  if (bookingFilterState.dateStart) {
+    data = data.filter(function (b) {
+      return (b.submitted_at || '').slice(0, 10) >= bookingFilterState.dateStart;
+    });
+  }
+  if (bookingFilterState.dateEnd) {
+    data = data.filter(function (b) {
+      return (b.submitted_at || '').slice(0, 10) <= bookingFilterState.dateEnd;
+    });
+  }
+
+  // ── Step 2：排序 ──────────────────────────────────
+  // 依 bookingSortStack 的優先順序逐層比較（多鍵穩定排序）
+  if (bookingSortStack.length > 0) {
+    data.sort(function (a, b) {
+      for (var i = 0; i < bookingSortStack.length; i++) {
+        var key = bookingSortStack[i].key;
+        var dir = bookingSortStack[i].dir === 'asc' ? 1 : -1;
+
+        // 依欄位取值（final_amount 從 summary 取得）
+        var valA, valB;
+        if (key === 'final_amount') {
+          valA = (a.summary && a.summary.final_amount) || 0;
+          valB = (b.summary && b.summary.final_amount) || 0;
+        } else if (key === 'submitted_at') {
+          valA = (a.submitted_at || '').slice(0, 10);
+          valB = (b.submitted_at || '').slice(0, 10);
+        } else {
+          valA = a[key] || '';
+          valB = b[key] || '';
+        }
+
+        if (valA < valB) return -1 * dir;
+        if (valA > valB) return  1 * dir;
+        // 相等時繼續比下一層
+      }
+      return 0;
+    });
+  }
+
+  // ── Step 3：渲染 + 更新 UI ────────────────────────
+  renderBookingsTable(data);
+  updateBookingSortUI();
+  updateBookingFilterUI();
+}
+
+// ─────────────────────────────────────────────
+// UI 同步更新
+// ─────────────────────────────────────────────
+
+/**
+ * 依 bookingSortStack 更新欄位標頭的箭頭 icon 和「清除排序」按鈕的顯隱
+ */
+function updateBookingSortUI() {
+  // 所有排序 icon 先重置為雙箭頭（灰色、未排序狀態）
+  $('.sort-icon')
+    .removeClass('fa-sort-up fa-sort-down sort-active')
+    .addClass('fa-sort');
+
+  // 依 bookingSortStack 設定對應欄位的箭頭方向和顏色
+  bookingSortStack.forEach(function (s) {
+    var $icon = $('.sortable-th[data-sort-key="' + s.key + '"] .sort-icon');
+    $icon
+      .removeClass('fa-sort')
+      .addClass(s.dir === 'asc' ? 'fa-sort-up' : 'fa-sort-down')
+      .addClass('sort-active'); // 換成品牌色
+  });
+
+  // 有排序條件時顯示「清除排序」按鈕；否則隱藏
+  // bookingSortStack 長度 > 1 或第一層不是預設的日期降冪 → 視為「有排序」
+  var isDefault = (
+    bookingSortStack.length === 1 &&
+    bookingSortStack[0].key === 'submitted_at' &&
+    bookingSortStack[0].dir === 'desc'
+  );
+  if (isDefault || bookingSortStack.length === 0) {
+    $('#btnClearBookingSort').addClass('d-none');
+  } else {
+    $('#btnClearBookingSort').removeClass('d-none');
+  }
+}
+
+/**
+ * 依 bookingFilterState 更新漏斗 icon 的顏色和紅點的顯隱
+ * 同時同步 checkbox 的勾選狀態（讓 pendingNavFilter 套用後 UI 可見）
+ * 同時同步日期按鈕 active 狀態與期間文字標籤
+ */
+function updateBookingFilterUI() {
+  // 遍歷四個可篩選的欄位（漏斗 icon + 紅點）
+  ['paymentStatus', 'bookingStatus', 'hasRental', 'region'].forEach(function (key) {
+    var $th   = $('.filter-th[data-filter-key="' + key + '"]');
+    var $icon = $th.find('.filter-icon');
+    var $dot  = $th.find('.filter-dot');
+
+    if (bookingFilterState[key].length > 0) {
+      // 有啟用中的篩選條件：icon 變品牌色 + 顯示紅點
+      $icon.addClass('active');
+      $dot.removeClass('d-none');
+      // 同步 checkbox 勾選狀態（KPI 跳來時讓 UI 可見）
+      $th.find('input[type="checkbox"]').each(function () {
+        $(this).prop('checked', bookingFilterState[key].indexOf($(this).val()) !== -1);
+      });
+    } else {
+      // 無篩選條件：icon 回灰色 + 隱藏紅點 + 取消所有勾選
+      $icon.removeClass('active');
+      $dot.addClass('d-none');
+      $th.find('input[type="checkbox"]').prop('checked', false);
+    }
+  });
+
+  // 同步日期篩選器按鈕 active 狀態與期間文字標籤
+  updateBookingPeriodLabel();
+}
+
 // ═══════════════════════════════════════════════════════════════
 // renderBookingsTable(bookings)
 // 將 bookings 陣列渲染成 HTML 表格列，填入 #bookingsTableBody
 // ═══════════════════════════════════════════════════════════════
 /**
- * @param {Array} bookings - bookings.json 的資料陣列
+ * @param {Array} bookings - 已篩選並排序完畢的預約陣列
  */
 function renderBookingsTable(bookings) {
   if (!bookings || bookings.length === 0) {
     $('#bookingsTableBody').html(
-      '<tr><td colspan="9" class="text-center text-muted py-4">目前沒有預約資料</td></tr>'
+      '<tr><td colspan="10" class="text-center text-muted py-4">' +
+      '<i class="fas fa-inbox me-2"></i>沒有符合條件的預約</td></tr>'
     );
     return;
   }
@@ -224,7 +697,7 @@ function renderBookingsTable(bookings) {
     var payBadge    = getPayBadgeHtml(booking.payment_status);
     var statusBadge = statusBadgeMap[booking.status] || '';
 
-    // ── 含租借 badge ──
+    // ── 含租借 badge（同時計算 hasRental 字串供 data 屬性使用）──
     var hasRental = booking.selected_rentals && booking.selected_rentals.length > 0;
     var rentalBadge = hasRental
       ? '<span class="badge bg-success">有租借</span>'
@@ -244,22 +717,15 @@ function renderBookingsTable(bookings) {
         'title="取消預約"><i class="fas fa-times me-1"></i>取消</button>';
     }
 
-    // ── 下單日期拆分日期 + 時間 ──
-    var dateParts = (booking.submitted_at || '').split(' ');
-    var dateStr = dateParts[0] || '';
-    var timeStr = dateParts[1] || '';
+    // ── 下單日期：只取 YYYY-MM-DD ──
+    var dateStr = (booking.submitted_at || '').split(' ')[0] || '';
 
-    // ── 入住・退營（幾晚）──
-    var checkIn  = info.check_in  || '';
-    var checkOut = info.check_out || '';
-    var nights   = info.total_days || 0;
-    var stayStr  = checkIn + ' ～ ' + checkOut +
-                   '<br><small class="text-muted">共 ' + nights + ' 晚</small>';
+    // ── 訂單金額 ──
+    var finalAmount = (booking.summary && booking.summary.final_amount) || 0;
+    var amountStr = 'NT$ ' + finalAmount.toLocaleString();
 
-    // ── 營區 + 地區 badge ──
-    var campStr = info.campground_name +
-                  '<br><span class="badge bg-secondary bg-opacity-50 text-dark small">' +
-                  info.region + '</span>';
+    // ── 營區（僅顯示名稱，地區移至獨立欄位）──
+    var campStr = info.campground_name;
 
     // ── 預約單號連結 ──
     var idLink =
@@ -268,32 +734,35 @@ function renderBookingsTable(bookings) {
       'style="cursor:pointer; text-decoration:underline dotted;" ' +
       'title="點擊查看預約明細">' + booking.id + '</span>';
 
-    // ── 顧客姓名超連結（帶 customer_id，點擊後跳轉至客戶管理）──
+    // ── 顧客姓名超連結 ──
     var customerLink =
       '<a href="#" class="booking-customer-link text-decoration-underline" ' +
       'data-customer-id="' + booking.customer_id + '" ' +
       'title="查看顧客檔案">' +
-      // 從 customers 快取查名字；快取未載入時顯示 customer_id
       getCustomerName(booking.customer_id) +
       '</a>';
 
+    // ── <tr> 包含新增的 data-region 和 data-has-rental 屬性 ──
     return '<tr data-booking-id="' + booking.id + '"' +
            ' data-booking-status="' + booking.status + '"' +
-           ' data-payment-status="' + booking.payment_status + '">' +
+           ' data-payment-status="' + booking.payment_status + '"' +
+           ' data-submitted-at="' + (booking.submitted_at || '').slice(0, 10) + '"' +
+           ' data-region="' + info.region + '"' +
+           ' data-has-rental="' + (hasRental ? 'true' : 'false') + '">' +
            '<td>' + idLink + '</td>' +
-           '<td>' + dateStr + '<br><small class="text-muted">' + timeStr + '</small></td>' +
+           '<td>' + dateStr + '</td>' +
            '<td>' + customerLink + '</td>' +
-           '<td>' + stayStr + '</td>' +
+           '<td>' + amountStr + '</td>' +
            '<td>' + campStr + '</td>' +
            '<td class="text-center">' + rentalBadge + '</td>' +
            '<td>' + payBadge + '</td>' +
            '<td>' + statusBadge + '</td>' +
+           '<td>' + info.region + '</td>' +
            '<td>' + actionBtns + '</td>' +
            '</tr>';
   }).join('');
 
   $('#bookingsTableBody').html(html);
-  applyBookingFilters();
 
   if (typeof window.applyEditPermission === 'function') {
     window.applyEditPermission('bookings', $('#contentArea'));
@@ -415,7 +884,6 @@ function showBookingModal(booking) {
   var showReturn = (booking.status === 'confirmed') && (rentals.length > 0);
   if (showReturn) {
     $('#equipmentReturnSection').removeClass('d-none');
-    // 重置 checkbox 勾選狀態
     $('#equipmentReturnedCheck').prop('checked', booking.equipment_returned || false);
   } else {
     $('#equipmentReturnSection').addClass('d-none');
@@ -448,22 +916,8 @@ function showBookingModal(booking) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// applyBookingFilters()
-// 依 #bookingStatusFilter 與 #paymentStatusFilter 雙條件（AND）顯示列
+// 工具函式
 // ═══════════════════════════════════════════════════════════════
-function applyBookingFilters() {
-  var orderStatus  = $('#bookingStatusFilter').val()  || 'all';
-  var paymentStatus = $('#paymentStatusFilter').val() || 'all';
-
-  $('#bookingsTableBody tr[data-booking-id]').each(function () {
-    var $row = $(this);
-    var matchOrder   = (orderStatus === 'all') ||
-                       ($row.attr('data-booking-status') === orderStatus);
-    var matchPayment = (paymentStatus === 'all') ||
-                       ($row.attr('data-payment-status') === paymentStatus);
-    $row.toggle(matchOrder && matchPayment);
-  });
-}
 
 /**
  * 產生付款狀態 badge HTML
@@ -477,10 +931,6 @@ function getPayBadgeHtml(paymentStatus) {
   };
   return map[paymentStatus] || '';
 }
-
-// ═══════════════════════════════════════════════════════════════
-// 工具函式
-// ═══════════════════════════════════════════════════════════════
 
 /**
  * 從 customersCache 查詢顧客姓名

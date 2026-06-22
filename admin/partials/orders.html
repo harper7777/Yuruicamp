@@ -6,23 +6,44 @@
 
 <div class="card shadow-sm border-0">
 
-  <!-- 卡片頂部：標題 + 篩選 Select -->
+  <!-- 卡片頂部：標題 + 日期篩選 + 清除排序按鈕 -->
+  <!-- 舊的 #orderStatusFilter select 已移除，篩選功能改由欄位標頭的漏斗 icon 負責 -->
   <div class="card-header bg-white border-0
-              d-flex justify-content-between align-items-center py-3">
+              d-flex justify-content-between align-items-center flex-wrap gap-2 py-3">
     <h6 class="fw-semibold mb-0">
       <i class="fas fa-shopping-bag me-2 text-muted"></i>訂單列表
     </h6>
 
-    <!-- 狀態篩選下拉選單 -->
-    <!-- orders.js 監聽此 Select 的 change 事件，根據 data-order-status 屬性篩選列 -->
-    <!-- value 對應 orders.json 的 orderStatus 欄位三種值 -->
-    <select class="form-select form-select-sm w-auto" id="orderStatusFilter"
-            style="min-width: 120px;">
-      <option value="all">全部訂單</option>
-      <option value="unshipped">未出貨</option>
-      <option value="shipped">已出貨</option>
-      <option value="returned">已退貨</option>
-    </select>
+    <!-- 右側工具列：日期篩選 + 清除排序按鈕 -->
+    <div class="d-flex align-items-center flex-wrap gap-2">
+
+      <!-- 日期篩選器：快速選鈕 + flatpickr 自定義 + 期間文字 -->
+      <!-- 與分析報表頁風格一致；由 orders.js setupOrderPeriodFilter / initOrderFlatpickr 驅動 -->
+      <div class="d-flex align-items-center flex-wrap gap-2">
+        <div class="btn-group btn-group-sm" id="orderPeriodBtns" role="group">
+          <button type="button" class="btn btn-outline-secondary" data-days="7">近 7 天</button>
+          <button type="button" class="btn btn-outline-secondary active" data-days="30">近 30 天</button>
+          <button type="button" class="btn btn-outline-secondary" data-days="month">本月</button>
+          <button type="button" class="btn btn-outline-secondary" data-days="90">近 3 個月</button>
+          <button type="button" class="btn btn-outline-secondary" data-days="custom">
+            <i class="fas fa-calendar-alt me-1"></i>自定義
+          </button>
+        </div>
+        <!-- flatpickr input：預設 hidden，點「自定義」才顯示 -->
+        <input type="text" id="orderDateRangePicker"
+               class="form-control form-control-sm"
+               style="max-width: 230px; display: none;"
+               placeholder="開始日期 ~ 結束日期" readonly>
+        <!-- 期間文字：由 updateOrderPeriodLabel() 動態更新 -->
+        <span class="text-muted small" id="orderPeriodLabel"></span>
+      </div>
+
+      <!-- 清除排序按鈕：只有在排序堆疊不為空時才顯示，由 updateSortUI() 控制 d-none -->
+      <button id="btnClearSort" class="btn btn-sm btn-outline-secondary d-none">
+        <i class="fas fa-rotate-left me-1"></i>清除排序
+      </button>
+
+    </div>
   </div>
 
   <!-- 表格容器 -->
@@ -31,12 +52,55 @@
       <table class="table table-hover mb-0" id="ordersTable">
         <thead class="table-light">
           <tr>
-            <th>訂單編號</th>
-            <th>訂單日期</th>
+            <!-- 排序欄位：加 .sortable-th class 和 data-sort-key，orders.js 監聽點擊 -->
+
+            <!-- 訂單編號：字串排序（字典序） -->
+            <th class="sortable-th" data-sort-key="id">
+              訂單編號 <i class="fas fa-sort sort-icon ms-1"></i>
+            </th>
+
+            <!-- 訂單日期：字串排序（ISO 格式 YYYY-MM-DD 可直接比大小） -->
+            <th class="sortable-th" data-sort-key="createdAt">
+              訂單日期 <i class="fas fa-sort sort-icon ms-1"></i>
+            </th>
+
+            <!-- 客戶姓名：不排序，不加 icon -->
             <th>客戶姓名</th>
-            <th>總金額</th>
-            <th>付款狀態</th>
-            <th>訂單狀態</th>
+
+            <!-- 總金額：數值排序 -->
+            <th class="sortable-th" data-sort-key="total">
+              總金額 <i class="fas fa-sort sort-icon ms-1"></i>
+            </th>
+
+            <!-- 付款狀態：多選篩選欄位
+                 .filter-th = 相對定位基準（供 Dropdown 絕對定位）
+                 data-filter-key = 對應 orders.json 的欄位名稱
+                 .filter-icon = 漏斗 icon，啟用時加 .active 變色
+                 .filter-dot = 紅點，有篩選條件時移除 d-none
+                 .filter-dropdown = checkbox 選單，預設 d-none -->
+            <th class="filter-th" data-filter-key="paymentStatus">
+              付款狀態
+              <i class="fas fa-filter filter-icon ms-1"></i>
+              <span class="filter-dot d-none"></span>
+              <div class="filter-dropdown d-none">
+                <label><input type="checkbox" value="paid"> 已付款</label>
+                <label><input type="checkbox" value="unpaid"> 未付款</label>
+                <label><input type="checkbox" value="cod"> 貨到付款</label>
+              </div>
+            </th>
+
+            <!-- 訂單狀態：多選篩選欄位（同上） -->
+            <th class="filter-th" data-filter-key="orderStatus">
+              訂單狀態
+              <i class="fas fa-filter filter-icon ms-1"></i>
+              <span class="filter-dot d-none"></span>
+              <div class="filter-dropdown d-none">
+                <label><input type="checkbox" value="unshipped"> 未出貨</label>
+                <label><input type="checkbox" value="shipped"> 已出貨</label>
+                <label><input type="checkbox" value="returned"> 已退貨</label>
+              </div>
+            </th>
+
             <th>操作</th>
           </tr>
         </thead>

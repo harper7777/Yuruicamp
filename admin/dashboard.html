@@ -11,6 +11,9 @@
   <!-- Font Awesome 6 圖示庫 -->
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- flatpickr 日期選擇器 CSS（供 analytics 頁面期間篩選器使用） -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <!-- 後台專屬樣式 -->
   <link rel="stylesheet" href="css/admin.css">
 </head>
@@ -309,6 +312,20 @@
 
           <hr class="my-3">
 
+          <!-- 顧客備註（customerNote 有值才顯示，否則 d-none）-->
+          <!-- orders.js 的 showOrderModal() 會動態控制此區塊的顯隱 -->
+          <div id="modalCustomerNoteSection" class="d-none">
+            <h6 class="fw-semibold mb-2">
+              <i class="fas fa-comment-dots me-2 text-muted"></i>顧客備註
+            </h6>
+            <!-- white-space: pre-wrap：保留顧客輸入的換行符號 -->
+            <!-- word-break: break-all：避免長文字撐破版面 -->
+            <p id="modalCustomerNote"
+               class="text-muted mb-0"
+               style="white-space: pre-wrap; word-break: break-all;"></p>
+            <hr class="my-3">
+          </div>
+
           <!-- 訂單紀錄時間軸 -->
           <!-- orders.js 的 showOrderModal() 會動態填入 #modalHistory -->
           <h6 class="fw-semibold mb-2">
@@ -551,23 +568,153 @@
               </div>
             </div>
 
+            <!-- [新增] 編輯商店商品時顯示的分店庫存區塊，新增模式預設隱藏 -->
+            <!-- Branch stock section: visible only in store-product edit mode -->
+            <div class="mb-3 d-none" id="editBranchStockField">
+              <label class="form-label fw-semibold">各分店庫存</label>
+              <small class="text-muted d-block mb-2">
+                庫存需先歸零才能取消勾選；取消勾選後該分店庫存視為 0。
+              </small>
+
+              <!-- 總庫存唯讀顯示：由各分店數量自動加總 -->
+              <!-- Read-only total: auto-computed from branch inputs -->
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="text-muted small">總庫存：</span>
+                <span id="editBranchTotalStock" class="fw-semibold">0</span>
+                <span class="text-muted small">件</span>
+              </div>
+
+              <!-- 固定 4 列：主倉 / 分店A / B / C，仿租借 checkbox + 數量樣式 -->
+              <!-- Fixed 4 rows: main warehouse + branch A/B/C, same style as rental camps -->
+              <div class="vstack gap-2" id="editBranchPresetList">
+
+                <div class="input-group input-group-sm edit-branch-row" data-branch-id="main">
+                  <div class="input-group-text" style="width:32px; justify-content:center;">
+                    <input class="form-check-input mt-0 edit-branch-check" type="checkbox" checked
+                           aria-label="主倉">
+                  </div>
+                  <span class="input-group-text" style="min-width:80px;">主倉</span>
+                  <input type="number" class="form-control edit-branch-quantity-input"
+                         min="0" value="0" aria-label="主倉存放數量">
+                </div>
+
+                <div class="input-group input-group-sm edit-branch-row" data-branch-id="branch-001">
+                  <div class="input-group-text" style="width:32px; justify-content:center;">
+                    <input class="form-check-input mt-0 edit-branch-check" type="checkbox" checked
+                           aria-label="分店 A">
+                  </div>
+                  <span class="input-group-text" style="min-width:80px;">分店 A</span>
+                  <input type="number" class="form-control edit-branch-quantity-input"
+                         min="0" value="0" aria-label="分店 A 存放數量">
+                </div>
+
+                <div class="input-group input-group-sm edit-branch-row" data-branch-id="branch-002">
+                  <div class="input-group-text" style="width:32px; justify-content:center;">
+                    <input class="form-check-input mt-0 edit-branch-check" type="checkbox" checked
+                           aria-label="分店 B">
+                  </div>
+                  <span class="input-group-text" style="min-width:80px;">分店 B</span>
+                  <input type="number" class="form-control edit-branch-quantity-input"
+                         min="0" value="0" aria-label="分店 B 存放數量">
+                </div>
+
+                <div class="input-group input-group-sm edit-branch-row" data-branch-id="branch-003">
+                  <div class="input-group-text" style="width:32px; justify-content:center;">
+                    <input class="form-check-input mt-0 edit-branch-check" type="checkbox" checked
+                           aria-label="分店 C">
+                  </div>
+                  <span class="input-group-text" style="min-width:80px;">分店 C</span>
+                  <input type="number" class="form-control edit-branch-quantity-input"
+                         min="0" value="0" aria-label="分店 C 存放數量">
+                </div>
+
+              </div><!-- end #editBranchPresetList -->
+            </div><!-- end #editBranchStockField -->
+
             <!-- 租借商品設定 -->
             <div class="mb-3">
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="newProductIsRental">
-                <label class="form-check-label fw-semibold" for="newProductIsRental">
-                  是否為租借商品
-                </label>
+              <!-- [wrapper] 讓 JS 在編輯模式可整塊隱藏 toggle -->
+              <!-- Wrapper lets JS hide/show the rental toggle per mode -->
+              <div id="newProductIsRentalWrapper">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="newProductIsRental">
+                  <label class="form-check-label fw-semibold" for="newProductIsRental">
+                    是否為租借商品
+                  </label>
+                </div>
               </div>
               <div class="mt-2 d-none" id="rentalCampField">
-                <!-- 租借商品營地清單：products.js 會依按鈕動態新增營地名稱與數量欄位 -->
-                <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
-                  <label class="form-label fw-semibold mb-0" for="newRentalCamp">存放營地</label>
-                  <button type="button" class="btn btn-sm btn-outline-secondary" id="addRentalCamp">
-                    <i class="fas fa-plus me-1"></i>新增營地
-                  </button>
-                </div>
-                <div id="rentalCampList" class="vstack gap-2"></div>
+                <label class="form-label fw-semibold mb-2">存放營地與數量</label>
+
+                <!-- 固定 5 個營地：勾選後數量欄才可輸入 -->
+                <!-- Fixed 5 camps: quantity input is enabled only when checked -->
+                <div class="vstack gap-2 mb-2" id="rentalCampPresetList">
+
+                  <div class="input-group input-group-sm rental-camp-preset-row" data-camp-id="camp-001">
+                    <div class="input-group-text" style="width:32px; justify-content:center;">
+                      <input class="form-check-input mt-0 rental-camp-check" type="checkbox"
+                             aria-label="湖畔星空營地">
+                    </div>
+                    <span class="input-group-text" style="min-width:90px;">湖畔星空營地</span>
+                    <input type="number" class="form-control rental-camp-quantity-input"
+                           min="0" value="0" disabled
+                           aria-label="湖畔星空營地存放數量">
+                  </div>
+
+                  <div class="input-group input-group-sm rental-camp-preset-row" data-camp-id="camp-002">
+                    <div class="input-group-text" style="width:32px; justify-content:center;">
+                      <input class="form-check-input mt-0 rental-camp-check" type="checkbox"
+                             aria-label="松林野營基地">
+                    </div>
+                    <span class="input-group-text" style="min-width:90px;">松林野營基地</span>
+                    <input type="number" class="form-control rental-camp-quantity-input"
+                           min="0" value="0" disabled
+                           aria-label="松林野營基地存放數量">
+                  </div>
+
+                  <div class="input-group input-group-sm rental-camp-preset-row" data-camp-id="camp-003">
+                    <div class="input-group-text" style="width:32px; justify-content:center;">
+                      <input class="form-check-input mt-0 rental-camp-check" type="checkbox"
+                             aria-label="溪谷森林營地">
+                    </div>
+                    <span class="input-group-text" style="min-width:90px;">溪谷森林營地</span>
+                    <input type="number" class="form-control rental-camp-quantity-input"
+                           min="0" value="0" disabled
+                           aria-label="溪谷森林營地存放數量">
+                  </div>
+
+                  <div class="input-group input-group-sm rental-camp-preset-row" data-camp-id="camp-004">
+                    <div class="input-group-text" style="width:32px; justify-content:center;">
+                      <input class="form-check-input mt-0 rental-camp-check" type="checkbox"
+                             aria-label="雲海高原營地">
+                    </div>
+                    <span class="input-group-text" style="min-width:90px;">雲海高原營地</span>
+                    <input type="number" class="form-control rental-camp-quantity-input"
+                           min="0" value="0" disabled
+                           aria-label="雲海高原營地存放數量">
+                  </div>
+
+                  <div class="input-group input-group-sm rental-camp-preset-row" data-camp-id="camp-005">
+                    <div class="input-group-text" style="width:32px; justify-content:center;">
+                      <input class="form-check-input mt-0 rental-camp-check" type="checkbox"
+                             aria-label="海岸微風營地">
+                    </div>
+                    <span class="input-group-text" style="min-width:90px;">海岸微風營地</span>
+                    <input type="number" class="form-control rental-camp-quantity-input"
+                           min="0" value="0" disabled
+                           aria-label="海岸微風營地存放數量">
+                  </div>
+
+                </div><!-- end #rentalCampPresetList -->
+
+                <!-- 自訂營地清單（手打名稱）：由 products.js 動態新增列 -->
+                <!-- Custom camps (free-text): rows added dynamically by products.js -->
+                <div id="rentalCampList" class="vstack gap-2 mb-2"></div>
+
+                <button type="button" class="btn btn-sm btn-outline-secondary w-100" id="addRentalCamp">
+                  <i class="fas fa-plus me-1"></i>新增自訂營地
+                </button>
+
               </div>
             </div>
 
@@ -596,6 +743,9 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Chart.js 圖表庫 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- flatpickr 日期選擇器 JS + 繁體中文語系 -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh-tw.js"></script>
 
   <!-- 後台自訂 JS（permissions.js 須在 core.js 之前，提供 ADMIN_SECTIONS 與員工資料） -->
   <script src="js/permissions.js"></script>

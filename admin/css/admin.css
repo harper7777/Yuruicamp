@@ -233,6 +233,7 @@ button[data-permission-disabled="true"] {
 .table td {
   vertical-align: middle;
   font-size: 0.88rem;
+  white-space: nowrap; /* 防止所有 td 文字自動折行 / prevent td text from wrapping */
 }
 
 /* ===== 品牌色按鈕 ===== */
@@ -372,6 +373,192 @@ button[data-permission-disabled="true"] {
 
 #mobileSidebar .btn-close {
   filter: invert(1);  /* 深色背景上白色關閉按鈕 */
+}
+
+/* ===== 商品表格：固定欄位（水平捲動時左側保持可見） =====
+   原理：position: sticky + left: Npx 讓欄位貼在容器左側不動
+   每個 sticky 欄都要設背景色，否則捲動時後方欄位會透出來
+
+   ⚠️  Bootstrap 5 用 .table > :not(caption) > * > * { background-color: var(--bs-table-bg) }
+       這條規則的 specificity 是 [0,1,1]，而單純的 .sticky-col 只有 [0,1,0]，
+       所以 Bootstrap 會「贏」，把 tbody 的背景蓋成 transparent，導致 sticky 欄透明。
+       thead 之所以 OK，是因為 .table-light 把 --bs-table-bg 設成不透明的 #f8f9fa。
+       解法：在選擇器前加 .table，把 specificity 提升到 [0,2,0]，確保蓋過 Bootstrap。
+   ========================================================= */
+
+/* 所有 sticky 欄位共用屬性
+   .table .sticky-col → specificity [0,2,0]，高於 Bootstrap 的 [0,1,1]
+   z-index: 4 → 高於 Bootstrap input-group > .btn 的 z-index: 2
+              → 高於 Bootstrap input-group > .btn:focus 的 z-index: 3
+   確保即使使用者聚焦可捲動欄的輸入框，sticky 欄仍會蓋在上方 */
+.table .sticky-col {
+  position: sticky;
+  z-index: 4;                    /* 蓋過可捲動欄內的 Bootstrap 按鈕（z-index:2）與聚焦輸入框（z-index:3） */
+  background-color: #ffffff;     /* 預設白色背景（覆蓋 Bootstrap 的 transparent） */
+}
+
+/* thead 的 sticky th：z-index 更高，確保蓋過 tbody sticky td
+   .table thead .sticky-col → specificity [0,2,1]，高於 .table .sticky-col 的 [0,2,0] */
+.table thead .sticky-col {
+  z-index: 5;                    /* 高於 tbody sticky 的 4，確保標題列永遠在最上層 */
+  background-color: #f8f9fa;     /* Bootstrap table-light 的背景色 */
+}
+
+/* 商品表格啟用固定欄寬模式（table-layout: fixed）
+   讓瀏覽器嚴格按照宣告的 width 渲染，不自行計算。
+   如此 sticky 的 left 偏移值才能與實際欄寬精確對齊，
+   避免可捲動欄位的內容滑入 sticky 欄下方。
+   Use table-layout: fixed so declared widths are strictly honored,
+   keeping sticky left offsets perfectly aligned. */
+.product-table-fixed {
+  table-layout: fixed;
+}
+
+/* 可水平捲動的庫存欄（分店 / 各營區）統一欄寬
+   Scrollable stock columns - uniform width to match the stepper widget */
+.scrollable-stock-col {
+  width: 150px;
+  min-width: 150px;
+}
+
+/* 各欄位的左側偏移（依欄寬累加：60 → 220 → 310 → 400 → 550） */
+.sticky-col-img          { left: 0;     width: 60px;  min-width: 60px; }
+.sticky-col-name         { left: 60px;  width: 160px; min-width: 160px; }
+.sticky-col-category     { left: 220px; width: 90px;  min-width: 90px; }
+.sticky-col-action       { left: 310px; width: 90px;  min-width: 90px; }
+.sticky-col-total-stock  { left: 400px; width: 150px; min-width: 150px; }
+
+/* 低庫存列（table-danger）下的 sticky 欄需覆寫背景，維持淡紅色
+   .table tr.table-danger .sticky-col → specificity [0,3,1]，最高，確保蓋過上方所有規則 */
+.table tr.table-danger .sticky-col {
+  background-color: #f8d7da;     /* Bootstrap danger 淺紅背景色 */
+}
+
+/* ===== 商品名稱截斷（超過欄寬顯示 ...，hover 透過 title 屬性顯示完整名稱） ===== */
+.product-name-cell {
+  display: block;                /* block 才能讓 max-width 生效 */
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== 訂單表格：排序欄位標頭 ===== */
+
+/* 可排序的 th：滑鼠變手形，提示使用者可點擊 */
+.sortable-th {
+  cursor: pointer;
+  user-select: none;             /* 防止快速點擊時選取文字 */
+  white-space: nowrap;
+}
+
+/* hover 時背景微亮，給視覺回饋 */
+.sortable-th:hover {
+  background-color: #e9ecef;
+}
+
+/* 排序 icon：預設灰色（雙箭頭 fa-sort = 尚未排序） */
+.sort-icon {
+  color: #adb5bd;
+  font-size: 0.75rem;
+  transition: color 0.15s ease;
+}
+
+/* 排序 icon 啟用中（升冪或降冪）：換成品牌色 */
+.sort-icon.sort-active {
+  color: var(--admin-brand-accent);
+}
+
+/* ===== 訂單表格：篩選欄位標頭 ===== */
+
+/* 可篩選的 th：相對定位，供 Dropdown 絕對定位基準 */
+.filter-th {
+  position: relative;
+  white-space: nowrap;
+}
+
+/* 漏斗 icon：預設灰色 */
+.filter-icon {
+  color: #adb5bd;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  vertical-align: middle;
+}
+
+/* 漏斗 icon 啟用中（有勾選篩選條件）：換成品牌色 */
+.filter-icon.active {
+  color: var(--admin-brand-accent);
+}
+
+/* 紅點提示：疊在漏斗 icon 右上角，提示目前有篩選條件啟用中 */
+.filter-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background-color: #dc3545;     /* Bootstrap danger 紅色 */
+  border-radius: 50%;
+  position: relative;
+  top: -6px;
+  left: -5px;
+  vertical-align: top;
+}
+
+/* 篩選 Dropdown 容器：絕對定位，浮在表格上方 */
+.filter-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);         /* th 下方 4px 處 */
+  left: 0;
+  z-index: 200;
+  min-width: 130px;
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  padding: 6px 0;
+}
+
+/* Dropdown 內每個選項列 */
+.filter-dropdown label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  font-size: 0.875rem;
+  font-weight: normal;
+  cursor: pointer;
+  margin-bottom: 0;
+  color: #333;
+  transition: background-color 0.1s ease;
+}
+
+/* 選項 hover 效果 */
+.filter-dropdown label:hover {
+  background-color: #f0f2f5;
+}
+
+/* checkbox 本身游標也是手形 */
+.filter-dropdown input[type="checkbox"] {
+  cursor: pointer;
+  accent-color: var(--admin-brand-accent);
+}
+
+/* ===== KPI 卡片可點擊互動樣式 ===== */
+/* kpi-clickable：加在 analytics.html 各 KPI .card 上，賦予點擊導航的視覺回饋 */
+.kpi-clickable {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Hover：卡片輕微上浮 + 陰影加深 */
+.kpi-clickable:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Active（按下瞬間）：輕微回壓，提供點擊手感 */
+.kpi-clickable:active {
+  transform: translateY(-1px);
 }
 
 /* ===== 頁面載入動畫 ===== */

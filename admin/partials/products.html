@@ -20,13 +20,22 @@
       </small>
     </div>
 
-    <!-- 新增商品按鈕：觸發 dashboard.html 裡的 #addProductModal -->
-    <button class="btn btn-sm text-white"
-            style="background-color: var(--admin-brand-accent);"
-            data-bs-toggle="modal"
-            data-bs-target="#addProductModal">
-      <i class="fas fa-plus me-1"></i>新增商品
-    </button>
+    <!-- 右側按鈕群組：新增商品（上）+ 產生異動紀錄（下）-->
+    <div class="d-flex flex-column align-items-end gap-2">
+      <button class="btn btn-sm text-white"
+              style="background-color: var(--admin-brand-accent);"
+              data-bs-toggle="modal"
+              data-bs-target="#addProductModal">
+        <i class="fas fa-plus me-1"></i>新增商品
+      </button>
+      <!-- 產生異動紀錄：有待確認的庫存異動後才啟用，由 products.js 控制 disabled 狀態 -->
+      <button type="button"
+              class="btn btn-sm btn-outline-success"
+              id="generateMovementRecord"
+              disabled>
+        <i class="fas fa-file-alt me-1"></i>產生異動紀錄
+      </button>
+    </div>
   </div>
 
   <!-- 商店 / 租借頁籤：由 products.js 控制下方 .card-body 顯示狀態 -->
@@ -52,24 +61,29 @@
   <!-- 商店表格容器 -->
   <div class="card-body p-0 admin-products-panel" data-products-panel="store">
     <div class="table-responsive">
-      <table class="table table-hover mb-0" id="productsTable">
+      <!-- product-table-fixed：啟用 table-layout: fixed，讓欄寬精確對齊 sticky left 值 -->
+      <table class="table table-hover mb-0 product-table-fixed" id="productsTable">
         <thead class="table-light">
           <tr>
-            <th style="width: 60px;">圖片</th>
-            <th>商品名稱</th>
-            <th>分類</th>
-            <th>總庫存量</th>
-            <th>分店 A</th>
-            <th>分店 B</th>
-            <th>分店 C</th>
-            <th>操作</th>
+            <!-- 固定欄位（sticky）：圖片、名稱、分類、操作、總庫存（唯讀，自動計算）-->
+            <th class="sticky-col sticky-col-img">圖片</th>
+            <th class="sticky-col sticky-col-name">商品名稱</th>
+            <th class="sticky-col sticky-col-category">分類</th>
+            <th class="sticky-col sticky-col-action">操作</th>
+            <th class="sticky-col sticky-col-total-stock">總庫存量</th>
+            <!-- 可水平捲動欄位：主倉 + 各分店庫存（明確指定欄寬）-->
+            <th class="scrollable-stock-col">主倉</th>
+            <th class="scrollable-stock-col">分店 A</th>
+            <th class="scrollable-stock-col">分店 B</th>
+            <th class="scrollable-stock-col">分店 C</th>
           </tr>
         </thead>
         <!-- tbody 由 products.js 的 renderProductsTable() 動態填入 -->
         <!-- 總庫存量 < 5 的列：JS 會自動加上 table-danger class（淡紅底色） -->
+        <!-- colspan=9：圖片、名稱、分類、操作、總庫存(唯讀)、主倉、分店A、分店B、分店C -->
         <tbody id="productsTableBody">
           <tr>
-            <td colspan="8" class="text-center py-4">
+            <td colspan="9" class="text-center py-4">
               <div class="spinner-border spinner-border-sm me-2"
                    style="color: var(--admin-brand-accent);"></div>
               <span class="text-muted">載入商品中...</span>
@@ -83,19 +97,29 @@
   <!-- 租借表格容器：點擊租借頁籤後由 products.js 載入 admin/data/reantal.json -->
   <div class="card-body p-0 admin-products-panel d-none" data-products-panel="rental">
     <div class="table-responsive">
-      <table class="table table-hover mb-0 table-light2" id="rentalProductsTable">
+      <!-- product-table-fixed：啟用 table-layout: fixed，讓欄寬精確對齊 sticky left 值 -->
+      <table class="table table-hover mb-0 product-table-fixed" id="rentalProductsTable">
         <thead class="table-light">
           <tr>
-            <th style="width: 60px;">圖片</th>
-            <th>商品名稱</th>
-            <th>分類</th>
-            <th>庫存</th>
-            <th>操作</th>
+            <!-- 固定欄位（sticky）：圖片、名稱、分類、操作、總租借庫存（唯讀，自動計算）-->
+            <th class="sticky-col sticky-col-img">圖片</th>
+            <th class="sticky-col sticky-col-name">商品名稱</th>
+            <th class="sticky-col sticky-col-category">分類</th>
+            <th class="sticky-col sticky-col-action">操作</th>
+            <th class="sticky-col sticky-col-total-stock">總租借庫存</th>
+            <!-- 可水平捲動欄位：主倉 + 各營區庫存（明確指定欄寬）/ scrollable camp columns -->
+            <th class="scrollable-stock-col">主倉</th>
+            <th class="scrollable-stock-col">湖畔星空</th>
+            <th class="scrollable-stock-col">松林野營</th>
+            <th class="scrollable-stock-col">溪谷森林</th>
+            <th class="scrollable-stock-col">雲海高原</th>
+            <th class="scrollable-stock-col">海岸微風</th>
           </tr>
         </thead>
+        <!-- colspan=11：圖片、名稱、分類、操作、總租借庫存(唯讀)、主倉、湖畔星空、松林野營、溪谷森林、雲海高原、海岸微風 -->
         <tbody id="rentalProductsTableBody">
           <tr>
-            <td colspan="5" class="text-center py-4">
+            <td colspan="11" class="text-center py-4">
               <div class="spinner-border spinner-border-sm me-2"
                    style="color: var(--admin-brand-accent);"></div>
               <span class="text-muted">請切換至租借頁籤載入資料</span>
@@ -107,3 +131,74 @@
   </div><!-- end rental card-body -->
 
 </div><!-- end card -->
+
+<!-- ════════════════════════════════════════════════════════
+     調至租借 Modal
+     由 products.js 的 openTransferToRentalModal() 開啟與填入資料
+     ════════════════════════════════════════════════════════ -->
+<div class="modal fade" id="transferToRentalModal" tabindex="-1"
+     aria-labelledby="transferToRentalModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title fw-semibold" id="transferToRentalModalLabel">
+          <i class="fas fa-exchange-alt me-2"></i>調至租借
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- 商品名稱（唯讀，由 JS 帶入）-->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">商品</label>
+          <p class="form-control-plaintext fw-semibold text-dark" id="transferProductName">—</p>
+        </div>
+
+        <!-- 來源分店 + 目前庫存 -->
+        <div class="row g-3 mb-3">
+          <div class="col-8">
+            <label for="transferSourceBranch" class="form-label">來源分店</label>
+            <select class="form-select form-select-sm" id="transferSourceBranch">
+              <!-- 由 JS 動態填入：主倉 / 分店A / B / C -->
+            </select>
+          </div>
+          <div class="col-4">
+            <label class="form-label">目前庫存</label>
+            <!-- 隨來源分店選取自動更新 -->
+            <p class="form-control-plaintext fw-semibold text-center" id="transferSourceStock">0</p>
+          </div>
+        </div>
+
+        <!-- 目標營地分配（多行動態清單，由 JS 管理） -->
+        <div class="mb-1">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <label class="form-label mb-0 fw-semibold">目標營地分配</label>
+            <!-- 即時計數器：已分配 N / M 件，隨數量輸入即時更新 -->
+            <span class="text-muted small" id="transferDistributionCounter">已分配 0 / 0 件</span>
+          </div>
+          <!-- 動態列容器：每列包含 [營地下拉] [數量輸入] [刪除按鈕] -->
+          <div id="transferCampRows" class="d-flex flex-column gap-2"></div>
+          <!-- 新增一列目標營地 -->
+          <button type="button" class="btn btn-outline-secondary btn-sm mt-2" id="addTransferCampRow">
+            <i class="fas fa-plus me-1"></i>新增營地
+          </button>
+        </div>
+
+      </div><!-- end modal-body -->
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary btn-sm"
+                data-bs-dismiss="modal">
+          <i class="fas fa-times me-1"></i>取消
+        </button>
+        <button type="button" class="btn btn-primary btn-sm"
+                id="submitTransferToRental">
+          <i class="fas fa-check me-1"></i>確認調撥
+        </button>
+      </div>
+
+    </div><!-- end modal-content -->
+  </div><!-- end modal-dialog -->
+</div><!-- end #transferToRentalModal -->

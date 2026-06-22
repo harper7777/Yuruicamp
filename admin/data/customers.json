@@ -9,8 +9,8 @@
     "tier": "VIP",
     "points": 1250,
     "coupons": 3,
-    "tags": ["VIP", "高消費"],
-    "orders": ["#0006", "ORD-20260520"]
+    "tags": ["高消費"],
+    "orders": ["#0006"]
   },
   {
     "id": "U002",
@@ -35,8 +35,8 @@
     "tier": "VIP",
     "points": 2240,
     "coupons": 5,
-    "tags": ["VIP", "高消費"],
-    "orders": ["#0003", "ORD-20260410", "ORD-20260315"]
+    "tags": ["高消費"],
+    "orders": ["#0003"]
   },
   {
     "id": "U004",
@@ -62,7 +62,7 @@
     "points": 912,
     "coupons": 2,
     "tags": [],
-    "orders": ["#0001", "ORD-20260430"]
+    "orders": ["#0001"]
   },
   {
     "id": "U006",
@@ -100,7 +100,7 @@
     "tier": "VIP",
     "points": 1860,
     "coupons": 4,
-    "tags": ["VIP", "高消費"],
+    "tags": ["高消費"],
     "orders": []
   },
   {
@@ -126,7 +126,7 @@
     "tier": "SVIP",
     "points": 3580,
     "coupons": 8,
-    "tags": ["SVIP", "高消費"],
+    "tags": ["高消費"],
     "orders": []
   }
 ]

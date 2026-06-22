@@ -1,6 +1,7 @@
 [
   {
     "id": "P001",
+    "rentalId": "R001",
     "thumbnail": "../assets/images/tent-01.jpg",
     "name": "Coleman 六人帳篷",
     "category": "帳篷",
@@ -8,6 +9,7 @@
     "price": 3200,
     "total-stock": 3,
     "branch": {
+      "main": 0,
       "branch-001": 1,
       "branch-002": 1,
       "branch-003": 1
@@ -16,6 +18,7 @@
   },
   {
     "id": "P002",
+    "rentalId": "R002",
     "thumbnail": "../assets/images/tent-01.jpg",
     "name": "MSR 超輕量帳篷",
     "category": "帳篷",
@@ -23,6 +26,7 @@
     "price": 9800,
     "total-stock": 4,
     "branch": {
+      "main": 0,
       "branch-001": 2,
       "branch-002": 1,
       "branch-003": 1
@@ -31,6 +35,7 @@
   },
   {
     "id": "P003",
+    "rentalId": "R018",
     "thumbnail": "../assets/images/tent-01.jpg",
     "name": "充氣式睡墊 L號",
     "category": "睡袋",
@@ -38,6 +43,7 @@
     "price": 1200,
     "total-stock": 15,
     "branch": {
+      "main": 0,
       "branch-001": 5,
       "branch-002": 5,
       "branch-003": 5
@@ -46,6 +52,7 @@
   },
   {
     "id": "P004",
+    "rentalId": "R005",
     "thumbnail": "../assets/images/tent-01.jpg",
     "name": "羽絨睡袋 -10°C",
     "category": "睡袋",
@@ -53,6 +60,7 @@
     "price": 2800,
     "total-stock": 2,
     "branch": {
+      "main": 0,
       "branch-001": 1,
       "branch-002": 1,
       "branch-003": 0
@@ -61,6 +69,7 @@
   },
   {
     "id": "P005",
+    "rentalId": "R006",
     "thumbnail": "../assets/images/tent-01.jpg",
     "name": "Coleman 氣化爐",
     "category": "炊具",
@@ -68,6 +77,7 @@
     "price": 5000,
     "total-stock": 12,
     "branch": {
+      "main": 0,
       "branch-001": 4,
       "branch-002": 4,
       "branch-003": 4
@@ -76,6 +86,7 @@
   },
   {
     "id": "P006",
+    "rentalId": "R007",
     "thumbnail": "../assets/images/tent-01.jpg",
     "name": "Snow Peak 鈦合金杯組",
     "category": "炊具",
@@ -83,6 +94,7 @@
     "price": 1800,
     "total-stock": 20,
     "branch": {
+      "main": 0,
       "branch-001": 7,
       "branch-002": 7,
       "branch-003": 6
@@ -91,6 +103,7 @@
   },
   {
     "id": "P007",
+    "rentalId": "R011",
     "thumbnail": "../assets/images/tent-01.jpg",
     "name": "LED 露營燈",
     "category": "燈具",
@@ -98,6 +111,7 @@
     "price": 800,
     "total-stock": 4,
     "branch": {
+      "main": 0,
       "branch-001": 2,
       "branch-002": 1,
       "branch-003": 1
@@ -106,6 +120,7 @@
   },
   {
     "id": "P008",
+    "rentalId": "R013",
     "thumbnail": "../assets/images/tent-01.jpg",
     "name": "防水登山背包 45L",
     "category": "背包",
@@ -113,6 +128,7 @@
     "price": 1600,
     "total-stock": 7,
     "branch": {
+      "main": 0,
       "branch-001": 3,
       "branch-002": 2,
       "branch-003": 2
@@ -121,6 +137,7 @@
   },
   {
     "id": "P009",
+    "rentalId": "R008",
     "thumbnail": "../assets/images/tent-01.jpg",
     "name": "折疊桌椅組",
     "category": "其他",
@@ -128,6 +145,7 @@
     "price": 2800,
     "total-stock": 5,
     "branch": {
+      "main": 0,
       "branch-001": 2,
       "branch-002": 2,
       "branch-003": 1
@@ -136,6 +154,7 @@
   },
   {
     "id": "P010",
+    "rentalId": null,
     "thumbnail": "../assets/images/tent-01.jpg",
     "name": "保溫壺 1L",
     "category": "其他",
@@ -143,6 +162,7 @@
     "price": 880,
     "total-stock": 0,
     "branch": {
+      "main": 0,
       "branch-001": 0,
       "branch-002": 0,
       "branch-003": 0

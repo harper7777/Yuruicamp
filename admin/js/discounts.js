@@ -11,6 +11,21 @@
  *   #setCouponStartNow（填入現在時間按鈕）
  */
 
+/**
+ * 將 "YYYY-MM-DDTHH:MM" 格式的時間字串轉為 "YYYY/MM/DD HH:MM" 顯示格式
+ * Convert datetime-local string to a readable display format
+ * 若傳入空值或 undefined，回傳 "—"
+ *
+ * @param {string} val - datetime-local 格式，例如 "2026-08-31T23:59"
+ * @returns {string} 例如 "2026/08/31 23:59"，或 "—"
+ */
+function formatDateDisplay(val) {
+  if (!val) return '—';
+  var parts    = val.split('T');                  // ["2026-08-31", "23:59"]
+  var datePart = parts[0].replace(/-/g, '/');     // "2026/08/31"
+  return datePart + ' ' + (parts[1] || '');       // "2026/08/31 23:59"
+}
+
 window.initDiscounts = function () {
   $(document).off('.discounts');
 
@@ -18,7 +33,7 @@ window.initDiscounts = function () {
     renderCouponsTable(coupons);
   }).fail(function () {
     $('#couponsTableBody').html(
-      '<tr><td colspan="8" class="text-center text-danger py-4">' +
+      '<tr><td colspan="9" class="text-center text-danger py-4">' +
       '<i class="fas fa-exclamation-triangle me-2"></i>載入優惠券數據失敗' +
       '</td></tr>'
     );
@@ -139,31 +154,8 @@ window.initDiscounts = function () {
       ? discountRaw + ' 折'
       : '折抵 NT$ ' + Math.floor(discountRaw);
 
-    // --- 有效期限顯示文字 ---
-    // 將 "YYYY-MM-DDTHH:MM" 轉為 "YYYY/MM/DD HH:MM" 格式
-    function formatDatetime(val) {
-      if (!val) return '';
-      // val 格式："2026-06-14T18:00"
-      var parts = val.split('T');           // ["2026-06-14", "18:00"]
-      var datePart = parts[0].replace(/-/g, '/'); // "2026/06/14"
-      return datePart + ' ' + parts[1];    // "2026/06/14 18:00"
-    }
-
-    var startDisplay = formatDatetime(startVal);
-    var endDisplay   = formatDatetime(endVal);
-    var expiryDisplay;
-
-    if (startDisplay && endDisplay) {
-      expiryDisplay = startDisplay + ' ～ ' + endDisplay;
-    } else if (!startDisplay && endDisplay) {
-      expiryDisplay = '即日起 ～ ' + endDisplay;
-    } else if (startDisplay && !endDisplay) {
-      expiryDisplay = startDisplay + ' ～ 無限期';
-    } else {
-      expiryDisplay = '無限期';
-    }
-
     // --- 組合新表格列 ---
+    // startVal / endVal 直接傳入 formatDateDisplay()，空值自動顯示 "—"
     var newRow =
       '<tr data-coupon-code="' + code + '" data-coupon-status="active">' +
       '<td><code class="fw-bold">' + code + '</code></td>' +
@@ -171,7 +163,8 @@ window.initDiscounts = function () {
       '<td class="text-center">' + quantity + '</td>' +
       '<td class="text-center">0</td>' +
       '<td class="text-center">' + quantity + '</td>' +
-      '<td>' + expiryDisplay + '</td>' +
+      '<td>' + formatDateDisplay(startVal) + '</td>' +
+      '<td>' + formatDateDisplay(endVal)   + '</td>' +
       '<td><span class="badge bg-success status-badge">啟用中</span></td>' +
       '<td>' +
       '<button class="btn btn-sm btn-outline-warning btn-toggle-coupon me-1">停用</button>' +
@@ -200,7 +193,7 @@ window.initDiscounts = function () {
 function renderCouponsTable(coupons) {
   if (!coupons || coupons.length === 0) {
     $('#couponsTableBody').html(
-      '<tr><td colspan="8" class="text-center text-muted py-4">目前沒有優惠券</td></tr>'
+      '<tr><td colspan="9" class="text-center text-muted py-4">目前沒有優惠券</td></tr>'
     );
     return;
   }
@@ -227,7 +220,8 @@ function renderCouponsTable(coupons) {
       '<td class="text-center">' + coupon.quantity + '</td>' +
       '<td class="text-center">' + coupon.used + '</td>' +
       '<td class="text-center">' + remainDisplay + '</td>' +
-      '<td>' + (coupon.expiry || '無限期') + '</td>' +
+      '<td>' + formatDateDisplay(coupon.startDate) + '</td>' +
+      '<td>' + formatDateDisplay(coupon.endDate)   + '</td>' +
       '<td>' + statusBadge + '</td>' +
       '<td>' + toggleBtn +
       '<button class="btn btn-sm btn-outline-danger btn-delete-coupon">刪除</button>' +

@@ -4,7 +4,8 @@
     "discount": 200,
     "quantity": 50,
     "used": 12,
-    "expiry": "2026-08-31",
+    "startDate": "2026-06-01T00:00",
+    "endDate": "2026-08-31T23:59",
     "status": "active"
   },
   {
@@ -12,7 +13,8 @@
     "discount": 50,
     "quantity": 100,
     "used": 87,
-    "expiry": "2026-07-15",
+    "startDate": "2026-06-01T00:00",
+    "endDate": "2026-07-15T23:59",
     "status": "active"
   },
   {
@@ -20,7 +22,8 @@
     "discount": 100,
     "quantity": 80,
     "used": 23,
-    "expiry": "2026-09-30",
+    "startDate": "2026-07-01T00:00",
+    "endDate": "2026-09-30T23:59",
     "status": "active"
   },
   {
@@ -28,7 +31,8 @@
     "discount": 300,
     "quantity": 20,
     "used": 5,
-    "expiry": "2026-10-01",
+    "startDate": "2026-09-01T00:00",
+    "endDate": "2026-10-01T23:59",
     "status": "active"
   },
   {
@@ -36,7 +40,8 @@
     "discount": 100,
     "quantity": 30,
     "used": 30,
-    "expiry": "2026-05-01",
+    "startDate": "2026-01-01T00:00",
+    "endDate": "2026-05-01T23:59",
     "status": "disabled"
   }
 ]
