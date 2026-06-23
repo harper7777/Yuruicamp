@@ -84,7 +84,7 @@
               </div>
               <div class="member-card-name" id="cardName">露友小明</div>
               <div class="member-card-since" id="cardSince">加入日期：2026-01-01</div>
-              <!-- 回饋點數由 member-center.js 依已完成訂單 subtotal 的 10% 動態更新 -->
+              <!-- 重點：回饋點數由 member-center.js 讀取 data/users.json 的 points，結帳新增點數後會動態刷新 -->
               <div class="member-card-points" id="cardPoints">回饋點數：載入中</div>
               <div style="margin-top:1.5rem;">
                 <div class="member-card-progress-label">升等進度 — 距下一等級還差 <strong>NT$3,000</strong></div>
@@ -124,7 +124,7 @@
                   <div style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0;border-bottom:1px solid #f0f0f0;">
                     <span style="font-size:1.2rem;">📦</span>
                     <div>
-                      <div style="font-size:0.85rem;font-weight:600;">訂單 #ORD-20260310 處理中</div>
+                      <div style="font-size:0.85rem;font-weight:600;">訂單 #ORD-20260310 待出貨</div>
                       <div style="font-size:0.75rem;color:#999;">2026-03-10</div>
                     </div>
                   </div>
@@ -226,17 +226,10 @@
                   <button class="order-type-tab" type="button" role="tab" data-order-type="rental" aria-selected="false" aria-pressed="false" aria-controls="rentalOrdersPanel">租借訂單</button>
                 </div>
 
-                <!-- 狀態篩選 Tab -->
-                <div class="order-status-tabs">
-                  <button class="order-status-tab active" data-filter="all">全部</button>
-                  <button class="order-status-tab" data-filter="processing">處理中</button>
-                  <button class="order-status-tab" data-filter="shipped">已出貨</button>
-                  <button class="order-status-tab" data-filter="delivered">已完成</button>
-                  <button class="order-status-tab" data-filter="cancelled">已取消</button>
-                </div>
-
                 <!-- 訂單清單（由 JS 動態渲染）-->
                 <div id="purchaseOrdersPanel" class="order-list-panel active" data-order-panel="purchase">
+                  <!-- 重點：購買訂單篩選列由 member-center.js 依 orders.json 的 status / paymentStatus 動態產生，預設為全部。 -->
+                  <div id="purchaseOrderStatusTabs" class="order-status-tabs" data-order-status-tabs="purchase"></div>
                   <div id="ordersList">
                     <div style="text-align:center;padding:2rem;color:#999;">
                       <div style="font-size:2rem;margin-bottom:0.5rem;">📦</div>
@@ -245,6 +238,8 @@
                   </div>
                 </div>
                 <div id="rentalOrdersPanel" class="order-list-panel" data-order-panel="rental" hidden>
+                  <!-- 重點：租借訂單篩選列由 member-center.js 依 reantalOrders.json 的 status / paymentStatus 動態產生，預設為全部。 -->
+                  <div id="rentalOrderStatusTabs" class="order-status-tabs" data-order-status-tabs="rental"></div>
                   <div id="rentalOrdersList">
                     <div style="text-align:center;padding:2rem;color:#999;">
                       <div style="font-size:2rem;margin-bottom:0.5rem;">⛺</div>

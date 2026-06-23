@@ -84,31 +84,58 @@ const MOCK_NOTIFICATIONS = [
 // Utility functions
 // ============================================================
 
+/** 重點：購買訂單篩選顯示順序固定，實際按鈕仍只會依 orders.json 出現過的 status / paymentStatus 動態渲染。 */
+const PURCHASE_ORDER_FILTER_META = [
+  { value: 'paid', label: '待付款', cls: 'status-paid' },
+  { value: 'unpaid', label: '已付款', cls: 'status-unpaid' },
+  { value: 'unshipped', label: '待出貨', cls: 'status-unshipped' },
+  { value: 'shipped', label: '已出貨', cls: 'status-shipped' },
+  { value: 'delivered', label: '已完成', cls: 'status-delivered' },
+  { value: 'returned', label: '已退貨', cls: 'status-returned' },
+  { value: 'cancelled', label: '已取消', cls: 'status-cancelled' },
+];
+
+/** 重點：租借訂單篩選顯示順序固定，實際按鈕仍只會依 reantalOrders.json 出現過的 status / paymentStatus 動態渲染。 */
+const RENTAL_ORDER_FILTER_META = [
+  { value: 'refunded', label: '已退款', cls: 'status-refunded' },
+  { value: 'paid', label: '已付款', cls: 'status-unpaid' },
+  { value: 'pending', label: '待確認', cls: 'status-pending' },
+  { value: 'confirmed', label: '已確認', cls: 'status-confirmed' },
+  { value: 'completed', label: '已完成', cls: 'status-completed' },
+  { value: 'cancelled', label: '已取消', cls: 'status-cancelled' },
+];
+
+const PURCHASE_ORDER_FILTER_MAP = Object.fromEntries(PURCHASE_ORDER_FILTER_META.map(item => [item.value, item]));
+const RENTAL_ORDER_FILTER_MAP = Object.fromEntries(RENTAL_ORDER_FILTER_META.map(item => [item.value, item]));
+
+/** 重點：舊購買訂單狀態不再獨立顯示，processing 併入待出貨，cod 併入待付款。 */
+const PURCHASE_ORDER_FILTER_ALIASES = {
+  processing: 'unshipped',
+  cod: 'paid',
+};
+
+/** 重點：舊租借訂單狀態不再獨立顯示，統一併入新版租借流程狀態。 */
+const RENTAL_ORDER_FILTER_ALIASES = {
+  processing: 'pending',
+  shipped: 'confirmed',
+  delivered: 'completed',
+};
+
 /**
  * 狀態文字對照表
- * Maps status code to Chinese display text
+ * 重點：購買訂單支援新 status 與 paymentStatus 值，舊值 processing 會併入待出貨。
  * @param {string} status - 訂單狀態代碼
  * @returns {{ label: string, cls: string }} 顯示文字 + CSS class
  */
 function _getStatusInfo(status) {
-  const map = {
-    processing: { label: '處理中', cls: 'status-processing' },
-    shipped:    { label: '已出貨', cls: 'status-shipped' },
-    delivered:  { label: '已完成', cls: 'status-delivered' },
-    cancelled:  { label: '已取消', cls: 'status-cancelled' }
-  };
-  return map[status] || { label: status, cls: '' };
+  const normalizedStatus = PURCHASE_ORDER_FILTER_ALIASES[status] || status;
+  return PURCHASE_ORDER_FILTER_MAP[normalizedStatus] || { label: status, cls: '' };
 }
 
 function _getRentalStatusInfo(status) {
-  // 重點：租借訂單沿用購買訂單狀態色票，但改成租借流程用語。
-  const map = {
-    processing: { label: '預約成立', cls: 'status-processing' },
-    shipped:    { label: '待取件', cls: 'status-shipped' },
-    delivered:  { label: '已歸還', cls: 'status-delivered' },
-    cancelled:  { label: '已取消', cls: 'status-cancelled' }
-  };
-  return map[status] || _getStatusInfo(status);
+  // 重點：租借訂單使用獨立狀態字典，新值 pending / confirmed / completed 與舊值都能顯示。
+  const normalizedStatus = RENTAL_ORDER_FILTER_ALIASES[status] || status;
+  return RENTAL_ORDER_FILTER_MAP[normalizedStatus] || _getStatusInfo(status);
 }
 
 /**
@@ -177,33 +204,117 @@ function _buildOrderCouponRow(order) {
 /** 回饋點數比例：訂單商品小計 subtotal 的 10% */
 const REWARD_POINT_RATE = 0.1;
 
-/**
- * 計算會員回饋點數
- * 重點：只採計 data/orders.json 中 status 為 delivered 的訂單 subtotal，未完成或取消訂單不給點。
- * @param {Array} orders - 訂單資料陣列
- * @returns {number} subtotal 加總後的 10% 回饋點數
- */
-function _calculateRewardPoints(orders) {
-  const deliveredSubtotal = (Array.isArray(orders) ? orders : []).reduce((sum, order) => {
-    if (order.status !== 'delivered') return sum;
-    return sum + (Number(order.subtotal) || 0);
-  }, 0);
+/** 重點：定期重新讀取 users.json，讓 points 欄位被更新時會員卡能跟著刷新。 */
+const MEMBER_POINTS_REFRESH_MS = 5000;
+let _memberPointsRefreshTimer = null;
 
-  // 重點：保留 10% 計算結果，最多顯示 1 位小數，避免浮點數尾差出現在畫面上。
-  return Number((deliveredSubtotal * REWARD_POINT_RATE).toFixed(1));
+/**
+ * 計算單筆訂單回饋點數
+ * 重點：每筆訂單點數固定使用 subtotal 的 10% 並無條件進位，供 orders.json points 缺漏時補算。
+ * @param {number} subtotal - 訂單商品小計
+ * @returns {number} 本筆訂單可得點數
+ */
+function _calculateOrderRewardPoints(subtotal) {
+  return Math.ceil((Number(subtotal) || 0) * REWARD_POINT_RATE);
+}
+
+/**
+ * 取得單筆訂單回饋點數
+ * 重點：優先讀取 data/orders.json 的 points，沒有 points 時才用 subtotal 即時計算。
+ * @param {Object} order - 訂單資料
+ * @returns {number} 本筆訂單點數
+ */
+function _getOrderRewardPoints(order) {
+  const points = Number(order && order.points);
+  if (Number.isFinite(points)) return points;
+  return _calculateOrderRewardPoints(order && order.subtotal);
+}
+
+/**
+ * 建立訂單明細的回饋點數列
+ * 重點：訂單明細固定顯示本筆可得點數，數值等於 subtotal 10% 無條件進位。
+ * @param {Object} order - 訂單資料
+ * @returns {string} HTML 字串
+ */
+function _buildOrderPointsRow(order) {
+  const points = _getOrderRewardPoints(order).toLocaleString('zh-TW');
+
+  return `
+        <div style="display:flex;justify-content:space-between;margin-top:0.35rem;color:#16a34a;">
+          <span>本筆回饋點數</span><span>${points} 點</span>
+        </div>`;
+}
+
+/**
+ * 取得目前會員 ID
+ * 重點：社群登入模擬資料可能沒有 id，會員中心預設對應 data/users.json 的 user-001。
+ * @returns {string} 會員 ID
+ */
+function _getCurrentMemberId() {
+  return (window.AppState && window.AppState.currentUser && window.AppState.currentUser.id) || 'user-001';
 }
 
 /**
  * 更新會員卡上的回饋點數
- * 重點：點數顯示跟訂單快取共用同一份資料，避免會員卡與訂單列表數字不同步。
- * @param {Array} orders - 已載入的會員訂單資料
+ * 重點：會員卡點數只吃 users.json 的 points 結果，不再從 orders.json 的 delivered 訂單反推。
+ * @param {number} points - 會員目前紅利點數
  */
-function _renderMemberRewardPoints(orders) {
+function _renderMemberRewardPoints(points) {
   const pointsEl = document.getElementById('cardPoints');
   if (!pointsEl) return;
 
-  const points = _calculateRewardPoints(orders);
-  pointsEl.textContent = `回饋點數：${points.toLocaleString('zh-TW', { maximumFractionDigits: 1 })} 點`;
+  const safePoints = Number.isFinite(Number(points)) ? Number(points) : 0;
+  pointsEl.textContent = `回饋點數：${safePoints.toLocaleString('zh-TW')} 點`;
+}
+
+/**
+ * 重新讀取會員點數
+ * 重點：透過 api-mock 讀 users.json 並合併本機點數增量，確保結帳後與 users.json 更新後都能刷新 cardPoints。
+ */
+async function _refreshMemberRewardPoints() {
+  try {
+    let user = null;
+
+    if (window.API && window.API.users && window.API.users.getById) {
+      user = await window.API.users.getById(_getCurrentMemberId());
+    } else {
+      const response = await fetch('../data/users.json', { cache: 'no-store' });
+      const users = await response.json();
+      user = users.find(item => item.id === _getCurrentMemberId()) || users[0];
+    }
+
+    _renderMemberRewardPoints(user ? user.points : 0);
+  } catch (error) {
+    console.error('載入會員點數失敗 / Failed to load member points:', error);
+    _renderMemberRewardPoints(0);
+  }
+}
+
+/**
+ * 初始化會員點數監聽
+ * 重點：同頁事件、跨分頁 storage 與定時刷新都會重新讀取 points，維持 cardPoints 動態更新。
+ */
+function initMemberRewardPoints() {
+  _refreshMemberRewardPoints();
+
+  if (_memberPointsRefreshTimer) clearInterval(_memberPointsRefreshTimer);
+  _memberPointsRefreshTimer = setInterval(_refreshMemberRewardPoints, MEMBER_POINTS_REFRESH_MS);
+
+  if (window._memberPointsListenersBound) return;
+  window._memberPointsListenersBound = true;
+
+  window.addEventListener('yurui:user-points-updated', event => {
+    const detail = event.detail || {};
+    if (!detail.userId || detail.userId === _getCurrentMemberId()) {
+      _renderMemberRewardPoints(detail.points);
+    }
+  });
+
+  window.addEventListener('storage', event => {
+    if (event.key === 'mockUserPointDeltas') {
+      _refreshMemberRewardPoints();
+    }
+  });
 }
 
 // ============================================================
@@ -348,7 +459,7 @@ function initOverviewPanel() {
   const statPending  = document.getElementById('statPendingOrders');
   const statCoupons  = document.getElementById('statCoupons');
   const statUnread   = document.getElementById('statUnread');
-  if (statPending) statPending.textContent = '1';  // processing 訂單
+  if (statPending) statPending.textContent = '1';  // 待出貨訂單
   if (statCoupons) statCoupons.textContent = MOCK_COUPONS.filter(c => !c.expired).length;
   if (statUnread)  statUnread.textContent  = MOCK_NOTIFICATIONS.filter(n => n.unread).length;
 }
@@ -441,6 +552,12 @@ let _rentalOrdersCache = null;
 /** 重點：記錄目前顯示的訂單類型，讓狀態篩選只重繪當前清單。 */
 let _activeOrderType = 'purchase';
 
+/** 重點：購買與租借各自保存篩選條件，切換面板時不互相覆蓋。 */
+const _activeOrderFilters = {
+  purchase: 'all',
+  rental: 'all',
+};
+
 function _buildOrderThumbsHTML(items) {
   // 重點：購買與租借訂單共用縮圖邏輯，保持卡片顯示方式一致。
   const safeItems = Array.isArray(items) ? items : [];
@@ -459,9 +576,92 @@ function _buildOrderThumbsHTML(items) {
   return `${thumbsHTML}${moreHTML}`;
 }
 
-function _getActiveOrderFilter() {
-  // 重點：購買 / 租借共用同一組狀態 Tab，切換類型時保留目前篩選條件。
-  return document.querySelector('.order-status-tab[data-filter].active')?.dataset.filter || 'all';
+function _normalizeOrderType(orderType) {
+  return orderType === 'rental' ? 'rental' : 'purchase';
+}
+
+function _getActiveOrderFilter(orderType = _activeOrderType) {
+  // 重點：讀取指定面板自己的篩選條件，預設為全部。
+  return _activeOrderFilters[_normalizeOrderType(orderType)] || 'all';
+}
+
+function _setActiveOrderFilter(orderType, filter) {
+  // 重點：篩選值只寫入指定面板，購買與租借互不影響。
+  _activeOrderFilters[_normalizeOrderType(orderType)] = filter || 'all';
+}
+
+function _normalizeOrderFilterValue(orderType, value) {
+  // 重點：動態篩選前先合併舊狀態，避免 processing / cod 再被渲染成獨立按鈕。
+  const normalizedType = _normalizeOrderType(orderType);
+  const aliases = normalizedType === 'rental'
+    ? RENTAL_ORDER_FILTER_ALIASES
+    : PURCHASE_ORDER_FILTER_ALIASES;
+
+  return aliases[value] || value;
+}
+
+function _orderMatchesFilter(order, filter, orderType = _activeOrderType) {
+  // 重點：同一組篩選按鈕同時支援訂單流程 status 與新增的 paymentStatus，並套用合併後的篩選值。
+  if (!filter || filter === 'all') return true;
+  const normalizedStatus = _normalizeOrderFilterValue(orderType, order.status);
+  const normalizedPayment = _normalizeOrderFilterValue(orderType, order.paymentStatus);
+
+  return normalizedStatus === filter || normalizedPayment === filter;
+}
+
+function _getOrderFilterMeta(orderType) {
+  return _normalizeOrderType(orderType) === 'rental'
+    ? RENTAL_ORDER_FILTER_META
+    : PURCHASE_ORDER_FILTER_META;
+}
+
+function _getOrderStatusTabsElement(orderType) {
+  const id = _normalizeOrderType(orderType) === 'rental'
+    ? 'rentalOrderStatusTabs'
+    : 'purchaseOrderStatusTabs';
+  return document.getElementById(id);
+}
+
+function _buildOrderFilterDefinitions(orderType, orders) {
+  const safeOrders = Array.isArray(orders) ? orders : [];
+  const availableValues = new Set(['all']);
+
+  safeOrders.forEach(order => {
+    if (order.status) availableValues.add(_normalizeOrderFilterValue(orderType, order.status));
+    if (order.paymentStatus) availableValues.add(_normalizeOrderFilterValue(orderType, order.paymentStatus));
+  });
+
+  const knownMeta = _getOrderFilterMeta(orderType);
+  const knownValues = new Set(knownMeta.map(item => item.value));
+  const dynamicItems = knownMeta.filter(item => availableValues.has(item.value));
+  const unknownItems = [...availableValues]
+    .filter(value => value !== 'all' && !knownValues.has(value))
+    .map(value => ({ value, label: value, cls: '' }));
+
+  return [{ value: 'all', label: '全部', cls: '' }, ...dynamicItems, ...unknownItems];
+}
+
+function renderOrderStatusTabs(orderType, orders) {
+  const normalizedType = _normalizeOrderType(orderType);
+  const container = _getOrderStatusTabsElement(normalizedType);
+  if (!container) return;
+
+  const filters = _buildOrderFilterDefinitions(normalizedType, orders);
+  const activeFilter = filters.some(item => item.value === _getActiveOrderFilter(normalizedType))
+    ? _getActiveOrderFilter(normalizedType)
+    : 'all';
+
+  _setActiveOrderFilter(normalizedType, activeFilter);
+
+  // 重點：狀態篩選按鈕依目前資料動態產生，每個面板保留自己的 active 狀態。
+  container.innerHTML = filters.map(item => `
+    <button class="order-status-tab ${item.value === activeFilter ? 'active' : ''}"
+            type="button"
+            data-filter="${item.value}"
+            aria-pressed="${item.value === activeFilter}">
+      ${item.label}
+    </button>
+  `).join('');
 }
 
 function _showOrderTypePanel(orderType) {
@@ -487,17 +687,15 @@ function _showOrderTypePanel(orderType) {
  * 渲染訂單卡片列表
  * Render order cards into #ordersList container
  * @param {Array} orders - 訂單資料陣列
- * @param {string} filter - 狀態篩選 (all/processing/shipped/delivered/cancelled)
+ * @param {string} filter - 狀態篩選 (all/refunded/paid/pending/confirmed/completed/cancelled)
  */
 function renderOrders(orders, filter = 'all') {
   const container = document.getElementById('ordersList');
   if (!container) return;
 
-  // 套用篩選
-  // Apply filter
-  const filtered = filter === 'all'
-    ? orders
-    : orders.filter(o => o.status === filter);
+  const safeOrders = Array.isArray(orders) ? orders : [];
+  // 重點：購買訂單篩選同時比對 status 與 paymentStatus，舊 processing / cod 會先併入待出貨 / 待付款。
+  const filtered = safeOrders.filter(order => _orderMatchesFilter(order, filter, 'purchase'));
 
   // 若無訂單，顯示空狀態
   // Empty state
@@ -556,16 +754,15 @@ function renderOrders(orders, filter = 'all') {
  * 渲染租借訂單列表
  * 重點：結構參照 renderOrders，但資料來源、狀態文案與明細事件改為租借訂單專用。
  * @param {Array} orders - 租借訂單資料陣列
- * @param {string} filter - 狀態篩選 (all/processing/shipped/delivered/cancelled)
+ * @param {string} filter - 狀態篩選 (all/paid/unpaid/unshipped/shipped/delivered/returned)
  */
 function renderRentalOrders(orders, filter = 'all') {
   const container = document.getElementById('rentalOrdersList');
   if (!container) return;
 
   const safeOrders = Array.isArray(orders) ? orders : [];
-  const filtered = filter === 'all'
-    ? safeOrders
-    : safeOrders.filter(o => o.status === filter);
+  // 重點：租借訂單篩選同時比對 status 與 paymentStatus，支援已退款、已付款與租借流程狀態。
+  const filtered = safeOrders.filter(order => _orderMatchesFilter(order, filter, 'rental'));
 
   if (filtered.length === 0) {
     container.innerHTML = `
@@ -616,8 +813,9 @@ function renderRentalOrders(orders, filter = 'all') {
 async function loadOrders() {
   if (_ordersCache) {
     // 已有快取，直接渲染
-    renderOrders(_ordersCache, _getActiveOrderFilter());
-    _renderMemberRewardPoints(_ordersCache); // 同步更新會員卡回饋點數
+    renderOrderStatusTabs('purchase', _ordersCache);
+    renderOrders(_ordersCache, _getActiveOrderFilter('purchase'));
+    _refreshMemberRewardPoints(); // 重點：訂單快取重繪時也重新讀 users.json points，維持會員卡數字最新。
     return;
   }
 
@@ -632,11 +830,12 @@ async function loadOrders() {
       const res = await fetch('../data/orders.json');
       _ordersCache = await res.json();
     }
-    renderOrders(_ordersCache, _getActiveOrderFilter());
-    _renderMemberRewardPoints(_ordersCache); // 訂單載入後依 delivered subtotal 更新點數
+    renderOrderStatusTabs('purchase', _ordersCache);
+    renderOrders(_ordersCache, _getActiveOrderFilter('purchase'));
+    _refreshMemberRewardPoints(); // 重點：訂單載入後仍以 users.json points 更新會員卡，不再用 delivered subtotal 推算。
   } catch (err) {
     console.error('載入訂單失敗 / Failed to load orders:', err);
-    _renderMemberRewardPoints([]); // 載入失敗時顯示 0 點，避免停留在載入中
+    _refreshMemberRewardPoints(); // 重點：訂單載入失敗不影響會員點數，點數資料獨立從 users.json 讀取。
     const container = document.getElementById('ordersList');
     if (container) {
       container.innerHTML = `
@@ -654,7 +853,8 @@ async function loadOrders() {
  */
 async function loadRentalOrders() {
   if (_rentalOrdersCache) {
-    renderRentalOrders(_rentalOrdersCache, _getActiveOrderFilter());
+    renderOrderStatusTabs('rental', _rentalOrdersCache);
+    renderRentalOrders(_rentalOrdersCache, _getActiveOrderFilter('rental'));
     return;
   }
 
@@ -663,7 +863,8 @@ async function loadRentalOrders() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
     _rentalOrdersCache = await res.json();
-    renderRentalOrders(_rentalOrdersCache, _getActiveOrderFilter());
+    renderOrderStatusTabs('rental', _rentalOrdersCache);
+    renderRentalOrders(_rentalOrdersCache, _getActiveOrderFilter('rental'));
   } catch (err) {
     console.error('載入租借訂單失敗 / Failed to load rental orders:', err);
     const container = document.getElementById('rentalOrdersList');
@@ -693,7 +894,8 @@ function initOrderTypeTabs() {
       }
 
       if (_ordersCache) {
-        renderOrders(_ordersCache, _getActiveOrderFilter());
+        renderOrderStatusTabs('purchase', _ordersCache);
+        renderOrders(_ordersCache, _getActiveOrderFilter('purchase'));
       } else {
         loadOrders();
       }
@@ -705,29 +907,29 @@ function initOrderTypeTabs() {
 
 /**
  * 初始化訂單狀態篩選 Tab
- * Bind click events to order status filter tabs
+ * 重點：購買 / 租借各自監聽自己的 order-status-tabs，動態生成的按鈕也能正常篩選。
  */
 function initOrderStatusTabs() {
-  document.querySelectorAll('.order-status-tab[data-filter]').forEach(tab => {
-    tab.addEventListener('click', () => {
-      // 切換 active class
-      document.querySelectorAll('.order-status-tab[data-filter]').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
+  document.querySelectorAll('.order-status-tabs[data-order-status-tabs]').forEach(container => {
+    if (container.dataset.statusTabsBound === 'true') return;
+    container.dataset.statusTabsBound = 'true';
 
-      // 用快取資料重新渲染（如果已載入）
-      // 重點：狀態篩選依目前訂單類型重繪，避免租借 / 購買清單互相覆蓋。
-      if (_activeOrderType === 'rental') {
-        if (_rentalOrdersCache) {
-          renderRentalOrders(_rentalOrdersCache, tab.dataset.filter);
-        } else {
-          loadRentalOrders();
-        }
+    container.addEventListener('click', event => {
+      const tab = event.target.closest('.order-status-tab[data-filter]');
+      if (!tab || !container.contains(tab)) return;
+
+      const orderType = _normalizeOrderType(container.dataset.orderStatusTabs);
+      const nextFilter = tab.dataset.filter || 'all';
+      _setActiveOrderFilter(orderType, nextFilter);
+
+      if (orderType === 'rental') {
+        renderOrderStatusTabs('rental', _rentalOrdersCache || []);
+        if (_rentalOrdersCache) renderRentalOrders(_rentalOrdersCache, _getActiveOrderFilter('rental'));
         return;
       }
 
-      if (_ordersCache) {
-        renderOrders(_ordersCache, tab.dataset.filter);
-      }
+      renderOrderStatusTabs('purchase', _ordersCache || []);
+      if (_ordersCache) renderOrders(_ordersCache, _getActiveOrderFilter('purchase'));
     });
   });
 }
@@ -745,6 +947,7 @@ window.openOrderDetail = function(orderId) {
 
   const { label, cls } = _getStatusInfo(order.status);
   const couponRowHTML = _buildOrderCouponRow(order);
+  const pointsRowHTML = _buildOrderPointsRow(order);
 
   // 產生商品明細列表 HTML
   // Build items detail HTML
@@ -814,6 +1017,7 @@ window.openOrderDetail = function(orderId) {
         <div style="display:flex;justify-content:space-between;font-weight:700;font-size:0.95rem;color:#244d4d;margin-top:0.5rem;border-top:1px solid #f0f0f0;padding-top:0.5rem;">
           <span>訂單總計</span><span>NT$ ${order.total.toLocaleString()}</span>
         </div>
+        ${pointsRowHTML}
       </div>
 
       <!-- 付款方式 -->
@@ -1175,7 +1379,7 @@ window.openReviewModal = function(orderId, itemName) {
       window.showToast && window.showToast('感謝您的評價！🌟', 'success');
 
       // 重新渲染訂單（移除「寫評價」按鈕）
-      const activeFilter = document.querySelector('.order-status-tab[data-filter].active')?.dataset.filter || 'all';
+      const activeFilter = _getActiveOrderFilter('purchase');
       renderOrders(_ordersCache, activeFilter);
     });
   }
@@ -1212,6 +1416,7 @@ window.initMemberCenterPage = function() {
   // Initialize page-specific features
   initTabSwitching();    // Tab 切換
   initOverviewPanel();   // 總覽
+  initMemberRewardPoints(); // 重點：會員卡回饋點數從 users.json points 載入，並持續監聽更新。
   initMemberPreferenceSyncListener(); // Listen for shared-header survey completion.
   initProfilePanel();    // 個人資料
   initOrderTypeTabs();   // 重點：初始化購買 / 租借訂單切換面板

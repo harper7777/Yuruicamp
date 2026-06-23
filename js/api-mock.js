@@ -19,6 +19,72 @@ const _detectDataPath = () => {
   return '/data';
 };
 
+const MOCK_ORDERS_STORAGE_KEY = 'mockOrders';
+const MOCK_USER_POINT_DELTAS_STORAGE_KEY = 'mockUserPointDeltas';
+
+/** 重點：集中讀取 localStorage JSON，避免新增訂單或點數快取資料損壞時中斷整個 mock API。 */
+const _readJsonStorage = (key, fallback) => {
+  try {
+    return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
+  } catch (error) {
+    console.warn(`localStorage ${key} 解析失敗，已改用預設值`, error);
+    return fallback;
+  }
+};
+
+/** 重點：集中寫入 localStorage JSON，讓訂單與點數的 mock 持久化格式一致。 */
+const _writeJsonStorage = (key, value) => {
+  localStorage.setItem(key, JSON.stringify(value));
+};
+
+/** 重點：新增訂單會和 data/orders.json 合併，會員中心讀取時可同時看到靜態與本機新增資料。 */
+const _mergeOrders = (baseOrders = [], persistedOrders = []) => {
+  const orderMap = new Map();
+  [...baseOrders, ...persistedOrders].forEach(order => {
+    if (order && order.id) orderMap.set(order.id, order);
+  });
+  return [...orderMap.values()];
+};
+
+/** 重點：訂單 ID 依目前最大 ord-數字 加 1，符合 data/orders.json 既有 ord-001 格式。 */
+const _getNextOrderSerial = (orders = []) => {
+  const serials = orders
+    .map(order => String(order.id || '').match(/^ord-(\d+)$/))
+    .filter(Boolean)
+    .map(match => Number(match[1]))
+    .filter(serial => Number.isFinite(serial) && serial > 0 && serial < 100000);
+  return Math.max(0, ...serials) + 1;
+};
+
+/** 重點：createdAt 與訂單編號都用使用者本機日期，避免 ISO UTC 跨日時出現日期少一天。 */
+const _formatLocalDate = (date = new Date()) => {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+};
+
+const _formatOrderId = (serial) => `ord-${String(serial).padStart(3, '0')}`;
+
+const _formatOrderNumber = (date, serial) => (
+  `#ORD-${_formatLocalDate(date).replace(/-/g, '')}-${String(serial).padStart(4, '0')}`
+);
+
+/** 重點：每筆訂單回饋點數固定為 subtotal 的 10% 並無條件進位。 */
+const _calculateRewardPoints = (subtotal) => Math.ceil((Number(subtotal) || 0) * 0.1);
+
+const _getStoredOrders = () => _readJsonStorage(MOCK_ORDERS_STORAGE_KEY, []);
+const _getUserPointDeltas = () => _readJsonStorage(MOCK_USER_POINT_DELTAS_STORAGE_KEY, {});
+
+/** 重點：users.json 是基礎資料，結帳新增的點數只記錄增量，避免覆蓋日後更新的 points 原始值。 */
+const _applyUserPointDeltas = (users = []) => {
+  const deltas = _getUserPointDeltas();
+  return users.map(user => ({
+    ...user,
+    points: (Number(user.points) || 0) + (Number(deltas[user.id]) || 0),
+  }));
+};
+
 window.API = {
   // Base data path for JSON fetching - adjusts based on current page location
   _dataPath: null,
@@ -115,8 +181,8 @@ window.API = {
      */
     getAll: async () => {
       try {
-        const response = await fetch(`${window.API._getDataPath()}/orders.json`);
-        const orders = await response.json();
+        const response = await fetch(`${window.API._getDataPath()}/orders.json`, { cache: 'no-store' });
+        const orders = _mergeOrders(await response.json(), _getStoredOrders());
         return Promise.resolve(orders);
       } catch (error) {
         console.error('Error fetching all orders:', error);
@@ -126,8 +192,8 @@ window.API = {
 
     getByUserId: async (userId, status = null) => {
       try {
-        const response = await fetch(`${window.API._getDataPath()}/orders.json`);
-        let orders = await response.json();
+        const response = await fetch(`${window.API._getDataPath()}/orders.json`, { cache: 'no-store' });
+        let orders = _mergeOrders(await response.json(), _getStoredOrders());
         
         orders = orders.filter(o => o.userId === userId);
         
@@ -149,22 +215,51 @@ window.API = {
      */
     create: async (orderData) => {
       try {
-        // 生成結構化的訂單編號，格式：#ORD-YYYYMMDD-XXXX
         const now = new Date();
-        const dateStr = now.toISOString().slice(0,10).replace(/-/g,'');
-        const seq = Math.floor(Math.random() * 9000) + 1000;
+        const response = await fetch(`${window.API._getDataPath()}/orders.json`, { cache: 'no-store' });
+        const baseOrders = await response.json();
+        const storedOrders = _getStoredOrders();
+        const serial = _getNextOrderSerial(_mergeOrders(baseOrders, storedOrders));
+        const subtotal = Number(orderData.subtotal) || 0;
+        const rewardPoints = Number.isFinite(Number(orderData.points))
+          ? Number(orderData.points)
+          : _calculateRewardPoints(subtotal);
+
+        // 重點：新增訂單欄位依 checkout.js 整理後的頁面資料建立，狀態預設為待出貨 unshipped。
         const newOrder = {
-          id: `ord-${Date.now()}`,
-          orderNumber: `#ORD-${dateStr}-${seq}`,
-          ...orderData,
-          status: 'processing',
-          createdAt: now.toISOString(),
+          id: orderData.id || _formatOrderId(serial),
+          userId: orderData.userId || 'user-001',
+          orderNumber: orderData.orderNumber || _formatOrderNumber(now, serial),
+          items: orderData.items || [],
+          subtotal,
+          points: rewardPoints,
+          shippingFee: Number(orderData.shippingFee) || 0,
+          ...(Array.isArray(orderData.coupons) && orderData.coupons.length > 0 ? { coupons: orderData.coupons } : {}),
+          discount: Number(orderData.discount) || 0,
+          total: Number(orderData.total) || 0,
+          status: orderData.status || 'unshipped',
+          shippingMethod: orderData.shippingMethod || 'delivery',
+          shippingAddress: orderData.shippingAddress || orderData.deliveryAddress || '',
+          payment: orderData.payment || orderData.paymentMethod || 'credit-card',
+          paymentStatus: orderData.paymentStatus || ((orderData.payment || orderData.paymentMethod) === 'cod' ? 'paid' : 'unpaid'),
+          createdAt: orderData.createdAt || _formatLocalDate(now),
+          canReview: false,
+          review: false,
+          reviewed: false,
+          buyerName: orderData.buyerName || '',
+          buyerPhone: orderData.buyerPhone || '',
+          buyerEmail: orderData.buyerEmail || '',
+          buyerNote: orderData.buyerNote || '',
         };
         
-        // 模擬保存到 localStorage
-        const orders = JSON.parse(localStorage.getItem('mockOrders') || '[]');
-        orders.push(newOrder);
-        localStorage.setItem('mockOrders', JSON.stringify(orders));
+        // 重點：瀏覽器無法直接寫回 data/orders.json，這裡以 mockOrders 模擬追加後的 orders.json。
+        const orders = [...storedOrders.filter(order => order.id !== newOrder.id), newOrder];
+        _writeJsonStorage(MOCK_ORDERS_STORAGE_KEY, orders);
+
+        // 重點：訂單成立時同步把本筆 points 加到會員點數增量，會員中心會即時讀到新總點數。
+        if (newOrder.userId && newOrder.points > 0 && window.API.users && window.API.users.addPoints) {
+          await window.API.users.addPoints(newOrder.userId, newOrder.points);
+        }
         
         return Promise.resolve(newOrder);
       } catch (error) {
@@ -178,6 +273,66 @@ window.API = {
    * 用戶相關 API
    */
   users: {
+    /**
+     * 取得所有會員資料
+     * 重點：每次都重新讀 data/users.json，再套用本機點數增量，讓 users.json points 更新後畫面也會跟著刷新。
+     * @returns {Promise<Array>}
+     */
+    getAll: async () => {
+      try {
+        const response = await fetch(`${window.API._getDataPath()}/users.json`, { cache: 'no-store' });
+        const users = await response.json();
+        return Promise.resolve(_applyUserPointDeltas(users));
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        return Promise.reject(error);
+      }
+    },
+
+    /**
+     * 依會員 ID 取得單一會員資料
+     * 重點：會員中心回饋點數固定從 users.json 的 points 欄位讀取，不再從訂單 delivered subtotal 推算。
+     * @param {string} userId - 用戶 ID
+     * @returns {Promise<Object>}
+     */
+    getById: async (userId) => {
+      const users = await window.API.users.getAll();
+      const user = users.find(item => item.id === userId) || users[0];
+      if (!user) return Promise.reject(new Error('User not found'));
+      return Promise.resolve(user);
+    },
+
+    /**
+     * 累加會員回饋點數
+     * 重點：瀏覽器不能直接修改 data/users.json，因此只保存「新增點數增量」，再與 users.json points 合併顯示。
+     * @param {string} userId - 用戶 ID
+     * @param {number} points - 本次新增點數
+     * @returns {Promise<Object>}
+     */
+    addPoints: async (userId, points) => {
+      const safeUserId = userId || 'user-001';
+      const earnedPoints = Number(points) || 0;
+      const deltas = _getUserPointDeltas();
+
+      deltas[safeUserId] = (Number(deltas[safeUserId]) || 0) + earnedPoints;
+      _writeJsonStorage(MOCK_USER_POINT_DELTAS_STORAGE_KEY, deltas);
+
+      const updatedUser = await window.API.users.getById(safeUserId);
+
+      // 重點：同步目前登入狀態，讓 Header 與其他頁面也可取得最新 points。
+      if (window.AppState && window.AppState.currentUser && (!window.AppState.currentUser.id || window.AppState.currentUser.id === safeUserId)) {
+        window.AppState.currentUser.id = safeUserId;
+        window.AppState.currentUser.points = updatedUser.points;
+        window.saveAppState && window.saveAppState();
+      }
+
+      window.dispatchEvent(new CustomEvent('yurui:user-points-updated', {
+        detail: { userId: safeUserId, points: updatedUser.points, earnedPoints },
+      }));
+
+      return Promise.resolve(updatedUser);
+    },
+
     /**
      * 登出
      * 設計說明：登出時只清除認證狀態（isLoggedIn、currentUser）

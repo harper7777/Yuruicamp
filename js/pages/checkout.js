@@ -23,6 +23,93 @@ let appliedCheckoutCouponCodes = [];
 // 目前選擇的物流方式 Currently selected shipping method
 let selectedShippingMethod = 'delivery';
 
+/** 重點：結帳新增訂單預設寫入 data/users.json 的 user-001，確保會員中心點數可對應更新。 */
+const DEFAULT_CHECKOUT_USER_ID = 'user-001';
+
+/** 重點：門市取貨的 shippingAddress 依需求固定寫入台北門市。 */
+const STORE_PICKUP_ADDRESS = '台北門市';
+
+/**
+ * 從金額文字讀取數字
+ * 重點：結帳確認時依畫面上的 span 金額建立訂單，免費運費會轉成 0。
+ * @param {string} elementId - 金額元素 ID
+ * @param {number} fallback - 讀取失敗時的備用值
+ * @returns {number} 金額數字
+ */
+function readCheckoutMoney(elementId, fallback = 0) {
+  const text = document.getElementById(elementId)?.textContent || '';
+  if (text.includes('免費')) return 0;
+
+  const value = Number(text.replace(/[^\d.-]/g, ''));
+  return Number.isFinite(value) ? Math.abs(value) : fallback;
+}
+
+/**
+ * 取得本次結帳可得點數
+ * 重點：依 span#checkoutSubtotal 的畫面金額乘以 10%，並使用 Math.ceil 無條件進位。
+ * @returns {number} 本次訂單 points
+ */
+function calculateCheckoutPointsFromSummary() {
+  const subtotal = readCheckoutMoney('checkoutSubtotal', window.calculateCartTotal(window.AppState.cart));
+  return Math.ceil(subtotal * 0.1);
+}
+
+/**
+ * 取得付款方式代碼
+ * 重點：將 checkout.html 的 radio value 對應成 orders.json 使用的 credit-card / line-pay / cod。
+ * @returns {string} orders.json payment 欄位值
+ */
+function getSelectedPaymentCode() {
+  const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'credit';
+  const paymentMap = {
+    credit: 'credit-card',
+    linepay: 'line-pay',
+    cod: 'cod',
+  };
+
+  return paymentMap[selectedPayment] || selectedPayment;
+}
+
+/**
+ * 取得訂單付款狀態
+ * 重點：貨到付款不再獨立成篩選，會併入待付款 paid；其餘結帳完成後歸入已付款 unpaid。
+ * @returns {string} orders.json paymentStatus 欄位值
+ */
+function getCheckoutPaymentStatus() {
+  return getSelectedPaymentCode() === 'cod' ? 'paid' : 'unpaid';
+}
+
+/**
+ * 建立訂單 coupon 快照
+ * 重點：成功套用多張 coupon 時，把折扣碼、折扣類型與本次折抵金額一起寫入訂單。
+ * @param {number} subtotal - 商品小計
+ * @returns {Array} coupon 快照陣列
+ */
+function buildCheckoutCouponSnapshots(subtotal) {
+  if (!window.YuruiCoupons || checkoutCouponCatalog.length === 0) return [];
+
+  const applied = window.YuruiCoupons.calculateAppliedCoupons(checkoutCouponCatalog, appliedCheckoutCouponCodes, subtotal);
+  return applied.items.map(item => ({
+    code: item.code,
+    type: item.coupon.type,
+    discount: item.coupon.discount,
+    amount: item.discount,
+  }));
+}
+
+/**
+ * 取得本機日期字串
+ * 重點：createdAt 使用今天日期 yyyy-mm-dd，不使用 UTC ISO 避免跨時區日期偏移。
+ * @returns {string} 本機日期
+ */
+function getCheckoutTodayString() {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
 /**
  * 初始化結帳頁面
  * Initialize checkout page
@@ -507,34 +594,46 @@ function initConfirmOrderBtn() {
 
     // ---- Step 2: 準備訂單資料 Prepare order data ----
     const cart = window.AppState.cart;
-    const subtotal = window.calculateCartTotal(cart);
-    const shipping = window.calculateShippingFee(subtotal, selectedShippingMethod);
-    const total = Math.max(subtotal - checkoutDiscount + shipping, 0);
-
-    const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'credit';
+    const subtotal = readCheckoutMoney('checkoutSubtotal', window.calculateCartTotal(cart));
+    const shipping = readCheckoutMoney('checkoutShipping', window.calculateShippingFee(subtotal, selectedShippingMethod));
+    const discount = readCheckoutMoney('checkoutDiscount', checkoutDiscount);
+    const total = readCheckoutMoney('checkoutTotal', Math.max(subtotal - discount + shipping, 0));
+    const points = calculateCheckoutPointsFromSummary();
+    const payment = getSelectedPaymentCode();
+    const shippingAddress = selectedShippingMethod === 'delivery' ? deliveryAddress : STORE_PICKUP_ADDRESS;
     const buyerNote = document.getElementById('buyerNote')?.value.trim() || '';
 
+    // 重點：訂單資料欄位對齊 data/orders.json，畫面摘要金額與本次 points 會一起交給 mock API 保存。
     const orderData = {
-      userId: window.AppState.currentUser?.id || 'guest',
+      userId: window.AppState.currentUser?.id || DEFAULT_CHECKOUT_USER_ID,
       buyerName,
       buyerPhone,
       buyerEmail,
       buyerNote,
       shippingMethod: selectedShippingMethod,
-      deliveryAddress: selectedShippingMethod === 'delivery' ? deliveryAddress : '門市取貨',
-      paymentMethod: selectedPayment,
+      shippingAddress,
+      payment,
+      paymentStatus: getCheckoutPaymentStatus(),
       items: cart.map(item => ({
-        productId: item.id,
+        productId: item.id || item.productId,
         name: item.name,
         brand: item.brand,
         price: item.price,
         quantity: item.quantity,
+        image: item.image,
         subtotal: item.price * item.quantity,
       })),
       subtotal,
+      points,
       shippingFee: shipping,
-      discount: checkoutDiscount,
+      coupons: buildCheckoutCouponSnapshots(subtotal),
+      discount,
       total,
+      status: 'unshipped',
+      createdAt: getCheckoutTodayString(),
+      canReview: false,
+      review: false,
+      reviewed: false,
     };
 
     // ---- Step 3: 送出訂單 Submit order ----
@@ -553,7 +652,8 @@ function initConfirmOrderBtn() {
 
       // Step 5: 跳轉到成功頁，帶上訂單編號
       // Redirect to success page with order number
-      const orderNum = newOrder.id || `ORD-${Date.now()}`;
+      // 重點：成功頁會在 orderNum 前補上 #，因此傳入時先移除 orders.json orderNumber 的 #。
+      const orderNum = String(newOrder.orderNumber || newOrder.id || `ORD-${Date.now()}`).replace(/^#/, '');
       window.location.href = `checkout-success.html?orderNum=${orderNum}`;
 
     } catch (error) {

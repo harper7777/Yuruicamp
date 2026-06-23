@@ -3671,10 +3671,18 @@ hr {
   border-radius: 50px;
 }
 
-.status-processing { background: #fff3cd; color: #856404; }
 .status-shipped    { background: #cce5ff; color: #004085; }
 .status-delivered  { background: #d4edda; color: #155724; }
 .status-cancelled  { background: #f8d7da; color: #721c24; }
+/* 重點：會員中心購買 / 租借新增狀態共用 badge 色票，支援 status 與 paymentStatus 篩選結果。 */
+.status-paid       { background: #fff3cd; color: #856404; }
+.status-unpaid     { background: #d4edda; color: #155724; }
+.status-unshipped  { background: #fff3cd; color: #856404; }
+.status-returned   { background: #f8d7da; color: #721c24; }
+.status-pending    { background: #fff3cd; color: #856404; }
+.status-confirmed  { background: #cce5ff; color: #004085; }
+.status-completed  { background: #d4edda; color: #155724; }
+.status-refunded   { background: #f8d7da; color: #721c24; }
 
 .order-card-body { padding: 1rem 1.1rem; }
 

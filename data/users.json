@@ -12,6 +12,7 @@
     "totalSpend": 18391,
     "nextTierSpend": 30000,
     "joinDate": "2025-01-15",
+    "points": 760,
     "preferences": { "styles": ["backpacking", "hiking"], "equipment": ["tent", "backpack"] },
     "coupons": [
       { "id": "cp-001", "code": "WELCOME100", "discount": 100, "type": "fixed", "minOrder": 500, "expiry": "2026-12-31", "used": false },
