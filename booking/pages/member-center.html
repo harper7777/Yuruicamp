@@ -96,6 +96,8 @@
               </div>
               <div class="mc-membership-card__name" id="cardName">露友小明</div>
               <div class="mc-membership-card__since" id="cardSince">加入日期：2026-01-01</div>
+              <!-- 重點：回饋點數從根目錄 data/users.json 的 points 讀取，並由 booking/js/member-center.js 動態刷新。 -->
+              <div class="mc-membership-card__points" id="cardPoints">回饋點數：載入中</div>
               <div class="mc-membership-card__progress-label">
                 升等進度 — 距下一等級還差 <strong>NT$3,000</strong>
               </div>
@@ -115,6 +117,10 @@
                 <div class="mc-stat-card__label">即將出發預約</div>
               </div>
               <div class="mc-stat-card">
+                <div class="mc-stat-card__num" id="statCoupons">0</div>
+                <div class="mc-stat-card__label">可用折價券</div>
+              </div>
+              <div class="mc-stat-card">
                 <div class="mc-stat-card__num danger" id="statUnread">2</div>
                 <div class="mc-stat-card__label">未讀通知</div>
               </div>
@@ -123,25 +129,13 @@
             <!-- 最近活動 -->
             <div class="mc-card-box">
               <h5><i class="bi bi-clock-history"></i> 最近活動</h5>
-              <div class="mc-activity-item">
-                
-                <div>
-                  <div class="mc-activity-item__title">合歡山露營區 預約確認</div>
-                  <div class="mc-activity-item__date">2026-06-10</div>
-                </div>
-              </div>
-              <div class="mc-activity-item">
-                
-                <div>
-                  <div class="mc-activity-item__title">訂單 #ORD-20260310 已出貨</div>
-                  <div class="mc-activity-item__date">2026-03-10</div>
-                </div>
-              </div>
-              <div class="mc-activity-item">
-                
-                <div>
-                  <div class="mc-activity-item__title">獲得折價券 CAMP100</div>
-                  <div class="mc-activity-item__date">2026-01-05</div>
+              <!-- 重點：最近活動改由 orders / rentalOrders / users 通知動態彙整，保留 booking 版卡片樣式。 -->
+              <div id="recentActivity">
+                <div class="mc-activity-item">
+                  <div>
+                    <div class="mc-activity-item__title">載入最近活動中...</div>
+                    <div class="mc-activity-item__date">請稍候</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -176,6 +170,30 @@
                     <input type="text" id="profileAddress" placeholder="台北市信義區..." value="台北市信義區信義路五段100號">
                   </div>
                 </div>
+                <!-- 重點：完整同步 pages/member-center.html 的 survey-tags，供 header 問卷與商品推薦共用同一批 data-value。 -->
+                <div class="mc-form-group full mc-preference-group">
+                  <label>露營喜好（可多選）</label>
+                  <div class="survey-tags" id="prefTags">
+                    <span class="survey-tag" data-value="glamping">✨ 豪華露營 Glamping</span>
+                    <span class="survey-tag" data-value="backpacking">🎒 輕量背包客</span>
+                    <span class="survey-tag" data-value="family">👨‍👩‍👧 親子家庭</span>
+                    <span class="survey-tag" data-value="solo">🧘 獨行俠</span>
+                    <span class="survey-tag" data-value="hiking">⛰️ 登山健行</span>
+                    <span class="survey-tag" data-value="car-camping">🚗 車頂帳</span>
+                    <span class="survey-tag" data-value="ultralight">🪶 極輕量</span>
+                    <span class="survey-tag" data-value="base-camp">⛺ 基地營</span>
+                    <span class="survey-tag" data-value="tent">⛺ 帳篷</span>
+                    <span class="survey-tag" data-value="sleeping-bag">🛏️ 睡袋</span>
+                    <span class="survey-tag" data-value="backpack">🎒 登山背包</span>
+                    <span class="survey-tag" data-value="cooking">🍳 炊具</span>
+                    <span class="survey-tag" data-value="lighting">💡 照明設備</span>
+                    <span class="survey-tag" data-value="clothing">🧥 戶外服飾</span>
+                    <span class="survey-tag" data-value="chair">🪑 桌椅</span>
+                    <span class="survey-tag" data-value="navigation">🧭 導航裝備</span>
+                    <span class="survey-tag" data-value="safety">🩹 安全急救</span>
+                    <span class="survey-tag" data-value="photography">📷 攝影器材</span>
+                  </div>
+                </div>
                 <div style="margin-top:1.25rem;">
                   <button type="submit" class="btn btn--primary">
                     <i class="bi bi-floppy"></i> 儲存修改
@@ -195,24 +213,18 @@
               <!-- Sub-tab 切換列 -->
               <div class="rec-tabs">
                 <button class="rec-tab active" data-rec="store">
-                  <i class="bi bi-bag"></i> 商城購買紀錄
+                  <i class="bi bi-bag"></i> 購買紀錄
                 </button>
                 <button class="rec-tab" data-rec="booking">
-                  <i class="bi bi-tent"></i> 預約紀錄
+                  <i class="bi bi-tent"></i> 預約&amp;租借紀錄
                 </button>
               </div>
 
               <!-- Sub-panel：商城購買紀錄 -->
-              <div class="rec-panel active" data-rec-panel="store">
-                <!-- 商城訂單狀態篩選 -->
-                <div class="order-status-tabs">
-                  <button class="order-status-tab active" data-store-filter="all">全部</button>
-                  <button class="order-status-tab" data-store-filter="unpaid">待付款</button>
-                  <button class="order-status-tab" data-store-filter="shipped">待出貨</button>
-                  <button class="order-status-tab" data-store-filter="delivered">已完成</button>
-                  <button class="order-status-tab" data-store-filter="refund">退貨退款</button>
-                </div>
-                <div class="rec-list" id="storeRecList">
+              <div id="purchaseOrdersPanel" class="rec-panel active" data-rec-panel="store" data-order-panel="purchase">
+                <!-- 重點：購買紀錄篩選列由 booking/js/member-center.js 依 data/orders.json 動態渲染，預設全部。 -->
+                <div id="purchaseOrderStatusTabs" class="order-status-tabs" data-order-status-tabs="purchase"></div>
+                <div class="rec-list" id="ordersList">
                   <div class="rec-item" data-status="delivered">
                     <div class="rec-item__info">
                       <div class="rec-item__title">輕量化露營帳篷 2人</div>
@@ -265,16 +277,10 @@
               </div>
 
               <!-- Sub-panel：預約紀錄 -->
-              <div class="rec-panel" data-rec-panel="booking">
-                <!-- 預約狀態篩選 -->
-                <div class="order-status-tabs">
-                  <button class="order-status-tab active" data-booking-filter="all">全部</button>
-                  <button class="order-status-tab" data-booking-filter="unpaid">待付款</button>
-                  <button class="order-status-tab" data-booking-filter="upcoming">即將入住</button>
-                  <button class="order-status-tab" data-booking-filter="delivered">已完成</button>
-                  <button class="order-status-tab" data-booking-filter="cancelled">取消</button>
-                </div>
-                <div class="rec-list" id="bookingRecList">
+              <div id="rentalOrdersPanel" class="rec-panel" data-rec-panel="booking" data-order-panel="rental">
+                <!-- 重點：預約 & 租借紀錄篩選列由 booking/js/member-center.js 依 data/rentalOrders.json 動態渲染，預設全部。 -->
+                <div id="rentalOrderStatusTabs" class="order-status-tabs" data-order-status-tabs="rental"></div>
+                <div class="rec-list" id="rentalOrdersList">
                   <div class="rec-item" data-status="upcoming">
                     <div class="rec-item__info">
                       <div class="rec-item__title">合歡山露營區 · 松景營位</div>
@@ -358,29 +364,14 @@
                   全部標為已讀
                 </button>
               </div>
+              <!-- 重點：通知清單改由 data/users.json 的 notifications 動態渲染，保留 booking 版通知樣式。 -->
               <div id="notificationList">
-                <div class="notif-item">
-                  <div class="notif-item__dot"></div>
-                  <div>
-                    <div class="notif-item__title">預約確認通知</div>
-                    <div class="notif-item__body">您的合歡山露營區預約（#BK-20260620）已確認，請於入住前一天完成付款。</div>
-                    <div class="notif-item__date">2026-06-10</div>
-                  </div>
-                </div>
-                <div class="notif-item">
-                  <div class="notif-item__dot"></div>
-                  <div>
-                    <div class="notif-item__title">折價券到期提醒</div>
-                    <div class="notif-item__body">您的折價券 BK200 將於 2026-09-30 到期，趕快去使用吧！</div>
-                    <div class="notif-item__date">2026-06-08</div>
-                  </div>
-                </div>
                 <div class="notif-item">
                   <div class="notif-item__dot read"></div>
                   <div>
-                    <div class="notif-item__title">訂單出貨通知</div>
-                    <div class="notif-item__body">您的訂單 #ORD-20260215 已出貨，預計 3～5 個工作天到達。</div>
-                    <div class="notif-item__date">2026-02-16</div>
+                    <div class="notif-item__title">載入通知中...</div>
+                    <div class="notif-item__body">請稍候</div>
+                    <div class="notif-item__date">--</div>
                   </div>
                 </div>
               </div>
