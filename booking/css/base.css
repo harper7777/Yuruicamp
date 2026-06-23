@@ -5,15 +5,15 @@
 }
 
 :root {
-  --color-text: #222;
-  --color-muted: #666;
-  --color-light-muted: #8a8a8a;
-  --color-primary: #9a6a31;
-  --color-primary-dark: #5d3603;
-  --color-bg: #fff;
-  --color-bg-soft: #faf7f1;
-  --color-cta: #d8b98f;
-  --color-black: #000;
+  --color-text: #3E463D;
+  --color-muted: #746A62;
+  --color-light-muted: #796F66;
+  --color-primary: #7F927A;
+  --color-primary-dark: #5F705B;
+  --color-bg: #FAF9EE;
+  --color-bg-soft: #EFE7DC;
+  --color-cta: #9FAA96;
+  --color-black: #3E463D;
   --font-main: "Noto Serif TC", serif;
   --header-height: 70px;
   --container-wide: min(1180px, 90%);

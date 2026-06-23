@@ -145,12 +145,12 @@
 
 .bk-footer__payment-icons i {
   font-size: 1.5rem;       /* 調整大小 */
-  color: #7a9494;          /* 改成符合你們 Footer 的低調優雅顏色 */
+  color: #D9E6D1;          /* 改成符合你們 Footer 的低調優雅顏色 */
   margin-right: 12px;
   transition: color 0.2s;
 }
 .bk-footer__payment-icons i:hover {
-  color: #cde0e0;          /* 滑鼠懸停時微亮 */
+  color: #FFFDF7;          /* 滑鼠懸停時微亮 */
 }
 
 /* ========================================
@@ -165,7 +165,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: linear-gradient(135deg, #2E3F2C 0%, #5A6D56 42%, #6B8F71 70%, #7B9E82 100%);
+  background: linear-gradient(135deg, #FAF9EE 0%, #EFE7DC 50%, #D9E6D1 100%);
 }
 
 /* 背景影片：inset:0 = top/right/bottom/left 全部設為 0，讓影片撐滿整個 section */
@@ -183,7 +183,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(62, 70, 61, 0.20);
   z-index: 1;
 }
 
@@ -233,9 +233,9 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.85rem 2.25rem;
-  background-color: #FDF1DB;
-  color: #5A6D56;
-  border: 2px solid #FDF1DB;
+  background-color: #FAF9EE;
+  color: #687A64;
+  border: 2px solid #FAF9EE;
   border-radius: 50px;
   font-size: 1rem;
   font-weight: 700;

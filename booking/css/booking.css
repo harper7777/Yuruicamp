@@ -9,35 +9,35 @@
    ============================================================ */
 :root {
   /* 品牌色（導覽列、頁尾、大面積區塊） */
-  --bk-primary:         #5A6D56;   /* 深青苔綠：品牌主色 */
-  --bk-primary-hover:   #6B8F71;   /* 石生苔綠 */
-  --bk-primary-light:   #E6EDE4;   /* 極淺苔綠：選中背景 */
-  --bk-on-dark:         #FDF1DB;   /* 深色背景反白字 */
+  --bk-primary:         #687A64;   /* 深青苔綠：品牌主色 */
+  --bk-primary-hover:   #7F927A;   /* 石生苔綠 */
+  --bk-primary-light:   #D9E6D1;   /* 極淺苔綠：選中背景 */
+  --bk-on-dark:         #FAF9EE;   /* 深色背景反白字 */
 
   /* 行動按鈕（CTA） */
-  --bk-cta:             #9D5F1B;   /* 溫暖陶土橘：主行動按鈕 */
-  --bk-cta-hover:       #7B4515;   /* 深陶土：懸停 */
+  --bk-cta:             #687A64;   /* 溫暖陶土橘：主行動按鈕 */
+  --bk-cta-hover:       #5F705B;   /* 深陶土：懸停 */
 
   /* 介面層次 */
-  --bk-white:           #ffffff;
-  --bk-bg:              #FDF1DB;   /* 晨光奶油黃：頁面底色 */
-  --bk-card-bg:         #ffffff;   /* 純白：卡片 */
-  --bk-border:          #D7C0A4;   /* 暖沙色：分隔線 */
-  --bk-border-strong:   #5A6D56;
+  --bk-white:           #FFFDF7;
+  --bk-bg:              #FAF9EE;   /* 晨光奶油黃：頁面底色 */
+  --bk-card-bg:         #FFFDF7;   /* 純白：卡片 */
+  --bk-border:          #DCCFC0;   /* 暖沙色：分隔線 */
+  --bk-border-strong:   #687A64;
 
   /* 文字層次 */
-  --bk-text:            #4A3B32;   /* 深炭褐木：主要文字 */
-  --bk-text-muted:      #96AB88;   /* 尤加利綠：次要文字 */
-  --bk-accent:          #7B8563;   /* 橄欖綠：強調 */
+  --bk-text:            #3E463D;   /* 深炭褐木：主要文字 */
+  --bk-text-muted:      #746A62;   /* 尤加利綠：次要文字 */
+  --bk-accent:          #7F927A;   /* 橄欖綠：強調 */
 
   /* 標籤 */
-  --bk-gold:            #9D5F1B;   /* 陶土橘：推薦標籤 */
-  --bk-sage:            #A4BD9B;   /* 淺鼠尾草綠：環保標籤 */
-  --bk-orange:          #C4792A;   /* 暖橘：警示 */
+  --bk-gold:            #687A64;   /* 陶土橘：推薦標籤 */
+  --bk-sage:            #B6C6AF;   /* 淺鼠尾草綠：環保標籤 */
+  --bk-orange:          #857B72;   /* 暖橘：警示 */
 
   /* 狀態 */
-  --bk-success:         #4A7A5A;   /* 深綠：成功 */
-  --bk-danger:          #c0392b;   /* 紅色：錯誤 */
+  --bk-success:         #687A64;   /* 深綠：成功 */
+  --bk-danger:          #A65F58;   /* 紅色：錯誤 */
 
   /* 陰影（暖褐色調） */
   --bk-shadow:          0 2px 12px rgba(74, 59, 50, 0.09);
@@ -309,18 +309,18 @@
 }
 
 .tag--env {
-  background: #E6EDE4;
-  color: #5A6D56;
+  background: #D9E6D1;
+  color: #687A64;
 }
 
 .tag--facility {
   background: rgba(123, 133, 99, 0.12);
-  color: #7B8563;
+  color: #7F927A;
 }
 
 .tag--recommend {
   background: rgba(157, 95, 27, 0.1);
-  color: #9D5F1B;
+  color: #687A64;
   border: 1px solid rgba(157, 95, 27, 0.32);
 }
 
@@ -687,8 +687,8 @@
 }
 
 .recommendation-banner__content {
-  background: linear-gradient(135deg, #fffbec 0%, #fff8e1 100%);
-  border: 1px solid #ffc107;
+  background: linear-gradient(135deg, #FFFDF7 0%, #EFE7DC 100%);
+  border: 1px solid #DCCFC0;
   border-radius: var(--bk-radius);
   padding: 1rem 1.25rem;
   font-size: 0.9rem;
@@ -708,9 +708,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  background: #fff3cd;
-  color: #856404;
-  border: 1px solid #ffc107;
+  background: #D9E6D1;
+  color: #5B5148;
+  border: 1px solid #DCCFC0;
   border-radius: 20px;
   padding: 0.2rem 0.7rem;
   font-size: 0.82rem;
@@ -855,7 +855,7 @@
   transition: background 0.15s;
 }
 
-.rental-remove-btn:hover { background: #fdeaea; }
+.rental-remove-btn:hover { background: #F4E7E4; }
 
 .rental-cost-summary {
   padding: 0.75rem;
@@ -1081,7 +1081,7 @@
 /* 結帳成功後導購橫幅 */
 .upsell-banner {
   margin-top: 1rem;
-  background: linear-gradient(135deg, var(--bk-primary-light), #e8f8f0);
+  background: linear-gradient(135deg, var(--bk-primary-light), #D9E6D1);
   border: 1px solid var(--bk-border);
   border-radius: var(--bk-radius);
   padding: 1rem;
@@ -1226,12 +1226,12 @@
 
 /* ============================================================
    22. Booking Header（預約系統專屬）
-   背景色 #5A6D56（深青苔綠），與頁面底色 #FDF1DB 形成深-淺層次
+   背景色 #687A64（深青苔綠），與頁面底色 #FAF9EE 形成深-淺層次
    ============================================================ */
 
 /* Header 外層容器 */
 .booking-header {
-  background: #5A6D56;
+  background: #687A64;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -1255,7 +1255,7 @@
 .bk-brand-link {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #FDF1DB;
+  color: #FAF9EE;
   text-decoration: none;
   display: flex;
   align-items: baseline;
@@ -1296,12 +1296,12 @@
 
 .bk-nav-link:hover {
   background: rgba(253, 241, 219, 0.12);
-  color: #FDF1DB;
+  color: #FAF9EE;
 }
 
 /* 目前頁面對應連結加底線 */
 .bk-nav-link.active {
-  color: #FDF1DB;
+  color: #FAF9EE;
   font-weight: 600;
   border-bottom: 2px solid rgba(253, 241, 219, 0.75);
   border-radius: 0;
@@ -1321,7 +1321,7 @@
   font-size: 0.875rem;
   white-space: nowrap;
   background: rgba(253, 241, 219, 0.1);
-  color: #FDF1DB;
+  color: #FAF9EE;
   border-color: rgba(253, 241, 219, 0.42);
 }
 
@@ -1346,7 +1346,7 @@
   width: 40px;
   height: 40px;
   border-radius: 8px;
-  color: #FDF1DB;
+  color: #FAF9EE;
   font-size: 1.35rem;
   text-decoration: none;
   transition: background 0.2s;
@@ -1365,7 +1365,7 @@
   min-width: 18px;
   height: 18px;
   padding: 0 4px;
-  background: #9D5F1B;
+  background: #687A64;
   color: #fff;
   font-size: 0.68rem;
   font-weight: 700;
@@ -1387,7 +1387,7 @@
 .bk-login-btn {
   padding: 0.4rem 0.9rem;
   font-size: 0.875rem;
-  color: #FDF1DB;
+  color: #FAF9EE;
   border-color: rgba(253, 241, 219, 0.5);
   background: transparent;
 }
@@ -1404,7 +1404,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
-  color: #FDF1DB;
+  color: #FAF9EE;
 }
 
 .bk-user-avatar {
@@ -1412,7 +1412,7 @@
   height: 32px;
   border-radius: 50%;
   background: rgba(253, 241, 219, 0.2);
-  color: #FDF1DB;
+  color: #FAF9EE;
   font-weight: 700;
   font-size: 0.9rem;
   display: flex;
@@ -1434,7 +1434,7 @@
   gap: 0.45rem;
   background: none;
   border: none;
-  color: #FDF1DB;
+  color: #FAF9EE;
   cursor: pointer;
   padding: 0;
   font-size: 0.875rem;
@@ -1499,7 +1499,7 @@
 
 /* 登出項目：紅色強調 */
 .bk-user-dropdown__item--danger {
-  color: #c0392b;
+  color: #A65F58;
 }
 
 .bk-user-dropdown__item--danger:hover {
@@ -1516,7 +1516,7 @@
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #FDF1DB;
+  color: #FAF9EE;
   cursor: pointer;
   padding: 0.3rem;
   border-radius: 6px;
@@ -1540,7 +1540,7 @@
   width: 300px;
   max-width: 85vw;
   height: 100vh;
-  background: #FDF1DB;
+  background: #FAF9EE;
   box-shadow: -4px 0 20px rgba(74, 59, 50, 0.18);
   z-index: 2000;
   transition: right 0.3s ease;
@@ -1555,20 +1555,20 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid #D7C0A4;
+  border-bottom: 1px solid #DCCFC0;
 }
 
 .bk-offcanvas__title {
   font-size: 1rem;
   font-weight: 700;
-  color: #5A6D56;
+  color: #687A64;
 }
 
 .bk-offcanvas__close {
   background: none;
   border: none;
   font-size: 1.25rem;
-  color: #7B8563;
+  color: #7F927A;
   cursor: pointer;
   padding: 0.2rem;
   border-radius: 4px;
@@ -1589,23 +1589,23 @@
   display: block;
   padding: 0.85rem 1.5rem;
   font-size: 0.95rem;
-  color: #4A3B32;
+  color: #3E463D;
   text-decoration: none;
   transition: background 0.15s;
 }
 
-.bk-offcanvas__list li a:hover { background: rgba(90, 109, 86, 0.08); color: #5A6D56; }
+.bk-offcanvas__list li a:hover { background: rgba(90, 109, 86, 0.08); color: #687A64; }
 
 /* Offcanvas 分隔線 */
 .bk-offcanvas__divider {
   height: 1px;
-  background: #D7C0A4;
+  background: #DCCFC0;
   margin: 0.5rem 1.5rem;
 }
 
 /* 系統切換連結（陶土橘強調） */
 .bk-offcanvas__switch {
-  color: #9D5F1B !important;
+  color: #687A64 !important;
   font-weight: 600 !important;
 }
 
@@ -1808,7 +1808,7 @@
   width: 100%;
   padding: 0.85rem 1.5rem;
   font-size: 0.95rem;
-  color: #333;
+  color: #3E463D;
   background: none;
   border: none;
   cursor: pointer;
@@ -1819,7 +1819,7 @@
 
 .bk-offcanvas__cart-btn:hover {
   background: rgba(90, 109, 86, 0.08);
-  color: #5A6D56;
+  color: #687A64;
 }
 
 /* 手機版 offcanvas 登出按鈕 */
@@ -1905,7 +1905,7 @@
    沿用買家端 4 欄式排版，確保視覺一致
    ============================================================ */
 .booking-footer {
-  background: #5A6D56;
+  background: #687A64;
   color: rgba(253, 241, 219, 0.82);
   padding: 3rem 0 1.5rem;
   margin-top: 4rem;
@@ -1936,7 +1936,7 @@
 .bk-footer__subheading {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #A4BD9B;
+  color: #B6C6AF;
   margin-bottom: 0.75rem;
 }
 
@@ -1964,10 +1964,10 @@
   transition: color 0.2s;
 }
 
-.bk-footer__links a:hover { color: #FDF1DB; }
+.bk-footer__links a:hover { color: #FAF9EE; }
 
 /* 重要連結（取消退款等）加強調 */
-.bk-footer__links a.important { color: #FDF1DB; font-weight: 600; }
+.bk-footer__links a.important { color: #FAF9EE; font-weight: 600; }
 .bk-footer__links a.important:hover { color: #fff; }
 
 /* 聯絡資訊 */
@@ -1978,7 +1978,7 @@
   line-height: 1.6;
 }
 
-.bk-footer__contact-item strong { color: #FDF1DB; }
+.bk-footer__contact-item strong { color: #FAF9EE; }
 
 /* 社群連結 */
 .social {
@@ -1995,7 +1995,7 @@
 }
 
 .social a i:hover {
-  color: #111;
+  color: #FFFDF7;
 }
 
 .site-footer p {
