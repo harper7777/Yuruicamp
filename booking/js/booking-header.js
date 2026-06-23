@@ -93,11 +93,60 @@
   /* ============================================================
      2. 登入狀態判斷
      ============================================================ */
+  function logout() {
+    localStorage.removeItem('yuruiUser');
+    closeUserDropdown();
+    checkLoginState();
+    window.showToast('已成功登出', 'success');
+  }
+
+  function closeUserDropdown() {
+    var dropdown = document.getElementById('bkUserDropdown');
+    var toggle   = document.getElementById('bkUserDropdownToggle');
+    if (dropdown) dropdown.classList.remove('is-open');
+    if (toggle)   toggle.setAttribute('aria-expanded', 'false');
+  }
+
+  function initUserDropdown() {
+    var toggle   = document.getElementById('bkUserDropdownToggle');
+    var dropdown = document.getElementById('bkUserDropdown');
+    var logoutBtn = document.getElementById('bkLogoutBtn');
+
+    if (!toggle || !dropdown) return;
+    if (toggle._dropdownBound) return;
+    toggle._dropdownBound = true;
+
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = dropdown.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', logout);
+    }
+
+    // 點選下拉選單以外的地方關閉
+    document.addEventListener('click', function (e) {
+      var userMenu = document.getElementById('bkUserMenu');
+      if (userMenu && !userMenu.contains(e.target)) {
+        closeUserDropdown();
+      }
+    });
+
+    // Esc 關閉
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeUserDropdown();
+    });
+  }
+
   function checkLoginState() {
-    var loginBtn   = document.getElementById('bkLoginBtn');
-    var userMenu   = document.getElementById('bkUserMenu');
-    var userAvatar = document.getElementById('bkUserAvatar');
-    var userName   = document.getElementById('bkUserName');
+    var loginBtn         = document.getElementById('bkLoginBtn');
+    var userMenu         = document.getElementById('bkUserMenu');
+    var userAvatar       = document.getElementById('bkUserAvatar');
+    var userName         = document.getElementById('bkUserName');
+    var logoutBtnMobile  = document.getElementById('bkLogoutBtnMobile');
+    var logoutItemMobile = document.getElementById('bkOffcanvasLogoutItem');
 
     if (!loginBtn || !userMenu) return;
 
@@ -109,9 +158,26 @@
       userMenu.style.display = 'flex';
       if (userAvatar) userAvatar.textContent = user.name.charAt(0).toUpperCase();
       if (userName)   userName.textContent   = user.name;
+      if (logoutItemMobile) logoutItemMobile.style.display = '';
+      initUserDropdown();
     } else {
       loginBtn.style.display = 'inline-flex';
       userMenu.style.display = 'none';
+      if (logoutItemMobile) logoutItemMobile.style.display = 'none';
+    }
+
+    if (logoutBtnMobile && !logoutBtnMobile._logoutBound) {
+      logoutBtnMobile._logoutBound = true;
+      logoutBtnMobile.addEventListener('click', function () {
+        var offcanvas = document.getElementById('bkOffcanvas');
+        var backdrop  = document.getElementById('bkBackdrop');
+        var hamburger = document.getElementById('bkHamburger');
+        if (offcanvas) offcanvas.classList.remove('is-open');
+        if (backdrop)  backdrop.classList.remove('is-visible');
+        if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+        logout();
+      });
     }
   }
 
@@ -327,11 +393,11 @@
     var clearBtn = document.getElementById('cartPanelClear');
     if (clearBtn) {
       clearBtn.addEventListener('click', function () {
-        if (window.confirm('確定清除背包中的所有預約資料？')) {
+        showConfirmToast('確定清除背包中的所有預約資料？', function () {
           localStorage.removeItem('bookingCart');
           updateBookingBadge();
           renderCartPanel();
-        }
+        });
       });
     }
   }
@@ -400,8 +466,57 @@
 
 })();
 
+/* ============================================================
+   showConfirmToast — 帶確認 / 取消按鈕的 Toast（取代 window.confirm）
+   ============================================================ */
+function showConfirmToast(message, onConfirm) {
+  var container = document.getElementById('bk-toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'bk-toast-container';
+    document.body.appendChild(container);
+  }
+
+  var toast = document.createElement('div');
+  toast.className = 'bk-toast bk-toast--warning bk-toast--confirm';
+
+  var icon = document.createElement('i');
+  icon.className = 'bi bi-exclamation-triangle-fill';
+  icon.setAttribute('aria-hidden', 'true');
+
+  var text = document.createElement('span');
+  text.className = 'bk-toast__text';
+  text.textContent = message;
+
+  var actions = document.createElement('div');
+  actions.className = 'bk-toast__actions';
+
+  var confirmBtn = document.createElement('button');
+  confirmBtn.className = 'bk-toast__action-btn bk-toast__action-btn--confirm';
+  confirmBtn.textContent = '確定清除';
+
+  var cancelBtn = document.createElement('button');
+  cancelBtn.className = 'bk-toast__action-btn bk-toast__action-btn--cancel';
+  cancelBtn.textContent = '取消';
+
+  function dismiss() {
+    toast.classList.add('bk-toast--hiding');
+    setTimeout(function () { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 300);
+  }
+
+  confirmBtn.addEventListener('click', function () { dismiss(); onConfirm(); });
+  cancelBtn.addEventListener('click', dismiss);
+
+  actions.appendChild(confirmBtn);
+  actions.appendChild(cancelBtn);
+  toast.appendChild(icon);
+  toast.appendChild(text);
+  toast.appendChild(actions);
+  container.appendChild(toast);
+}
+
 // booking-header.partial 以 jQuery.getScript 載入此檔後，通知頁面層級的 ready callback。
-// 目前僅 booking-cart.js 有定義 window.onBookingHeaderReady；其他頁面不存在，跳過。
+// 目前僅 booking-checkout.js 有定義 window.onBookingHeaderReady；其他頁面不存在，跳過。
 if (typeof window.onBookingHeaderReady === 'function') {
   window.onBookingHeaderReady();
 }

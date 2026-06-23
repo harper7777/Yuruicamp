@@ -889,7 +889,7 @@
   justify-content: center;
   gap: 0;
   margin-bottom: 2rem;
-  max-width: 700px;
+  max-width: 860px;
   margin-left: auto;
   margin-right: auto;
   padding: 0 1.5rem;
@@ -1427,14 +1427,89 @@
   white-space: nowrap;
 }
 
-.bk-settings-btn {
-  color: rgba(253, 241, 219, 0.72);
-  font-size: 1.1rem;
-  text-decoration: none;
-  transition: color 0.2s;
+/* 已登入：下拉選單觸發按鈕 */
+.bk-user-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: none;
+  border: none;
+  color: #FDF1DB;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.875rem;
+  font-family: inherit;
 }
 
-.bk-settings-btn:hover { color: #FDF1DB; }
+.bk-user-chevron {
+  font-size: 0.75rem;
+  opacity: 0.72;
+  transition: transform 0.2s;
+}
+
+.bk-user-dropdown-toggle[aria-expanded="true"] .bk-user-chevron {
+  transform: rotate(180deg);
+}
+
+/* 下拉選單容器 */
+.bk-user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 148px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  padding: 0.35rem 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.18s, transform 0.18s, visibility 0.18s;
+  z-index: 1100;
+}
+
+.bk-user-dropdown.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* 下拉選單項目（共用） */
+.bk-user-dropdown__item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.65rem 1.1rem;
+  font-size: 0.9rem;
+  color: #2d3a2e;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.bk-user-dropdown__item:hover {
+  background: #f5f5f3;
+}
+
+/* 登出項目：紅色強調 */
+.bk-user-dropdown__item--danger {
+  color: #c0392b;
+}
+
+.bk-user-dropdown__item--danger:hover {
+  background: #fdf1ef;
+}
+
+/* 讓 bk-user-menu 成為下拉定位基準 */
+.bk-user-menu {
+  position: relative;
+}
 
 /* 漢堡按鈕（手機版） */
 .bk-hamburger {
@@ -1747,6 +1822,27 @@
   color: #5A6D56;
 }
 
+/* 手機版 offcanvas 登出按鈕 */
+.bk-offcanvas__logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0.85rem 1.5rem;
+  font-size: 1rem;
+  color: #b94a3a;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.bk-offcanvas__logout-btn:hover {
+  background: rgba(185, 74, 58, 0.08);
+}
+
 /* OAuth 登入按鈕 */
 .oauth-desc {
   text-align: center;
@@ -2016,6 +2112,40 @@
 }
 
 .bk-toast__close:hover { color: #fff; }
+
+/* Confirm Toast 按鈕列 */
+.bk-toast--confirm { flex-wrap: wrap; gap: 0.5rem; }
+
+.bk-toast__actions {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.bk-toast__action-btn {
+  flex: 1;
+  padding: 0.3rem 0.6rem;
+  border-radius: 5px;
+  border: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s;
+}
+
+.bk-toast__action-btn:hover { opacity: 0.85; }
+
+.bk-toast__action-btn--confirm {
+  background: #fff;
+  color: var(--bk-orange, #c0762b);
+}
+
+.bk-toast__action-btn--cancel {
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
 
 @keyframes bk-toast-in {
   from { opacity: 0; transform: translateX(110%); }
