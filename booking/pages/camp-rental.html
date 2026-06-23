@@ -98,10 +98,7 @@
   <script>
     $(function () {
       // 載入預約系統專屬 Header / Footer（非買家端的 ../components/）
-      $('#booking-header').load('../components/booking-header.partial', function () {
-        $.getScript('../js/booking-header.js');
-      });
-      $('#booking-footer').load('../components/booking-footer.partial');
+      window.loadBookingSharedLayout();
     });
   </script>
   <script src="../js/booking-utils.js"></script>

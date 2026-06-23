@@ -106,12 +106,6 @@
     return Array.isArray(value) ? value : [];
   }
 
-  /** 重點：安全讀取 localStorage 物件，用來套用 checkout 增加的會員點數。 */
-  function readStorageObject(key) {
-    var value = safeJsonParse(localStorage.getItem(key), {});
-    return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
-  }
-
   /** 重點：data/orders.json 與 mockOrders 以 id 合併，讓結帳後的新訂單可即時出現在會員中心。 */
   function mergeOrders(baseOrders, mockOrders) {
     var orderMap = new Map();
@@ -123,9 +117,20 @@
     return Array.from(orderMap.values());
   }
 
-  /** 重點：users.json points 搭配 mockUserPointDeltas，讓 checkout 新增點數後會員卡同步更新。 */
+  /** 重點：cardPoints 只加總 delivered 的 mockOrders，避免 checkout 新增 unshipped 訂單時先發點數。 */
+  function getDeliveredMockOrderPointDeltas() {
+    return readStorageArray(MOCK_ORDERS_STORAGE_KEY).reduce(function (deltas, order) {
+      if (normalizeFilterValue('purchase', order && order.status) !== 'delivered') return deltas;
+
+      var userId = order.userId || 'user-001';
+      deltas[userId] = (Number(deltas[userId]) || 0) + getOrderRewardPoints(order);
+      return deltas;
+    }, {});
+  }
+
+  /** 重點：users.json points 搭配 delivered 訂單暫存點數，只有已完成訂單才更新會員卡點數。 */
   function applyUserPointDeltas(users) {
-    var deltas = readStorageObject(MOCK_USER_POINT_DELTAS_STORAGE_KEY);
+    var deltas = getDeliveredMockOrderPointDeltas();
     return (Array.isArray(users) ? users : []).map(function (user) {
       return Object.assign({}, user, {
         points: (Number(user.points) || 0) + (Number(deltas[user.id]) || 0)

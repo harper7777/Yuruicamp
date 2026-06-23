@@ -133,13 +133,22 @@ window.initBodyScrollLock = () => {
 // Shared layout fragments use `.partial` instead of `.html` because VS Code
 // Live Server injects reload scripts into HTML responses and can corrupt
 // fragment-only files that are fetched into the page.
-async function loadPartial(targetId, url) {
+async function loadPartial(targetId, url, partSelector) {
   const target = document.getElementById(targetId);
   if (!target) return;
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error(`無法載入組件: ${url}`);
-    target.innerHTML = await response.text();
+    const html = await response.text();
+    // 重點：header/footer partial 已整合主站與 booking 版型，主站載入時只取 main-* 區塊。
+    if (partSelector) {
+      const template = document.createElement('template');
+      template.innerHTML = html;
+      const part = template.content.querySelector(partSelector);
+      target.innerHTML = part ? part.innerHTML : html;
+      return;
+    }
+    target.innerHTML = html;
   } catch (error) {
     console.error(error);
   }
@@ -160,8 +169,8 @@ function loadComponentScript(src) {
 async function initGlobalLayout() {
   // 1. 根據目錄樹，從 pages/* 往上找頂層的 components/
   await Promise.all([
-    loadPartial("header", "../components/header.partial"),
-    loadPartial("footer", "../components/footer.partial") 
+    loadPartial("header", "../components/header.partial", '[data-layout-part="main-header"]'),
+    loadPartial("footer", "../components/footer.partial", '[data-layout-part="main-footer"]')
   ]);
 
   // 2. 確定 HTML 結構長到網頁上後，才動態載入原本的互動 JS

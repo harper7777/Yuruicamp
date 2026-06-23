@@ -63,4 +63,51 @@ function initFloatingActions() {
   toggleTopButton();
 }
 
+function loadBookingHeaderScript() {
+  if (window.__bookingHeaderScriptLoaded) return;
+  window.__bookingHeaderScriptLoaded = true;
+
+  const script = document.createElement("script");
+  script.src = "../js/booking-header.js";
+  script.onerror = function () {
+    window.__bookingHeaderScriptLoaded = false;
+  };
+  document.body.appendChild(script);
+}
+
+function loadBookingLayoutPartial(targetSelector, url, partSelector, callback) {
+  const target = document.querySelector(targetSelector);
+  if (!target) {
+    callback && callback(false);
+    return Promise.resolve(false);
+  }
+
+  return fetch(url)
+    .then(function (response) {
+      if (!response.ok) throw new Error("booking layout partial 載入失敗: " + url);
+      return response.text();
+    })
+    .then(function (html) {
+      const template = document.createElement("template");
+      template.innerHTML = html;
+      const part = template.content.querySelector(partSelector);
+      // 重點：統一 partial 檔內同時保留主站與 booking 版型，booking 頁面只注入 booking-* 區塊內容。
+      target.innerHTML = part ? part.innerHTML : html;
+      callback && callback(true);
+      return true;
+    })
+    .catch(function (error) {
+      console.error(error);
+      callback && callback(false);
+      return false;
+    });
+}
+
+window.loadBookingSharedLayout = function () {
+  loadBookingLayoutPartial("#booking-header", "../../components/header.partial", '[data-layout-part="booking-header"]', function (ok) {
+    if (ok) loadBookingHeaderScript();
+  });
+  loadBookingLayoutPartial("#booking-footer", "../../components/footer.partial", '[data-layout-part="booking-footer"]');
+};
+
 document.addEventListener("DOMContentLoaded", initFloatingActions);

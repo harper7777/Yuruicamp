@@ -31,14 +31,14 @@
 
 ## Changed（修改）
 
-### booking/components/booking-header.partial
+### components/header.partial（booking-header 區塊）
 - 桌機導覽列新增「會員中心」連結 → `./member-center.html`
 - 手機 Offcanvas 選單新增「會員中心」連結
 - 已登入頭像旁齒輪按鈕連結從 `../pages/member-center.html?tab=camping` 改為 `./member-center.html`
 
 ### booking/css/base.css
 - 新增 `.modal` 基礎樣式（`display:none; position:fixed; inset:0`）
-- 讓 `booking-header.partial` 中 `class="modal"` 的登入 Modal 不依賴 main.css
+- 讓 `components/header.partial` 的 booking-header 區塊中 `class="modal"` 的登入 Modal 不依賴 main.css
 
 ### booking/css/main.css（主站）
 - `@supports (-webkit-touch-callout: none)` 包住 `.hero-banner` 的 `-webkit-fill-available`，修正 Windows Chrome 上 hero 高度被壓縮的問題

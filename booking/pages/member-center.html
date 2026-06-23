@@ -68,10 +68,7 @@
     }
 
     function initBookingMemberCenterPage() {
-      loadHtml('#booking-header', '../components/booking-header.partial', function (ok) {
-        if (ok) loadScript('../js/booking-header.js');
-      });
-      loadHtml('#booking-footer', '../components/booking-footer.partial');
+      window.loadBookingSharedLayout && window.loadBookingSharedLayout();
       loadHtml('#memberCenterMount', '../../components/member-center.partial', function (ok) {
         if (!ok) {
           document.getElementById('memberCenterMount').innerHTML = '<div class="mc-login-guard" style="display:flex;"><div class="mc-login-guard__box"><h2 class="mc-login-guard__title">會員中心載入失敗</h2><p class="mc-login-guard__desc">請確認目前頁面透過本機伺服器開啟。</p></div></div>';

@@ -1,4 +1,9 @@
 <!-- ========================================
+     Unified Footer Partials
+     重點：主站與 booking footer 共用同一個 components/footer.partial，載入端依 data-layout-part 選取版型。
+     ======================================== -->
+<div data-layout-part="main-footer">
+<!-- ========================================
      Runtime fragment loaded by js/main.js.
      Keep this as .partial so Live Server does not inject reload scripts into it.
      頁腳組件 (Footer Component)
@@ -72,3 +77,116 @@
     </div>
   </div>
 </footer>
+</div>
+
+<div data-layout-part="booking-footer">
+<!-- ============================================================
+     Runtime fragment loaded by booking pages.
+     Keep this as .partial so Live Server does not inject reload scripts into it.
+     booking-footer 區塊 — 預約系統專屬 Footer 元件
+     4 欄式資訊區塊 + 底部版權宣告
+     背景色 #244d4d（深青綠，與買家端 footer 相同，維持品牌一致）
+     ============================================================ -->
+<footer class="booking-footer" id="booking-footer">
+  <div class="bk-footer__inner">
+
+    <!-- ========================================================
+         四欄式資訊區塊
+         欄一：品牌宣告
+         欄二：預約與租借指南（取代買家端「快速連結」）
+         欄三：聯絡方式（直接沿用買家端）
+         欄四：關注我們（直接沿用買家端）
+         ======================================================== -->
+    <div class="bk-footer__grid">
+
+      <!-- 欄位一：Yuruicamp 品牌宣告 -->
+      <div>
+        <h5 class="bk-footer__heading">Yuruicamp</h5>
+        <p class="bk-footer__tagline">探索戶外，輕鬆出發</p>
+        <p class="bk-footer__tagline">
+          營地預約與裝備租借體驗，<br>直接為您送達營區
+        </p>
+      </div>
+
+      <!-- 欄位二：預約與租借指南 -->
+      <div>
+        <h6 class="bk-footer__subheading">預約與租借指南</h6>
+        <ul class="bk-footer__links">
+          <li><a href="./camp-search.html">探索營區</a></li>
+          <li>
+            <!-- 預約與付款方式：連結至 FAQ #payment 錨點 -->
+            <a href="./booking-faq.html#payment">預約與付款方式</a>
+          </li>
+          <li>
+            <!-- 重點：取消與退款政策 -->
+            <a href="./booking-faq.html#cancellation" class="important">
+              取消與退款政策
+            </a>
+          </li>
+          <li>
+            <!--重點：裝備損壞與押金說明 -->
+            <a href="./booking-faq.html#damage" class="important">
+              裝備損壞與押金說明
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 欄位三：聯絡方式（沿用買家端設定） -->
+      <div>
+        <h6 class="bk-footer__subheading">聯絡方式</h6>
+        <p class="bk-footer__contact-item">
+          <strong>電話：</strong>0800-123-456
+        </p>
+        <p class="bk-footer__contact-item">
+          <strong>信箱：</strong>support@yuruicamp.com
+        </p>
+        <p class="bk-footer__contact-item">
+          <strong>地址：</strong><br>台北市信義區信義路五段 100 號
+        </p>
+        <p class="bk-footer__contact-item">
+          <strong>營業時間：</strong><br>週一至週日 10:00–20:00
+        </p>
+      </div>
+
+      <!-- 欄位四：關注我們（沿用買家端設定） -->
+      <div>
+        <h6 class="bk-footer__subheading">關注我們</h6>
+        <p class="bk-footer__tagline" style="margin-bottom:.75rem;">
+          在社群媒體上追蹤最新資訊與優惠
+        </p>
+        <ul class="social" aria-label="社群連結">
+          <li><a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="bi bi-facebook"></i></a></li>
+          <li><a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="bi bi-instagram"></i></a></li>
+          <li><a href="https://line.me" target="_blank" rel="noopener noreferrer" aria-label="Line"><i class="bi bi-chat-dots-fill"></i></a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- 分隔線 -->
+    <hr class="bk-footer__divider">
+
+    <!-- ========================================================
+         底部版權宣告區塊
+         ======================================================== -->
+    <div class="bk-footer__bottom">
+      <p class="bk-footer__copyright">
+        &copy; 2026 Yuruicamp 露營選物品牌. 版權所有。
+      </p>
+      <div class="bk-footer__policy">
+        <a href="#">隱私政策</a>
+        <a href="#">使用條款</a>
+        <a href="#">退換貨政策</a>
+      </div>
+      <p class="bk-footer__payment">我們接受以下付款方式：</p>
+<div class="bk-footer__payment-icons">
+  <i class="bi bi-credit-card" title="信用卡"></i>
+  <i class="bi bi-phone" title="LINE Pay"></i>
+  <!-- <i class="bi bi-box-seam" title="貨到付款"></i> -->
+</div>
+    </div>
+
+  </div>
+</footer>
+</div>

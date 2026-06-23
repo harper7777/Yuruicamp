@@ -153,7 +153,7 @@ main {
 
 /* =========================
    Modal 基礎
-   booking-header.partial 的 #loginModal 使用 class="modal"
+   components/header.partial 的 booking-header 區塊 #loginModal 使用 class="modal"
 ========================= */
 .modal {
   display: none;

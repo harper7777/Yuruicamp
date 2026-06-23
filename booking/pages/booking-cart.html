@@ -384,10 +384,7 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
     $(function () {
-      $('#booking-header').load('../components/booking-header.partial', function () {
-        $.getScript('../js/booking-header.js');
-      });
-      $('#booking-footer').load('../components/booking-footer.partial');
+      window.loadBookingSharedLayout();
     });
   </script>
   <script src="../js/booking-utils.js"></script>

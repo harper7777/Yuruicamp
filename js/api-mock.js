@@ -76,9 +76,23 @@ const _calculateRewardPoints = (subtotal) => Math.ceil((Number(subtotal) || 0) *
 const _getStoredOrders = () => _readJsonStorage(MOCK_ORDERS_STORAGE_KEY, []);
 const _getUserPointDeltas = () => _readJsonStorage(MOCK_USER_POINT_DELTAS_STORAGE_KEY, {});
 
+/** 重點：只有 delivered 的 mockOrders 才會回饋點數，避免 checkout 新建 unshipped 訂單先更新 cardPoints。 */
+const _getDeliveredOrderPointDeltas = () => {
+  return _getStoredOrders().reduce((deltas, order) => {
+    if (!order || order.status !== 'delivered') return deltas;
+
+    const userId = order.userId || 'user-001';
+    const points = Number.isFinite(Number(order.points))
+      ? Number(order.points)
+      : _calculateRewardPoints(order.subtotal);
+    deltas[userId] = (Number(deltas[userId]) || 0) + points;
+    return deltas;
+  }, {});
+};
+
 /** 重點：users.json 是基礎資料，結帳新增的點數只記錄增量，避免覆蓋日後更新的 points 原始值。 */
 const _applyUserPointDeltas = (users = []) => {
-  const deltas = _getUserPointDeltas();
+  const deltas = _getDeliveredOrderPointDeltas();
   return users.map(user => ({
     ...user,
     points: (Number(user.points) || 0) + (Number(deltas[user.id]) || 0),
@@ -261,7 +275,8 @@ window.API = {
         _writeJsonStorage(MOCK_ORDERS_STORAGE_KEY, orders);
 
         // 重點：訂單成立時同步把本筆 points 加到會員點數增量，會員中心會即時讀到新總點數。
-        if (newOrder.userId && newOrder.points > 0 && window.API.users && window.API.users.addPoints) {
+        // 重點：只有 delivered 訂單才可把 points 加到會員暫存點數，checkout 新訂單預設 unshipped 不更新 cardPoints。
+        if (newOrder.status === 'delivered' && newOrder.userId && newOrder.points > 0 && window.API.users && window.API.users.addPoints) {
           await window.API.users.addPoints(newOrder.userId, newOrder.points);
         }
         

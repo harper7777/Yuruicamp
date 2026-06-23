@@ -515,7 +515,7 @@ function showConfirmToast(message, onConfirm) {
   container.appendChild(toast);
 }
 
-// booking-header.partial 以 jQuery.getScript 載入此檔後，通知頁面層級的 ready callback。
+// 重點：統一 header partial 載入完成並執行本檔後，通知頁面層級的 ready callback。
 // 目前僅 booking-checkout.js 有定義 window.onBookingHeaderReady；其他頁面不存在，跳過。
 if (typeof window.onBookingHeaderReady === 'function') {
   window.onBookingHeaderReady();
