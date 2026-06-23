@@ -952,6 +952,63 @@
 /* ============================================================
    RWD（≤ 768px）
 ============================================================ */
+/* 重點：前台原本的商品評價功能改為共用會員中心 Modal，樣式補在 booking 會員中心 CSS 內避免兩邊各維護一份。 */
+.mc-review-product {
+  margin-bottom: 1rem;
+  color: var(--bk-primary);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.mc-review-label {
+  display: block;
+  margin: 0.85rem 0 0.45rem;
+  color: var(--bk-text);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.mc-review-stars {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.mc-review-star {
+  border: none;
+  background: transparent;
+  color: #d6d6d6;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.mc-review-star.is-active,
+.mc-review-star:hover {
+  color: #f59e0b;
+}
+
+#reviewContent {
+  width: 100%;
+  min-height: 110px;
+  padding: 0.7rem 0.8rem;
+  border: 2px solid var(--bk-border);
+  border-radius: 8px;
+  color: var(--bk-text);
+  font-size: 0.875rem;
+  resize: vertical;
+}
+
+#reviewContent:focus {
+  border-color: var(--bk-primary);
+  outline: none;
+}
+
+.btn-block {
+  width: 100%;
+}
+
 @media (max-width: 768px) {
   .mc-layout { grid-template-columns: 1fr; }
   .mc-sidebar { display: none; }

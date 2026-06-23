@@ -1,0 +1,275 @@
+<!--
+  重點：會員中心顯示層集中在此 partial，pages/member-center.html 與 booking/pages/member-center.html 共用同一份 booking 風格版型。
+-->
+<section class="member-center-component" id="memberCenterComponentRoot" data-component="member-center">
+  <div id="mcLoginGuard" class="mc-login-guard">
+    <div class="mc-login-guard__box">
+      <div class="mc-login-guard__icon"><i class="bi bi-person-lock"></i></div>
+      <h2 class="mc-login-guard__title">需要登入</h2>
+      <p class="mc-login-guard__desc">
+        登入後可查看會員資料、購買紀錄、預約與租借紀錄、折價券及通知。
+      </p>
+      <button class="btn btn--primary mc-login-guard__btn" id="guardLoginBtn" type="button">
+        <i class="bi bi-box-arrow-in-right"></i> 會員登入
+      </button>
+      <a href="home.html" class="mc-login-guard__back" data-member-center-home-link>返回首頁</a>
+    </div>
+  </div>
+
+  <main class="mc-page" id="mcPage" style="display:none;">
+    <div class="mc-container">
+      <div class="mc-tabs-mobile">
+        <button class="mc-tab-mobile active" type="button" data-tab="overview">
+          <i class="bi bi-house"></i> 總覽
+        </button>
+        <button class="mc-tab-mobile" type="button" data-tab="profile">
+          <i class="bi bi-person"></i> 資料
+        </button>
+        <button class="mc-tab-mobile" type="button" data-tab="records">
+          <i class="bi bi-receipt"></i> 紀錄
+        </button>
+        <button class="mc-tab-mobile" type="button" data-tab="coupons">
+          <i class="bi bi-ticket-perforated"></i> 折價券
+        </button>
+        <button class="mc-tab-mobile" type="button" data-tab="notifications">
+          <i class="bi bi-bell"></i> 通知
+        </button>
+      </div>
+
+      <div class="mc-layout">
+        <aside class="mc-sidebar">
+          <div class="mc-sidebar-user">
+            <div class="mc-sidebar-avatar" id="mcAvatar">?</div>
+            <div>
+              <div class="mc-sidebar-name" id="mcName">會員</div>
+              <div class="mc-sidebar-email" id="mcEmail">loading...</div>
+            </div>
+          </div>
+          <ul class="mc-nav-list">
+            <li class="mc-nav-item active" data-tab="overview">
+              <i class="bi bi-house"></i> 總覽
+            </li>
+            <li class="mc-nav-item" data-tab="profile">
+              <i class="bi bi-person"></i> 個人資料
+            </li>
+            <li class="mc-nav-item" data-tab="records">
+              <i class="bi bi-receipt"></i> 交易紀錄
+            </li>
+            <li class="mc-nav-item" data-tab="coupons">
+              <i class="bi bi-ticket-perforated"></i> 折價券
+            </li>
+            <li class="mc-nav-item" data-tab="notifications">
+              <i class="bi bi-bell"></i> 通知
+            </li>
+          </ul>
+        </aside>
+
+        <div class="mc-content">
+          <div class="mc-panel active" data-panel="overview">
+            <div class="mc-membership-card">
+              <div class="mc-membership-card__top">
+                <span class="mc-membership-card__brand">Yuruicamp</span>
+                <span class="mc-membership-card__tier" id="cardTier">探險家</span>
+              </div>
+              <div class="mc-membership-card__name" id="cardName">露友</div>
+              <div class="mc-membership-card__since" id="cardSince">加入日期：--</div>
+              <!-- 重點：回饋點數由共用 JS 讀取 data/users.json 的 points，結帳或資料更新後會定時刷新。 -->
+              <div class="mc-membership-card__points" id="cardPoints">回饋點數：載入中</div>
+              <div class="mc-membership-card__progress-label">
+                升等進度，距下一等級還差 <strong id="nextTierSpend">NT$ 0</strong>
+              </div>
+              <div class="mc-membership-card__progress">
+                <div class="mc-membership-card__progress-bar" id="tierProgressBar" style="width:0%;"></div>
+              </div>
+            </div>
+
+            <div class="mc-stats">
+              <div class="mc-stat-card">
+                <div class="mc-stat-card__num" id="statOrders">0</div>
+                <div class="mc-stat-card__label">待處理訂單</div>
+              </div>
+              <div class="mc-stat-card">
+                <div class="mc-stat-card__num" id="statBookings">0</div>
+                <div class="mc-stat-card__label">預約租借</div>
+              </div>
+              <div class="mc-stat-card">
+                <div class="mc-stat-card__num" id="statCoupons">0</div>
+                <div class="mc-stat-card__label">可用折價券</div>
+              </div>
+              <div class="mc-stat-card">
+                <div class="mc-stat-card__num danger" id="statUnread">0</div>
+                <div class="mc-stat-card__label">未讀通知</div>
+              </div>
+            </div>
+
+            <div class="mc-card-box">
+              <h5><i class="bi bi-clock-history"></i> 最近活動</h5>
+              <!-- 重點：最近活動彙整購買訂單、租借紀錄與通知，兩個會員中心維持相同來源。 -->
+              <div id="recentActivity">
+                <div class="rec-empty">載入最近活動中...</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mc-panel" data-panel="profile">
+            <div class="mc-card-box">
+              <h5><i class="bi bi-person"></i> 個人資料</h5>
+              <form id="profileForm" novalidate>
+                <div class="mc-form-grid">
+                  <div class="mc-form-group">
+                    <label for="profileName">姓名</label>
+                    <input type="text" id="profileName" name="name" placeholder="露友小明">
+                  </div>
+                  <div class="mc-form-group">
+                    <label for="profilePhone">電話</label>
+                    <input type="tel" id="profilePhone" name="phone" placeholder="0912-345-678">
+                  </div>
+                  <div class="mc-form-group">
+                    <label for="profileEmail">電子郵件</label>
+                    <input type="email" id="profileEmail" name="email" placeholder="your@email.com">
+                  </div>
+                  <div class="mc-form-group">
+                    <label for="profileBirthday">生日</label>
+                    <input type="date" id="profileBirthday" name="birthday">
+                  </div>
+                  <div class="mc-form-group full">
+                    <label for="profileAddress">常用地址</label>
+                    <input type="text" id="profileAddress" name="address" placeholder="台北市信義區信義路五段 100 號">
+                  </div>
+                </div>
+
+                <div class="mc-form-group full mc-preference-group">
+                  <label>露營喜好，可多選</label>
+                  <!-- 重點：data-value 參考 components/header.partial 的 personalizationModal，供會員中心與推薦輪播共用。 -->
+                  <div class="survey-tags" id="prefTags">
+                    <span class="survey-tag" data-value="glamping">豪華露營 Glamping</span>
+                    <span class="survey-tag" data-value="backpacking">輕量背包客</span>
+                    <span class="survey-tag" data-value="family">親子家庭</span>
+                    <span class="survey-tag" data-value="solo">獨行俠</span>
+                    <span class="survey-tag" data-value="hiking">登山健行</span>
+                    <span class="survey-tag" data-value="car-camping">車頂帳</span>
+                    <span class="survey-tag" data-value="ultralight">極輕量</span>
+                    <span class="survey-tag" data-value="base-camp">基地營</span>
+                    <span class="survey-tag" data-value="tent">帳篷</span>
+                    <span class="survey-tag" data-value="sleeping-bag">睡袋</span>
+                    <span class="survey-tag" data-value="backpack">登山背包</span>
+                    <span class="survey-tag" data-value="cooking">炊具</span>
+                    <span class="survey-tag" data-value="lighting">照明設備</span>
+                    <span class="survey-tag" data-value="clothing">戶外服飾</span>
+                    <span class="survey-tag" data-value="chair">桌椅</span>
+                    <span class="survey-tag" data-value="navigation">導航裝備</span>
+                    <span class="survey-tag" data-value="safety">安全急救</span>
+                    <span class="survey-tag" data-value="photography">攝影器材</span>
+                  </div>
+                </div>
+
+                <div style="margin-top:1.25rem;">
+                  <button type="submit" class="btn btn--primary">
+                    <i class="bi bi-floppy"></i> 儲存修改
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="mc-panel" data-panel="records">
+            <div class="mc-card-box">
+              <h5><i class="bi bi-receipt"></i> 交易紀錄</h5>
+
+              <div class="rec-tabs">
+                <button class="rec-tab active" type="button" data-rec="store">
+                  <i class="bi bi-bag"></i> 購買紀錄
+                </button>
+                <button class="rec-tab" type="button" data-rec="booking">
+                  <i class="bi bi-tent"></i> 預約 &amp; 租借紀錄
+                </button>
+              </div>
+
+              <div id="purchaseOrdersPanel" class="rec-panel active" data-rec-panel="store" data-order-panel="purchase">
+                <!-- 重點：購買狀態篩選由共用 JS 依 data/orders.json 的 status / paymentStatus 動態渲染。 -->
+                <div id="purchaseOrderStatusTabs" class="order-status-tabs" data-order-status-tabs="purchase"></div>
+                <div class="rec-list" id="ordersList">
+                  <div class="rec-empty">載入購買紀錄中...</div>
+                </div>
+              </div>
+
+              <div id="rentalOrdersPanel" class="rec-panel" data-rec-panel="booking" data-order-panel="rental">
+                <!-- 重點：租借狀態篩選由共用 JS 依 data/rentalOrders.json 的 status / paymentStatus 動態渲染。 -->
+                <div id="rentalOrderStatusTabs" class="order-status-tabs" data-order-status-tabs="rental"></div>
+                <div class="rec-list" id="rentalOrdersList">
+                  <div class="rec-empty">載入租借紀錄中...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mc-panel" data-panel="coupons">
+            <div class="mc-card-box">
+              <h5><i class="bi bi-ticket-perforated"></i> 我的折價券</h5>
+
+              <div class="coupon-tabs">
+                <button class="rec-tab active" type="button" data-coupon-tab="active">可使用</button>
+                <button class="rec-tab" type="button" data-coupon-tab="expired">已失效</button>
+              </div>
+
+              <!-- 重點：折價券資料由 users.json 的 coupons 動態分成可使用與已失效。 -->
+              <div id="activeCoupons"></div>
+              <div id="expiredCoupons" style="display:none;"></div>
+            </div>
+          </div>
+
+          <div class="mc-panel" data-panel="notifications">
+            <div class="mc-card-box">
+              <div class="notif-header">
+                <h5><i class="bi bi-bell"></i> 通知中心</h5>
+                <button class="btn btn--outline" style="font-size:0.8rem;padding:0.3rem 0.75rem;" id="markAllReadBtn" type="button">
+                  全部標為已讀
+                </button>
+              </div>
+              <!-- 重點：通知清單由 users.json 的 notifications 渲染，點擊後即時更新未讀統計。 -->
+              <div id="notificationList">
+                <div class="rec-empty">載入通知中...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="bk-modal-overlay" id="orderDetailOverlay">
+    <div class="bk-modal-box">
+      <div class="bk-modal-header">
+        <div class="bk-modal-title" id="orderDetailTitle">訂單詳情</div>
+        <button class="bk-modal-close" id="orderDetailClose" type="button" aria-label="關閉">&times;</button>
+      </div>
+      <div class="bk-modal-body" id="orderDetailBody"></div>
+    </div>
+  </div>
+
+  <div class="bk-modal-overlay" id="reviewOverlay">
+    <div class="bk-modal-box">
+      <div class="bk-modal-header">
+        <div class="bk-modal-title">商品評價</div>
+        <button class="bk-modal-close" id="reviewClose" type="button" aria-label="關閉">&times;</button>
+      </div>
+      <div class="bk-modal-body">
+        <!-- 重點：保留 pages/member-center.html 原有評價功能，改用 booking Modal 樣式整合。 -->
+        <form id="reviewForm" novalidate>
+          <div class="mc-review-product" id="reviewProductName">商品名稱</div>
+          <label class="mc-review-label" for="reviewContent">評分</label>
+          <div class="mc-review-stars" id="reviewRatingGroup" role="radiogroup" aria-label="評分">
+            <button type="button" class="mc-review-star" data-review-rating="1" aria-label="1 分">★</button>
+            <button type="button" class="mc-review-star" data-review-rating="2" aria-label="2 分">★</button>
+            <button type="button" class="mc-review-star" data-review-rating="3" aria-label="3 分">★</button>
+            <button type="button" class="mc-review-star" data-review-rating="4" aria-label="4 分">★</button>
+            <button type="button" class="mc-review-star" data-review-rating="5" aria-label="5 分">★</button>
+          </div>
+          <label class="mc-review-label" for="reviewContent">評論內容</label>
+          <textarea id="reviewContent" rows="4" placeholder="分享你的使用心得..."></textarea>
+          <button class="btn btn--primary btn-block" id="submitReviewBtn" type="submit">送出評價</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
