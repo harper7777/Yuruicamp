@@ -1,0 +1,6 @@
+dist/
+node_modules/
+*.min.*
+admin/data/
+data/
+booking/data/

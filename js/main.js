@@ -206,7 +206,9 @@ function loadComponentScript(src) {
   });
 }
 
-// 主初始化流程
+/**
+ * Loads the shared header/footer fragments and the scripts that operate on them.
+ */
 async function initGlobalLayout() {
   const rootPrefix = getRootPathPrefix();
 
@@ -228,6 +230,9 @@ async function initGlobalLayout() {
   }
 }
 
+/**
+ * Adds global floating actions once per page and wires their scroll behavior.
+ */
 function initFloatingActions() {
   if (document.querySelector(".floating-actions")) return;
 
@@ -265,6 +270,9 @@ function initFloatingActions() {
 
   const topButton = floatingActions.querySelector(".floating-top-btn");
 
+  /**
+   * Shows the top button after the user scrolls away from the first viewport area.
+   */
   function toggleTopButton() {
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const documentHeight = document.documentElement.scrollHeight;
@@ -288,20 +296,6 @@ function initFloatingActions() {
   // 初始化時執行一次，確保重整網頁時狀態正確
   toggleTopButton();
 }
-
-async function initLayout() {
-  await Promise.all([
-    loadPartial("site-header", "./partials/header.html"),
-    loadPartial("site-footer", "./partials/footer.html")
-  ]);
-
-  setActiveNav();
-  initMenuToggle();
-  initHeaderScroll();
-  initFloatingActions();
-}
-
-document.addEventListener("DOMContentLoaded", initLayout);
 
 /**
  * 應用啟動入口

@@ -41,10 +41,12 @@ function _initHamburgerMenu() {
 
   if (!hamburger || !offcanvas) return;
 
-  // 點擊漢堡圖示 → 打開側邊欄
+  // 點擊漢堡圖示 → 關閉其他 dialog 後打開左側導覽
   hamburger.addEventListener('click', () => {
+    window.closeMainHeaderDialogs?.();
     offcanvas.classList.add('active');
     if (backdrop) backdrop.classList.add('active');
+    hamburger.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden'; // 防止背景滾動
   });
 
@@ -62,8 +64,14 @@ function _initHamburgerMenu() {
   function _closeOffcanvas() {
     offcanvas.classList.remove('active');
     if (backdrop) backdrop.classList.remove('active');
+    hamburger.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = ''; // 恢復背景滾動
   }
+
+  /**
+   * Exposes the main navigation close action so cart/search can avoid overlapping dialogs.
+   */
+  window.closeMainNavOffcanvas = _closeOffcanvas;
 }
 
 /**
@@ -74,8 +82,23 @@ function _initSearchBar() {
   const searchInput = document.querySelector('.navbar-search-input');
   const searchDropdown = document.querySelector('.navbar-search-dropdown');
   const searchForm = document.querySelector('.navbar-search-form');
+  const searchWrapper = document.querySelector('.navbar-search-wrapper');
+  const searchToggle = document.querySelector('.navbar-search-toggle');
 
-  if (!searchInput || !searchDropdown) return;
+  if (!searchInput || !searchDropdown || !searchWrapper) return;
+
+  // Search form starts collapsed; clicking the icon reveals it under the header.
+  if (searchToggle && searchToggle.dataset.searchBound !== 'true') {
+    searchToggle.dataset.searchBound = 'true';
+    searchToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      const willOpen = !searchWrapper.classList.contains('is-open');
+      searchWrapper.classList.toggle('is-open', willOpen);
+      searchForm?.setAttribute('aria-hidden', String(!willOpen));
+      searchToggle.setAttribute('aria-expanded', String(willOpen));
+      if (willOpen) searchInput.focus();
+    });
+  }
 
   // 當使用者在搜尋框輸入時，過濾並顯示建議
   searchInput.addEventListener('input', window.debounce(() => {
@@ -104,6 +127,9 @@ function _initSearchBar() {
   // 點擊頁面其他地方 → 隱藏下拉
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.navbar-search-wrapper')) {
+      searchWrapper.classList.remove('is-open');
+      searchForm?.setAttribute('aria-hidden', 'true');
+      searchToggle?.setAttribute('aria-expanded', 'false');
       searchDropdown.classList.remove('active');
     }
   });
@@ -115,12 +141,30 @@ function _initSearchBar() {
       const query = searchInput.value.trim();
       if (query) {
         window.showToast(`搜尋：${query}`, 'info');
+        searchWrapper.classList.remove('is-open');
+        searchForm?.setAttribute('aria-hidden', 'true');
+        searchToggle?.setAttribute('aria-expanded', 'false');
         searchDropdown.classList.remove('active');
         // 實際頁面跳轉：window.location.href = `/pages/products.html?q=${encodeURIComponent(query)}`;
       }
     });
   }
 }
+
+/**
+ * Closes visible main-site dialogs before opening another layer.
+ */
+window.closeMainHeaderDialogs = () => {
+  document.querySelector('.navbar-search-wrapper')?.classList.remove('is-open');
+  document.querySelector('.navbar-search-form')?.setAttribute('aria-hidden', 'true');
+  document.querySelector('.navbar-search-toggle')?.setAttribute('aria-expanded', 'false');
+  document.querySelector('.navbar-search-dropdown')?.classList.remove('active');
+  document.querySelector('.navbar-user-dropdown')?.setAttribute('hidden', '');
+  window.closeMainNavOffcanvas?.();
+  document.querySelectorAll('#loginModal.active, #personalizationModal.active').forEach((modal) => {
+    modal.classList.remove('active');
+  });
+};
 
 /**
  * 私有函數：渲染搜尋下拉選單
@@ -175,7 +219,7 @@ window.updateCartBadge = () => {
   cartBadge.textContent = count;
 
   // 有商品才顯示 Badge，沒有則隱藏
-  cartBadge.style.display = count > 0 ? 'flex' : 'none';
+  cartBadge.hidden = count <= 0;
 };
 
 /**
@@ -191,9 +235,9 @@ window.updateNavbarLoginState = () => {
 
   if (user) {
     // 已登入：隱藏「登入」按鈕，顯示用戶選單
-    if (loginBtn) loginBtn.style.display = 'none';
+    if (loginBtn) loginBtn.hidden = true;
     if (userMenu) {
-      userMenu.style.display = 'flex';
+      userMenu.hidden = false;
       const userName = userMenu.querySelector('.user-name');
       const userAvatar = userMenu.querySelector('.user-avatar');
       if (userName) userName.textContent = user.name;
@@ -204,8 +248,8 @@ window.updateNavbarLoginState = () => {
     }
   } else {
     // 未登入：顯示「登入」按鈕，隱藏用戶選單
-    if (loginBtn) loginBtn.style.display = '';
-    if (userMenu) userMenu.style.display = 'none';
+    if (loginBtn) loginBtn.hidden = false;
+    if (userMenu) userMenu.hidden = true;
   }
 };
 
@@ -240,7 +284,7 @@ function _initUserMenuDropdown(userMenu) {
   // 點擊用戶信息區 → 打開/關閉下拉菜單
   userInfo.addEventListener('click', (e) => {
     e.stopPropagation();
-    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    dropdown.hidden = !dropdown.hidden;
   });
 
   // 點擊登出按鈕 → 執行登出
@@ -254,14 +298,14 @@ function _initUserMenuDropdown(userMenu) {
   // 點擊頁面其他地方 → 關閉下拉菜單
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.navbar-user-menu')) {
-      dropdown.style.display = 'none';
+      dropdown.hidden = true;
     }
   });
 
   // 點擊下拉菜單中的連結 → 自動關閉下拉
   dropdown.querySelectorAll('.dropdown-item').forEach(item => {
     item.addEventListener('click', () => {
-      dropdown.style.display = 'none';
+      dropdown.hidden = true;
     });
   });
 }
@@ -280,7 +324,7 @@ console.log('✓ Navbar 組件已初始化');
  */
 function _closeNavbarUserDropdown() {
   const dropdown = document.querySelector('.navbar-user-dropdown');
-  if (dropdown) dropdown.style.display = 'none';
+  if (dropdown) dropdown.hidden = true;
 }
 
 /**

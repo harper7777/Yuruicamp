@@ -13,52 +13,47 @@
     <nav class="navbar">
     <div class="container">
       <div class="navbar-content">
-        <!-- Logo -->
-        <div class="navbar-brand">
-          <a href="../pages/home.html" class="logo-link" aria-label="回到首頁" style="text-decoration: none; color: inherit;">Yuruicamp</a>
-        </div>
+        <!-- Main hamburger: opens the same left-side dialog on desktop and mobile. -->
+        <button class="navbar-hamburger" type="button" title="展開菜單" aria-label="展開菜單" aria-expanded="false">☰</button>
 
-        <!-- 桌面版菜單 (PC) -->
-        <div class="navbar-menu hidden-mobile">
-          <ul class="navbar-items">
-            <li><a href="../pages/products.html">商品</a></li>
-            <li><a href="../pages/blog.html">部落格</a></li>
-            <li><a href="../pages/branches.html">分店</a></li>
-            <li><a href="../pages/faq.html">常見問題</a></li>
-            <li><a href="../booking/pages/camp-search.html">預約體驗</a></li>
-          </ul>
+        <!-- Center logo: CSS keeps the brand centered while menus and actions stay on both sides. -->
+        <div class="navbar-brand">
+          <a href="/pages/home.html" class="logo-link" aria-label="回到首頁">
+            <img src="/assets/icons/brand_icon.png" alt="" class="logo">
+            <span>Yuruicamp</span>
+          </a>
         </div>
 
         <!-- 右側操作按鈕 -->
         <div class="navbar-actions">
           <div class="navbar-search-wrapper hidden-mobile">
-            <form class="navbar-search-form" role="search">
+            <button type="button" class="navbar-search-btn navbar-search-toggle" title="搜尋" aria-expanded="false">🔍</button>
+            <form class="navbar-search-form" role="search" aria-hidden="true">
               <input type="text" class="navbar-search-input" placeholder="搜尋商品、品牌..." autocomplete="off" aria-label="搜尋">
-              <button type="submit" class="navbar-search-btn" title="搜尋">🔍</button>
+              <button type="submit" class="navbar-search-submit" title="送出搜尋">搜尋</button>
             </form>
             <div class="navbar-search-dropdown"></div>
           </div>
-          <a href="cart.html" class="navbar-cart-btn" title="購物車">
-            🛒<span class="cart-badge" style="display:none;">0</span>
-          </a>
+          <button type="button" class="navbar-cart-btn" title="購物車" aria-controls="siteCartDrawer" aria-expanded="false">
+            🛒<span class="cart-badge" hidden>0</span>
+          </button>
           <button class="navbar-login-btn" onclick="window.openModal('loginModal')" title="登入">登入</button>
-          <div class="navbar-user-menu" style="display:none;">
-            <div class="user-info" style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+          <div class="navbar-user-menu" hidden>
+            <div class="user-info">
               <div class="user-avatar" title="個人資料">?</div>
               <span class="user-name">用戶</span>
-              <span style="font-size:0.8rem;">▼</span>
+              <span class="user-menu-chevron">⌄</span>
             </div>
             <!-- 用戶選單下拉菜單 -->
-            <div class="navbar-user-dropdown" style="display:none; position:absolute; top:100%; right:0; background:#fff; border:1px solid #e0e0e0; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); min-width:200px; z-index:1000; margin-top:0.5rem;">
-              <a href="member-center.html" class="dropdown-item" style="display:block; padding:0.75rem 1rem; text-decoration:none; color:#333; border-bottom:1px solid #f0f0f0; transition:background-color 0.2s;">
+            <div class="navbar-user-dropdown" hidden>
+              <a href="member-center.html" class="dropdown-item">
                 👤 會員中心
               </a>
-              <button class="navbar-logout-btn" style="width:100%; text-align:left; background:none; border:none; padding:0.75rem 1rem; color:#d32f2f; cursor:pointer; font-size:0.95rem; transition:background-color 0.2s;">
+              <button class="navbar-logout-btn">
                 🚪 登出
               </button>
             </div>
           </div>
-          <button class="navbar-hamburger hidden-desktop" title="展開菜單">☰</button>
         </div>
 
 
@@ -67,25 +62,50 @@
   </nav>
 
   <!-- ========================================
-      Offcanvas 側邊欄（手機版菜單）
+      Offcanvas 側邊欄（主站導覽）
       ======================================== -->
   <div class="navbar-offcanvas">
     <div class="offcanvas-header">
-      <h5 style="margin: 0; font-size: 1.125rem; font-weight: 600;">菜單</h5>
-      <button class="offcanvas-close" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666;">✕</button>
+      <h5 class="offcanvas-title">菜單</h5>
+      <button class="offcanvas-close" type="button" aria-label="關閉菜單">✕</button>
     </div>
     <div class="offcanvas-body">
-      <ul class="navbar-items" style="flex-direction: column; gap: 0.5rem;">
+      <ul class="navbar-items navbar-items--stacked">
         <li><a href="/pages/products.html">商品</a></li>
         <li><a href="/pages/blog.html">部落格</a></li>
         <li><a href="/pages/branches.html">分店</a></li>
         <li><a href="/pages/faq.html">常見問題</a></li>
-        <li><a href="/booking/camp-search.html">露營預訂</a></li>
+        <li><a href="/booking/pages/camp-search.html">露營預訂</a></li>
       </ul>
     </div>
   </div>
   <!-- 背景遮罩 -->
   <div class="offcanvas-backdrop"></div>
+
+  <!-- Cart drawer: clicking .navbar-cart-btn opens this panel instead of navigating. -->
+  <aside id="siteCartDrawer" class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="siteCartDrawerTitle">
+    <div class="cart-drawer__header">
+      <h5 class="cart-drawer__title" id="siteCartDrawerTitle">🛒 我的購物車</h5>
+      <button class="cart-drawer__close" type="button" aria-label="關閉購物車">✕</button>
+    </div>
+    <div class="cart-drawer__body" id="siteCartDrawerBody"></div>
+    <div class="cart-drawer__footer" id="siteCartDrawerFooter">
+      <div class="cart-drawer__summary">
+        <span>商品小計</span>
+        <strong id="summarySubtotal">NT$0</strong>
+      </div>
+      <div class="cart-drawer__summary">
+        <span>運費</span>
+        <strong id="summaryShipping">NT$0</strong>
+      </div>
+      <div class="cart-drawer__summary cart-drawer__summary--total">
+        <span>合計</span>
+        <strong id="summaryTotal">NT$0</strong>
+      </div>
+      <a id="checkoutBtn" class="btn btn-primary btn-block" href="/pages/checkout.html">前往結帳</a>
+    </div>
+  </aside>
+  <div class="cart-drawer-backdrop" id="siteCartBackdrop"></div>
   
 
 
@@ -95,7 +115,7 @@
 <div data-layout-part="shared-auth">
   <!-- 主站與 booking 共用登入 Modal。載入端會把同一份 markup 注入各自頁面。 -->
   <div id="loginModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
-    <div class="modal-content" style="max-width:420px;">
+    <div class="modal-content modal-content--login">
       <div class="modal-header">
         <h5 class="modal-title" id="loginModalTitle">歡迎加入 Yuruicamp</h5>
         <button class="modal-close" type="button" title="關閉">✕</button>
@@ -126,7 +146,7 @@
 
   <!-- 主站與 booking 共用個人化問卷 Modal。 -->
   <div id="personalizationModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="personalizationTitle">
-    <div class="modal-content" style="max-width:480px;">
+    <div class="modal-content modal-content--survey">
       <div class="modal-header">
         <h5 class="modal-title" id="personalizationTitle">告訴我們你的露營偏好</h5>
         <button class="modal-close" type="button" title="跳過">✕</button>
@@ -187,6 +207,13 @@
 <header class="booking-header">
   <nav class="bk-navbar">
     <div class="bk-navbar__inner">
+      <!-- Booking hamburger: desktop and mobile both open the left navigation dialog. -->
+      <button class="bk-hamburger"
+              id="bkHamburger"
+              aria-label="展開選單"
+              aria-expanded="false">
+        <i class="bi bi-list"></i>
+      </button>
 
       <!-- ======================================================
            左側：品牌識別區
@@ -200,16 +227,6 @@
           <span class="brand-sub">| 營地預約</span>
         </a>
       </div>
-
-      <!-- ======================================================
-           中間：核心導覽列（桌機版顯示）
-           ====================================================== -->
-      <ul class="bk-navbar__menu bk-hidden-mobile">
-        <li><a href="./camp-search.html"    class="bk-nav-link" id="navSearch">探索營區</a></li>
-        <li><a href="./rental-guide.html"  class="bk-nav-link" id="navRentalGuide">租借體驗說明</a></li>
-        <li><a href="./booking-faq.html"   class="bk-nav-link" id="navFaq">常見問題</a></li>
-        <li><a href="./member-center.html" class="bk-nav-link" id="navMember">會員中心</a></li>
-      </ul>
 
       <!-- ======================================================
            右側：操作區
@@ -228,8 +245,8 @@
                 class="bk-cart-btn"
                 title="預約背包"
                 aria-label="預約背包">
-          <i class="bi bi-bag-heart"></i>
-          <span class="bk-badge" id="bookingBadge" style="display:none;">0</span>
+          <span aria-hidden="true">🛒</span>
+          <span class="bk-badge" id="bookingBadge" hidden>0</span>
         </button>
 
         <!-- ③ 未登入：booking 也使用主站共用登入按鈕 class 與事件。 -->
@@ -240,30 +257,21 @@
         </button>
 
         <!-- ③ 已登入：booking 改用主站共用會員下拉結構。 -->
-        <div class="navbar-user-menu" style="display:none;">
-          <div class="user-info" style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+        <div class="navbar-user-menu" hidden>
+          <div class="user-info">
             <div class="user-avatar" title="個人資料">?</div>
             <span class="user-name">用戶</span>
-            <span style="font-size:0.8rem;">▼</span>
+            <span class="user-menu-chevron">⌄</span>
           </div>
-          <div class="navbar-user-dropdown" style="display:none; position:absolute; top:100%; right:0; background:#fff; border:1px solid #e0e0e0; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); min-width:200px; z-index:1000; margin-top:0.5rem;">
-            <a href="./member-center.html" class="dropdown-item" style="display:block; padding:0.75rem 1rem; text-decoration:none; color:#333; border-bottom:1px solid #f0f0f0; transition:background-color 0.2s;">
+          <div class="navbar-user-dropdown" hidden>
+            <a href="./member-center.html" class="dropdown-item">
               會員中心
             </a>
-            <button class="navbar-logout-btn" style="width:100%; text-align:left; background:none; border:none; padding:0.75rem 1rem; color:#d32f2f; cursor:pointer; font-size:0.95rem; transition:background-color 0.2s;">
+            <button class="navbar-logout-btn">
               登出
             </button>
           </div>
         </div>
-
-        <!-- 手機版漢堡選單按鈕 -->
-        <button class="bk-hamburger bk-hidden-desktop"
-                id="bkHamburger"
-                aria-label="展開選單"
-                aria-expanded="false">
-          <i class="bi bi-list"></i>
-        </button>
-
       </div>
     </div>
   </nav>
@@ -293,11 +301,11 @@
         <li>
           <!-- 手機版預約背包：點擊關閉 offcanvas 並開啟 Cart Panel -->
           <button id="bkCartBtnMobile" class="bk-offcanvas__cart-btn">
-            <i class="bi bi-bag-heart"></i> 預約背包
-            <span class="bk-badge bk-badge--inline" id="bookingBadgeMobile" style="display:none;">0</span>
+            <span aria-hidden="true">🛒</span> 預約背包
+            <span class="bk-badge bk-badge--inline" id="bookingBadgeMobile" hidden>0</span>
           </button>
         </li>
-        <li id="bkOffcanvasLogoutItem" style="display:none;">
+        <li id="bkOffcanvasLogoutItem" hidden>
           <button id="bkLogoutBtnMobile" class="bk-offcanvas__logout-btn">
             <i class="bi bi-box-arrow-right"></i> 登出
           </button>
@@ -317,7 +325,7 @@
 <div id="cartPanel" class="bk-slide-panel" role="dialog" aria-modal="true" aria-label="預約背包">
   <div class="bk-slide-panel__header">
     <h5 class="bk-slide-panel__title">
-      <i class="bi bi-bag-heart"></i> 預約背包
+      <span aria-hidden="true">🛒</span> 預約背包
     </h5>
     <button class="bk-slide-panel__close" id="cartPanelClose" title="關閉" aria-label="關閉預約背包">
       <i class="bi bi-x-lg"></i>
@@ -326,7 +334,7 @@
   <div class="bk-slide-panel__body" id="cartPanelBody">
     <!-- 由 JS renderCartPanel() 動態填入 -->
   </div>
-  <div class="bk-slide-panel__footer" id="cartPanelFooter" style="display:none;">
+  <div class="bk-slide-panel__footer" id="cartPanelFooter" hidden>
     <a href="./booking-cart.html" class="btn btn--primary btn--full">
       <i class="bi bi-arrow-right-circle"></i> 前往完成預約
     </a>

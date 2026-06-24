@@ -91,7 +91,7 @@
     <!-- ================================================
          步驟 4.3：精選商品 - 最新商品
          ================================================ -->
-    <section class="home-section" style="background-color: #ffffff;">
+    <section class="home-section home-section--white">
       <div class="container">
         <div class="section-header">
           <h2 class="section-title">最新商品</h2>
@@ -100,7 +100,7 @@
         <!-- 商品卡片由 JS 動態生成，加載前顯示骨架屏 -->
         <div class="products-scroll-row" id="newProductsRow">
           <!-- 骨架屏加載佔位 -->
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
+          <div class="skeleton-card skeleton-card--product">
             <div class="skeleton-img"></div>
             <div class="skeleton-body">
               <div class="skeleton-line short"></div>
@@ -108,7 +108,7 @@
               <div class="skeleton-line price"></div>
             </div>
           </div>
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
+          <div class="skeleton-card skeleton-card--product">
             <div class="skeleton-img"></div>
             <div class="skeleton-body">
               <div class="skeleton-line short"></div>
@@ -116,7 +116,7 @@
               <div class="skeleton-line price"></div>
             </div>
           </div>
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
+          <div class="skeleton-card skeleton-card--product">
             <div class="skeleton-img"></div>
             <div class="skeleton-body">
               <div class="skeleton-line short"></div>
@@ -124,7 +124,7 @@
               <div class="skeleton-line price"></div>
             </div>
           </div>
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
+          <div class="skeleton-card skeleton-card--product">
             <div class="skeleton-img"></div>
             <div class="skeleton-body">
               <div class="skeleton-line short"></div>
@@ -139,7 +139,7 @@
     <!-- ================================================
          步驟 4.3：精選商品 - 熱銷商品
          ================================================ -->
-    <section class="home-section" style="background-color: #f6fbf6;">
+    <section class="home-section home-section--muted">
       <div class="container">
         <div class="section-header">
           <h2 class="section-title">🔥 熱銷商品</h2>
@@ -147,7 +147,7 @@
         </div>
         <div class="products-scroll-row" id="bestsellerProductsRow">
           <!-- 骨架屏加載佔位 -->
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
+          <div class="skeleton-card skeleton-card--product">
             <div class="skeleton-img"></div>
             <div class="skeleton-body">
               <div class="skeleton-line short"></div>
@@ -155,7 +155,7 @@
               <div class="skeleton-line price"></div>
             </div>
           </div>
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
+          <div class="skeleton-card skeleton-card--product">
             <div class="skeleton-img"></div>
             <div class="skeleton-body">
               <div class="skeleton-line short"></div>
@@ -163,7 +163,7 @@
               <div class="skeleton-line price"></div>
             </div>
           </div>
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
+          <div class="skeleton-card skeleton-card--product">
             <div class="skeleton-img"></div>
             <div class="skeleton-body">
               <div class="skeleton-line short"></div>
@@ -171,7 +171,7 @@
               <div class="skeleton-line price"></div>
             </div>
           </div>
-          <div class="skeleton-card" style="min-width:220px; max-width:220px;">
+          <div class="skeleton-card skeleton-card--product">
             <div class="skeleton-img"></div>
             <div class="skeleton-body">
               <div class="skeleton-line short"></div>
@@ -186,35 +186,27 @@
     <!-- ================================================
          品牌特色區塊（三個賣點 Icon + 文字）
          ================================================ -->
-    <section style="padding: 4rem 0; background-color: #244d4d; color: #fff;">
+    <section class="brand-benefits">
       <div class="container">
-        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:2rem; text-align:center;">
-          <div>
-            <div style="font-size:2.5rem; margin-bottom:0.75rem;">🚚</div>
-            <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:0.5rem;">滿 NT$3,000 免運費</h3>
-            <p style="font-size:0.875rem; color:rgba(255,255,255,0.75); margin:0;">全台宅配，門市取貨也免費</p>
+        <div class="brand-benefits__grid">
+          <div class="brand-benefits__item">
+            <div class="brand-benefits__icon" aria-hidden="true">🚚</div>
+            <h3 class="brand-benefits__title">滿 NT$3,000 免運費</h3>
+            <p class="brand-benefits__text">全台宅配，門市取貨也免費</p>
           </div>
-          <div>
-            <div style="font-size:2.5rem; margin-bottom:0.75rem;">🏅</div>
-            <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:0.5rem;">品牌正品保證</h3>
-            <p style="font-size:0.875rem; color:rgba(255,255,255,0.75); margin:0;">直接品牌授權，每件附原廠保固</p>
+          <div class="brand-benefits__item">
+            <div class="brand-benefits__icon" aria-hidden="true">🏅</div>
+            <h3 class="brand-benefits__title">品牌正品保證</h3>
+            <p class="brand-benefits__text">直接品牌授權，每件附原廠保固</p>
           </div>
-          <div>
-            <div style="font-size:2.5rem; margin-bottom:0.75rem;">🔄</div>
-            <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:0.5rem;">30 天無憂退換貨</h3>
-            <p style="font-size:0.875rem; color:rgba(255,255,255,0.75); margin:0;">不滿意免費退，保障您的購物體驗</p>
+          <div class="brand-benefits__item">
+            <div class="brand-benefits__icon" aria-hidden="true">🔄</div>
+            <h3 class="brand-benefits__title">30 天無憂退換貨</h3>
+            <p class="brand-benefits__text">不滿意免費退，保障您的購物體驗</p>
           </div>
         </div>
       </div>
     </section>
-    <!-- 手機版調整：3 欄改為 1 欄 -->
-    <style>
-      @media (max-width: 768px) {
-        section[style*="background-color: #244d4d"] .container > div {
-          grid-template-columns: 1fr !important;
-        }
-      }
-    </style>
 
   </main>
 
@@ -225,6 +217,11 @@
        JavaScript 載入（順序很重要！）
        =================================================== -->
   <script src="../js/config.js" defer></script>
+  <script src="../js/storage.js" defer></script>
+  <script src="../js/state.js" defer></script>
+  <script src="../js/formatters.js" defer></script>
+  <script src="../js/validators.js" defer></script>
+  <script src="../js/cart-service.js" defer></script>
   <script src="../js/api-mock.js" defer></script>
   <script src="../js/components/toast.js" defer></script>
   <script src="../js/components/modal.js" defer></script>

@@ -278,6 +278,19 @@
 .mc-activity-item:last-child { border-bottom: none; }
 .mc-activity-item__icon { font-size: 1.1rem; flex-shrink: 0; }
 .mc-activity-item__title { font-weight: 600; color: var(--bk-text); }
+.mc-activity-item__title--button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  text-align: left;
+}
+
+.mc-activity-item__title--button:hover {
+  color: var(--bk-cta);
+  text-decoration: underline;
+}
 .mc-activity-item__date { font-size: 0.75rem; color: var(--bk-text-muted); margin-top: 0.1rem; }
 
 /* ============================================================
@@ -315,6 +328,12 @@
 
 .mc-form-group input:focus,
 .mc-form-group textarea:focus { border-color: var(--bk-primary); }
+
+.mc-form-group input[readonly] {
+  background: #f5f4f1;
+  color: var(--bk-text-muted);
+  cursor: not-allowed;
+}
 
 /* 重點：survey-tags 從前台會員中心搬入 booking 版，樣式使用 booking 色票與表單間距。 */
 .mc-preference-group {
@@ -574,6 +593,17 @@
   font-size: 0.8rem;
   color: var(--bk-text-muted);
   line-height: 1.5;
+}
+
+.notif-item__link {
+  background: none;
+  border: none;
+  color: var(--bk-cta);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  padding: 0;
+  text-decoration: underline;
 }
 
 .notif-item__date {

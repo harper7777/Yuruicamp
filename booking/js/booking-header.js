@@ -111,7 +111,7 @@
     [badge, badgeMobile].forEach(function (el) {
       if (!el) return;
       el.textContent = displayText;
-      el.style.display = total > 0 ? 'inline-flex' : 'none';
+      el.hidden = total <= 0;
     });
   }
 
@@ -131,7 +131,7 @@
    */
   function closeUserDropdown() {
     var dropdown = document.querySelector('.booking-header .navbar-user-dropdown');
-    if (dropdown) dropdown.style.display = 'none';
+    if (dropdown) dropdown.hidden = true;
   }
 
   /**
@@ -167,7 +167,7 @@
 
     userInfo.addEventListener('click', function (event) {
       event.stopPropagation();
-      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+      dropdown.hidden = !dropdown.hidden;
     });
 
     if (logoutBtn) {
@@ -192,16 +192,16 @@
     if (user && user.name) {
       var userName = userMenu.querySelector('.user-name');
       var userAvatar = userMenu.querySelector('.user-avatar');
-      loginBtn.style.display = 'none';
-      userMenu.style.display = 'flex';
+      loginBtn.hidden = true;
+      userMenu.hidden = false;
       if (userName) userName.textContent = user.name;
       if (userAvatar) userAvatar.textContent = (user.avatar || user.name.charAt(0)).toUpperCase();
-      if (logoutItemMobile) logoutItemMobile.style.display = '';
+      if (logoutItemMobile) logoutItemMobile.hidden = false;
       initUserDropdown();
     } else {
-      loginBtn.style.display = 'inline-flex';
-      userMenu.style.display = 'none';
-      if (logoutItemMobile) logoutItemMobile.style.display = 'none';
+      loginBtn.hidden = false;
+      userMenu.hidden = true;
+      if (logoutItemMobile) logoutItemMobile.hidden = true;
       closeUserDropdown();
     }
   }
@@ -227,6 +227,9 @@
     var backdrop = document.getElementById('bkBackdrop');
     var hamburger = document.getElementById('bkHamburger');
     if (!offcanvas || !hamburger) return;
+    closePanels();
+    closeSharedModal('loginModal', { force: true });
+    closeSharedModal('personalizationModal', { force: true });
     offcanvas.classList.add('is-open');
     if (backdrop) backdrop.classList.add('is-visible');
     hamburger.setAttribute('aria-expanded', 'true');
@@ -555,10 +558,10 @@
         '<div class="cart-panel__empty">',
         '  <i class="bi bi-bag-x"></i>',
         '  <p>預約背包目前是空的</p>',
-        '  <a href="./camp-search.html" class="btn btn--outline" style="margin-top:0.75rem;">前往找營地</a>',
+        '  <a href="./camp-search.html" class="btn btn--outline cart-panel__empty-link">前往找營地</a>',
         '</div>'
       ].join('');
-      if (footer) footer.style.display = 'none';
+      if (footer) footer.hidden = true;
       return;
     }
 
@@ -602,7 +605,7 @@
     html += '<button class="cart-panel__clear" id="cartPanelClear" type="button">清空預約背包</button>';
 
     body.innerHTML = html;
-    if (footer) footer.style.display = '';
+    if (footer) footer.hidden = false;
 
     var clearBtn = document.getElementById('cartPanelClear');
     if (clearBtn) {

@@ -64,7 +64,7 @@
           </div>
 
           <!-- 購物車按鈕（含數字 Badge） -->
-          <a href="pages/cart.html" class="navbar-cart-btn" title="購物車">
+          <a href="pages/checkout.html" class="navbar-cart-btn" title="購物車">
             🛒
             <span class="cart-badge" style="display:none;">0</span>
           </a>
@@ -450,6 +450,11 @@
 
   <!-- 全局配置（最先載入） -->
   <script src="js/config.js" defer></script>
+  <script src="js/storage.js" defer></script>
+  <script src="js/state.js" defer></script>
+  <script src="js/formatters.js" defer></script>
+  <script src="js/validators.js" defer></script>
+  <script src="js/cart-service.js" defer></script>
 
   <!-- Mock API 層 -->
   <script src="js/api-mock.js" defer></script>
@@ -466,7 +471,6 @@
   <script src="js/pages/home.js" defer></script>
   <script src="js/pages/product-list.js" defer></script>
   <script src="js/pages/product-detail.js" defer></script>
-  <script src="js/pages/cart.js" defer></script>
   <script src="js/pages/checkout.js" defer></script>
   <script src="js/pages/member-center.js" defer></script>
   <script src="js/pages/blog.js" defer></script>

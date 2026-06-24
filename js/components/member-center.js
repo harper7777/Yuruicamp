@@ -170,6 +170,26 @@
     return 'NT$ ' + Number(value || 0).toLocaleString('zh-TW');
   }
 
+  /** 重點：升等進度只採計 delivered 購買訂單 subtotal，讓已完成訂單才會推進會員等級。 */
+  function getDeliveredPurchaseSubtotal() {
+    return state.orders.reduce(function (total, order) {
+      if (normalizeFilterValue('purchase', order && order.status) !== 'delivered') return total;
+      return total + (Number(order.subtotal) || 0);
+    }, 0);
+  }
+
+  /** 重點：依目前 delivered subtotal 更新會員卡進度條與距下一級文字。 */
+  function renderTierProgress(user) {
+    var nextTierSpend = Number(user && user.nextTierSpend) || 0;
+    var totalSpend = getDeliveredPurchaseSubtotal();
+    var remaining = Math.max(nextTierSpend - totalSpend, 0);
+    var progress = nextTierSpend > 0 ? Math.min(Math.round((totalSpend / nextTierSpend) * 100), 100) : 0;
+    var progressBar = document.getElementById('tierProgressBar');
+
+    setText('nextTierSpend', formatMoney(remaining));
+    if (progressBar) progressBar.style.width = progress + '%';
+  }
+
   function formatDate(value) {
     return value || '--';
   }
@@ -610,11 +630,7 @@
     var saved = getSavedProfile();
     var loginUser = getLoginUser() || {};
     var displayName = saved.name || loginUser.name || user.name || '露友';
-    var displayEmail = saved.email || loginUser.email || user.email || 'camper@example.com';
-    var nextTierSpend = Number(user.nextTierSpend || 0);
-    var totalSpend = Number(user.totalSpend || 0);
-    var remaining = Math.max(nextTierSpend - totalSpend, 0);
-    var progress = nextTierSpend > 0 ? Math.min(Math.round((totalSpend / nextTierSpend) * 100), 100) : 0;
+    var displayEmail = loginUser.email || user.email || saved.email || 'camper@example.com';
 
     setText('mcAvatar', displayName.charAt(0).toUpperCase());
     setText('mcName', displayName);
@@ -622,15 +638,12 @@
     setText('cardName', displayName);
     setText('cardTier', user.tierName || '探險家');
     setText('cardSince', '加入日期：' + (user.joinDate || user.joinedAt || '2026-01-01'));
-    setText('nextTierSpend', formatMoney(remaining));
-
-    var progressBar = document.getElementById('tierProgressBar');
-    if (progressBar) progressBar.style.width = progress + '%';
+    renderTierProgress(user);
 
     setInputValue('profileName', saved.name || user.name || displayName);
     setInputValue('profilePhone', saved.phone || user.phone || '0912-345-678');
-    setInputValue('profileEmail', saved.email || user.email || displayEmail);
-    setInputValue('profileBirthday', saved.birthday || user.birthday || '1990-06-15');
+    setInputValue('profileEmail', displayEmail);
+    setInputValue('profileBirthday', user.birthday || saved.birthday || '1990-06-15');
     setInputValue('profileAddress', saved.address || user.address || '台北市信義區信義路五段 100 號');
 
     renderMemberRewardPoints(user.points);
@@ -693,13 +706,13 @@
       var profileData = {
         name: getInputValue('profileName'),
         phone: getInputValue('profilePhone'),
-        email: getInputValue('profileEmail'),
-        birthday: getInputValue('profileBirthday'),
+        email: (state.user && state.user.email) || (getLoginUser() && getLoginUser().email) || getInputValue('profileEmail'),
+        birthday: (state.user && state.user.birthday) || getInputValue('profileBirthday'),
         address: getInputValue('profileAddress'),
         preferences: selectedPreferences
       };
 
-      // 重點：個人資料與 survey-tags 統一存入 yurui_profile，登入物件只更新會影響 header 顯示的姓名與信箱。
+      // 重點：Email 與生日為唯讀資料，儲存時保留原始值，避免前端表單覆寫會員識別資料。
       localStorage.setItem('yurui_profile', JSON.stringify(profileData));
       updateLoginStorage(profileData);
 
@@ -812,6 +825,57 @@
     showMcToast('已複製折扣碼：' + code, 'success');
   }
 
+  /** 重點：建立通知可辨識的訂單編號清單，讓訊息中的編號可導向對應明細。 */
+  function getNotificationOrderTokens() {
+    var tokens = [];
+    state.orders.forEach(function (order) {
+      [order.id, order.orderNumber].filter(Boolean).forEach(function (token) {
+        tokens.push({ token: String(token), type: 'purchase', id: order.id });
+      });
+    });
+    state.rentalOrders.forEach(function (order) {
+      [order.id, order.orderNumber].filter(Boolean).forEach(function (token) {
+        tokens.push({ token: String(token), type: 'rental', id: order.id });
+      });
+    });
+    return tokens.sort(function (a, b) { return b.token.length - a.token.length; });
+  }
+
+  /** 重點：通知文字會保留原文順序，只將確定存在的訂單 / 預約編號轉成可點擊明細連結。 */
+  function linkNotificationText(value) {
+    var text = String(value == null ? '' : value);
+    var tokens = getNotificationOrderTokens();
+    var matches = [];
+
+    tokens.forEach(function (item) {
+      var start = text.indexOf(item.token);
+      while (start !== -1) {
+        var end = start + item.token.length;
+        var overlaps = matches.some(function (match) {
+          return start < match.end && end > match.start;
+        });
+        if (!overlaps) matches.push({ start: start, end: end, item: item });
+        start = text.indexOf(item.token, end);
+      }
+    });
+
+    if (!matches.length) return escapeHtml(text);
+
+    matches.sort(function (a, b) { return a.start - b.start; });
+    var html = '';
+    var cursor = 0;
+    matches.forEach(function (match) {
+      html += escapeHtml(text.slice(cursor, match.start));
+      html += '<button class="notif-item__link" type="button" data-notification-'
+        + (match.item.type === 'rental' ? 'rental' : 'order')
+        + '-detail="' + escapeHtml(match.item.id) + '">'
+        + escapeHtml(text.slice(match.start, match.end))
+        + '</button>';
+      cursor = match.end;
+    });
+    return html + escapeHtml(text.slice(cursor));
+  }
+
   function renderNotifications() {
     var container = document.getElementById('notificationList');
     if (!container) return;
@@ -828,8 +892,8 @@
       return '<div class="notif-item" id="notif-' + escapeHtml(notification.id) + '" data-notif-id="' + escapeHtml(notification.id) + '">'
         + '<div class="notif-item__dot' + (read ? ' read' : '') + '"></div>'
         + '<div>'
-        + '<div class="notif-item__title">' + escapeHtml(notification.title) + '</div>'
-        + '<div class="notif-item__body">' + escapeHtml(notification.message) + '</div>'
+        + '<div class="notif-item__title">' + linkNotificationText(notification.title) + '</div>'
+        + '<div class="notif-item__body">' + linkNotificationText(notification.message) + '</div>'
         + '<div class="notif-item__date">' + escapeHtml(notification.time) + '</div>'
         + '</div>'
         + '</div>';
@@ -844,13 +908,17 @@
     state.orders.slice(0, 3).forEach(function (order) {
       activities.push({
         date: order.createdAt,
-        title: '訂單 ' + (order.orderNumber || order.id) + ' ' + getStatusInfo(order.status).label
+        title: '訂單 ' + (order.orderNumber || order.id) + ' ' + getStatusInfo(order.status).label,
+        type: 'purchase',
+        id: order.id
       });
     });
     state.rentalOrders.slice(0, 2).forEach(function (order) {
       activities.push({
         date: order.createdAt,
-        title: '預約與租借 ' + (order.orderNumber || order.id) + ' ' + getRentalStatusInfo(order.status).label
+        title: '預約與租借 ' + (order.orderNumber || order.id) + ' ' + getRentalStatusInfo(order.status).label,
+        type: 'rental',
+        id: order.id
       });
     });
     ((state.user && state.user.notifications) || []).slice(0, 2).forEach(function (notification) {
@@ -870,9 +938,15 @@
     }
 
     container.innerHTML = activities.slice(0, 4).map(function (activity) {
+      var detailAttr = activity.type === 'rental'
+        ? ' data-notification-rental-detail="' + escapeHtml(activity.id) + '"'
+        : (activity.type === 'purchase' ? ' data-notification-order-detail="' + escapeHtml(activity.id) + '"' : '');
+      var titleHtml = detailAttr
+        ? '<button class="mc-activity-item__title mc-activity-item__title--button" type="button"' + detailAttr + '>' + escapeHtml(activity.title) + '</button>'
+        : '<div class="mc-activity-item__title">' + escapeHtml(activity.title) + '</div>';
       return '<div class="mc-activity-item">'
         + '<div>'
-        + '<div class="mc-activity-item__title">' + escapeHtml(activity.title) + '</div>'
+        + titleHtml
         + '<div class="mc-activity-item__date">' + escapeHtml(formatDate(activity.date)) + '</div>'
         + '</div>'
         + '</div>';
@@ -967,7 +1041,40 @@
       var copyBtn = event.target.closest('[data-copy-coupon]');
       if (copyBtn) {
         window.copyMcCouponCode(copyBtn.dataset.copyCoupon);
+        return;
       }
+
+      var notificationOrderBtn = event.target.closest('[data-notification-order-detail]');
+      if (notificationOrderBtn) {
+        openRecordDetailFromNotification('purchase', notificationOrderBtn.dataset.notificationOrderDetail);
+        return;
+      }
+
+      var notificationRentalBtn = event.target.closest('[data-notification-rental-detail]');
+      if (notificationRentalBtn) {
+        openRecordDetailFromNotification('rental', notificationRentalBtn.dataset.notificationRentalDetail);
+      }
+    });
+  }
+
+  /** 重點：通知與最近活動點擊編號時，先切到紀錄分頁再開啟對應明細。 */
+  function openRecordDetailFromNotification(orderType, orderId) {
+    switchMemberPanel('records');
+    switchRecordTab(orderType === 'rental' ? 'rental' : 'purchase');
+    if (orderType === 'rental') {
+      window.openRentalOrderDetail(orderId);
+      return;
+    }
+    window.openOrderDetail(orderId);
+  }
+
+  /** 重點：抽出紀錄內部 tab 切換，通知連結與使用者點擊 tab 共用同一流程。 */
+  function switchRecordTab(rec) {
+    document.querySelectorAll('.rec-tab[data-rec]').forEach(function (item) {
+      item.classList.toggle('active', item.dataset.rec === rec);
+    });
+    document.querySelectorAll('.rec-panel[data-rec-panel]').forEach(function (panel) {
+      panel.classList.toggle('active', panel.dataset.recPanel === rec);
     });
   }
 
@@ -977,36 +1084,31 @@
       tab.dataset.bound = 'true';
 
       tab.addEventListener('click', function () {
-        var rec = tab.dataset.rec;
-        document.querySelectorAll('.rec-tab[data-rec]').forEach(function (item) {
-          item.classList.toggle('active', item.dataset.rec === rec);
-        });
-        document.querySelectorAll('.rec-panel[data-rec-panel]').forEach(function (panel) {
-          panel.classList.toggle('active', panel.dataset.recPanel === rec);
-        });
+        switchRecordTab(tab.dataset.rec);
       });
     });
   }
 
-  function initPanelTabs() {
-    function switchPanel(tab) {
-      var normalizedTab = tab === 'orders' ? 'records' : tab;
-      document.querySelectorAll('.mc-nav-item').forEach(function (item) {
-        item.classList.toggle('active', item.dataset.tab === normalizedTab);
-      });
-      document.querySelectorAll('.mc-tab-mobile').forEach(function (button) {
-        button.classList.toggle('active', button.dataset.tab === normalizedTab);
-      });
-      document.querySelectorAll('.mc-panel').forEach(function (panel) {
-        panel.classList.toggle('active', panel.dataset.panel === normalizedTab);
-      });
-    }
+  /** 重點：抽出會員中心主分頁切換，URL、導覽列與通知深連結共用同一流程。 */
+  function switchMemberPanel(tab) {
+    var normalizedTab = tab === 'orders' ? 'records' : tab;
+    document.querySelectorAll('.mc-nav-item').forEach(function (item) {
+      item.classList.toggle('active', item.dataset.tab === normalizedTab);
+    });
+    document.querySelectorAll('.mc-tab-mobile').forEach(function (button) {
+      button.classList.toggle('active', button.dataset.tab === normalizedTab);
+    });
+    document.querySelectorAll('.mc-panel').forEach(function (panel) {
+      panel.classList.toggle('active', panel.dataset.panel === normalizedTab);
+    });
+  }
 
+  function initPanelTabs() {
     document.querySelectorAll('.mc-nav-item').forEach(function (item) {
       if (item.dataset.bound === 'true') return;
       item.dataset.bound = 'true';
       item.addEventListener('click', function () {
-        switchPanel(item.dataset.tab);
+        switchMemberPanel(item.dataset.tab);
       });
     });
 
@@ -1014,12 +1116,12 @@
       if (button.dataset.bound === 'true') return;
       button.dataset.bound = 'true';
       button.addEventListener('click', function () {
-        switchPanel(button.dataset.tab);
+        switchMemberPanel(button.dataset.tab);
       });
     });
 
     var urlTab = new URLSearchParams(window.location.search).get('tab');
-    if (urlTab) switchPanel(urlTab);
+    if (urlTab) switchMemberPanel(urlTab);
   }
 
   function applyLoginState() {

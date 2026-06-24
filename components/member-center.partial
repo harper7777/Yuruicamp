@@ -76,6 +76,7 @@
               <!-- 重點：回饋點數由共用 JS 讀取 data/users.json 的 points，結帳或資料更新後會定時刷新。 -->
               <div class="mc-membership-card__points" id="cardPoints">回饋點數：載入中</div>
               <div class="mc-membership-card__progress-label">
+                <!-- 重點：升等進度由 delivered 訂單 subtotal 推進，文字會隨購買完成金額更新。 -->
                 升等進度，距下一等級還差 <strong id="nextTierSpend">NT$ 0</strong>
               </div>
               <div class="mc-membership-card__progress">
@@ -126,11 +127,13 @@
                   </div>
                   <div class="mc-form-group">
                     <label for="profileEmail">電子郵件</label>
-                    <input type="email" id="profileEmail" name="email" placeholder="your@email.com">
+                    <!-- 重點：Email 由登入資料提供，會員中心只顯示不可修改。 -->
+                    <input type="email" id="profileEmail" name="email" placeholder="your@email.com" readonly aria-readonly="true">
                   </div>
                   <div class="mc-form-group">
                     <label for="profileBirthday">生日</label>
-                    <input type="date" id="profileBirthday" name="birthday">
+                    <!-- 重點：生日作為會員識別資料，會員中心只顯示不可修改。 -->
+                    <input type="date" id="profileBirthday" name="birthday" readonly aria-readonly="true">
                   </div>
                   <div class="mc-form-group full">
                     <label for="profileAddress">常用地址</label>

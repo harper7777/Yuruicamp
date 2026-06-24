@@ -5044,3 +5044,491 @@ body {
   line-height: 1;
 }
 
+/* ========================================
+   Header / Search / Cart Drawer Refinements
+   These component classes replace inline header styles and power the shared cart drawer.
+   ======================================== */
+
+.navbar-content {
+  position: relative;
+}
+
+.navbar-brand {
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.logo-link {
+  align-items: center;
+  color: inherit;
+  display: inline-flex;
+  gap: 0.45rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.logo-link .logo {
+  height: 32px;
+  width: 32px;
+}
+
+.navbar-actions {
+  margin-left: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.navbar-cart-btn {
+  align-items: center;
+  background: none;
+  border: none;
+  color: #244d4d;
+  display: inline-flex;
+  line-height: 1;
+  padding: 0.35rem;
+}
+
+.offcanvas-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.offcanvas-close {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.navbar-items--stacked {
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.navbar-search-form {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.75rem);
+  width: 280px;
+  z-index: 1500;
+}
+
+.navbar-search-wrapper.is-open .navbar-search-form {
+  display: flex;
+  animation: fadeInDown 200ms ease;
+}
+
+.navbar-search-submit {
+  background: #244d4d;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.45rem 0.85rem;
+}
+
+.navbar-search-dropdown {
+  left: auto;
+  right: 0;
+  top: calc(100% + 3.5rem);
+}
+
+.navbar-user-menu:not([hidden]) {
+  display: flex;
+}
+
+.user-info {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.user-menu-chevron {
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.navbar-user-dropdown {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+  margin-top: 0.5rem;
+  min-width: 200px;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 1000;
+}
+
+.navbar-user-dropdown .dropdown-item,
+.navbar-user-dropdown .navbar-logout-btn {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  display: block;
+  font-size: 0.95rem;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  text-decoration: none;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.navbar-user-dropdown .dropdown-item {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.navbar-user-dropdown .navbar-logout-btn {
+  color: #d32f2f;
+}
+
+.navbar-user-dropdown .dropdown-item:hover,
+.navbar-user-dropdown .navbar-logout-btn:hover {
+  background-color: #f6fbf6;
+}
+
+.modal-content--login {
+  max-width: 420px;
+}
+
+.modal-content--survey {
+  max-width: 480px;
+}
+
+.cart-drawer {
+  background: #fff;
+  box-shadow: -8px 0 28px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 92vw;
+  position: fixed;
+  right: -420px;
+  top: 0;
+  transition: right 0.28s ease;
+  width: 400px;
+  z-index: 2100;
+}
+
+.cart-drawer.is-open {
+  right: 0;
+}
+
+.cart-drawer__header,
+.cart-drawer__footer {
+  flex-shrink: 0;
+  padding: 1rem 1.25rem;
+}
+
+.cart-drawer__header {
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cart-drawer__title {
+  color: #244d4d;
+  font-size: 1rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.cart-drawer__close {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 1.25rem;
+}
+
+.cart-drawer__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.cart-drawer__footer {
+  border-top: 1px solid #e5e7eb;
+}
+
+.cart-drawer__summary {
+  align-items: center;
+  color: #555;
+  display: flex;
+  font-size: 0.9rem;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+}
+
+.cart-drawer__summary--total {
+  border-top: 1px solid #e5e7eb;
+  color: #244d4d;
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-top: 0.65rem;
+  padding-top: 0.85rem;
+}
+
+.cart-drawer-backdrop {
+  background: rgba(0, 0, 0, 0.45);
+  display: none;
+  inset: 0;
+  position: fixed;
+  z-index: 2090;
+}
+
+.cart-drawer-backdrop.is-visible {
+  display: block;
+}
+
+.cart-drawer-empty {
+  color: #777;
+  padding: 4rem 1.25rem;
+  text-align: center;
+}
+
+.cart-drawer-empty__icon {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.cart-drawer-empty__title {
+  color: #374151;
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem;
+}
+
+.cart-drawer-empty__text {
+  color: #8a8f98;
+  margin: 0;
+}
+
+.cart-drawer-item {
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  gap: 0.9rem;
+  padding: 1rem 1.25rem;
+}
+
+.cart-drawer-item__image {
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  height: 78px;
+  object-fit: cover;
+  width: 78px;
+}
+
+.cart-drawer-item__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.cart-drawer-item__brand {
+  color: #244d4d;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  min-height: 1em;
+  text-transform: uppercase;
+}
+
+.cart-drawer-item__name {
+  color: #1f2937;
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.4;
+  overflow: hidden;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cart-drawer-item__price {
+  color: #6b7280;
+  font-size: 0.84rem;
+  margin: 0.25rem 0 0.6rem;
+}
+
+.cart-drawer-item__actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.cart-qty-decrease,
+.cart-qty-increase {
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 5px;
+  color: #374151;
+  cursor: pointer;
+  display: inline-flex;
+  height: 30px;
+  justify-content: center;
+  width: 30px;
+}
+
+.cart-drawer-item__qty {
+  font-weight: 800;
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+.cart-drawer-item__subtotal {
+  color: #244d4d;
+  margin-left: auto;
+}
+
+.cart-remove-btn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+/* ============================================================
+   Home / Cart Redirect Components
+   These classes replace inline styles so Vite/Sass can own layout styling.
+   ============================================================ */
+.home-section--white {
+  background-color: #fff;
+}
+
+.home-section--muted {
+  background-color: #f6fbf6;
+}
+
+.skeleton-card--product {
+  max-width: 220px;
+  min-width: 220px;
+}
+
+.brand-benefits {
+  background-color: #244d4d;
+  color: #fff;
+  padding: 4rem 0;
+}
+
+.brand-benefits__grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(3, 1fr);
+  text-align: center;
+}
+
+.brand-benefits__icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.brand-benefits__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.brand-benefits__text {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.cart-redirect-page {
+  align-items: center;
+  background: #f6fbf6;
+  display: flex;
+  min-height: 62vh;
+  padding: 6rem 1rem 4rem;
+}
+
+.cart-redirect-panel {
+  margin: 0 auto;
+  max-width: 680px;
+  text-align: center;
+}
+
+.cart-redirect-panel__eyebrow {
+  color: #244d4d;
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin: 0 0 0.75rem;
+}
+
+.cart-redirect-panel__title {
+  color: #333;
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 1rem;
+}
+
+.cart-redirect-panel__text {
+  color: #666;
+  line-height: 1.8;
+  margin: 0 auto 1.5rem;
+  max-width: 560px;
+}
+
+@media (max-width: 768px) {
+  .brand-benefits__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-redirect-panel__title {
+    font-size: 1.55rem;
+  }
+}
+
+/* ============================================================
+   Header Drawer Overrides
+   The primary navigation now lives behind the left hamburger on every viewport.
+   ============================================================ */
+.navbar-content {
+  align-items: center;
+  display: flex;
+  position: relative;
+}
+
+.navbar-hamburger {
+  align-items: center;
+  background: none;
+  border: none;
+  color: #244d4d;
+  cursor: pointer;
+  display: inline-flex !important;
+  font-size: 1.4rem;
+  height: 40px;
+  justify-content: center;
+  margin-right: auto;
+  width: 40px;
+  z-index: 2;
+}
+
+.navbar-menu {
+  display: none !important;
+}
+
+.navbar-offcanvas {
+  left: 0;
+  right: auto;
+  transform: translateX(-100%);
+}
+
+.navbar-offcanvas.active {
+  transform: translateX(0);
+}
+

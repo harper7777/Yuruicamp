@@ -577,8 +577,8 @@ function initActionButtons(product) {
       const specSuffix = [specs.color, specs.size].filter(Boolean).join(' / ');
       const productName = specSuffix ? `${product.name}（${specSuffix}）` : product.name;
 
-      // 先加入購物車，然後跳轉到購物車頁
-      // Add to cart first, then redirect to cart page
+      // 先加入購物車，然後直接進入結帳頁，避免使用已移除的 cart.html。
+      // Add to cart first, then go straight to checkout because cart.html is removed.
       window.addToCart({
         id: product.id,
         name: productName,
@@ -590,7 +590,7 @@ function initActionButtons(product) {
       // 短暫延遲後跳轉（確保 toast 有時間顯示）
       // Brief delay before redirect (let toast show)
       setTimeout(() => {
-        window.location.href = 'cart.html';
+        window.location.href = 'checkout.html';
       }, 500);
     });
   }

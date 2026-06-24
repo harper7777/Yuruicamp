@@ -21,6 +21,8 @@ const _detectDataPath = () => {
 
 const MOCK_ORDERS_STORAGE_KEY = 'mockOrders';
 const MOCK_USER_POINT_DELTAS_STORAGE_KEY = 'mockUserPointDeltas';
+let productsCache = null;
+let productsCacheExpiresAt = 0;
 
 /** 重點：集中讀取 localStorage JSON，避免新增訂單或點數快取資料損壞時中斷整個 mock API。 */
 const _readJsonStorage = (key, fallback) => {
@@ -76,6 +78,22 @@ const _calculateRewardPoints = (subtotal) => Math.ceil((Number(subtotal) || 0) *
 const _getStoredOrders = () => _readJsonStorage(MOCK_ORDERS_STORAGE_KEY, []);
 const _getUserPointDeltas = () => _readJsonStorage(MOCK_USER_POINT_DELTAS_STORAGE_KEY, {});
 
+/**
+ * Loads products.json once per cache window so product APIs share one request.
+ * @returns {Promise<Array>} Cached product list.
+ */
+const _getProducts = async () => {
+  const now = Date.now();
+  if (productsCache && now < productsCacheExpiresAt) {
+    return productsCache;
+  }
+
+  const response = await fetch(`${window.API._getDataPath()}/products.json`);
+  productsCache = await response.json();
+  productsCacheExpiresAt = now + (window.AppConfig?.CACHE_DURATION || 3600000);
+  return productsCache;
+};
+
 /** 重點：只有 delivered 的 mockOrders 才會回饋點數，避免 checkout 新建 unshipped 訂單先更新 cardPoints。 */
 const _getDeliveredOrderPointDeltas = () => {
   return _getStoredOrders().reduce((deltas, order) => {
@@ -120,8 +138,7 @@ window.API = {
      */
     getAll: async (filters = {}) => {
       try {
-        const response = await fetch(`${window.API._getDataPath()}/products.json`);
-        let products = await response.json();
+        let products = await _getProducts();
         
         // 應用篩選
         if (filters.category) {
@@ -151,8 +168,7 @@ window.API = {
      */
     getById: async (productId) => {
       try {
-        const response = await fetch(`${window.API._getDataPath()}/products.json`);
-        const products = await response.json();
+        const products = await _getProducts();
         const product = products.find(p => p.id === productId);
         
         if (!product) {
@@ -172,8 +188,7 @@ window.API = {
      */
     getCategories: async () => {
       try {
-        const response = await fetch(`${window.API._getDataPath()}/products.json`);
-        const products = await response.json();
+        const products = await _getProducts();
         const categories = [...new Set(products.map(p => p.category))];
         return Promise.resolve(categories);
       } catch (error) {

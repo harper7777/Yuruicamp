@@ -74,6 +74,8 @@
                        id="buyerPhone"
                        name="buyerPhone"
                        placeholder="0912-345-678"
+                       pattern="^(\+886|886|0)[1-9][0-9\-\s()]{7,12}$"
+                       title="請輸入台灣電話格式，例如 0912-345-678 或 +886912345678"
                        required
                        style="width:100%;padding:0.6rem 0.875rem;border:1px solid #d1d5db;border-radius:6px;font-size:0.9rem;box-sizing:border-box;outline:none;transition:border-color 0.2s;">
               </div>
@@ -364,6 +366,11 @@
        Script 載入
        =================================================== -->
   <script src="../js/config.js" defer></script>
+  <script src="../js/storage.js" defer></script>
+  <script src="../js/state.js" defer></script>
+  <script src="../js/formatters.js" defer></script>
+  <script src="../js/validators.js" defer></script>
+  <script src="../js/cart-service.js" defer></script>
   <script src="../js/api-mock.js" defer></script>
   <script src="../js/components/toast.js" defer></script>
   <script src="../js/components/modal.js" defer></script>

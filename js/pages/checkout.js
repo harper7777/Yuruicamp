@@ -214,12 +214,12 @@ function syncCheckoutOrderSnapshot(order) {
 window.initCheckoutPage = () => {
   console.log('📋 結帳頁面初始化...');
 
-  // 若購物車為空，跳回購物車頁
-  // If cart is empty, redirect back to cart page
+  // 若購物車為空，導回商品列表，因為主站 cart.html 已移除。
+  // If cart is empty, redirect to products because the legacy cart page was removed.
   if (!window.AppState.cart || window.AppState.cart.length === 0) {
     window.showToast('購物車是空的，請先加入商品', 'warning');
     setTimeout(() => {
-      window.location.href = 'cart.html';
+      window.location.href = 'products.html';
     }, 1500);
     return;
   }
@@ -670,6 +670,12 @@ function initConfirmOrderBtn() {
     }
     if (!buyerPhone) {
       window.showToast('請填寫電話', 'warning');
+      document.getElementById('buyerPhone')?.focus();
+      return;
+    }
+    // 重點：結帳電話必須符合台灣手機 / 市話格式，避免 mock 訂單留下無效聯絡資料。
+    if (!window.isValidPhone(buyerPhone)) {
+      window.showToast('電話格式不正確，請輸入台灣電話格式', 'warning');
       document.getElementById('buyerPhone')?.focus();
       return;
     }
