@@ -16,17 +16,30 @@
       <!-- 低庫存警告說明 -->
       <small class="text-danger">
         <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
-        紅色列表示庫存不足 5 件
+        紅色列表示庫存不足（低於最低庫存設定）
+      </small>
+      <!-- 最低庫存設定模式提示（預設隱藏，進入設定模式後由 products.js 顯示） -->
+      <!-- Min-stock mode hint, hidden by default, shown by products.js when mode is active -->
+      <small class="text-warning d-none" id="minStockModeHint">
+        <i class="fas fa-edit me-1"></i>
+        最低庫存設定模式：修改後按確定儲存
       </small>
     </div>
 
-    <!-- 右側按鈕群組：新增商品（上）+ 產生異動紀錄（下）-->
+    <!-- 右側按鈕群組：新增商品 + 設定最低庫存 + 產生異動紀錄 -->
     <div class="d-flex flex-column align-items-end gap-2">
       <button class="btn btn-sm text-white"
               style="background-color: var(--admin-brand-accent);"
               data-bs-toggle="modal"
               data-bs-target="#addProductModal">
         <i class="fas fa-plus me-1"></i>新增商品
+      </button>
+      <!-- 最低庫存設定切換按鈕：點擊後切換表格進入最低庫存設定模式，由 products.js 控制狀態 -->
+      <!-- Min-stock mode toggle: switches table to min-stock edit mode, state managed by products.js -->
+      <button type="button"
+              class="btn btn-sm btn-outline-warning"
+              id="toggleMinStockMode">
+        <i class="fas fa-sliders-h me-1"></i>設定最低庫存
       </button>
       <!-- 產生異動紀錄：有待確認的庫存異動後才啟用，由 products.js 控制 disabled 狀態 -->
       <button type="button"
@@ -71,8 +84,8 @@
             <th class="sticky-col sticky-col-category">分類</th>
             <th class="sticky-col sticky-col-action">操作</th>
             <th class="sticky-col sticky-col-total-stock">總庫存量</th>
-            <!-- 可水平捲動欄位：主倉 + 各分店庫存（明確指定欄寬）-->
-            <th class="scrollable-stock-col">主倉</th>
+            <!-- 可水平捲動欄位：商店主倉 + 各分店庫存（明確指定欄寬）-->
+            <th class="scrollable-stock-col">商店主倉</th>
             <th class="scrollable-stock-col">分店 A</th>
             <th class="scrollable-stock-col">分店 B</th>
             <th class="scrollable-stock-col">分店 C</th>
@@ -107,8 +120,8 @@
             <th class="sticky-col sticky-col-category">分類</th>
             <th class="sticky-col sticky-col-action">操作</th>
             <th class="sticky-col sticky-col-total-stock">總租借庫存</th>
-            <!-- 可水平捲動欄位：主倉 + 各營區庫存（明確指定欄寬）/ scrollable camp columns -->
-            <th class="scrollable-stock-col">主倉</th>
+            <!-- 可水平捲動欄位：租借主倉 + 各營區庫存（明確指定欄寬）/ scrollable camp columns -->
+            <th class="scrollable-stock-col">租借主倉</th>
             <th class="scrollable-stock-col">湖畔星空</th>
             <th class="scrollable-stock-col">松林野營</th>
             <th class="scrollable-stock-col">溪谷森林</th>
@@ -164,9 +177,9 @@
               <!-- 由 JS 動態填入：主倉 / 分店A / B / C -->
             </select>
           </div>
-          <div class="col-4">
+          <div class="col-4" id="transferSourceStockCol">
             <label class="form-label">目前庫存</label>
-            <!-- 隨來源分店選取自動更新 -->
+            <!-- 隨來源分店選取自動更新；Mode 2（營地互轉）時由 JS 隱藏此欄 -->
             <p class="form-control-plaintext fw-semibold text-center" id="transferSourceStock">0</p>
           </div>
         </div>
@@ -178,6 +191,8 @@
             <!-- 即時計數器：已分配 N / M 件，隨數量輸入即時更新 -->
             <span class="text-muted small" id="transferDistributionCounter">已分配 0 / 0 件</span>
           </div>
+          <!-- 說明文字：依模式由 JS 切換內容 -->
+          <small class="text-muted d-block mb-2" id="transferModeHint">以下為本次從來源分店調入各營地的數量（0 = 不異動）</small>
           <!-- 動態列容器：每列包含 [營地下拉] [數量輸入] [刪除按鈕] -->
           <div id="transferCampRows" class="d-flex flex-column gap-2"></div>
           <!-- 新增一列目標營地 -->

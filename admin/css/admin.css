@@ -434,6 +434,41 @@ button[data-permission-disabled="true"] {
   background-color: #f8d7da;     /* Bootstrap danger 淺紅背景色 */
 }
 
+/* ── 單格庫存不足標示（.stock-cell-below-min）────────────────────────────────
+   任一分店 / 營地的實際庫存低於其最低庫存閾值時，由 JS 加上此 class。
+   橘色邊框 + 淡橘色背景，游標 hover 時 title tooltip 顯示「目前 N 件，最低需 M 件」。
+   Orange border + light orange background for cells below minimum threshold.
+   Tooltip via title attribute: "目前 N 件，最低需 M 件"
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* 正常列內的不足格：淡橘色背景 + 橘色邊框 */
+/* Orange cell in a normal (non-danger) row */
+.stock-cell-below-min .admin-stock-control .stock-input {
+  border-color: #fd7e14;
+  background-color: #fff3e0;
+}
+
+/* table-danger（淡紅列）內的不足格：橘色加深版本，確保與紅色底色區別 */
+/* Orange cell inside a table-danger row: use deeper orange to contrast with red row bg */
+.table tr.table-danger .stock-cell-below-min .admin-stock-control .stock-input {
+  border-color: #e65c00;
+  background-color: #ffe0b2;
+}
+
+/* 最低庫存設定模式（isMinStockMode）：表格 header 加上黃色背景，提醒管理員 */
+/* Min-stock mode header: yellow background to remind admin they are in edit mode */
+#productsTable thead.min-stock-mode-header,
+#rentalProductsTable thead.min-stock-mode-header {
+  background-color: #fff3cd !important;  /* Bootstrap warning 淺黃色 */
+}
+
+/* 最低庫存模式下步進器按鈕改為黃色外框，與正常模式視覺區分 */
+/* Min-stock mode steppers use yellow outline to distinguish from normal mode */
+.min-stock-mode .admin-stock-control .stock-step-btn {
+  border-color: #ffc107;
+  color: #856404;
+}
+
 /* ===== 商品名稱截斷（超過欄寬顯示 ...，hover 透過 title 屬性顯示完整名稱） ===== */
 .product-name-cell {
   display: block;                /* block 才能讓 max-width 生效 */

@@ -22,7 +22,7 @@ window.initMovement = function () {
       renderMovementTable(window.movementCache);
     }).fail(function () {
       $('#movementTableBody').html(
-        '<tr><td colspan="4" class="text-center text-danger py-4">' +
+        '<tr><td colspan="5" class="text-center text-danger py-4">' +
         '<i class="fas fa-exclamation-triangle me-2"></i>載入庫存異動紀錄失敗' +
         '</td></tr>'
       );
@@ -91,22 +91,40 @@ function normalizeMovementRecord(record) {
         productName: (item && item.productName) || '未命名商品',
         quantity: parseInt(item && item.quantity, 10) || 0,
         fromStore: (item && item.fromStore) || '—',
-        toStore: (item && item.toStore) || '—'
+        toStore:   (item && item.toStore)   || '—',
+        type:      (item && item.type)      || '—'
       };
     })
   };
 }
 
+/**
+ * 從 items 陣列摘要顯示「異動性質」（取各 item type 的唯一值集合）。
+ * 若有多種 type，用逗號連接。
+ * Summarizes unique movement types from the items array.
+ */
+function summarizeMovementTypes(items) {
+  var types = {};
+  (items || []).forEach(function (item) {
+    var t = item.type || '—';
+    types[t] = true;
+  });
+  var keys = Object.keys(types);
+  return keys.length > 0 ? keys.join('、') : '—';
+}
+
+
 function renderMovementTable(records) {
   if (!records || records.length === 0) {
     $('#movementTableBody').html(
-      '<tr><td colspan="4" class="text-center text-muted py-4">目前沒有庫存異動紀錄</td></tr>'
+      '<tr><td colspan="5" class="text-center text-muted py-4">目前沒有庫存異動紀錄</td></tr>'
     );
     return;
   }
 
   var html = records.map(function (record) {
     var itemCount = (record.items || []).length;
+    var typesSummary = summarizeMovementTypes(record.items);
 
     return '<tr data-movement-id="' + escapeMovementHtml(record.id) + '">' +
       '<td>' +
@@ -118,6 +136,7 @@ function renderMovementTable(records) {
       '<td>' + escapeMovementHtml(record.date) + '</td>' +
       '<td>' + escapeMovementHtml(record.employeeId || '—') + '</td>' +
       '<td>' + itemCount + ' 筆</td>' +
+      '<td>' + escapeMovementHtml(typesSummary) + '</td>' +
       '</tr>';
   }).join('');
 
@@ -130,16 +149,23 @@ function showMovementDetailModal(record) {
   $('#modalMovementEmployeeId').text(record.employeeId || '—');
 
   var itemsHtml = (record.items || []).map(function (item) {
+    var typeBadge = item.type || '—';
+    // 損耗類型加上醒目標示 / Highlight '損耗' type items
+    var typeCellContent = item.type === '損耗'
+      ? '<span class="badge bg-warning text-dark">' + escapeMovementHtml(typeBadge) + '</span>'
+      : escapeMovementHtml(typeBadge);
+
     return '<tr>' +
       '<td>' + escapeMovementHtml(item.productName) + '</td>' +
       '<td class="text-center fw-semibold">' + escapeMovementHtml(item.quantity) + '</td>' +
       '<td>' + escapeMovementHtml(item.fromStore) + '</td>' +
       '<td>' + escapeMovementHtml(item.toStore) + '</td>' +
+      '<td>' + typeCellContent + '</td>' +
       '</tr>';
   }).join('');
 
   $('#modalMovementItems').html(
-    itemsHtml || '<tr><td colspan="4" class="text-center text-muted">沒有異動明細</td></tr>'
+    itemsHtml || '<tr><td colspan="5" class="text-center text-muted">沒有異動明細</td></tr>'
   );
 
   bootstrap.Modal.getOrCreateInstance(document.getElementById('movementDetailModal')).show();

@@ -24,17 +24,19 @@
             <th>異動日期</th>
             <th>負責員工 ID</th>
             <th>明細筆數</th>
+            <th>異動性質</th>
           </tr>
         </thead>
         <!-- tbody 由 movement.js 的 renderMovementTable() 動態填入 -->
         <tbody id="movementTableBody">
           <tr>
-            <td colspan="4" class="text-center py-4">
+            <td colspan="5" class="text-center py-4">
               <div class="spinner-border spinner-border-sm me-2"
                    style="color: var(--admin-brand-accent);"></div>
               <span class="text-muted">載入庫存異動紀錄中...</span>
             </td>
           </tr>
+          <!-- colspan 需對應 thead 5 欄 -->
         </tbody>
       </table>
     </div>
@@ -72,6 +74,7 @@
                 <th class="text-center">數量</th>
                 <th>配送地</th>
                 <th>接收地</th>
+                <th>異動性質</th>
               </tr>
             </thead>
             <tbody id="modalMovementItems">

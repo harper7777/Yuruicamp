@@ -173,6 +173,38 @@ window.initOrders = function () {
     showOrderModal(order);
   });
 
+  // ── 「完成」按鈕：已出貨 + 非貨到付款 訂單才可標記完成 ──────────
+  // 點擊後：更新 orderStatus → 'completed'，push history，顯示 Toast，重新渲染表格
+  $(document).on('click.orders', '.btn-complete-order', function () {
+    var $row    = $(this).closest('tr');
+    var orderId = $row.data('order-id');
+    var order   = (window.ordersCache || []).find(function (o) { return o.id === orderId; });
+    if (!order) return;
+
+    // 二次防護：COD 訂單不允許完成（按鈕邏輯已過濾，此處防止異常呼叫）
+    if (order.paymentStatus === 'cod') return;
+
+    order.orderStatus = 'completed';
+
+    // 產生當下時間字串，格式：YYYY-MM-DD HH:MM:SS（與出貨邏輯一致）
+    var now = new Date();
+    var pad = function (n) { return String(n).padStart(2, '0'); };
+    var timeStr = now.getFullYear() + '-' +
+                  pad(now.getMonth() + 1) + '-' +
+                  pad(now.getDate()) + ' ' +
+                  pad(now.getHours()) + ':' +
+                  pad(now.getMinutes()) + ':' +
+                  pad(now.getSeconds());
+
+    order.history = order.history || [];
+    order.history.push({ time: timeStr, action: '已完成' });
+
+    window.showAdminToast('訂單 ' + orderId + ' 已標記為「已完成」');
+
+    // 重新跑管線，讓篩選器即時反映新的 orderStatus
+    applyFiltersAndSort();
+  });
+
   // ── 出貨按鈕 ──────────────────────────────────────
   $(document).on('click.orders', '.btn-ship-order', function () {
     var $btn    = $(this);
@@ -548,22 +580,31 @@ function renderOrdersTable(orders) {
     cod:    '<span class="badge bg-info text-dark">貨到付款</span>'
   };
 
-  // 訂單狀態 badge（3 種）
+  // 訂單狀態 badge（4 種）
+  // unshipped = 黃色 / shipped = 綠色 / returned = 紅色 / completed = 藍色
   var orderStatusMap = {
     unshipped: '<span class="badge bg-warning text-dark order-status-badge">未出貨</span>',
     shipped:   '<span class="badge bg-success order-status-badge">已出貨</span>',
-    returned:  '<span class="badge bg-danger order-status-badge">已退貨</span>'
+    returned:  '<span class="badge bg-danger order-status-badge">已退貨</span>',
+    completed: '<span class="badge bg-primary order-status-badge">已完成</span>'
   };
 
   var html = orders.map(function (order) {
     var payBadge    = payBadgeMap[order.paymentStatus]  || '';
     var statusBadge = orderStatusMap[order.orderStatus] || '';
 
-    // 出貨按鈕只在「未出貨」時顯示
-    var shipBtn = (order.orderStatus === 'unshipped')
-      ? '<button class="btn btn-sm btn-outline-success btn-ship-order" title="確認出貨">' +
-        '<i class="fas fa-truck me-1"></i>出貨</button>'
-      : '';
+    // 操作欄按鈕邏輯：
+    //   未出貨               → 顯示「出貨」按鈕
+    //   已出貨 且 非貨到付款 → 顯示「完成」按鈕（COD 訂單送達時無法確認付款，故不允許完成）
+    //   其餘狀態             → 不顯示按鈕
+    var actionBtn = '';
+    if (order.orderStatus === 'unshipped') {
+      actionBtn = '<button class="btn btn-sm btn-outline-success btn-ship-order" title="確認出貨">' +
+                  '<i class="fas fa-truck me-1"></i>出貨</button>';
+    } else if (order.orderStatus === 'shipped' && order.paymentStatus !== 'cod') {
+      actionBtn = '<button class="btn btn-sm btn-outline-primary btn-complete-order" title="確認送達完成">' +
+                  '<i class="fas fa-check-circle me-1"></i>完成</button>';
+    }
 
     // 只取日期部分（YYYY-MM-DD），不顯示時間
     var date = order.createdAt.split(' ')[0] || '';
@@ -583,7 +624,7 @@ function renderOrdersTable(orders) {
            '<td class="fw-semibold">NT$ ' + order.total.toLocaleString() + '</td>' +
            '<td>' + payBadge + '</td>' +
            '<td>' + statusBadge + '</td>' +
-           '<td>' + shipBtn + '</td>' +
+           '<td>' + actionBtn + '</td>' +
            '</tr>';
   }).join('');
 
@@ -608,11 +649,12 @@ window.showOrderModal = function (order) {
   $('#modalOrderId').text(order.id);
   $('#modalBuyerName').text(order.buyerName);
 
-  // 訂單狀態 badge
+  // 訂單狀態 badge（4 種，需與 renderOrdersTable 的 orderStatusMap 保持一致）
   var statusMap = {
     unshipped: '<span class="badge bg-warning text-dark">未出貨</span>',
     shipped:   '<span class="badge bg-success">已出貨</span>',
-    returned:  '<span class="badge bg-danger">已退貨</span>'
+    returned:  '<span class="badge bg-danger">已退貨</span>',
+    completed: '<span class="badge bg-primary">已完成</span>'
   };
   $('#modalOrderStatus').html(statusMap[order.orderStatus] || '');
 

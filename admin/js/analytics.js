@@ -78,12 +78,16 @@ window.initAnalytics = function () {
 // ═══════════════════════════════════════════════════════════════
 
 /**
- * 並行載入四份 JSON，全部完成才呼叫 callback
- * 任何一份失敗時，對應 cache 設為空陣列，不阻斷其他資料顯示
+ * 並行載入五份 JSON（orders / products / min_stock / bookings / reantal），
+ * 全部完成才呼叫 callback。
+ * 任何一份失敗時，對應 cache 設為空陣列 / 空物件，不阻斷其他資料顯示。
+ *
+ * Loads 5 JSON files in parallel; invokes callback when all are done.
+ * Any individual failure silently falls back to an empty array/object.
  */
 function loadAllAnalyticsData(callback) {
   var loaded = 0;
-  var total  = 4;
+  var total  = 5; // orders + products + min_stock + bookings + reantal
 
   // 每份完成時 +1，全部完成才 callback
   function onDone() {
@@ -108,6 +112,17 @@ function loadAllAnalyticsData(callback) {
     $.getJSON('data/products.json')
       .done(function (data) { window.analyticsProductsCache = data; })
       .fail(function ()     { window.analyticsProductsCache = []; })
+      .always(onDone);
+  }
+
+  // min_stock.json：最低庫存設定，失敗時降級為空物件（全用預設值 5）
+  // min_stock.json: min-stock thresholds; fall back to {} on failure (uses default 5)
+  if (window.analyticsMinStockCache && typeof window.analyticsMinStockCache === 'object') {
+    onDone();
+  } else {
+    $.getJSON('data/min_stock.json')
+      .done(function (data) { window.analyticsMinStockCache = data; })
+      .fail(function ()     { window.analyticsMinStockCache = {}; })
       .always(onDone);
   }
 
@@ -380,9 +395,10 @@ function renderShopKpis() {
     }, 0);
   $('#shopKpiSoldQty').text(soldQty);
 
-  // ── 卡片 6：低庫存商品（不受期間限制，全商品庫存 < 5）──
+  // ── 卡片 6：低庫存商品（不受期間限制，任一分店庫存 < 最低閾值即計入）──
+  // Low-stock products: any branch below its minimum threshold counts, regardless of date filter
   var lowStock = products.filter(function (p) {
-    return getAnalyticsProductTotalStock(p) < 5;
+    return isAnalyticsProductLowStock(p);
   }).length;
   $('#shopKpiLowStock').text(lowStock);
 }
@@ -1068,6 +1084,70 @@ function destroyAllCharts() {
   _rentalDonut    = null;
   _campgroundBar  = null;
   _regionBar      = null;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 低庫存判斷（使用 min_stock.json 的閾值，避免硬編碼 < 5）
+// Low-stock detection using per-product thresholds from min_stock.json
+// ═══════════════════════════════════════════════════════════════
+
+/** 分店 ID 清單（與 products.js 保持一致）— 不引入跨模組耦合 */
+var ANALYTICS_BRANCH_IDS      = ['main', 'branch-001', 'branch-002', 'branch-003'];
+var ANALYTICS_MIN_STOCK_DEFAULT = 5; // 找不到設定時的預設最低庫存
+
+/**
+ * 取得 analytics 模組內的最低庫存閾值。
+ * 從 window.analyticsMinStockCache 讀取，找不到時回傳預設值 5。
+ *
+ * @param {string} productId  - 商品 ID（例如 'P001'）
+ * @param {string} locationId - 分店 / 營地 ID（例如 'branch-001'）
+ * @returns {number}
+ */
+function getAnalyticsMinStockValue(productId, locationId) {
+  var cache       = (window.analyticsMinStockCache && window.analyticsMinStockCache['store']) || {};
+  var productData = cache[productId] || {};
+  var val         = productData[locationId];
+
+  if (val !== undefined) {
+    var parsed = parseInt(val, 10);
+    return isNaN(parsed) ? ANALYTICS_MIN_STOCK_DEFAULT : Math.max(parsed, 0);
+  }
+
+  return ANALYTICS_MIN_STOCK_DEFAULT;
+}
+
+/**
+ * 判斷商店商品是否低庫存（雙層判斷，與 products.js 邏輯一致）：
+ * ① 任一分店實際庫存 < 該分店最低值
+ * ② 總庫存 < 所有分店最低值加總
+ *
+ * Returns true if the store product is considered low-stock.
+ * Mirrors isStoreProductLowStock() in products.js to avoid cross-module coupling.
+ *
+ * @param {Object} product - products.json 中的單一商品物件
+ * @returns {boolean}
+ */
+function isAnalyticsProductLowStock(product) {
+  if (!product) { return false; }
+
+  var branch = product.branch || {};
+
+  // 判斷①：任一分店庫存 < 最低值
+  var anyBranchLow = ANALYTICS_BRANCH_IDS.some(function (branchId) {
+    var actual  = parseInt(branch[branchId], 10);
+    actual      = isNaN(actual) ? 0 : Math.max(actual, 0);
+    var minimum = getAnalyticsMinStockValue(product.id, branchId);
+    return actual < minimum;
+  });
+
+  if (anyBranchLow) { return true; }
+
+  // 判斷②：總庫存 < 所有分店最低值加總
+  var totalMinimum = ANALYTICS_BRANCH_IDS.reduce(function (sum, branchId) {
+    return sum + getAnalyticsMinStockValue(product.id, branchId);
+  }, 0);
+
+  return getAnalyticsProductTotalStock(product) < totalMinimum;
 }
 
 // ═══════════════════════════════════════════════════════════════

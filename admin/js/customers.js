@@ -508,10 +508,10 @@ function renderCustomersAccordion(customers) {
     return (
       '<div class="accordion-item">' +
         '<h2 class="accordion-header" id="' + headingId + '">' +
-          '<button class="accordion-button' + (isFirst ? '' : ' collapsed') + '"' +
+          '<button class="accordion-button collapsed"' +
                   ' type="button" data-bs-toggle="collapse"' +
                   ' data-bs-target="#' + collapseId + '"' +
-                  ' aria-expanded="' + (isFirst ? 'true' : 'false') + '"' +
+                  ' aria-expanded="false"' +
                   ' aria-controls="' + collapseId + '">' +
             '<img src="' + avatarSrc + '" width="40" height="40"' +
                  ' class="rounded-circle me-3 border object-fit-cover"' +
@@ -529,7 +529,7 @@ function renderCustomersAccordion(customers) {
           '</button>' +
         '</h2>' +
         '<div id="' + collapseId + '"' +
-             ' class="accordion-collapse collapse' + (isFirst ? ' show' : '') + '"' +
+             ' class="accordion-collapse collapse"' + 
              ' aria-labelledby="' + headingId + '">' +
           '<div class="accordion-body pt-0">' +
             '<table class="table table-sm mb-3"><tbody>' +
