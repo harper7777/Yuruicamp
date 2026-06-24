@@ -80,6 +80,10 @@
 
   var PURCHASE_META_MAP = toMetaMap(PURCHASE_ORDER_STATUS_META);
   var RENTAL_META_MAP = toMetaMap(RENTAL_ORDER_STATUS_META);
+  var PREFERENCE_STYLE_VALUES = ['glamping', 'backpacking', 'family', 'solo', 'hiking', 'car-camping', 'ultralight', 'base-camp'];
+  var PREFERENCE_EQUIPMENT_VALUES = ['tent', 'sleeping-bag', 'backpack', 'cooking', 'lighting', 'clothing', 'chair', 'navigation', 'safety', 'photography'];
+  var PURCHASE_TAB_FILTERS = ['all', 'unshipped', 'shipped', 'returned'];
+  var RENTAL_TAB_FILTERS = ['all', 'pending', 'confirmed', 'refunded'];
 
   function joinPath(base, fileName) {
     return String(base || '').replace(/\/+$/, '') + '/' + fileName;
@@ -259,6 +263,76 @@
       .filter(Boolean);
   }
 
+  function getPreferenceGroup(value) {
+    if (PREFERENCE_STYLE_VALUES.includes(value)) return 'styles';
+    if (PREFERENCE_EQUIPMENT_VALUES.includes(value)) return 'equipment';
+    return null;
+  }
+
+  function uniqueValues(values) {
+    return Array.from(new Set((Array.isArray(values) ? values : []).filter(Boolean)));
+  }
+
+  function normalizePreferenceObject(preferences) {
+    var normalized = { styles: [], equipment: [] };
+
+    // 重點：舊資料可能是攤平陣列，新資料則固定拆回 styles / equipment。
+    normalizePreferenceValues(preferences).forEach(function (value) {
+      var group = getPreferenceGroup(value);
+      if (group) normalized[group].push(value);
+    });
+
+    normalized.styles = uniqueValues(normalized.styles);
+    normalized.equipment = uniqueValues(normalized.equipment);
+    return normalized;
+  }
+
+  function getStoredPreferenceObject() {
+    return normalizePreferenceObject(getStoredPreferenceValues());
+  }
+
+  function getActivePreferenceObject() {
+    var preferences = { styles: [], equipment: [] };
+
+    document.querySelectorAll('#prefTags .survey-tag.active').forEach(function (tag) {
+      var group = getPreferenceGroup(tag.dataset.value);
+      if (group) preferences[group].push(tag.dataset.value);
+    });
+
+    preferences.styles = uniqueValues(preferences.styles);
+    preferences.equipment = uniqueValues(preferences.equipment);
+    return preferences;
+  }
+
+  function persistPreferenceObject(preferences) {
+    var normalized = normalizePreferenceObject(preferences);
+    var savedProfile = getSavedProfile();
+
+    // 重點：同步保存分類結構，避免重新渲染時把剛切換的 active 狀態復原。
+    savedProfile.preferences = normalized;
+    localStorage.setItem('yurui_profile', JSON.stringify(savedProfile));
+    localStorage.setItem('preferences', JSON.stringify(normalized));
+
+    if (window.AppState) {
+      window.AppState.preferences = normalized;
+      if (typeof window.saveAppState === 'function') window.saveAppState();
+    }
+
+    return normalized;
+  }
+
+  function updatePreferenceObjectValue(preferences, value, isActive) {
+    var normalized = normalizePreferenceObject(preferences);
+    var group = getPreferenceGroup(value);
+    if (!group) return normalized;
+
+    // 重點：active 被取消就從對應陣列移除，新啟用則新增到對應陣列。
+    normalized[group] = normalized[group].filter(function (item) { return item !== value; });
+    if (isActive) normalized[group].push(value);
+    normalized[group] = uniqueValues(normalized[group]);
+    return normalized;
+  }
+
   function getStoredPreferenceValues() {
     var appPrefs = normalizePreferenceValues(window.AppState && window.AppState.preferences);
     if (appPrefs.length) return appPrefs;
@@ -302,21 +376,14 @@
   }
 
   function buildFilterDefinitions(orderType, orders) {
-    var available = new Set(['all']);
     var meta = orderType === 'rental' ? RENTAL_ORDER_STATUS_META : PURCHASE_ORDER_STATUS_META;
-    var known = new Set(meta.map(function (item) { return item.value; }));
+    var allowed = orderType === 'rental' ? RENTAL_TAB_FILTERS : PURCHASE_TAB_FILTERS;
 
-    (orders || []).forEach(function (order) {
-      if (order.status) available.add(normalizeFilterValue(orderType, order.status));
-      if (order.paymentStatus) available.add(normalizeFilterValue(orderType, order.paymentStatus));
+    // 重點：訂單可保留更多 status，但 tab 只渲染需求指定的篩選選項。
+    return allowed.map(function (value) {
+      if (value === 'all') return { value: 'all', label: '全部', cls: '' };
+      return meta.find(function (item) { return item.value === value; }) || { value: value, label: value, cls: 'status--pending' };
     });
-
-    var dynamic = meta.filter(function (item) { return available.has(item.value); });
-    var unknown = Array.from(available)
-      .filter(function (value) { return value !== 'all' && !known.has(value); })
-      .map(function (value) { return { value: value, label: value, cls: 'status--pending' }; });
-
-    return [{ value: 'all', label: '全部', cls: '' }].concat(dynamic, unknown);
   }
 
   function renderOrderStatusTabs(orderType, orders) {
@@ -668,13 +735,11 @@
   }
 
   window.syncMemberPreferenceTags = function (preferences) {
-    var selectedPrefs = normalizePreferenceValues(preferences);
+    var selectedPrefs = normalizePreferenceObject(preferences);
     syncPreferenceTags(selectedPrefs);
 
-    // 重點：喜好標籤同時寫入 yurui_profile，讓商品推薦與兩個會員中心讀同一份攤平 survey-tags。
-    var savedProfile = getSavedProfile();
-    savedProfile.preferences = selectedPrefs;
-    localStorage.setItem('yurui_profile', JSON.stringify(savedProfile));
+    // 重點：外部問卷同步進來時，也保留 styles / equipment 分類結構。
+    persistPreferenceObject(selectedPrefs);
   };
 
   function initPreferenceTags() {
@@ -683,7 +748,12 @@
       if (tag.dataset.prefToggleBound === 'true') return;
       tag.dataset.prefToggleBound = 'true';
       tag.addEventListener('click', function () {
-        tag.classList.toggle('active');
+        var willBeActive = !tag.classList.contains('active');
+        var preferences = updatePreferenceObjectValue(getStoredPreferenceObject(), tag.dataset.value, willBeActive);
+
+        // 重點：先寫入資料再更新畫面，避免下一次重繪把 active 狀態復原。
+        persistPreferenceObject(preferences);
+        syncPreferenceTags(preferences);
       });
     });
   }
@@ -700,9 +770,7 @@
 
     form.addEventListener('submit', function (event) {
       event.preventDefault();
-      var selectedPreferences = Array.from(document.querySelectorAll('#prefTags .survey-tag.active')).map(function (tag) {
-        return tag.dataset.value;
-      });
+      var selectedPreferences = getActivePreferenceObject();
       var profileData = {
         name: getInputValue('profileName'),
         phone: getInputValue('profilePhone'),
@@ -715,6 +783,7 @@
       // 重點：Email 與生日為唯讀資料，儲存時保留原始值，避免前端表單覆寫會員識別資料。
       localStorage.setItem('yurui_profile', JSON.stringify(profileData));
       updateLoginStorage(profileData);
+      persistPreferenceObject(selectedPreferences);
 
       if (window.AppState) {
         window.AppState.preferences = selectedPreferences;

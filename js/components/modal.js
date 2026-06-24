@@ -44,22 +44,43 @@ function _requestPersonalizationClose() {
     return;
   }
 
-  // Close button is the only exit path and requires confirmation while unfinished.
-  if (window.confirm(SURVEY_UNFINISHED_CLOSE_MESSAGE)) {
-    window.closeModal('personalizationModal', { force: true });
-  }
+  // Close button opens an in-page confirmation modal instead of using browser confirm().
+  if (_openSurveyCloseConfirmModal()) return;
+
+  // Fallback action: if old pages miss the confirm markup, keep the survey open and notify in-page.
+  window.showToast && window.showToast(SURVEY_UNFINISHED_CLOSE_MESSAGE, 'warning');
 }
 
 /**
- * Flatten step 1 and step 2 survey answers into one member-center preference list.
- * @param {{ styles?: string[], equipment?: string[] }} preferences
- * @returns {string[]} Combined selected values
+ * Open the unfinished-survey confirmation modal when the shared partial is present.
+ * @returns {boolean} Whether the in-page confirmation modal handled the request.
  */
-function _flattenSurveyPreferences(preferences) {
-  return [
-    ...(preferences.styles || []),
-    ...(preferences.equipment || []),
-  ];
+function _openSurveyCloseConfirmModal() {
+  const confirmModal = document.getElementById('surveyCloseConfirmModal');
+  if (!confirmModal) return false;
+
+  window.openModal('surveyCloseConfirmModal');
+  return true;
+}
+
+/**
+ * Bind the in-page unfinished-survey confirmation actions once.
+ */
+function _initSurveyCloseConfirmModal() {
+  const confirmModal = document.getElementById('surveyCloseConfirmModal');
+  if (!confirmModal || confirmModal.dataset.surveyCloseConfirmBound === 'true') return;
+  confirmModal.dataset.surveyCloseConfirmBound = 'true';
+
+  confirmModal.querySelector('[data-survey-close-cancel]')?.addEventListener('click', () => {
+    // Cancel action only dismisses the confirmation layer and keeps the survey choices intact.
+    window.closeModal('surveyCloseConfirmModal', { force: true });
+  });
+
+  confirmModal.querySelector('[data-survey-close-confirm]')?.addEventListener('click', () => {
+    // Confirm action closes both the confirmation layer and the unfinished personalization survey.
+    window.closeModal('surveyCloseConfirmModal', { force: true });
+    window.closeModal('personalizationModal', { force: true });
+  });
 }
 
 /**
@@ -68,8 +89,10 @@ function _flattenSurveyPreferences(preferences) {
  */
 function _syncProfilePreferenceStorage(preferences) {
   const profile = JSON.parse(localStorage.getItem('yurui_profile') || '{}');
-  profile.preferences = _flattenSurveyPreferences(preferences);
+  // 重點：profile 保留 styles / equipment 結構，攤平值只由讀取端需要時轉換。
+  profile.preferences = preferences;
   localStorage.setItem('yurui_profile', JSON.stringify(profile));
+  localStorage.setItem('preferences', JSON.stringify(preferences));
 }
 
 /**
@@ -101,7 +124,8 @@ window.closeModal = (modalId, options = {}) => {
     }
 
     modal.classList.remove('active');
-    document.body.style.overflow = ''; // 恢復頁面滾動
+    // 重點：若仍有其他 Modal 開啟，維持 body scroll lock。
+    document.body.style.overflow = document.querySelector('.modal.active') ? 'hidden' : '';
   }
 };
 
@@ -162,6 +186,7 @@ window.initModalListeners = () => {
 
   // 初始化登入 Modal 的互動邏輯
   _initLoginModal();
+  _initSurveyCloseConfirmModal();
 };
 
 // ----------------------------------------

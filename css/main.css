@@ -616,6 +616,19 @@ hr {
   margin-top: 0.75rem;
 }
 
+#surveyCloseConfirmModal .modal-content--confirm {
+  max-width: 420px;
+}
+
+#surveyCloseConfirmModal .modal-confirm-message {
+  color: #3f4f4f;
+  margin: 0;
+}
+
+#surveyCloseConfirmModal .modal-footer {
+  justify-content: flex-end;
+}
+
 @supports (height: 100dvh) {
   #personalizationModal .modal-content {
     max-height: calc(100dvh - 2rem);
@@ -5070,14 +5083,35 @@ body {
 }
 
 .logo-link .logo {
-  height: 32px;
-  width: 32px;
+  /* 重點：主站 header logo 依需求放大 2 倍。 */
+  height: 64px;
+  width: 64px;
 }
 
 .navbar-actions {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
   margin-left: auto;
   position: relative;
   z-index: 2;
+}
+
+.navbar-booking-link {
+  border: 1px solid #244d4d;
+  border-radius: 999px;
+  color: #244d4d;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.45rem 0.85rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navbar-booking-link:hover {
+  background-color: #244d4d;
+  color: #ffffff;
 }
 
 .navbar-cart-btn {

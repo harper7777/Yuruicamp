@@ -34,6 +34,8 @@
             </form>
             <div class="navbar-search-dropdown"></div>
           </div>
+          <!-- 重點：露營預訂從側欄清單拉出，固定放在 header 右側操作區、購物車前方。 -->
+          <a href="/booking/pages/camp-search.html" class="navbar-booking-link">露營預訂</a>
           <button type="button" class="navbar-cart-btn" title="購物車" aria-controls="siteCartDrawer" aria-expanded="false">
             🛒<span class="cart-badge" hidden>0</span>
           </button>
@@ -75,7 +77,6 @@
         <li><a href="/pages/blog.html">部落格</a></li>
         <li><a href="/pages/branches.html">分店</a></li>
         <li><a href="/pages/faq.html">常見問題</a></li>
-        <li><a href="/booking/pages/camp-search.html">露營預訂</a></li>
       </ul>
     </div>
   </div>
@@ -190,6 +191,23 @@
           </div>
           <button id="surveyFinishBtn" class="btn btn-primary btn-block" type="button">完成設定</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 重點：未完成問卷的關閉確認改用站內 Modal，取代瀏覽器原生 confirm。 -->
+  <div id="surveyCloseConfirmModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="surveyCloseConfirmTitle">
+    <div class="modal-content modal-content--confirm">
+      <div class="modal-header">
+        <h5 class="modal-title" id="surveyCloseConfirmTitle">偏好設定尚未完成</h5>
+        <button class="modal-close" type="button" title="關閉">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-confirm-message">選項還未完成，要關閉視窗之後再來填寫嗎?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn--outline" type="button" data-survey-close-cancel>繼續填寫</button>
+        <button class="btn btn-primary" type="button" data-survey-close-confirm>稍後再填</button>
       </div>
     </div>
   </div>
