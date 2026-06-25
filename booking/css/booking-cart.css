@@ -1,0 +1,225 @@
+/* ── 購物車兩欄佈局 ── */
+    .bk-cart-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 2rem;
+      align-items: start;
+      padding: 1.5rem 0 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── 商品卡（住宿 / 裝備各一塊）── */
+    .bk-cart-card {
+      background: var(--bk-white);
+      border: 1px solid var(--bk-border);
+      border-radius: var(--bk-radius);
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .bk-cart-card__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 1.25rem;
+      border-bottom: 1px solid var(--bk-border);
+      background: var(--bk-bg);
+    }
+
+    .bk-cart-card__title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--bk-text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .bk-cart-card__body { padding: 0; }
+
+    /* ── 每一筆項目列 ── */
+    .bk-cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--bk-border);
+      gap: 1rem;
+    }
+
+    .bk-cart-item:last-child { border-bottom: none; }
+
+    .bk-cart-item__info { flex: 1; }
+
+    .bk-cart-item__name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--bk-text);
+      margin-bottom: 0.25rem;
+    }
+
+    .bk-cart-item__meta {
+      font-size: 0.8rem;
+      color: var(--bk-text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .bk-cart-item__price {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--bk-primary);
+      white-space: nowrap;
+    }
+
+    /* ── 修改連結 ── */
+    .bk-cart-edit-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+      color: var(--bk-text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .bk-cart-edit-link:hover { color: var(--bk-primary); }
+
+    /* ── 右側 Sticky 摘要 ── */
+    .bk-cart-summary-col {
+      position: sticky;
+      top: 5rem;
+    }
+
+    .bk-cart-summary-card {
+      background: var(--bk-white);
+      border: 1px solid var(--bk-border);
+      border-radius: var(--bk-radius);
+      padding: 1.5rem;
+    }
+
+    .bk-cart-summary-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--bk-primary);
+      margin: 0 0 1.25rem 0;
+    }
+
+    /* ── 空背包狀態 ── */
+    .bk-cart-empty {
+      text-align: center;
+      padding: 5rem 2rem;
+    }
+
+    .bk-cart-empty__icon {
+      font-size: 4rem;
+      color: var(--bk-border);
+      margin-bottom: 1rem;
+    }
+
+    .bk-cart-empty__title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--bk-text);
+      margin-bottom: 0.5rem;
+    }
+
+    .bk-cart-empty__desc {
+      font-size: 0.9rem;
+      color: var(--bk-text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── 清除背包按鈕 ── */
+    .bk-cart-clear-btn {
+      background: none;
+      border: none;
+      color: var(--bk-danger, #c0392b);
+      font-size: 0.82rem;
+      cursor: pointer;
+      padding: 0.2rem 0.5rem;
+      font-family: inherit;
+      transition: opacity 0.15s;
+    }
+
+    .bk-cart-clear-btn:hover { opacity: 0.7; }
+
+    /* ── 項目右側（數量 + 價格）── */
+    .bk-cart-item__right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    /* ── 數量調整器 ── */
+    .bk-qty-stepper {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1.5px solid var(--bk-border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .bk-qty-btn {
+      width: 30px;
+      height: 30px;
+      background: var(--bk-bg);
+      border: none;
+      font-size: 1rem;
+      line-height: 1;
+      cursor: pointer;
+      color: var(--bk-text);
+      transition: background 0.15s;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bk-qty-btn:hover:not(:disabled) { background: var(--bk-primary); color: #fff; }
+    .bk-qty-btn:disabled { opacity: 0.35; cursor: default; }
+
+    .bk-qty-val {
+      min-width: 32px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--bk-text);
+      border-left: 1.5px solid var(--bk-border);
+      border-right: 1.5px solid var(--bk-border);
+      padding: 0 4px;
+      line-height: 30px;
+    }
+
+    /* ── 裝備刪除按鈕 ── */
+    .bk-rental-remove {
+      background: none;
+      border: none;
+      color: var(--bk-text-muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 0;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      transition: color 0.15s;
+    }
+
+    .bk-rental-remove:hover { color: var(--bk-danger, #c0392b); }
+
+    /* RWD */
+    @media (max-width: 860px) {
+      .bk-cart-layout {
+        grid-template-columns: 1fr;
+      }
+      .bk-cart-summary-col {
+        position: static;
+        order: -1;
+      }
+    }

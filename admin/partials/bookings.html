@@ -1,0 +1,148 @@
+<!-- partials/bookings.html
+     預約/租借管理頁面
+     由 core.js 的 $.load() 注入到 #contentArea
+     表格數據由 bookings.js 的 $.getJSON() 動態產生
+-->
+
+<div class="card shadow-sm border-0">
+
+  <!-- 卡片頂部：標題 + 日期快速選鈕 + 清除排序按鈕 -->
+  <!-- 舊的 #bookingStatusFilter / #paymentStatusFilter select 已移除，
+       篩選功能改由欄位標頭的漏斗 icon 負責 -->
+  <div class="card-header bg-white border-0
+              d-flex justify-content-between align-items-center flex-wrap gap-2 py-3">
+    <h6 class="fw-semibold mb-0">
+      <i class="fas fa-calendar-check me-2 text-muted"></i>預約列表
+    </h6>
+
+    <!-- 右側工具列：日期篩選 + 清除排序按鈕 -->
+    <div class="d-flex align-items-center flex-wrap gap-2">
+
+      <!-- 日期篩選器：快速選鈕 + flatpickr 自定義 + 期間文字 -->
+      <!-- 與訂單管理頁風格一致；由 bookings.js setupBookingPeriodFilter / initBookingFlatpickr 驅動 -->
+      <div class="d-flex align-items-center flex-wrap gap-2">
+        <div class="btn-group btn-group-sm" id="bookingPeriodBtns" role="group">
+          <button type="button" class="btn btn-outline-secondary" data-days="7">近 7 天</button>
+          <button type="button" class="btn btn-outline-secondary active" data-days="30">近 30 天</button>
+          <button type="button" class="btn btn-outline-secondary" data-days="month">本月</button>
+          <button type="button" class="btn btn-outline-secondary" data-days="90">近 3 個月</button>
+          <button type="button" class="btn btn-outline-secondary" data-days="custom">
+            <i class="fas fa-calendar-alt me-1"></i>自定義
+          </button>
+        </div>
+        <!-- flatpickr input：預設 hidden，點「自定義」才顯示 -->
+        <input type="text" id="bookingDateRangePicker"
+               class="form-control form-control-sm"
+               style="max-width: 230px; display: none;"
+               placeholder="開始日期 ~ 結束日期" readonly>
+        <!-- 期間文字：由 updateBookingPeriodLabel() 動態更新 -->
+        <span class="text-muted small" id="bookingPeriodLabel"></span>
+      </div>
+
+      <!-- 清除排序按鈕：只有在排序堆疊不為預設時才顯示，由 updateBookingSortUI() 控制 d-none -->
+      <button id="btnClearBookingSort" class="btn btn-sm btn-outline-secondary d-none">
+        <i class="fas fa-rotate-left me-1"></i>清除排序
+      </button>
+
+    </div>
+  </div>
+
+  <!-- 表格容器 -->
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0" id="bookingsTable">
+        <thead class="table-light">
+          <tr>
+            <!-- 預約單號：字串排序（字典序） -->
+            <th class="sortable-th" data-sort-key="id">
+              預約單號 <i class="fas fa-sort sort-icon ms-1"></i>
+            </th>
+
+            <!-- 下單日期：字串排序（ISO 格式 YYYY-MM-DD 可直接比大小） -->
+            <th class="sortable-th" data-sort-key="submitted_at">
+              下單日期 <i class="fas fa-sort sort-icon ms-1"></i>
+            </th>
+
+            <!-- 顧客姓名：不排序，不加 icon -->
+            <th>顧客姓名</th>
+
+            <!-- 訂單金額：數值排序 -->
+            <th class="sortable-th" data-sort-key="final_amount">
+              訂單金額 <i class="fas fa-sort sort-icon ms-1"></i>
+            </th>
+
+            <!-- 營區：不排序 -->
+            <th>營區</th>
+
+            <!-- 含租借：多選篩選欄位
+                 .filter-th = 相對定位基準（供 Dropdown 絕對定位）
+                 data-filter-key = 對應篩選邏輯的欄位名稱
+                 .filter-icon = 漏斗 icon，啟用時加 .active 變色
+                 .filter-dot = 紅點，有篩選條件時移除 d-none
+                 .filter-dropdown = checkbox 選單，預設 d-none -->
+            <th class="filter-th" data-filter-key="hasRental">
+              含租借
+              <i class="fas fa-filter filter-icon ms-1"></i>
+              <span class="filter-dot d-none"></span>
+              <div class="filter-dropdown d-none">
+                <label><input type="checkbox" value="true"> 有租借</label>
+                <label><input type="checkbox" value="false"> 無</label>
+              </div>
+            </th>
+
+            <!-- 付款狀態：多選篩選欄位（同上） -->
+            <th class="filter-th" data-filter-key="paymentStatus">
+              付款狀態
+              <i class="fas fa-filter filter-icon ms-1"></i>
+              <span class="filter-dot d-none"></span>
+              <div class="filter-dropdown d-none">
+                <label><input type="checkbox" value="paid"> 已付款</label>
+                <label><input type="checkbox" value="refunded"> 已退款</label>
+              </div>
+            </th>
+
+            <!-- 訂單狀態：多選篩選欄位（同上） -->
+            <th class="filter-th" data-filter-key="bookingStatus">
+              訂單狀態
+              <i class="fas fa-filter filter-icon ms-1"></i>
+              <span class="filter-dot d-none"></span>
+              <div class="filter-dropdown d-none">
+                <label><input type="checkbox" value="pending"> 待確認</label>
+                <label><input type="checkbox" value="confirmed"> 已確認</label>
+                <label><input type="checkbox" value="completed"> 已完成</label>
+                <label><input type="checkbox" value="cancelled"> 已取消</label>
+              </div>
+            </th>
+
+            <!-- 地區：多選篩選欄位（同上） -->
+            <th class="filter-th" data-filter-key="region">
+              地區
+              <i class="fas fa-filter filter-icon ms-1"></i>
+              <span class="filter-dot d-none"></span>
+              <div class="filter-dropdown d-none">
+                <label><input type="checkbox" value="北部"> 北部</label>
+                <label><input type="checkbox" value="中部"> 中部</label>
+                <label><input type="checkbox" value="南部"> 南部</label>
+                <label><input type="checkbox" value="東部"> 東部</label>
+              </div>
+            </th>
+
+            <th>操作</th>
+          </tr>
+        </thead>
+        <!-- tbody 由 bookings.js 的 renderBookingsTable() 動態填入 -->
+        <tbody id="bookingsTableBody">
+          <!-- 初始顯示 Loading 提示 -->
+          <tr>
+            <td colspan="10" class="text-center py-4">
+              <div class="spinner-border spinner-border-sm me-2"
+                   style="color: var(--admin-brand-accent);"></div>
+              <span class="text-muted">載入預約資料中...</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div><!-- end card-body -->
+
+</div><!-- end card -->

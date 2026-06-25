@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Yuruicamp 會員中心 - 管理訂單、折價券、個人資料">
+  <meta name="theme-color" content="#244d4d">
+  <title>會員中心 - Yuruicamp 露營選物</title>
+  <link rel="preconnect" href="https://picsum.photos">
+  <link rel="dns-prefetch" href="https://picsum.photos">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../booking/css/base.css">
+  <link rel="stylesheet" href="../booking/css/layout.css">
+  <link rel="stylesheet" href="../booking/css/booking.css">
+  <link rel="stylesheet" href="../booking/css/member-center.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="icon" href="../assets/icons/camping_icon.png" type="image/png">
+</head>
+<body>
+
+  <div id="header"></div>
+
+  <!-- 重點：前台會員中心只保留頁面外殼，實際顯示與互動統一載入 components/member-center.partial。 -->
+  <div id="memberCenterMount" data-component-mount="member-center"></div>
+
+  <div id="footer"></div>
+
+  <script>
+    // 重點：前台會員中心使用根目錄 data，登入狀態讀 currentUser，並保留 yuruiUser 作為 booking 相容來源。
+    window.MemberCenterConfig = {
+      dataBasePath: '../data',
+      authStorageKey: 'currentUser',
+      fallbackAuthStorageKey: 'yuruiUser',
+      homeHref: 'home.html'
+    };
+
+    window.loadMemberCenterComponent = async function () {
+      const mount = document.getElementById('memberCenterMount');
+      if (!mount) return;
+
+      try {
+        const response = await fetch('../components/member-center.partial', { cache: 'no-store' });
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        mount.innerHTML = await response.text();
+        window.initMemberCenterComponent && window.initMemberCenterComponent();
+      } catch (error) {
+        console.error('會員中心元件載入失敗', error);
+        mount.innerHTML = '<div class="mc-login-guard" style="display:flex;"><div class="mc-login-guard__box"><h2 class="mc-login-guard__title">會員中心載入失敗</h2><p class="mc-login-guard__desc">請確認目前頁面透過本機伺服器開啟。</p></div></div>';
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', window.loadMemberCenterComponent);
+  </script>
+  <script src="../js/config.js" defer></script>
+  <script src="../js/storage.js" defer></script>
+  <script src="../js/state.js" defer></script>
+  <script src="../js/formatters.js" defer></script>
+  <script src="../js/validators.js" defer></script>
+  <script src="../js/cart-service.js" defer></script>
+  <script src="../js/api-mock.js" defer></script>
+  <script src="../js/components/toast.js" defer></script>
+  <script src="../js/components/modal.js" defer></script>
+  <script src="../js/components/header.js" defer></script>
+  <script src="../js/components/cart.js" defer></script>
+  <script src="../js/components/member-center.js" defer></script>
+  <script src="../js/main.js" defer></script>
+
+</body>
+</html>

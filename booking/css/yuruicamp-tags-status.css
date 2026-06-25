@@ -1,0 +1,347 @@
+/* =========================================================
+   Yuruicamp Tags & Order Status System v1.0
+   奶油暖白 × 鼠尾草綠 × 暖光奶油金 × 粉灰警示
+   載入順序：booking.css 之後、頁面 CSS 之前
+   ========================================================= */
+
+:root {
+  /* ── 暖光奶油金標籤專屬 tokens ──
+     與 --yc-cta-* 語意不同：cta 用於互動按鈕，gold 用於資訊標籤，
+     文字色 --yc-gold-text (#6A5A2E) 與 --yc-on-cta (#4A4537) 刻意區分
+  */
+  --yc-gold-soft:        #FBF3D1;
+  --yc-gold-line:        #D9C98F;
+  --yc-gold:             #E2D39A;
+  --yc-gold-hover:       #D4C27E;
+  --yc-gold-active:      #C4AF62;
+  --yc-gold-text:        #6A5A2E;
+
+  /* ── 中性米灰 ── */
+  --yc-neutral-soft:     #F4F0E8;
+  --yc-neutral-line:     #D8CFC3;
+  --yc-neutral-text:     #625E56;
+
+  /* ── 成功綠（標籤淺色版，與 --yc-success-soft 區分）── */
+  --yc-tag-success-soft: #E7EFE3;
+  --yc-success-line:     #A8BEA0;
+  --yc-success-text:     #4F624A;
+
+  /* ── 粉灰警示 ── */
+  --yc-danger-soft:      #F4E7E4;
+  --yc-danger-line:      #D4A29D;
+  --yc-danger:           #B8645D;
+  --yc-danger-text:      #8A4842;
+
+  /* ── 已退貨（玫瑰米灰，警示程度低於退款）── */
+  --yc-return-soft:      #F3ECE7;
+  --yc-return-line:      #CDAA9C;
+  --yc-return-text:      #7A4D40;
+
+  /* ── 訂單狀態專屬邊框（標籤規格指定，比語意色略深）── */
+  --yc-refunded-line:    #C97872;
+  --yc-pending-line:     #D7B75F;
+
+  /* ── 元件尺寸 ── */
+  --yc-tag-height:       30px;
+  --yc-chip-height:      40px;
+  --yc-tag-gap:          8px;
+  --yc-transition:       180ms ease;
+}
+
+/* =========================================================
+   1. 共用基礎
+   ========================================================= */
+
+.yc-tag,
+.yc-badge,
+.yc-filter-chip,
+.yc-survey-chip,
+.yc-order-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  max-width: 100%;
+  border-radius: var(--yc-radius-pill);
+  font-family: "Noto Sans TC", "Source Han Sans TC", sans-serif;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.yc-tag,
+.yc-badge,
+.yc-order-status {
+  min-height: var(--yc-tag-height);
+  padding: 5px 11px;
+  font-size: 12px;
+  border: 1px solid transparent;
+}
+
+.yc-tag-list,
+.yc-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--yc-tag-gap);
+}
+
+/* =========================================================
+   2. 資訊標籤 Information Tag
+   用於環境屬性、設施、文章主題、商品賣點 — 主要閱讀，不可點擊
+   ========================================================= */
+
+/* 自然環境、正向屬性、核心賣點 */
+.yc-tag--green {
+  color: var(--yc-sage-dark);
+  background: var(--yc-sage-mist);
+  border-color: rgba(143, 157, 139, 0.48);
+}
+
+/* 熱門、推薦、季節精選、功能亮點、流程進行中 */
+.yc-tag--gold {
+  color: var(--yc-gold-text);
+  background: var(--yc-gold-soft);
+  border-color: var(--yc-gold-line);
+}
+
+/* 設施、規格、材質、一般主題 */
+.yc-tag--neutral {
+  color: var(--yc-neutral-text);
+  background: var(--yc-neutral-soft);
+  border-color: var(--yc-neutral-line);
+}
+
+/* 已完成、正向狀態 */
+.yc-tag--success {
+  color: var(--yc-success-text);
+  background: var(--yc-tag-success-soft);
+  border-color: var(--yc-success-line);
+}
+
+/* 退款、風險、錯誤、反向流程 */
+.yc-tag--danger {
+  color: var(--yc-danger-text);
+  background: var(--yc-danger-soft);
+  border-color: var(--yc-danger-line);
+}
+
+/* =========================================================
+   3. 篩選 Chip / 問卷 Chip
+   可點擊；顏色只表達「選中 / 未選」，不因選項文字各自變色
+   ========================================================= */
+
+.yc-filter-chip,
+.yc-survey-chip {
+  min-height: var(--yc-chip-height);
+  padding: 0 17px;
+  font-size: 14px;
+  color: var(--yc-text-secondary);
+  background: var(--yc-surface);
+  border: 1px solid var(--yc-border);
+  cursor: pointer;
+  transition:
+    color var(--yc-transition),
+    background-color var(--yc-transition),
+    border-color var(--yc-transition),
+    box-shadow var(--yc-transition),
+    transform var(--yc-transition);
+}
+
+.yc-filter-chip:hover,
+.yc-survey-chip:hover {
+  color: var(--yc-sage-dark);
+  background: var(--yc-sage-mist);
+  border-color: var(--yc-sage-light);
+}
+
+.yc-filter-chip[aria-pressed="true"],
+.yc-filter-chip.is-active,
+.yc-survey-chip[aria-pressed="true"],
+.yc-survey-chip.is-selected {
+  color: var(--yc-on-dark);
+  background: var(--yc-sage-action);
+  border-color: var(--yc-sage-action);
+}
+
+.yc-filter-chip:focus-visible,
+.yc-survey-chip:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(115, 129, 110, 0.22);
+}
+
+.yc-filter-chip:active,
+.yc-survey-chip:active {
+  transform: translateY(1px);
+}
+
+.yc-filter-chip:disabled,
+.yc-survey-chip:disabled,
+.yc-filter-chip.is-disabled,
+.yc-survey-chip.is-disabled {
+  color: #9A958D;
+  background: #F2EFE9;
+  border-color: #E2DDD3;
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+/* =========================================================
+   4. 訂單狀態 Badge
+   顯示語意狀態，不可點擊，不與篩選 chip 混用
+   ========================================================= */
+
+.yc-order-status {
+  min-width: 76px;
+  letter-spacing: 0.02em;
+}
+
+/* 待確認：中性，不突出 */
+.yc-order-status--pending-confirmation,
+[data-order-status="pending-confirmation"] {
+  color: var(--yc-neutral-text);
+  background: var(--yc-surface);
+  border-color: #B9B0A3;
+}
+
+/* 已確認：實心品牌綠，最明確的正向完成 */
+.yc-order-status--confirmed,
+[data-order-status="confirmed"] {
+  color: var(--yc-on-dark);
+  background: var(--yc-success);
+  border-color: var(--yc-success);
+}
+
+/* 已退款：粉灰警示，需與一般訂單明確區分 */
+.yc-order-status--refunded,
+[data-order-status="refunded"] {
+  color: var(--yc-danger-text);
+  background: var(--yc-danger-soft);
+  border-color: var(--yc-refunded-line);
+}
+
+/* 待出貨：奶油金，流程進行中、需要多看一眼 */
+.yc-order-status--pending-shipment,
+[data-order-status="pending-shipment"] {
+  color: var(--yc-gold-text);
+  background: var(--yc-gold-soft);
+  border-color: var(--yc-pending-line);
+}
+
+/* 已出貨：淺綠，完成節點但尚未結案 */
+.yc-order-status--shipped,
+[data-order-status="shipped"] {
+  color: var(--yc-success-text);
+  background: var(--yc-sage-mist);
+  border-color: var(--yc-sage);
+}
+
+/* 已退貨：玫瑰米灰，警示程度低於退款 */
+.yc-order-status--returned,
+[data-order-status="returned"] {
+  color: var(--yc-return-text);
+  background: var(--yc-return-soft);
+  border-color: var(--yc-return-line);
+}
+
+/* 選用狀態 icon */
+.yc-order-status::before {
+  display: inline-flex;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.yc-order-status--pending-confirmation::before { content: "○"; }
+.yc-order-status--confirmed::before            { content: "✓"; }
+.yc-order-status--refunded::before             { content: "↩"; }
+.yc-order-status--pending-shipment::before     { content: "▷"; }
+.yc-order-status--shipped::before              { content: "✓"; }
+.yc-order-status--returned::before             { content: "◀"; }
+
+/* =========================================================
+   5. 訂單篩選列
+   上方篩選列只用選中 / 未選，不讓每個選項各自變色
+   ========================================================= */
+
+.yc-order-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.yc-order-filter .yc-filter-chip {
+  min-width: 78px;
+}
+
+/* =========================================================
+   6. 後台客戶標籤
+   搭配 .yc-tag 使用（提供基礎形狀），本區塊只覆寫色彩
+   ========================================================= */
+
+.yc-customer-tag--high-value {
+  color: var(--yc-gold-text);
+  background: var(--yc-gold-soft);
+  border: 1px solid var(--yc-gold-line);
+}
+
+.yc-customer-tag--new {
+  color: var(--yc-sage-dark);
+  background: var(--yc-sage-mist);
+  border: 1px solid var(--yc-sage-light);
+}
+
+.yc-customer-tag--high-return {
+  color: var(--yc-danger-text);
+  background: var(--yc-danger-soft);
+  border: 1px solid var(--yc-danger-line);
+}
+
+/* =========================================================
+   7. 表格緊湊模式
+   ========================================================= */
+
+.yc-data-table .yc-tag,
+.yc-data-table .yc-badge,
+.yc-data-table .yc-order-status {
+  min-height: 26px;
+  padding: 4px 9px;
+  font-size: 11px;
+}
+
+/* =========================================================
+   8. RWD
+   ========================================================= */
+
+@media (max-width: 680px) {
+  .yc-tag-list,
+  .yc-chip-list,
+  .yc-order-filter {
+    gap: 7px;
+  }
+
+  .yc-filter-chip,
+  .yc-survey-chip {
+    min-height: 44px;
+    padding-inline: 16px;
+  }
+
+  .yc-order-filter .yc-filter-chip {
+    flex: 1 1 calc(50% - 7px);
+  }
+
+  .yc-order-status {
+    min-width: 72px;
+  }
+}
+
+/* =========================================================
+   9. Reduced motion
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .yc-filter-chip,
+  .yc-survey-chip {
+    transition: none;
+  }
+}

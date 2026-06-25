@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yuruicamp 賣家後台 — 登入</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- Font Awesome 6 圖示庫 -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 後台專屬樣式 -->
+  <link rel="stylesheet" href="css/admin.css">
+
+  <style>
+    /* 登入頁獨立樣式：深色漸層背景 */
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* 規格書指定：Sidebar 背景色的漸層 */
+      background: linear-gradient(135deg, #1e2329 0%, #2d3748 50%, #1a2a3a 100%);
+    }
+
+    /* 裝飾性背景圖案（露營圓圈點點） */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(36, 77, 77, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(36, 77, 77, 0.2) 0%, transparent 40%);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== 登入卡片 ========== -->
+  <div class="card shadow-lg login-card position-relative">
+    <div class="card-body">
+
+      <!-- 品牌 Logo 區塊 -->
+      <div class="text-center mb-4">
+        <!-- 帳篷 Icon 作為 Logo 替代 -->
+        <div class="mb-3">
+          <i class="fas fa-campground fs-1" style="color: var(--admin-brand-accent);"></i>
+        </div>
+        <h4 class="fw-bold mb-1" style="color: var(--admin-brand-accent);">
+          Yuruicamp 後台
+        </h4>
+        <p class="text-muted small mb-0">賣家管理系統</p>
+      </div>
+
+      <!-- 登入表單 -->
+      <form id="loginForm" novalidate>
+
+        <!-- 員工 ID 欄位 -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="username">
+            <i class="fas fa-id-badge me-1 text-muted"></i>員工 ID
+          </label>
+          <input type="text"
+                 class="form-control"
+                 id="username"
+                 placeholder="例：01 或 02"
+                 autocomplete="username">
+          <!-- 錯誤提示（預設隱藏） -->
+          <div class="invalid-feedback">請輸入帳號</div>
+        </div>
+
+        <!-- 密碼欄位 -->
+        <div class="mb-4">
+          <label class="form-label fw-semibold" for="password">
+            <i class="fas fa-lock me-1 text-muted"></i>密碼
+          </label>
+          <div class="input-group">
+            <input type="password"
+                   class="form-control"
+                   id="password"
+                   placeholder="請輸入密碼"
+                   autocomplete="current-password">
+            <!-- 顯示/隱藏密碼切換按鈕 -->
+            <button class="btn btn-outline-secondary" type="button" id="togglePassword"
+                    title="顯示/隱藏密碼">
+              <i class="fas fa-eye" id="toggleIcon"></i>
+            </button>
+          </div>
+          <div class="invalid-feedback">請輸入密碼</div>
+        </div>
+
+        <!-- 登入按鈕 -->
+        <button type="submit"
+                class="btn w-100 text-white fw-semibold py-2"
+                style="background-color: var(--admin-brand-accent);"
+                id="loginBtn">
+          <i class="fas fa-sign-in-alt me-2"></i>登入後台
+        </button>
+
+      </form>
+
+      <!-- 提示文字（Demo 說明） -->
+      <div class="text-center mt-4">
+        <small class="text-muted">
+          <i class="fas fa-info-circle me-1"></i>
+          Demo：員工 ID <code>01</code>（老闆）/ <code>02</code>（員工），密碼任意非空即可
+        </small>
+      </div>
+
+      <!-- 登入錯誤訊息區 -->
+      <div id="loginError" class="alert alert-danger mt-3 d-none small mb-0" role="alert"></div>
+
+    </div>
+  </div>
+
+  <!-- ========== JavaScript ========== -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- 員工資料層（localStorage 種子 + 查詢） -->
+  <script src="js/permissions.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+      /** 顯示登入錯誤訊息 / Show login error message */
+      function showLoginError(message) {
+        $('#loginError').removeClass('d-none').text(message);
+      }
+
+      function hideLoginError() {
+        $('#loginError').addClass('d-none').text('');
+      }
+
+      // === 顯示/隱藏密碼切換 ===
+      $('#togglePassword').on('click', function () {
+        const $pwd = $('#password');
+        const $icon = $('#toggleIcon');
+
+        if ($pwd.attr('type') === 'password') {
+          // 切換為明文顯示
+          $pwd.attr('type', 'text');
+          $icon.removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+          // 切換回密碼遮蔽
+          $pwd.attr('type', 'password');
+          $icon.removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+      });
+
+      // === 登入表單送出事件 ===
+      // 驗證：員工 ID 須存在且啟用；密碼必填但不驗證內容
+      // API 預留：POST /api/admin/login
+      $('#loginForm').on('submit', function (e) {
+        e.preventDefault();
+
+        const employeeId = $('#username').val().trim();
+        const password = $('#password').val().trim();
+
+        $('#username, #password').removeClass('is-invalid');
+        hideLoginError();
+
+        // 分開提示：帳號空 / 密碼空
+        if (!employeeId) {
+          $('#username').addClass('is-invalid');
+          showLoginError('請輸入帳號');
+          return;
+        }
+        if (!password) {
+          $('#password').addClass('is-invalid');
+          showLoginError('請輸入密碼');
+          return;
+        }
+
+        // 查 localStorage 員工資料
+        const employee = window.findEmployeeById(employeeId);
+        if (!employee || !employee.isActive) {
+          showLoginError('帳號不存在或已停用');
+          return;
+        }
+
+        const $btn = $('#loginBtn');
+        $btn.prop('disabled', true)
+            .html('<span class="spinner-border spinner-border-sm me-2"></span>登入中...');
+
+        setTimeout(function () {
+          // 寫入 sessionStorage（5 個 key）
+          sessionStorage.setItem('adminLoggedIn', 'true');
+          sessionStorage.setItem('adminId', employee.id);
+          sessionStorage.setItem('adminName', employee.displayName);
+          sessionStorage.setItem('isSuperAdmin', String(!!employee.isSuperAdmin));
+          sessionStorage.setItem('adminPermissions', JSON.stringify(employee.permissions || {}));
+          window.location.href = 'dashboard.html';
+        }, 800);
+      });
+
+      // === Input 取得焦點時移除錯誤樣式 ===
+      $('#username, #password').on('focus', function () {
+        $(this).removeClass('is-invalid');
+        hideLoginError();
+      });
+
+      // === 鍵盤 Enter 觸發登入 ===
+      $('#username, #password').on('keypress', function (e) {
+        if (e.key === 'Enter') {
+          $('#loginForm').trigger('submit');
+        }
+      });
+
+    });
+  </script>
+
+</body>
+</html>

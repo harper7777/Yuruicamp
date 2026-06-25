@@ -1,0 +1,107 @@
+<!-- partials/permissions.html
+     權限管理頁面 — 員工帳號與逐頁權限控管
+     由 core.js 的 $.load() 注入到 #contentArea
+     列表與 Modal 邏輯由 permissions.js 處理
+-->
+
+<div class="card shadow-sm border-0">
+  <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+    <h6 class="fw-semibold mb-0">
+      <i class="fas fa-user-shield me-2 text-muted"></i>權限管理
+    </h6>
+    <button type="button" class="btn btn-sm text-white" id="addEmployeeBtn"
+            style="background-color: var(--admin-brand-accent);">
+      <i class="fas fa-plus me-1"></i>新增員工
+    </button>
+  </div>
+
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>員工編號</th>
+            <th>顯示名稱</th>
+            <th>身份</th>
+            <th>狀態</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="employeeTableBody">
+          <tr>
+            <td colspan="5" class="text-center text-muted py-4">載入中...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 新增 / 編輯員工 Modal -->
+<div class="modal fade" id="employeeModal" tabindex="-1"
+     aria-labelledby="employeeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="employeeModalLabel">新增員工</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+      </div>
+      <div class="modal-body">
+        <form id="employeeForm" novalidate>
+          <!-- 員工編號（自動產生，不可改） -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="empIdDisplay">員工編號</label>
+            <input type="text" class="form-control" id="empIdDisplay" readonly>
+          </div>
+
+          <!-- 顯示名稱（必填） -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="empDisplayName">
+              顯示名稱 <span class="text-danger">*</span>
+            </label>
+            <input type="text" class="form-control" id="empDisplayName"
+                   placeholder="例：張店員" required>
+            <div class="invalid-feedback">請輸入顯示名稱</div>
+          </div>
+
+          <!-- 設為超級管理員 -->
+          <div class="mb-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="empIsSuperAdmin">
+              <label class="form-check-label fw-semibold" for="empIsSuperAdmin">
+                設為超級管理員（擁有全部頁面權限）
+              </label>
+            </div>
+            <small class="text-muted">勾選後下方權限矩陣將全開且鎖定</small>
+          </div>
+
+          <!-- 9 頁權限矩陣 -->
+          <h6 class="fw-semibold mb-2">
+            <i class="fas fa-th-list me-2 text-muted"></i>頁面權限
+          </h6>
+          <div class="table-responsive border rounded">
+            <table class="table table-sm mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>頁面</th>
+                  <th class="text-center" style="width: 80px;">查看</th>
+                  <th class="text-center" style="width: 80px;">編輯</th>
+                </tr>
+              </thead>
+              <tbody id="permissionMatrixBody">
+                <!-- 由 permissions.js 動態填入 -->
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+        <button type="button" class="btn text-white" id="saveEmployeeBtn"
+                style="background-color: var(--admin-brand-accent);">
+          <i class="fas fa-save me-1"></i>儲存
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

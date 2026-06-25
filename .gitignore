@@ -1,0 +1,44 @@
+﻿# Dependencies
+node_modules/
+
+# Package manager
+# Commit package-lock.json when using npm.
+# Commit yarn.lock when using Yarn.
+
+# IDE and operating system files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Build output
+dist/
+build/
+.cache/
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+temp/
+
+# Archives
+*.zip
+*.rar
+*.7z
+
+# Large local video not stored in Git
+assets/videos/hero_video.mp4
+
+# Local test directory
+YuruicampTest/

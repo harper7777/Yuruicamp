@@ -1,0 +1,88 @@
+<!-- partials/movement.html
+     庫存異動紀錄頁面
+     由 core.js 的 $.load() 注入到 #contentArea
+     表格數據由 movement.js 的 $.getJSON() 動態產生
+-->
+
+<div class="card shadow-sm border-0">
+
+  <!-- 卡片頂部：標題 -->
+  <div class="card-header bg-white border-0
+              d-flex justify-content-between align-items-center py-3">
+    <h6 class="fw-semibold mb-0">
+      <i class="fas fa-right-left me-2 text-muted"></i>庫存異動紀錄
+    </h6>
+  </div>
+
+  <!-- 表格容器 -->
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0" id="movementTable">
+        <thead class="table-light">
+          <tr>
+            <th>連結</th>
+            <th>異動日期</th>
+            <th>負責員工 ID</th>
+            <th>明細筆數</th>
+            <th>異動性質</th>
+          </tr>
+        </thead>
+        <!-- tbody 由 movement.js 的 renderMovementTable() 動態填入 -->
+        <tbody id="movementTableBody">
+          <tr>
+            <td colspan="5" class="text-center py-4">
+              <div class="spinner-border spinner-border-sm me-2"
+                   style="color: var(--admin-brand-accent);"></div>
+              <span class="text-muted">載入庫存異動紀錄中...</span>
+            </td>
+          </tr>
+          <!-- colspan 需對應 thead 5 欄 -->
+        </tbody>
+      </table>
+    </div>
+  </div><!-- end card-body -->
+
+</div><!-- end card -->
+
+<!-- 庫存異動明細 Modal -->
+<div class="modal fade" id="movementDetailModal" tabindex="-1"
+     aria-labelledby="movementDetailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="movementDetailModalLabel">
+          庫存異動明細 — <span id="modalMovementId" class="text-muted"></span>
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3 mb-3">
+          <div class="col-sm-6">
+            <small class="text-muted d-block">異動日期</small>
+            <span id="modalMovementDate" class="fw-semibold"></span>
+          </div>
+          <div class="col-sm-6">
+            <small class="text-muted d-block">員工 ID</small>
+            <span id="modalMovementEmployeeId" class="fw-semibold"></span>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>商品名稱</th>
+                <th class="text-center">數量</th>
+                <th>配送地</th>
+                <th>接收地</th>
+                <th>異動性質</th>
+              </tr>
+            </thead>
+            <tbody id="modalMovementItems">
+              <!-- movement.js 動態填入 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

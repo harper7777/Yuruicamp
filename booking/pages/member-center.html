@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#73816E">
+  <meta name="description" content="Yuruicamp 會員中心 - 管理會員資料、購買紀錄與預約租借紀錄">
+  <link rel="icon" href="../../assets/icons/camping_icon.png" type="image/png">
+  <title>會員中心 | Yuruicamp 預約系統</title>
+
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/booking.css">
+  <link rel="stylesheet" href="../css/yuruicamp-tags-status.css">
+  <link rel="stylesheet" href="../css/member-center.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+
+  <div id="booking-header"></div>
+
+  <!-- 重點：booking 會員中心保留 booking 外殼，顯示內容改與前台共用 components/member-center.partial。 -->
+  <div id="memberCenterMount" data-component-mount="member-center"></div>
+
+  <div id="booking-footer"></div>
+
+  <script src="../js/layout.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    // 重點：booking 會員中心使用 booking 登入來源 yuruiUser，資料仍讀根目錄 data。
+    window.MemberCenterConfig = {
+      dataBasePath: '../../data',
+      authStorageKey: 'yuruiUser',
+      fallbackAuthStorageKey: 'currentUser',
+      homeHref: './camp-search.html'
+    };
+
+    // 重點：保留既有 jQuery partial loader，但補上 fetch fallback，避免 CDN 失敗時會員中心無法顯示。
+    function loadHtml(targetSelector, path, callback) {
+      const target = document.querySelector(targetSelector);
+      if (!target) return;
+
+      if (window.jQuery) {
+        window.jQuery(target).load(path, function (_response, status) {
+          callback && callback(status !== 'error');
+        });
+        return;
+      }
+
+      fetch(path, { cache: 'no-store' })
+        .then(function (response) {
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          return response.text();
+        })
+        .then(function (html) {
+          target.innerHTML = html;
+          callback && callback(true);
+        })
+        .catch(function (error) {
+          console.error('booking partial 載入失敗', path, error);
+          callback && callback(false);
+        });
+    }
+
+    function loadScript(path) {
+      const script = document.createElement('script');
+      script.src = path;
+      document.head.appendChild(script);
+    }
+
+    function initBookingMemberCenterPage() {
+      window.loadBookingSharedLayout && window.loadBookingSharedLayout();
+      loadHtml('#memberCenterMount', '../../components/member-center.partial', function (ok) {
+        if (!ok) {
+          document.getElementById('memberCenterMount').innerHTML = '<div class="mc-login-guard" style="display:flex;"><div class="mc-login-guard__box"><h2 class="mc-login-guard__title">會員中心載入失敗</h2><p class="mc-login-guard__desc">請確認目前頁面透過本機伺服器開啟。</p></div></div>';
+          return;
+        }
+        window.initMemberCenterComponent && window.initMemberCenterComponent();
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initBookingMemberCenterPage);
+  </script>
+  <script src="../js/booking-utils.js"></script>
+  <script src="../../js/components/member-center.js"></script>
+
+</body>
+</html>

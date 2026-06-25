@@ -1,0 +1,131 @@
+[
+  {
+    "id": "ord-001",
+    "userId": "user-001",
+    "orderNumber": "#ORD-20260101",
+    "items": [
+      { "productId": "prod-001", "name": "輕量化露營帳篷 2人", "price": 2999, "quantity": 1, "image": "https://picsum.photos/seed/tent1/80/80" },
+      { "productId": "prod-005", "name": "USB 充電 LED 露營燈", "price": 399, "quantity": 2, "image": "https://picsum.photos/seed/lamp1/80/80" }
+    ],
+    "subtotal": 3797,
+    "points": 380,
+    "shippingFee": 0,
+    "discount": 0,
+    "total": 3797,
+    "status": "delivered",
+    "paymentStatus": "unpaid",
+    "shippingMethod": "delivery",
+    "shippingAddress": "台北市信義區信義路五段100號",
+    "payment": "credit-card",
+    "userNote": "",
+    "createdAt": "2026-01-01",
+    "deliveredAt": "2026-01-05",
+    "trackingNumber": "9261290100830450622739",
+    "canReview": true,
+    "reviewed": false
+  },
+  {
+    "id": "ord-002",
+    "userId": "user-001",
+    "orderNumber": "#ORD-20260215",
+    "items": [
+      { "productId": "prod-002", "name": "專業登山背包 65L", "price": 4999, "quantity": 1, "image": "https://picsum.photos/seed/pack1/80/80" }
+    ],
+    "subtotal": 4999,
+    "points": 500,
+    "shippingFee": 0,
+    "coupons": [
+      { "code": "CAMP200", "type": "fixed", "discount": 200 }
+    ],
+    "discount": 200,
+    "total": 4799,
+    "status": "shipped",
+    "paymentStatus": "unpaid",
+    "shippingMethod": "delivery",
+    "shippingAddress": "台北市信義區信義路五段100號",
+    "payment": "line-pay",
+    "userNote": "",
+    "createdAt": "2026-02-15",
+    "trackingNumber": "9261290100830450622740",
+    "canReview": false,
+    "reviewed": false
+  },
+  {
+    "id": "ord-003",
+    "userId": "user-001",
+    "orderNumber": "#ORD-20260310",
+    "items": [
+      { "productId": "prod-007", "name": "防風防水戶外衝鋒衣", "price": 3599, "quantity": 1, "image": "https://picsum.photos/seed/jacket1/80/80" },
+      { "productId": "prod-017", "name": "快乾排汗機能T恤", "price": 699, "quantity": 2, "image": "https://picsum.photos/seed/tshirt1/80/80" }
+    ],
+    "subtotal": 4997,
+    "points": 500,
+    "shippingFee": 0,
+    "coupons": [
+      { "code": "SUMMER10", "type": "percent", "discount": 10, "amount": 500 }
+    ],
+    "discount": 500,
+    "total": 4497,
+    "status": "unshipped",
+    "paymentStatus": "paid",
+    "shippingMethod": "delivery",
+    "shippingAddress": "台北市信義區信義路五段100號",
+    "payment": "credit-card",
+    "userNote": "",
+    "createdAt": "2026-03-10",
+    "canReview": false,
+    "reviewed": false
+  },
+  {
+    "id": "ord-004",
+    "userId": "user-001",
+    "orderNumber": "#ORD-20260401",
+    "items": [
+      { "productId": "prod-008", "name": "攜帶式淨水器", "price": 899, "quantity": 1, "image": "https://picsum.photos/seed/filter1/80/80" },
+      { "productId": "prod-011", "name": "登山健行手杖（一對）", "price": 1299, "quantity": 1, "image": "https://picsum.photos/seed/poles1/80/80" }
+    ],
+    "subtotal": 2198,
+    "points": 220,
+    "shippingFee": 60,
+    "discount": 0,
+    "total": 2258,
+    "status": "returned",
+    "paymentStatus": "paid",
+    "shippingMethod": "delivery",
+    "shippingAddress": "台北市信義區信義路五段100號",
+    "payment": "cod",
+    "userNote": "",
+    "createdAt": "2026-04-01",
+    "cancelReason": "訂購錯誤",
+    "canReview": false,
+    "reviewed": false
+  },
+  {
+    "id": "ord-005",
+    "userId": "user-001",
+    "orderNumber": "#ORD-20260510",
+    "items": [
+      { "productId": "prod-012", "name": "鈦合金炊具組 4件套", "price": 2199, "quantity": 1, "image": "https://picsum.photos/seed/cook1/80/80" },
+      { "productId": "prod-006", "name": "戶外輕量折疊椅", "price": 799, "quantity": 2, "image": "https://picsum.photos/seed/chair1/80/80" }
+    ],
+    "subtotal": 3797,
+    "points": 380,
+    "shippingFee": 0,
+    "coupons": [
+      { "code": "WELCOME100", "type": "fixed", "discount": 100 },
+      { "code": "SUMMER10", "type": "percent", "discount": 10, "amount": 380 }
+    ],
+    "discount": 480,
+    "total": 3317,
+    "status": "delivered",
+    "paymentStatus": "unpaid",
+    "shippingMethod": "store",
+    "storeAddress": "台北市信義區信義路五段100號（台北門市）",
+    "payment": "credit-card",
+    "userNote": "",
+    "createdAt": "2026-05-10",
+    "deliveredAt": "2026-05-13",
+    "canReview": true,
+    "reviewed": true
+  }
+]

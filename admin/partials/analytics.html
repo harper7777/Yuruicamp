@@ -1,0 +1,472 @@
+<!-- partials/analytics.html
+     分析報表頁面 v2 — 裝備商城 / 預約・租借 雙 Tab
+     由 core.js 的 $.load() 注入到 #contentArea
+     注意：此檔案不含 <html>/<head>/<body> 標籤，只有內容區塊
+-->
+
+<!-- ===== Tab 導覽列 ===== -->
+<ul class="nav nav-tabs border-bottom-0 mb-0" id="analyticsTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active fw-semibold px-4 py-2"
+            id="shopTab"
+            data-bs-toggle="tab"
+            data-bs-target="#shopTabPane"
+            type="button" role="tab"
+            aria-controls="shopTabPane" aria-selected="true">
+      <i class="fas fa-shopping-cart me-2"></i>裝備商城
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link fw-semibold px-4 py-2"
+            id="bookingTab"
+            data-bs-toggle="tab"
+            data-bs-target="#bookingTabPane"
+            type="button" role="tab"
+            aria-controls="bookingTabPane" aria-selected="false">
+      <i class="fas fa-campground me-2"></i>預約 / 租借
+    </button>
+  </li>
+</ul>
+
+<!-- ===== Tab 內容容器 ===== -->
+<div class="tab-content border border-top-0 rounded-bottom bg-white p-4 shadow-sm"
+     id="analyticsTabContent">
+
+  <!-- ╔══════════════════════════════════╗
+       ║     Tab A：裝備商城               ║
+       ╚══════════════════════════════════╝ -->
+  <div class="tab-pane fade show active"
+       id="shopTabPane" role="tabpanel" aria-labelledby="shopTab">
+
+    <!-- ── 期間篩選器 ── -->
+    <div class="d-flex align-items-center flex-wrap gap-2 mb-4">
+      <span class="text-muted small me-1">期間：</span>
+      <!-- 快速選鈕（data-days 由 analytics.js 讀取）-->
+      <div class="btn-group btn-group-sm" id="shopPeriodBtns" role="group">
+        <button type="button" class="btn btn-outline-secondary" data-days="7">近 7 天</button>
+        <button type="button" class="btn btn-outline-secondary active" data-days="30">近 30 天</button>
+        <button type="button" class="btn btn-outline-secondary" data-days="month">本月</button>
+        <button type="button" class="btn btn-outline-secondary" data-days="90">近 3 個月</button>
+        <button type="button" class="btn btn-outline-secondary" data-days="custom">
+          <i class="fas fa-calendar-alt me-1"></i>自定義
+        </button>
+      </div>
+      <!-- flatpickr 隱藏 input，點「自定義」後顯示 -->
+      <input type="text" id="shopDateRangePicker"
+             class="form-control form-control-sm"
+             style="max-width: 230px; display: none;"
+             placeholder="開始日期 ~ 結束日期" readonly>
+      <!-- 目前篩選期間文字說明 -->
+      <span class="text-muted small" id="shopPeriodLabel"></span>
+    </div>
+
+    <!-- ── 圖表區：折線圖（左 8/12）+ 甜甜圈（右 4/12） ── -->
+    <div class="row g-4 mb-4">
+
+      <!-- 折線圖：銷售額趨勢 -->
+      <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-white border-0 pt-3 pb-0
+                       d-flex align-items-center">
+            <!-- 左欄：圖表標題 -->
+            <h6 class="fw-semibold mb-0 flex-fill">
+              <i class="fas fa-chart-line me-2" style="color: var(--admin-brand-accent);"></i>
+              銷售額趨勢
+            </h6>
+            <!-- 中欄：期間銷售總額（由 analytics.js updateShopLineTotal() 動態更新） -->
+            <div class="flex-fill text-center">
+              <span id="shopLineTotalBadge"
+                    class="fw-bold fs-4"
+                    style="color: var(--admin-brand-accent);">NT$ 0</span>
+            </div>
+            <!-- 右欄：空白佔位，確保中欄金額視覺上真正置中 -->
+            <div class="flex-fill"></div>
+          </div>
+          <div class="card-body">
+            <!-- 空資料提示（無銷售時顯示，由 analytics.js 控制）-->
+            <div id="shopLineChartEmpty" class="text-center text-muted py-4 d-none">
+              <i class="fas fa-chart-line fa-2x mb-2 text-secondary"></i>
+              <p class="mb-0 small">此期間無銷售資料</p>
+            </div>
+            <!-- Canvas ID 固定，由 analytics.js 繪製 Chart.js 折線圖 -->
+            <canvas id="shopSalesLineChart" height="100"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- 甜甜圈圖：商品類別營收佔比 -->
+      <div class="col-lg-4">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-white border-0 pt-3 pb-0">
+            <h6 class="fw-semibold mb-0">
+              <i class="fas fa-chart-pie me-2" style="color: var(--admin-brand-accent);"></i>
+              商品類別營收佔比
+            </h6>
+          </div>
+          <div class="card-body">
+            <div id="shopDonutEmpty" class="text-center text-muted py-4 d-none">
+              <i class="fas fa-chart-pie fa-2x mb-2 text-secondary"></i>
+              <p class="mb-0 small">此期間無銷售資料</p>
+            </div>
+            <canvas id="shopCategoryDonutChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end 圖表 row -->
+
+    <!-- ── KPI 卡片 第一列：訂單數 / 待出貨（銷售額已移至折線圖標題） ── -->
+    <div class="row g-3 mb-3">
+
+      <!-- 卡片 1：本期訂單數 -->
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100 kpi-clickable" data-kpi-id="shopKpiOrders">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="kpi-icon-wrap" style="background: rgba(13,110,253,0.1);">
+              <i class="fas fa-shopping-cart fs-4 text-primary"></i>
+            </div>
+            <div>
+              <p class="text-muted small mb-1">本期訂單數</p>
+              <h3 class="fw-bold mb-0">
+                <span id="shopKpiOrders">
+                  <span class="spinner-border spinner-border-sm text-secondary"></span>
+                </span>
+                <span class="fs-6 text-muted"> 筆</span>
+              </h3>
+              <small class="text-muted" id="shopKpiOrdersNote">計算中...</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 卡片 2：待出貨（不受期間篩選，永遠顯示全部未出貨） -->
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100 kpi-clickable" data-kpi-id="shopKpiPending">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="kpi-icon-wrap" style="background: rgba(255,193,7,0.15);">
+              <i class="fas fa-truck fs-4 text-warning"></i>
+            </div>
+            <div>
+              <p class="text-muted small mb-1">待出貨訂單</p>
+              <h3 class="fw-bold mb-0">
+                <span id="shopKpiPending">
+                  <span class="spinner-border spinner-border-sm text-secondary"></span>
+                </span>
+                <span class="fs-6 text-muted"> 筆</span>
+              </h3>
+              <!-- 此卡不受期間篩選，永遠顯示當前全部待出貨 -->
+              <small class="text-muted">需盡快出貨（全部）</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end 第一列 -->
+
+    <!-- ── KPI 卡片 第二列：退款 / 已售件數 / 低庫存 ── -->
+    <div class="row g-3 mb-4">
+
+      <!-- 卡片 4：退貨/退款 -->
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100 kpi-clickable" data-kpi-id="shopKpiRefund">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="kpi-icon-wrap" style="background: rgba(220,53,69,0.1);">
+              <i class="fas fa-undo fs-4 text-danger"></i>
+            </div>
+            <div>
+              <p class="text-muted small mb-1">退貨 / 退款</p>
+              <h3 class="fw-bold mb-0">
+                <span id="shopKpiRefund">
+                  <span class="spinner-border spinner-border-sm text-secondary"></span>
+                </span>
+                <span class="fs-6 text-muted"> 筆</span>
+              </h3>
+              <small class="text-muted" id="shopKpiRefundNote">計算中...</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 卡片 5：已售商品件數 -->
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100 kpi-clickable" data-kpi-id="shopKpiSoldQty">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="kpi-icon-wrap" style="background: rgba(25,135,84,0.1);">
+              <i class="fas fa-box fs-4 text-success"></i>
+            </div>
+            <div>
+              <p class="text-muted small mb-1">已售商品件數</p>
+              <h3 class="fw-bold mb-0">
+                <span id="shopKpiSoldQty">
+                  <span class="spinner-border spinner-border-sm text-secondary"></span>
+                </span>
+                <span class="fs-6 text-muted"> 件</span>
+              </h3>
+              <small class="text-muted">已出貨訂單商品加總</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 卡片 6：低庫存商品（不受期間篩選，永遠顯示當前庫存狀態） -->
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100 kpi-clickable" data-kpi-id="shopKpiLowStock">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="kpi-icon-wrap" style="background: rgba(255,107,53,0.1);">
+              <i class="fas fa-exclamation-triangle fs-4" style="color: #e8591a;"></i>
+            </div>
+            <div>
+              <p class="text-muted small mb-1">低庫存商品</p>
+              <h3 class="fw-bold mb-0">
+                <span id="shopKpiLowStock">
+                  <span class="spinner-border spinner-border-sm text-secondary"></span>
+                </span>
+                <span class="fs-6 text-muted"> 件</span>
+              </h3>
+              <small class="text-muted">庫存 &lt; 5 件（全商品）</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end 第二列 -->
+
+  </div><!-- end Tab A：裝備商城 -->
+
+
+  <!-- ╔══════════════════════════════════╗
+       ║     Tab B：預約 / 租借            ║
+       ╚══════════════════════════════════╝ -->
+  <div class="tab-pane fade"
+       id="bookingTabPane" role="tabpanel" aria-labelledby="bookingTab">
+
+    <!-- ── 期間篩選器 ── -->
+    <div class="d-flex align-items-center flex-wrap gap-2 mb-4">
+      <span class="text-muted small me-1">期間：</span>
+      <div class="btn-group btn-group-sm" id="bookingPeriodBtns" role="group">
+        <button type="button" class="btn btn-outline-secondary" data-days="7">近 7 天</button>
+        <button type="button" class="btn btn-outline-secondary active" data-days="30">近 30 天</button>
+        <button type="button" class="btn btn-outline-secondary" data-days="month">本月</button>
+        <button type="button" class="btn btn-outline-secondary" data-days="90">近 3 個月</button>
+        <button type="button" class="btn btn-outline-secondary" data-days="custom">
+          <i class="fas fa-calendar-alt me-1"></i>自定義
+        </button>
+      </div>
+      <input type="text" id="bookingDateRangePicker"
+             class="form-control form-control-sm"
+             style="max-width: 230px; display: none;"
+             placeholder="開始日期 ~ 結束日期" readonly>
+      <span class="text-muted small" id="bookingPeriodLabel"></span>
+    </div>
+
+    <!-- ── 圖表區上半：折線圖（左 8/12）+ 甜甜圈（右 4/12） ── -->
+    <div class="row g-4 mb-4">
+
+      <!-- 折線圖：預約收入趨勢 -->
+      <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-white border-0 pt-3 pb-0
+                       d-flex align-items-center">
+            <!-- 左欄：圖表標題 -->
+            <h6 class="fw-semibold mb-0 flex-fill">
+              <i class="fas fa-chart-line me-2" style="color: var(--admin-brand-accent);"></i>
+              預約收入趨勢
+            </h6>
+            <!-- 中欄：期間預約總額（由 analytics.js updateBookingLineTotal() 動態更新） -->
+            <div class="flex-fill text-center">
+              <span id="bookingLineTotalBadge"
+                    class="fw-bold fs-4"
+                    style="color: var(--admin-brand-accent);">NT$ 0</span>
+            </div>
+            <!-- 右欄：空白佔位，確保中欄金額視覺上真正置中 -->
+            <div class="flex-fill"></div>
+          </div>
+          <div class="card-body">
+            <div id="bookLineChartEmpty" class="text-center text-muted py-4 d-none">
+              <i class="fas fa-chart-line fa-2x mb-2 text-secondary"></i>
+              <p class="mb-0 small">此期間無預約資料</p>
+            </div>
+            <canvas id="bookingRevenueLineChart" height="100"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- 甜甜圈圖：租借裝備類別佔比 -->
+      <div class="col-lg-4">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-white border-0 pt-3 pb-0">
+            <h6 class="fw-semibold mb-0">
+              <i class="fas fa-chart-pie me-2" style="color: var(--admin-brand-accent);"></i>
+              租借裝備類別佔比
+            </h6>
+          </div>
+          <div class="card-body">
+            <div id="rentalDonutEmpty" class="text-center text-muted py-4 d-none">
+              <i class="fas fa-chart-pie fa-2x mb-2 text-secondary"></i>
+              <p class="mb-0 small">此期間無租借資料</p>
+            </div>
+            <canvas id="rentalCategoryDonutChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end 圖表上半 -->
+
+    <!-- ── KPI 卡片 第一列：待確認 / 取消率（預約收入已移至折線圖標題） ── -->
+    <div class="row g-3 mb-3">
+
+      <!-- 卡片 1：待確認預約（不受期間篩選，永遠顯示當前全部 pending） -->
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100 kpi-clickable" data-kpi-id="bookKpiPending">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="kpi-icon-wrap" style="background: rgba(255,193,7,0.15);">
+              <i class="fas fa-clock fs-4 text-warning"></i>
+            </div>
+            <div>
+              <p class="text-muted small mb-1">待確認預約</p>
+              <h3 class="fw-bold mb-0">
+                <span id="bookKpiPending">
+                  <span class="spinner-border spinner-border-sm text-secondary"></span>
+                </span>
+                <span class="fs-6 text-muted"> 筆</span>
+              </h3>
+              <small class="text-muted">需人工確認（全部）</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 卡片 2：取消率 -->
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100 kpi-clickable" data-kpi-id="bookKpiCancelRate">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="kpi-icon-wrap" style="background: rgba(220,53,69,0.1);">
+              <i class="fas fa-ban fs-4 text-danger"></i>
+            </div>
+            <div>
+              <p class="text-muted small mb-1">取消率</p>
+              <h3 class="fw-bold mb-0" id="bookKpiCancelRate">
+                <span class="spinner-border spinner-border-sm text-secondary"></span>
+              </h3>
+              <small class="text-muted" id="bookKpiCancelNote">計算中...</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end 第一列 -->
+
+    <!-- ── KPI 卡片 第二列：已完成 / 租借費 / 租借佔比 ── -->
+    <div class="row g-3 mb-4">
+
+      <!-- 卡片 4：已完成預約 -->
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100 kpi-clickable" data-kpi-id="bookKpiCompleted">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="kpi-icon-wrap" style="background: rgba(25,135,84,0.1);">
+              <i class="fas fa-check-circle fs-4 text-success"></i>
+            </div>
+            <div>
+              <p class="text-muted small mb-1">已完成預約</p>
+              <h3 class="fw-bold mb-0">
+                <span id="bookKpiCompleted">
+                  <span class="spinner-border spinner-border-sm text-secondary"></span>
+                </span>
+                <span class="fs-6 text-muted"> 筆</span>
+              </h3>
+              <small class="text-muted">顧客完成露營行程</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 卡片 5：裝備租借費（絕對金額 NT$） -->
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100 kpi-clickable" data-kpi-id="bookKpiRentalAmt">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="kpi-icon-wrap" style="background: rgba(13,110,253,0.1);">
+              <i class="fas fa-hiking fs-4 text-primary"></i>
+            </div>
+            <div>
+              <p class="text-muted small mb-1">裝備租借費</p>
+              <h3 class="fw-bold mb-0" id="bookKpiRentalAmt">
+                <span class="spinner-border spinner-border-sm text-secondary"></span>
+              </h3>
+              <small class="text-muted">租借裝備費用合計</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 卡片 6：租借費佔比（%） -->
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100 kpi-clickable" data-kpi-id="bookKpiRentalRatio">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="kpi-icon-wrap" style="background: rgba(111,66,193,0.1);">
+              <i class="fas fa-percentage fs-4" style="color: #6f42c1;"></i>
+            </div>
+            <div>
+              <p class="text-muted small mb-1">租借費佔比</p>
+              <h3 class="fw-bold mb-0" id="bookKpiRentalRatio">
+                <span class="spinner-border spinner-border-sm text-secondary"></span>
+              </h3>
+              <small class="text-muted">租借費 / 預約總收入</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end 第二列 -->
+
+    <!-- ── 圖表區下半：各營地長條圖（左 6/12）+ 各地區長條圖（右 6/12） ── -->
+    <div class="row g-4">
+
+      <!-- 水平長條圖：各營地預約筆數 -->
+      <div class="col-lg-6">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-white border-0 pt-3 pb-0">
+            <h6 class="fw-semibold mb-0">
+              <i class="fas fa-map-marker-alt me-2" style="color: var(--admin-brand-accent);"></i>
+              各營地預約筆數
+            </h6>
+          </div>
+          <div class="card-body">
+            <div id="campgroundBarEmpty" class="text-center text-muted py-4 d-none">
+              <i class="fas fa-campground fa-2x mb-2 text-secondary"></i>
+              <p class="mb-0 small">此期間無預約資料</p>
+            </div>
+            <!-- campgroundBarCanvasWrap：show/hide 由 analytics.js 控制 -->
+            <div id="campgroundBarCanvasWrap" style="position: relative; height: 260px;">
+              <canvas id="campgroundBookingBarChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 垂直長條圖：各地區預約收入 -->
+      <div class="col-lg-6">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-white border-0 pt-3 pb-0">
+            <h6 class="fw-semibold mb-0">
+              <i class="fas fa-map me-2" style="color: var(--admin-brand-accent);"></i>
+              各地區預約收入
+            </h6>
+          </div>
+          <div class="card-body">
+            <div id="regionBarEmpty" class="text-center text-muted py-4 d-none">
+              <i class="fas fa-map fa-2x mb-2 text-secondary"></i>
+              <p class="mb-0 small">此期間無預約資料</p>
+            </div>
+            <!-- regionBarCanvasWrap：show/hide 由 analytics.js 控制 -->
+            <div id="regionBarCanvasWrap" style="position: relative; height: 260px;">
+              <canvas id="regionRevenueBarChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end 圖表下半 -->
+
+  </div><!-- end Tab B：預約/租借 -->
+
+</div><!-- end .tab-content -->
