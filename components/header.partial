@@ -32,13 +32,15 @@
             </a>
           </div>
 
-          <!-- 右側操作按鈕 -->
+
+          <!-- 右側操作按鈕：搜尋、露營預訂、購物車與會員功能共用同一容器。 -->
           <div class="navbar-actions">
             <div class="navbar-search-wrapper hidden-mobile">
               <button
                 type="button"
                 class="navbar-search-btn navbar-search-toggle"
                 title="搜尋"
+                aria-label="搜尋"
                 aria-expanded="false"
               >
                 🔍
@@ -77,8 +79,14 @@
               </div>
               <!-- 用戶選單下拉菜單 -->
               <div class="navbar-user-dropdown" hidden>
-                <a href="member-center.html" class="dropdown-item"> 👤 會員中心 </a>
-                <button class="navbar-logout-btn">🚪 登出</button>
+                <a href="member-center.html" class="dropdown-item">
+                  <i class="bi bi-person" aria-hidden="true"></i>
+                  會員中心
+                </a>
+                <button class="navbar-logout-btn" type="button">
+                  <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                  登出
+                </button>
               </div>
             </div>
           </div>
@@ -336,8 +344,16 @@
             </a>
 
             <!-- ② 預約背包（Booking Cart）— 點擊開啟 Cart Slide Panel -->
-            <button id="bkCartBtn" class="bk-cart-btn" title="預約背包" aria-label="預約背包">
-              <span aria-hidden="true">🛒</span>
+            <button
+              id="bkCartBtn"
+              class="bk-cart-btn"
+              type="button"
+              title="預約背包"
+              aria-label="預約背包"
+              aria-controls="cartPanel"
+              aria-expanded="false"
+            >
+              <i class="bi bi-bag-heart" aria-hidden="true"></i>
               <span class="bk-badge" id="bookingBadge" hidden>0</span>
             </button>
 
@@ -352,8 +368,14 @@
                 <span class="user-menu-chevron">⌄</span>
               </div>
               <div class="navbar-user-dropdown" hidden>
-                <a href="./member-center.html" class="dropdown-item"> 會員中心 </a>
-                <button class="navbar-logout-btn">登出</button>
+                <a href="./member-center.html" class="dropdown-item">
+                  <i class="bi bi-person" aria-hidden="true"></i>
+                  會員中心
+                </a>
+                <button class="navbar-logout-btn" type="button">
+                  <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                  登出
+                </button>
               </div>
             </div>
           </div>
