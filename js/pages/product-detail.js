@@ -85,16 +85,8 @@ window.initProductDetailPage = async () => {
     document.getElementById('productError').style.display = 'block';
   }
 
-  // 初始化全局組件（navbar、modal、cart）
-  // Initialize global components
-  window.initNavbar();
-  window.initModalListeners();
-  window.initCartListeners();
-  window.initPersonalizationModal();
-
-  // 標記全局組件已初始化，避免 main.js 重複執行
-  // Flag to prevent double-initialization in main.js
-  window._appComponentsInitialized = true;
+  // 共用 header/modal/cart 必須等 main.js 注入 header partial 後再綁定事件。
+  // Let main.js initialize shared header/modal/cart after their partial markup exists.
 };
 
 // -----------------------------------------------

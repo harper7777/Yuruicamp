@@ -25,8 +25,8 @@ window.initApp = async () => {
   // 先載入 header/footer HTML 與 header.js
   await initGlobalLayout();
 
-  // 若頁面 JS 尚未初始化全局組件，在此補上
-  // If page JS hasn't initialized global components yet, do it now
+  // Header partial 注入完成後才綁定共用互動，避免 product-detail 等頁面先初始化造成空 DOM 綁定。
+  // Bind shared interactions only after partial markup exists, so page scripts cannot bind empty DOM.
   if (!window._appComponentsInitialized) {
     window.initNavbar();
     window.initModalListeners();
