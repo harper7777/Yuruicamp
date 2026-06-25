@@ -1,0 +1,20 @@
+:root {
+  --yr-admin-bg: #faf7ed;
+  --yr-admin-surface: #fffdf8;
+  --yr-admin-surface-soft: #f7f1e6;
+  --yr-admin-border: #e4dacb;
+  --yr-admin-border-strong: #d6c9b5;
+  --yr-admin-brand: #9ead96;
+  --yr-admin-brand-strong: #6f7d69;
+  --yr-admin-brand-hover: #5f6d59;
+  --yr-admin-text: #454941;
+  --yr-admin-text-muted: #66645d;
+  --yr-admin-warning-soft: #f7ead8;
+  --yr-admin-warning-border: #dfc5a2;
+  --yr-admin-success-soft: #edf3ea;
+  --yr-admin-success-border: #ccd9c5;
+  --yr-admin-danger-soft: #f6e6e4;
+  --yr-admin-danger-border: #dfbdb8;
+  --yr-admin-focus-ring: rgba(111, 125, 105, 0.22);
+  --yr-admin-shadow: 0 8px 20px rgba(72, 78, 66, 0.08);
+}

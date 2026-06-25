@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Yuruicamp 露營選物品牌 - 探索戶外，從這裡開始。精選露營裝備、登山背包、帳篷睡袋一次購足。">
-  <meta name="theme-color" content="#244d4d">
+  <meta name="theme-color" content="#FAF7ED">
   <title>首頁 - Yuruicamp 露營選物</title>
   <!-- 預先連線外部資源，減少 DNS 查詢延遲 / Preconnect to reduce DNS lookup latency -->
   <link rel="preconnect" href="https://picsum.photos">
@@ -15,9 +15,10 @@
   <link rel="stylesheet" href="../css/theme/theme-base.css">
   <link rel="stylesheet" href="../css/theme/theme-components.css">
   <link rel="stylesheet" href="../css/theme/theme-layout.css">
+  <link rel="stylesheet" href="../css/theme/pages/home.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%2374846F'/><path d='M18 16h10l4 9 4-9h10L37 34v14h-10V34L18 16z' fill='%23FFFDF8'/></svg>">
 </head>
-<body class="yr-theme">
+<body class="yr-theme yr-home-page">
 
   <div id="header"></div>
 
@@ -32,22 +33,27 @@
          - 全螢幕背景（漸層色，預留 video 位置）
          - 中央標題 + CTA 按鈕
          ================================================ -->
-    <section class="hero-banner" id="heroBanner">
+    <section class="hero-banner yr-home-hero" id="heroBanner">
 
       <!-- 背景影片（檔案路徑：assets/videos/hero_video.mp4）
            影片載入前或不支援時，會顯示 .hero-banner 的漸層背景色作為備援 -->
-      <video autoplay loop muted playsinline>
+      <video class="yr-home-hero__video" autoplay loop muted playsinline>
         <source src="../assets/videos/hero_video.mp4" type="video/mp4">
       </video>
 
-      <div class="hero-content">
-        <p class="hero-tagline">探索台灣戶外</p>
-        <h1 class="hero-title">每次出走，<br>都是最好的選擇</h1>
-        <p class="hero-subtitle">精選頂級露營裝備、登山背包、帳篷睡袋<br>一站式購齊，讓冒險毫無後顧之憂</p>
-        <div class="hero-cta-group">
+      <div class="hero-content yr-home-hero__content">
+        <p class="hero-tagline yr-home-hero__eyebrow">探索台灣戶外</p>
+        <h1 class="hero-title yr-home-hero__title"><span class="yr-home-hero__title-accent">每次出走，</span><br>都是最好的選擇</h1>
+        <p class="hero-subtitle yr-home-hero__description">精選頂級露營裝備、登山背包、帳篷睡袋<br>一站式購齊，讓冒險毫無後顧之憂</p>
+        <div class="hero-cta-group yr-home-hero__actions">
           <a href="products.html" class="btn-hero-primary">立刻探索 <i class="bi bi-chevron-right" aria-hidden="true"></i></a>
           <a href="blog.html" class="btn-hero-outline">露營指南</a>
         </div>
+      </div>
+
+      <div class="yr-home-hero__stamp" aria-hidden="true">
+        <span>YURUICAMP</span>
+        <small>OUTDOOR SELECT</small>
       </div>
 
     </section>
@@ -57,11 +63,11 @@
          - CSS 跑馬燈無縫動畫
          - 8 個知名露營品牌
          ================================================ -->
-    <section class="brand-carousel-section">
+    <section class="brand-carousel-section yr-home-brands">
       <p class="brand-carousel-title">精選合作品牌</p>
-      <div class="brand-marquee-wrapper">
+      <div class="brand-marquee-wrapper yr-home-brands__viewport">
         <!-- 複製兩次以實現無縫循環 -->
-        <div class="brand-marquee-track">
+        <div class="brand-marquee-track yr-home-brands__track">
           <!-- 第一組 -->
           <div class="brand-logo-item"><i class="bi bi-triangle" aria-hidden="true"></i> Snow Peak</div>
           <div class="brand-logo-item"><i class="bi bi-compass" aria-hidden="true"></i> Osprey</div>
@@ -95,14 +101,14 @@
     <!-- ================================================
          步驟 4.3：精選商品 - 最新商品
          ================================================ -->
-    <section class="home-section home-section--white">
+    <section class="home-section home-section--white yr-home-products-section">
       <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">最新商品</h2>
-          <a href="products.html?filter=new" class="section-link">查看更多 <i class="bi bi-chevron-right" aria-hidden="true"></i></a>
+        <div class="section-header yr-home-section-header">
+          <h2 class="section-title yr-home-section-title">最新商品</h2>
+          <a href="products.html?filter=new" class="section-link yr-home-section-link">查看更多 <i class="bi bi-chevron-right" aria-hidden="true"></i></a>
         </div>
         <!-- 商品卡片由 JS 動態生成，加載前顯示骨架屏 -->
-        <div class="products-scroll-row" id="newProductsRow">
+        <div class="products-scroll-row yr-home-product-row" id="newProductsRow">
           <!-- 骨架屏加載佔位 -->
           <div class="skeleton-card skeleton-card--product">
             <div class="skeleton-img"></div>
@@ -143,13 +149,13 @@
     <!-- ================================================
          步驟 4.3：精選商品 - 熱銷商品
          ================================================ -->
-    <section class="home-section home-section--muted">
+    <section class="home-section home-section--muted yr-home-products-section">
       <div class="container">
-        <div class="section-header">
-          <h2 class="section-title"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i> 熱銷商品</h2>
-          <a href="products.html?filter=bestseller" class="section-link">查看更多 <i class="bi bi-chevron-right" aria-hidden="true"></i></a>
+        <div class="section-header yr-home-section-header">
+          <h2 class="section-title yr-home-section-title"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i> 熱銷商品</h2>
+          <a href="products.html?filter=bestseller" class="section-link yr-home-section-link">查看更多 <i class="bi bi-chevron-right" aria-hidden="true"></i></a>
         </div>
-        <div class="products-scroll-row" id="bestsellerProductsRow">
+        <div class="products-scroll-row yr-home-product-row" id="bestsellerProductsRow">
           <!-- 骨架屏加載佔位 -->
           <div class="skeleton-card skeleton-card--product">
             <div class="skeleton-img"></div>
@@ -190,9 +196,9 @@
     <!-- ================================================
          品牌特色區塊（三個賣點 Icon + 文字）
          ================================================ -->
-    <section class="brand-benefits">
+    <section class="brand-benefits yr-home-benefits">
       <div class="container">
-        <div class="brand-benefits__grid">
+        <div class="brand-benefits__grid yr-home-benefits__grid">
           <div class="brand-benefits__item">
             <div class="brand-benefits__icon" aria-hidden="true"><i class="bi bi-truck"></i></div>
             <h3 class="brand-benefits__title">滿 NT$3,000 免運費</h3>

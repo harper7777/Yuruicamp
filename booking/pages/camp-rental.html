@@ -12,8 +12,10 @@
   <link rel="stylesheet" href="../css/booking.css">
   <link rel="stylesheet" href="../css/yuruicamp-tags-status.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="../css/theme/booking-shell.css">
+  <link rel="stylesheet" href="../css/camp-rental.css">
 </head>
-<body>
+<body class="yr-booking-theme yr-camp-rental-page">
 
   <!-- 預約系統專屬 Header / Booking header -->
   <div id="booking-header"></div>
@@ -26,10 +28,9 @@
          Displays camp + date info from previous page
          ===================================================== -->
     <div class="booking-summary-bar" id="bookingSummaryBar">
-      <i class="bi bi-info-circle"></i>
+      <i class="bi bi-info-circle" aria-hidden="true"></i>
       <span id="summaryText">載入預約資訊中...</span>
-      <a href="./camp-detail.html" id="summaryEditLink"
-         style="color:#fff;text-decoration:underline;margin-left:auto;font-size:.85rem;">
+      <a href="./camp-detail.html" id="summaryEditLink" class="summary-edit-link">
         修改
       </a>
     </div>
@@ -50,22 +51,22 @@
       <!-- 左側：可租借裝備 / Left: Available Equipment -->
       <section class="rental-items-list">
         <h2>
-          <i class="bi bi-bag-check"></i>
+          <i class="bi bi-bag-check" aria-hidden="true"></i>
           可租借裝備
-          <span style="font-size:.875rem;font-weight:400;color:var(--yc-text-muted,#7B756D);" id="rentalCount"></span>
+          <span class="rental-count" id="rentalCount"></span>
         </h2>
 
         <!-- 裝備卡片 Grid（由 JS 動態填入）-->
         <div class="rental-grid" id="rentalGrid">
           <div class="loading-skeleton">
-            <i class="bi bi-hourglass-split"></i> 載入裝備中...
+            <i class="bi bi-hourglass-split" aria-hidden="true"></i> 載入裝備中...
           </div>
         </div>
       </section>
 
       <!-- 右側：已選清單 + 費用 / Right: Cart + Cost -->
       <aside class="rental-cart-sidebar">
-        <h3><i class="bi bi-cart3"></i> 已選裝備</h3>
+        <h3><i class="bi bi-cart3" aria-hidden="true"></i> 已選裝備</h3>
 
         <!-- 已選裝備清單 / Selected rental list -->
         <div class="rental-cart-list" id="rentalCartList">
@@ -79,12 +80,12 @@
 
         <!-- 前往結帳 / Go to checkout -->
         <button class="btn btn--primary btn--full" id="goToBookingCartBtn">
-          下一步：確認預約結帳 <i class="bi bi-arrow-right"></i>
+          下一步：確認預約結帳 <i class="bi bi-arrow-right" aria-hidden="true"></i>
         </button>
 
         <!-- 略過直接結帳 / Skip to checkout -->
         <a href="./booking-cart.html" class="rental-skip-link" id="skipRentalLink">
-          略過裝備，直接前往結帳 →
+          略過裝備，直接前往結帳 <i class="bi bi-arrow-right" aria-hidden="true"></i>
         </a>
       </aside>
 

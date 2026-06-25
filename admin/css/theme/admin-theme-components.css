@@ -1,0 +1,91 @@
+.yr-admin-products {
+  background: var(--yr-admin-surface);
+  border: 1px solid var(--yr-admin-border) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--yr-admin-shadow);
+  color: var(--yr-admin-text);
+}
+
+.yr-admin-products .yr-admin-products__header {
+  background: var(--yr-admin-surface) !important;
+  border-bottom: 1px solid var(--yr-admin-border) !important;
+  border-radius: 16px 16px 0 0 !important;
+}
+
+.yr-admin-products .yr-admin-products__title {
+  color: var(--yr-admin-text);
+}
+
+.yr-admin-products .yr-admin-products__description,
+.yr-admin-products .yr-admin-products__stock-note {
+  color: var(--yr-admin-text-muted) !important;
+}
+
+.yr-admin-products .yr-admin-products__actions .btn {
+  min-height: 34px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.yr-admin-products .yr-admin-products__actions button:first-child {
+  background-color: var(--yr-admin-brand-strong) !important;
+  border-color: var(--yr-admin-brand-strong) !important;
+  color: #fff !important;
+}
+
+.yr-admin-products #toggleMinStockMode {
+  border-color: var(--yr-admin-warning-border) !important;
+  color: #7a6041 !important;
+  background: var(--yr-admin-warning-soft) !important;
+}
+
+.yr-admin-products #generateMovementRecord {
+  border-color: var(--yr-admin-success-border) !important;
+  color: var(--yr-admin-brand-strong) !important;
+  background: var(--yr-admin-success-soft) !important;
+}
+
+.yr-admin-products #generateMovementRecord[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.yr-admin-products .yr-admin-products__tabs {
+  background: var(--yr-admin-surface-soft);
+  border-color: var(--yr-admin-border);
+}
+
+.yr-admin-products .yr-admin-products__tab {
+  border-radius: 8px !important;
+  border: 1px solid transparent;
+  color: var(--yr-admin-text-muted);
+}
+
+.yr-admin-products .yr-admin-products__tab.active {
+  background: var(--yr-admin-brand-strong) !important;
+  border-color: var(--yr-admin-brand-strong) !important;
+  color: #fff !important;
+}
+
+.yr-admin-modal .modal-content {
+  background: var(--yr-admin-surface);
+  border: 1px solid var(--yr-admin-border);
+  border-radius: 16px;
+}
+
+.yr-admin-modal .modal-header,
+.yr-admin-modal .modal-footer {
+  border-color: var(--yr-admin-border);
+}
+
+.yr-admin-modal .modal-title {
+  color: var(--yr-admin-text);
+}
+
+.yr-admin-modal .form-select:focus,
+.yr-admin-modal .form-control:focus,
+.yr-admin-modal .form-control-plaintext:focus {
+  border-color: var(--yr-admin-brand-strong);
+  box-shadow: 0 0 0 0.2rem var(--yr-admin-focus-ring);
+}

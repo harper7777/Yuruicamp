@@ -1,125 +1,219 @@
-/* ── Hero 搜尋列：強制單行，擴大容器寬度 ── */
-    .hero-content {
-      max-width: 900px;
-      /* 原 layout.css 700px 不夠放 5 個欄位，加寬 */
-    }
+.yr-camp-search-page .hero-content {
+  max-width: min(100% - 3rem, 1200px);
+  margin: 0 auto;
+}
 
-    .hero-banner .search-bar {
-      flex-wrap: nowrap;
-    }
+.yr-camp-search-page .hero-banner .search-bar-section {
+  margin-top: 1rem;
+}
 
-    .hero-banner .search-bar .search-bar__input,
-    .hero-banner .search-bar .search-bar__select {
-      min-width: 0;
-      /* 允許縮到比 160px 更窄，維持單行 */
-    }
+.yr-camp-search-page .hero-banner .search-bar {
+  background: rgb(255 253 248 / 92%);
+  border: 1px solid #e2d8ca;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgb(63 70 61 / 5%);
+  padding: 0.7rem;
+  gap: 0.55rem;
+  flex-wrap: nowrap;
+}
 
-    /* ── 搜尋列各欄位比例微調 (新增) ── */
-    #dateRange {
-      flex: 2.5 1 0; /* 日期範圍加寬 */
-    }
-    
-    #guestCount,
-    #regionFilter {
-      flex: 1 1 0; /* 人數與地區縮窄 */
-    }
+.yr-camp-search-page .hero-banner .search-bar .search-bar__input,
+.yr-camp-search-page .hero-banner .search-bar .search-bar__select,
+.yr-camp-search-page .hero-banner .search-bar .btn {
+  min-height: 44px;
+  border-radius: 10px;
+}
 
-    /* ── Dual-Thumb Price Slider ── */
-    .price-range-display {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--bk-primary);
-      text-align: center;
-      margin-bottom: 1.25rem;
-    }
+.yr-camp-search-page [id='dateRange'] {
+  flex: 2.2 1 0;
+}
 
-    .price-range-track-wrap {
-      position: relative;
-      height: 6px;
-      margin: 0.6rem 0 0.5rem;
-    }
+.yr-camp-search-page [id='guestCount'],
+.yr-camp-search-page [id='regionFilter'] {
+  flex: 1 1 0;
+}
 
-    /* 底色軌道 */
-    .price-range-track-wrap::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--bk-border, #d8e4e4);
-      border-radius: 3px;
-    }
+.yr-camp-search-page .search-page {
+  max-width: min(100% - 3rem, 1200px);
+  margin: 0 auto;
+}
 
-    /* 選取範圍的亮色填充，由 JS 控制 left / width */
-    .price-range-fill {
-      position: absolute;
-      top: 0;
-      height: 6px;
-      background: var(--bk-primary);
-      border-radius: 3px;
-      pointer-events: none;
-    }
+.yr-camp-search-page .search-layout {
+  gap: 1.5rem;
+}
 
-    /* 兩個 range 疊在同一位置，背景透明 */
-    .price-range-track-wrap input[type="range"] {
-      position: absolute;
-      width: 100%;
-      top: 50%;
-      transform: translateY(-50%);
-      height: 6px;
-      background: transparent;
-      pointer-events: none;
-      -webkit-appearance: none;
-      appearance: none;
-      margin: 0;
-      padding: 0;
-      outline: none;
-    }
+.yr-camp-search-page .filter-sidebar,
+.yr-camp-search-page .search-results,
+.yr-camp-search-page .camp-card {
+  border: 1px solid #e2d8ca;
+  border-radius: 16px;
+  background: #fffdf8;
+  box-shadow: 0 6px 18px rgb(63 70 61 / 5%);
+}
 
-    #priceMin {
-      z-index: 3;
-    }
+.yr-camp-search-page .filter-sidebar__toggle {
+  min-height: 44px;
+  border-radius: 10px;
+}
 
-    #priceMax {
-      z-index: 4;
-    }
+.yr-camp-search-page .filter-group__title {
+  color: #3f463d;
+}
 
-    /* WebKit thumb */
-    .price-range-track-wrap input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #fff;
-      border: 2px solid var(--bk-primary);
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
-      cursor: pointer;
-      pointer-events: all;
-    }
+.yr-camp-search-page .filter-group label {
+  color: #6d6a62;
+}
 
-    .price-range-track-wrap input[type="range"]::-webkit-slider-runnable-track {
-      background: transparent;
-      height: 6px;
-    }
+.yr-camp-search-page .filter-group input[type="checkbox"] {
+  accent-color: #74846f;
+}
 
-    /* Firefox thumb */
-    .price-range-track-wrap input[type="range"]::-moz-range-thumb {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #fff;
-      border: 2px solid var(--bk-primary);
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
-      cursor: pointer;
-      pointer-events: all;
-    }
+.yr-camp-search-page .camp-card {
+  box-shadow: 0 6px 16px rgb(63 70 61 / 5%);
+}
 
-    .price-range-track-wrap input[type="range"]::-moz-range-track {
-      background: transparent;
-    }
+.yr-camp-search-page .camp-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgb(63 70 61 / 8%);
+}
 
-    .price-range-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.72rem;
-      color: var(--bk-text-muted);
-      margin-top: 0.75rem;
-    }
+.yr-camp-search-page .camp-card:hover .camp-card__image img {
+  transform: none;
+}
+
+.yr-camp-search-page .camp-card__image img {
+  object-fit: cover;
+}
+
+.yr-camp-search-page .camp-card__price strong {
+  color: #62715e;
+}
+
+.yr-camp-search-page .camp-card__badge {
+  border-radius: 8px;
+}
+
+.yr-camp-search-page .price-range-display {
+  text-align: center;
+  color: #62715e;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+.yr-camp-search-page .price-range-track-wrap {
+  position: relative;
+  height: 6px;
+  margin: 0.6rem 0 0.5rem;
+}
+
+.yr-camp-search-page .price-range-track-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 3px;
+  background: #e2d8ca;
+}
+
+.yr-camp-search-page .price-range-fill {
+  position: absolute;
+  top: 0;
+  height: 6px;
+  border-radius: 3px;
+  background: #74846f;
+  pointer-events: none;
+}
+
+.yr-camp-search-page .price-range-track-wrap input[type="range"] {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  height: 6px;
+  margin: 0;
+  padding: 0;
+  transform: translateY(-50%);
+  background: transparent;
+  appearance: none;
+  pointer-events: none;
+}
+
+.yr-camp-search-page [id='priceMin'] {
+  z-index: 3;
+}
+
+.yr-camp-search-page [id='priceMax'] {
+  z-index: 4;
+}
+
+.yr-camp-search-page .price-range-track-wrap input[type="range"]::-webkit-slider-thumb {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #74846f;
+  border-radius: 50%;
+  background: #fffdf8;
+  box-shadow: 0 1px 4px rgb(63 70 61 / 18%);
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.yr-camp-search-page .price-range-track-wrap input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  background: transparent;
+}
+
+.yr-camp-search-page .price-range-track-wrap input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #74846f;
+  border-radius: 50%;
+  background: #fffdf8;
+  box-shadow: 0 1px 4px rgb(63 70 61 / 18%);
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.yr-camp-search-page .price-range-track-wrap input[type="range"]::-moz-range-track {
+  background: transparent;
+}
+
+.yr-camp-search-page .price-range-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.75rem;
+  color: #6d6a62;
+  font-size: 0.72rem;
+}
+
+@media (width <= 1024px) {
+  .yr-camp-search-page .hero-content,
+  .yr-camp-search-page .search-page {
+    max-width: min(100% - 2.5rem, 1200px);
+  }
+}
+
+@media (width <= 768px) {
+  .yr-camp-search-page .hero-banner .search-bar {
+    flex-wrap: wrap;
+  }
+
+  .yr-camp-search-page [id='dateRange'],
+  .yr-camp-search-page [id='guestCount'],
+  .yr-camp-search-page [id='regionFilter'],
+  .yr-camp-search-page [id='searchBtn'] {
+    flex: 1 1 calc(50% - 0.55rem);
+  }
+}
+
+@media (width <= 390px) {
+  .yr-camp-search-page .hero-content,
+  .yr-camp-search-page .search-page {
+    max-width: calc(100% - 2rem);
+  }
+
+  .yr-camp-search-page [id='dateRange'],
+  .yr-camp-search-page [id='guestCount'],
+  .yr-camp-search-page [id='regionFilter'],
+  .yr-camp-search-page [id='searchBtn'] {
+    flex: 1 1 100%;
+  }
+}

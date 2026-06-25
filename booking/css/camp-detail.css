@@ -1,2 +1,130 @@
-/* 詳情頁微調 / Detail page minor overrides */
-    .detail-page { padding-top: 1.5rem; }
+.yr-camp-detail-page .detail-page {
+  max-width: min(100% - 3rem, 1200px);
+  margin: 0 auto;
+  padding-top: 1.5rem;
+}
+
+.yr-camp-detail-page .breadcrumb {
+  color: #6d6a62;
+}
+
+.yr-camp-detail-page .breadcrumb-separator {
+  margin: 0 0.4rem;
+  color: #6d6a62;
+}
+
+.yr-camp-detail-page .camp-header,
+.yr-camp-detail-page .camp-gallery,
+.yr-camp-detail-page .camp-description,
+.yr-camp-detail-page .zone-table-section {
+  border-radius: 16px;
+}
+
+.yr-camp-detail-page .camp-header,
+.yr-camp-detail-page .camp-gallery,
+.yr-camp-detail-page .camp-description,
+.yr-camp-detail-page .booking-form-card,
+.yr-camp-detail-page .zone-table-section {
+  border: 1px solid #e2d8ca;
+  background: #fffdf8;
+  box-shadow: 0 6px 18px rgb(63 70 61 / 5%);
+}
+
+.yr-camp-detail-page .camp-gallery img {
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.yr-camp-detail-page .booking-form-card {
+  top: 96px;
+}
+
+.yr-camp-detail-page .booking-form-card__title {
+  color: #3f463d;
+  font-weight: 600;
+}
+
+.yr-camp-detail-page .booking-form-card__title i,
+.yr-camp-detail-page .form-group label i {
+  color: #74846f;
+}
+
+.yr-camp-detail-page .form-group label {
+  color: #3f463d;
+}
+
+.yr-camp-detail-page .date-summary {
+  border: 1px solid #e2d8ca;
+  background: #f5efe5;
+}
+
+.yr-camp-detail-page .date-summary__row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.yr-camp-detail-page .date-summary__row--main {
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.yr-camp-detail-page .zone-list__hint {
+  margin: 0;
+  padding: 1rem 0;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6d6a62;
+}
+
+.yr-camp-detail-page .zone-card {
+  border-color: #e2d8ca;
+  border-radius: 12px;
+  background: #fffdf8;
+}
+
+.yr-camp-detail-page .zone-card.is-selected {
+  border-color: #74846f;
+  background: #e7ece2;
+}
+
+.yr-camp-detail-page .zone-card__price,
+.yr-camp-detail-page .price-summary__amount {
+  color: #62715e;
+}
+
+.yr-camp-detail-page .zone-card__stock {
+  color: #6d6a62;
+}
+
+.yr-camp-detail-page .zone-table-wrap {
+  overflow-x: auto;
+}
+
+.yr-camp-detail-page .zone-table {
+  min-width: 620px;
+}
+
+.yr-camp-detail-page .zone-table thead th {
+  background: #f5efe5;
+}
+
+.yr-camp-detail-page .zone-table td,
+.yr-camp-detail-page .zone-table th {
+  border-color: #e2d8ca;
+}
+
+.yr-camp-detail-page .btn--primary {
+  border-radius: 10px;
+}
+
+@media (width <= 900px) {
+  .yr-camp-detail-page .booking-form-card {
+    position: static;
+  }
+}
+
+@media (width <= 390px) {
+  .yr-camp-detail-page .detail-page {
+    max-width: calc(100% - 2rem);
+  }
+}

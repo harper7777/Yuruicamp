@@ -13,16 +13,14 @@
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/booking.css">
   <link rel="stylesheet" href="../css/yuruicamp-tags-status.css">
-  <link rel="stylesheet" href="../css/camp-search.css">
-
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/theme/booking-shell.css">
+  <link rel="stylesheet" href="../css/camp-search.css">
   
 </head>
 
-<body>
+<body class="yr-booking-theme yr-camp-search-page">
 
   <div id="booking-header"></div>
 
@@ -56,7 +54,7 @@
             <option value="東部">東部</option>
           </select>
           <button id="searchBtn" class="btn btn--primary">
-            <i class="bi bi-search"></i> 搜尋
+            <i class="bi bi-search" aria-hidden="true"></i> 搜尋
           </button>
         </div>
       </section>
@@ -71,7 +69,7 @@
       <aside class="filter-sidebar">
 
         <button class="filter-sidebar__toggle" id="filterToggle" aria-expanded="false">
-          <i class="bi bi-funnel"></i>&nbsp; 篩選條件
+          <i class="bi bi-funnel" aria-hidden="true"></i>&nbsp; 篩選條件
         </button>
 
         <div class="filter-sidebar__body" id="filterBody">
@@ -113,7 +111,7 @@
           </div>
 
           <button id="resetFilterBtn" class="btn btn--outline">
-            <i class="bi bi-arrow-counterclockwise"></i> 重設篩選
+            <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> 重設篩選
           </button>
 
         </div>
@@ -127,7 +125,7 @@
 
         <div class="camp-card-grid" id="campCardGrid">
           <div class="loading-skeleton" id="loadingSkeleton">
-            <i class="bi bi-hourglass-split"></i> 載入營區資料中...
+            <i class="bi bi-hourglass-split" aria-hidden="true"></i> 載入營區資料中...
           </div>
         </div>
 

@@ -1,0 +1,87 @@
+.yr-admin-products .yr-admin-products__panel {
+  background: var(--yr-admin-surface);
+}
+
+.yr-admin-products .yr-admin-products__table {
+  margin-bottom: 0;
+}
+
+.yr-admin-products .yr-admin-products__table thead.table-light th {
+  background: #f4efe5;
+  color: var(--yr-admin-text);
+  border-bottom: 1px solid var(--yr-admin-border-strong);
+}
+
+.yr-admin-products .yr-admin-products__table th,
+.yr-admin-products .yr-admin-products__table td {
+  border-color: var(--yr-admin-border);
+}
+
+.yr-admin-products .yr-admin-products__table tbody tr:hover td {
+  background: #f1f6ef;
+}
+
+.yr-admin-products .yr-admin-products__table .sticky-col {
+  box-shadow: inset -1px 0 0 var(--yr-admin-border);
+}
+
+.yr-admin-products .yr-admin-products__table .sticky-col-total-stock {
+  box-shadow: inset -1px 0 0 var(--yr-admin-border-strong), 8px 0 10px -10px rgba(69, 73, 65, 0.35);
+}
+
+.yr-admin-products .yr-admin-products__table tr.table-danger td {
+  background-color: var(--yr-admin-danger-soft) !important;
+}
+
+.yr-admin-products .yr-admin-products__table tr.table-danger .sticky-col {
+  background-color: var(--yr-admin-danger-soft) !important;
+}
+
+.yr-admin-products .yr-admin-products__loading {
+  background: var(--yr-admin-surface);
+  color: var(--yr-admin-text-muted);
+}
+
+.yr-admin-modal .modal-body #transferModeHint,
+.yr-admin-modal .modal-body #transferDistributionCounter {
+  color: var(--yr-admin-text-muted) !important;
+}
+
+.yr-admin-modal #addTransferCampRow {
+  border-color: var(--yr-admin-border-strong);
+  color: var(--yr-admin-text-muted);
+}
+
+.yr-admin-modal #submitTransferToRental {
+  background: var(--yr-admin-brand-strong);
+  border-color: var(--yr-admin-brand-strong);
+}
+
+.yr-admin-modal #submitTransferToRental:hover {
+  background: var(--yr-admin-brand-hover);
+  border-color: var(--yr-admin-brand-hover);
+}
+
+@media (max-width: 767.98px) {
+  .yr-admin-products .yr-admin-products__header {
+    display: block !important;
+  }
+
+  .yr-admin-products .yr-admin-products__actions {
+    margin-top: 0.75rem;
+    align-items: stretch !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 0.5rem !important;
+  }
+
+  .yr-admin-products .yr-admin-products__actions .btn {
+    flex: 1 1 100%;
+  }
+
+  .yr-admin-products .yr-admin-products__tabs {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
