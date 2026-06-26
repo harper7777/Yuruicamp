@@ -219,18 +219,34 @@ function syncMainHeaderAssetPaths(rootPrefix) {
  */
 async function initGlobalLayout() {
   const rootPrefix = getRootPathPrefix();
+  const headerRoot = document.getElementById('header');
+  const contextAttr = headerRoot && headerRoot.dataset
+    ? (headerRoot.dataset.headerContext || '').toLowerCase()
+    : '';
+  const headerPartSelector = contextAttr ? '[data-layout-part="shared-site-header"]' : '[data-layout-part="main-header"]';
 
   // 1. 根據目錄樹，從 pages/* 往上找頂層的 components/
   await Promise.all([
-    loadPartial("header", `${rootPrefix}/components/header.partial`, '[data-layout-part="main-header"]'),
+    loadPartial("header", `${rootPrefix}/components/header.partial`, headerPartSelector),
     loadPartial("footer", `${rootPrefix}/components/footer.partial`, '[data-layout-part="main-footer"]')
   ]);
-  await appendPartial("header", `${rootPrefix}/components/header.partial`, '[data-layout-part="shared-auth"]');
+  if (!document.getElementById('loginModal')) {
+    await appendPartial("header", `${rootPrefix}/components/header.partial`, '[data-layout-part="shared-auth"]');
+  }
+  if (contextAttr === 'shop' && !document.getElementById('siteCartDrawer')) {
+    await appendPartial("header", `${rootPrefix}/components/header.partial`, '[data-layout-part="shared-site-cart-panel"]');
+  }
+  if (contextAttr === 'camp' && !document.getElementById('cartPanel')) {
+    await appendPartial("header", `${rootPrefix}/components/header.partial`, '[data-layout-part="shared-booking-cart-panel"]');
+  }
   syncMainHeaderAssetPaths(rootPrefix);
 
   // 2. 確定 HTML 結構長到網頁上後，才動態載入原本的互動 JS
   try {
     await loadComponentScript(`${rootPrefix}/js/components/auth.js`);
+    if (typeof window.initAuth === 'function') {
+      window.initAuth();
+    }
     // 若頁面尚未以 <script defer> 載入 header.js，才補動態載入，避免同頁重複綁定。
     if (typeof window.initNavbar !== 'function') {
       await loadComponentScript(`${rootPrefix}/js/components/header.js`);

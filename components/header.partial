@@ -2,6 +2,121 @@
      Unified Header Partials
      重點：主站與 booking header 共用同一個 components/header.partial，載入端依 data-layout-part 選取版型。
      ======================================== -->
+<div data-layout-part="shared-site-header">
+<section class="yr-site-header-shell">
+  <header class="yr-site-header booking-header">
+    <div class="yr-site-header__inner">
+      <div class="yr-site-header__start">
+        <button
+          class="yr-site-menu-toggle"
+          type="button"
+          aria-label="開啟選單"
+          aria-expanded="false"
+          aria-controls="yrSiteDrawer"
+        >
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+
+        <a class="yr-site-brand" data-header-home-link aria-label="回到首頁">
+          <span class="yr-site-brand__mark" aria-hidden="true">Y</span>
+          <span class="yr-site-brand__name">Yuruicamp</span>
+        </a>
+      </div>
+
+      <div class="yr-site-header__actions" data-header-actions></div>
+    </div>
+  </header>
+
+  <div class="yr-site-overlay" data-header-overlay aria-hidden="true"></div>
+
+  <aside
+    class="yr-site-drawer"
+    id="yrSiteDrawer"
+    data-header-drawer
+    aria-hidden="true"
+  >
+    <div class="yr-site-drawer__header">
+      <div class="yr-site-drawer__identity">
+        <strong class="yr-site-drawer__brand">Yuruicamp</strong>
+        <span class="yr-site-drawer__divider" aria-hidden="true">｜</span>
+        <span class="yr-site-drawer__context" data-header-context-label></span>
+      </div>
+
+      <button
+        class="yr-site-drawer__close"
+        type="button"
+        aria-label="關閉選單"
+        data-header-close
+      >
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav
+      class="yr-site-drawer__navigation"
+      aria-label="主要導覽"
+      data-header-navigation
+    ></nav>
+
+    <div class="yr-site-drawer__footer">
+      <a class="yr-site-drawer__switch" data-header-switch-action></a>
+
+      <button
+        class="yr-site-drawer__utility"
+        type="button"
+        data-header-utility
+      ></button>
+    </div>
+  </aside>
+</section>
+</div>
+
+<div data-layout-part="shared-site-cart-panel">
+  <aside id="siteCartDrawer" class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="siteCartDrawerTitle">
+    <div class="cart-drawer__header">
+      <h5 class="cart-drawer__title" id="siteCartDrawerTitle"><i class="bi bi-bag" aria-hidden="true"></i> 我的購物車</h5>
+      <button class="cart-drawer__close" type="button" aria-label="關閉購物車"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+    </div>
+    <div class="cart-drawer__body" id="siteCartDrawerBody"></div>
+    <div class="cart-drawer__footer" id="siteCartDrawerFooter">
+      <div class="cart-drawer__summary">
+        <span>商品小計</span>
+        <strong id="summarySubtotal">NT$0</strong>
+      </div>
+      <div class="cart-drawer__summary">
+        <span>運費</span>
+        <strong id="summaryShipping">NT$0</strong>
+      </div>
+      <div class="cart-drawer__summary cart-drawer__summary--total">
+        <span>合計</span>
+        <strong id="summaryTotal">NT$0</strong>
+      </div>
+      <a id="checkoutBtn" class="btn btn-primary btn-block" href="/pages/checkout.html">前往結帳</a>
+    </div>
+  </aside>
+  <div class="cart-drawer-backdrop" id="siteCartBackdrop"></div>
+</div>
+
+<div data-layout-part="shared-booking-cart-panel">
+  <div id="cartPanel" class="bk-slide-panel" role="dialog" aria-modal="true" aria-label="預約背包">
+    <div class="bk-slide-panel__header">
+      <h5 class="bk-slide-panel__title">
+        <span aria-hidden="true">🛒</span> 預約背包
+      </h5>
+      <button class="bk-slide-panel__close" id="cartPanelClose" title="關閉" aria-label="關閉預約背包">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="bk-slide-panel__body" id="cartPanelBody"></div>
+    <div class="bk-slide-panel__footer" id="cartPanelFooter" hidden>
+      <a href="/booking/pages/booking-cart.html" class="btn btn--primary btn--full">
+        <i class="bi bi-arrow-right-circle"></i> 前往完成預約
+      </a>
+    </div>
+  </div>
+  <div class="bk-panel-backdrop" id="bkPanelBackdrop"></div>
+</div>
+
 <div data-layout-part="main-header">
 <!-- ========================================
      Header Component

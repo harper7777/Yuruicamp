@@ -657,9 +657,24 @@
       ['navFaq', 'booking-faq'],
       ['navMember', 'member-center']
     ];
+    var matchedLegacy = false;
     navMap.forEach(function (item) {
       var el = document.getElementById(item[0]);
-      if (el && path.indexOf(item[1]) !== -1) el.classList.add('active');
+      if (el && path.indexOf(item[1]) !== -1) {
+        matchedLegacy = true;
+        el.classList.add('active');
+      }
+    });
+
+    if (matchedLegacy) return;
+
+    document.querySelectorAll('.yr-site-context-link, .yr-site-drawer__link').forEach(function (link) {
+      var href = link.getAttribute('href');
+      if (!href) return;
+      if (path.indexOf('camp-search') !== -1 && href.indexOf('camp-search') !== -1) link.classList.add('active');
+      if (path.indexOf('rental-guide') !== -1 && href.indexOf('rental-guide') !== -1) link.classList.add('active');
+      if (path.indexOf('booking-faq') !== -1 && href.indexOf('booking-faq') !== -1) link.classList.add('active');
+      if (path.indexOf('member-center') !== -1 && href.indexOf('member-center') !== -1) link.classList.add('active');
     });
   }
 
@@ -673,7 +688,9 @@
       closeSharedModal(activeModal.id);
       return;
     }
-    closeOffcanvasFromAnywhere();
+    if (!window.__sharedHeaderControllerActive) {
+      closeOffcanvasFromAnywhere();
+    }
     closePanels();
   }
 
@@ -750,7 +767,9 @@
   function initBookingHeader() {
     ensureToastFallback();
     updateBookingBadge();
-    initOffcanvas();
+    if (!window.__sharedHeaderControllerActive) {
+      initOffcanvas();
+    }
     initSharedAuthModals();
     initCartPanel();
     setActiveNavLink();

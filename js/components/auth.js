@@ -178,4 +178,16 @@
       emitAuthChanged('sync', getUser());
     }
   };
+
+  /**
+   * Re-initializes shared auth state after late-inserted header/auth markup.
+   * Safe to call multiple times.
+   * @returns {Object} Shared auth API.
+   */
+  window.initAuth = function initAuth() {
+    if (window.YuruiAuth && typeof window.YuruiAuth.sync === 'function') {
+      window.YuruiAuth.sync();
+    }
+    return window.YuruiAuth;
+  };
 }());
