@@ -101,9 +101,11 @@
     <div class="modal-content yr-branches-modal__content">
       <div class="modal-header">
         <h5 class="modal-title" id="partnerModalTitle">合作店家詳情</h5>
-        <button class="modal-close"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+        <button class="modal-close" type="button" aria-label="關閉優惠詳情">
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body yr-branches-modal__body">
         <!-- 店家圖片 -->
         <div class="yr-branches-modal__media">
           <img id="partnerModalImg" src="" alt="合作店家"
@@ -118,6 +120,8 @@
           <div class="yr-branches-modal__offer-title"><i class="bi bi-gift" aria-hidden="true"></i> Yuruicamp 會員專屬優惠</div>
           <div id="partnerModalDiscount" class="yr-branches-modal__offer-content"></div>
         </div>
+      </div>
+      <div class="modal-footer yr-branches-modal__footer">
         <!-- 按鈕 -->
         <button class="btn btn-primary btn-block yr-btn yr-btn--primary yr-branches-modal__button"
                 onclick="window.showToast && window.showToast('優惠已記錄！前往露營地時出示即可', 'success')">

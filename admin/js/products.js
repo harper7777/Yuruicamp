@@ -2609,7 +2609,7 @@ function buildProductRow(p) {
         var totalMin = ADMIN_PRODUCT_BRANCH_IDS.reduce(function (sum, branchId) {
           return sum + getMinStockValue('store', p.id, branchId);
         }, 0);
-        return '<td class="sticky-col sticky-col-total-stock stock-cell text-center fw-semibold text-warning" ' +
+        return '<td class="sticky-col sticky-col-total-stock stock-cell text-center fw-semibold yr-admin-product-threshold-sum" ' +
                'data-total-stock-display>' +
                '<span class="total-stock-value">' + totalMin + '</span>' +
                '<br><small class="text-muted fw-normal" style="font-size:0.65rem;">閾值合計</small>' +
@@ -2716,7 +2716,7 @@ function buildRentalRow(item) {
         var totalMin = allCampKeys.reduce(function (sum, key) {
           return sum + getMinStockValue('rental', rental.id, key);
         }, 0);
-        return '<td class="sticky-col sticky-col-total-stock stock-cell text-center fw-semibold text-warning" ' +
+        return '<td class="sticky-col sticky-col-total-stock stock-cell text-center fw-semibold yr-admin-product-threshold-sum" ' +
                'data-total-stock-display>' +
                '<span class="total-stock-value">' + totalMin + '</span>' +
                '<br><small class="text-muted fw-normal" style="font-size:0.65rem;">閾值合計</small>' +

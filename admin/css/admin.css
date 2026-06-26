@@ -199,15 +199,15 @@ button[data-permission-disabled="true"] {
 }
 
 .admin-stock-control .stock-input.stock-input-increase {
-  background-color: #d1e7dd;
-  border-color: #198754;
-  color: #0f5132;
+  background-color: var(--yr-admin-success-bg);
+  border-color: var(--yr-admin-success-border);
+  color: var(--yr-admin-success-text);
 }
 
 .admin-stock-control .stock-input.stock-input-decrease {
-  background-color: #f8d7da;
-  border-color: #dc3545;
-  color: #842029;
+  background-color: var(--yr-admin-danger-bg);
+  border-color: var(--yr-admin-danger-border);
+  color: var(--yr-admin-danger-text);
 }
 
 /* ===== 租借商品營地欄位 ===== */
@@ -327,15 +327,6 @@ button[data-permission-disabled="true"] {
   margin-bottom: 24px;
 }
 
-/* ===== 星星評分顏色（僅限評論模組） ===== */
-.yr-admin-dashboard-page .yr-admin-reviews-module .yr-admin-review-star--filled {
-  color: var(--yr-admin-rating-gold);
-}
-
-.yr-admin-dashboard-page .yr-admin-reviews-module .yr-admin-review-star--empty {
-  color: #a9a39a;
-}
-
 /* ===== Loading Spinner 品牌色 ===== */
 .spinner-border-brand {
   color: var(--admin-brand-accent);
@@ -444,29 +435,31 @@ button[data-permission-disabled="true"] {
 /* 正常列內的不足格：淡橘色背景 + 橘色邊框 */
 /* Orange cell in a normal (non-danger) row */
 .stock-cell-below-min .admin-stock-control .stock-input {
-  border-color: #fd7e14;
-  background-color: #fff3e0;
+  border-color: var(--yr-admin-warning-border);
+  background-color: var(--yr-admin-warning-bg);
+  color: var(--yr-admin-warning-text);
 }
 
 /* table-danger（淡紅列）內的不足格：橘色加深版本，確保與紅色底色區別 */
 /* Orange cell inside a table-danger row: use deeper orange to contrast with red row bg */
 .table tr.table-danger .stock-cell-below-min .admin-stock-control .stock-input {
-  border-color: #e65c00;
-  background-color: #ffe0b2;
+  border-color: var(--yr-admin-danger-border);
+  background-color: var(--yr-admin-danger-bg);
+  color: var(--yr-admin-danger-text);
 }
 
 /* 最低庫存設定模式（isMinStockMode）：表格 header 加上黃色背景，提醒管理員 */
 /* Min-stock mode header: yellow background to remind admin they are in edit mode */
 #productsTable thead.min-stock-mode-header,
 #rentalProductsTable thead.min-stock-mode-header {
-  background-color: #fff3cd !important;  /* Bootstrap warning 淺黃色 */
+  background-color: var(--yr-admin-warning-bg) !important;
 }
 
 /* 最低庫存模式下步進器按鈕改為黃色外框，與正常模式視覺區分 */
 /* Min-stock mode steppers use yellow outline to distinguish from normal mode */
 .min-stock-mode .admin-stock-control .stock-step-btn {
-  border-color: #ffc107;
-  color: #856404;
+  border-color: var(--yr-admin-warning-border);
+  color: var(--yr-admin-warning-text);
 }
 
 /* ===== 商品名稱截斷（超過欄寬顯示 ...，hover 透過 title 屬性顯示完整名稱） ===== */
@@ -531,7 +524,7 @@ button[data-permission-disabled="true"] {
   display: inline-block;
   width: 7px;
   height: 7px;
-  background-color: #dc3545;     /* Bootstrap danger 紅色 */
+  background-color: var(--yr-admin-danger-text);
   border-radius: 50%;
   position: relative;
   top: -6px;

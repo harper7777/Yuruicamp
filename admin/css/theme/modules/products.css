@@ -182,6 +182,10 @@
   font-variant-numeric: tabular-nums;
 }
 
+.yr-admin-dashboard-page .yr-admin-products-module .yr-admin-product-threshold-sum {
+  color: var(--yr-admin-warning-text);
+}
+
 .yr-admin-dashboard-page .yr-admin-products-module .yr-admin-stock-total-value {
   font-variant-numeric: tabular-nums;
 }

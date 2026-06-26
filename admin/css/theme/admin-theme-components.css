@@ -937,97 +937,10 @@
   border: 1px solid var(--yr-admin-state-neutral-border);
 }
 
-.yr-admin-dashboard-page .yr-admin-reviews-tabs .filter-btn {
-  background: var(--yr-admin-surface);
-  color: #615e58;
-  border: 1px solid var(--yr-admin-border);
-  border-radius: 9px;
-  min-height: 38px;
-  font-weight: 600;
-  box-shadow: none;
-}
-
-.yr-admin-dashboard-page .yr-admin-reviews-tabs .filter-btn.active {
-  background: #4f5750;
-  color: var(--yr-admin-text-inverse);
-  border-color: #4f5750;
-}
-
-.yr-admin-dashboard-page .yr-admin-reviews-tabs [id="tabCountAll"] {
-  background: var(--yr-admin-state-neutral-bg) !important;
-  color: var(--yr-admin-state-neutral-text) !important;
-  border: 1px solid var(--yr-admin-state-neutral-border);
-}
-
-.yr-admin-dashboard-page .yr-admin-reviews-tabs [id="tabCountUnreplied"] {
-  background: var(--yr-admin-state-warm-bg) !important;
-  color: var(--yr-admin-state-warm-text) !important;
-  border: 1px solid var(--yr-admin-state-warm-border);
-}
-
-.yr-admin-dashboard-page .yr-admin-reviews-tabs [id="tabCountReplied"] {
-  background: var(--yr-admin-state-sage-bg) !important;
-  color: var(--yr-admin-state-sage-text) !important;
-  border: 1px solid var(--yr-admin-state-sage-border);
-}
-
-.yr-admin-dashboard-page .yr-admin-reviews-module .review-card {
-  background: var(--yr-admin-surface);
-  border: 1px solid var(--yr-admin-border) !important;
-  border-radius: 14px;
-}
-
-.yr-admin-dashboard-page .yr-admin-reviews-module .review-card.border-danger {
-  border-color: var(--yr-admin-border) !important;
-  border-left: 4px solid #c28c81 !important;
-}
-
-.yr-admin-dashboard-page .yr-admin-reviews-module .replied-badge.bg-warning {
-  background: var(--yr-admin-state-warm-bg) !important;
-  color: var(--yr-admin-state-warm-text) !important;
-  border: 1px solid var(--yr-admin-state-warm-border);
-}
-
-.yr-admin-dashboard-page .yr-admin-reviews-module .replied-badge.bg-success {
-  background: var(--yr-admin-state-sage-bg) !important;
-  color: var(--yr-admin-state-sage-text) !important;
-  border: 1px solid var(--yr-admin-state-sage-border);
-}
-
-.yr-admin-dashboard-page .yr-admin-reviews-module .reply-display.bg-light {
-  background: #f4f6f1 !important;
-  border-left: 3px solid #7f9179 !important;
-}
-
-.yr-admin-dashboard-page .yr-admin-reviews-module :is(.fa-star.text-warning, .fa-star.fas) {
-  color: var(--yr-admin-rating-gold) !important;
-}
-
-.yr-admin-dashboard-page .yr-admin-reviews-module .btn-reply-toggle {
-  background: var(--yr-admin-surface) !important;
-  color: var(--yr-admin-text-muted) !important;
-  border: 1px solid var(--yr-admin-border) !important;
-  border-radius: 9px !important;
-  min-height: 38px;
-  font-weight: 600;
-}
-
-.yr-admin-dashboard-page .yr-admin-reviews-module .btn-reply-toggle:hover {
-  background: var(--yr-admin-surface-soft) !important;
-  color: var(--yr-admin-brand-strong) !important;
-  border-color: var(--yr-admin-border) !important;
-}
-
 .yr-admin-dashboard-page .yr-admin-discounts-module .yr-admin-discount-code {
   color: var(--yr-admin-primary-hover);
   font-weight: 600;
   letter-spacing: 0.02em;
-}
-
-.yr-admin-dashboard-page .yr-admin-discounts-module .status-badge.bg-success {
-  background: var(--yr-admin-state-sage-bg) !important;
-  color: var(--yr-admin-state-sage-text) !important;
-  border: 1px solid var(--yr-admin-state-sage-border);
 }
 
 .yr-admin-dashboard-page .yr-admin-discounts-module .status-badge.bg-secondary {
