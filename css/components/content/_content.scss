@@ -1,15 +1,8 @@
 // 用途：ITCSS content 匯總入口，連接共用內容元件與頁面內容元件。
+@import 'legacy-main-fallback';
 @import 'legacy-components';
 @import 'home-cart';
 @import 'page-inline-blocks';
-@import 'shared-content';
-@import 'home';
-@import 'products';
-@import 'checkout';
-@import 'member-center';
-@import 'branches';
-@import 'blog';
-@import 'faq';
 
 // 來源：pages/blog.html。
 // 用途：承接原露營生活誌 banner 副標樣式，對齊既有 .page-banner-sub 視覺。

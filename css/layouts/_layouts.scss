@@ -1,4 +1,6 @@
-// 用途：大型版面骨架，提供目前前台頁面實際使用的 container 與 grid 欄位。
+@use 'sass:math';
+
+// 用途：大型版面骨架，提供 container 與 12 欄 grid。
 // 應用：所有使用 .container、.row、.col-* 的前台頁面。
 // ========================================
 // 版面佈局樣式 (Layout)
@@ -52,72 +54,40 @@
   padding-left: calc(#{$spacing-lg} / 2);
 }
 
-// 固定寬度欄位：僅保留目前 HTML 實際引用的欄位，避免產生未使用的預擴充 grid class。
-.col-4 {
-  flex: 0 0 33.3333%;
-  max-width: 33.3333%;
+// 固定寬度欄位
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    flex: 0 0 math.percentage(math.div($i, 12));
+    max-width: math.percentage(math.div($i, 12));
+  }
 }
 
-.col-6 {
-  flex: 0 0 50%;
-  max-width: 50%;
-}
-
-.col-8 {
-  flex: 0 0 66.6667%;
-  max-width: 66.6667%;
-}
-
-.col-12 {
-  flex: 0 0 100%;
-  max-width: 100%;
-}
-
-// 小屏幕響應式：目前只保留頁面使用中的半寬欄位。
+// 小屏幕響應式
 @media (max-width: $md - 1px) {
-  .col-sm-6 {
-    flex: 0 0 50%;
-    max-width: 50%;
+  @for $i from 1 through 12 {
+    .col-sm-#{$i} {
+      flex: 0 0 math.percentage(math.div($i, 12));
+      max-width: math.percentage(math.div($i, 12));
+    }
   }
 }
 
-// 中等屏幕響應式：目前只保留頁面使用中的三欄、四欄與半寬欄位。
+// 中等屏幕響應式
 @media (min-width: $md) and (max-width: $lg - 1px) {
-  .col-md-3 {
-    flex: 0 0 25%;
-    max-width: 25%;
-  }
-
-  .col-md-4 {
-    flex: 0 0 33.3333%;
-    max-width: 33.3333%;
-  }
-
-  .col-md-6 {
-    flex: 0 0 50%;
-    max-width: 50%;
+  @for $i from 1 through 12 {
+    .col-md-#{$i} {
+      flex: 0 0 math.percentage(math.div($i, 12));
+      max-width: math.percentage(math.div($i, 12));
+    }
   }
 }
 
-// 大屏幕響應式：目前只保留頁面使用中的三欄、四欄、半寬與 2/3 欄位。
+// 大屏幕響應式
 @media (min-width: $lg) {
-  .col-lg-3 {
-    flex: 0 0 25%;
-    max-width: 25%;
-  }
-
-  .col-lg-4 {
-    flex: 0 0 33.3333%;
-    max-width: 33.3333%;
-  }
-
-  .col-lg-6 {
-    flex: 0 0 50%;
-    max-width: 50%;
-  }
-
-  .col-lg-8 {
-    flex: 0 0 66.6667%;
-    max-width: 66.6667%;
+  @for $i from 1 through 12 {
+    .col-lg-#{$i} {
+      flex: 0 0 math.percentage(math.div($i, 12));
+      max-width: math.percentage(math.div($i, 12));
+    }
   }
 }
