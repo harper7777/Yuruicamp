@@ -2,7 +2,7 @@
      客戶管理頁面
      由 core.js 的 $.load() 注入到 #contentArea
      桌面：表格 + 可展開列；手機：卡片 + 可展開詳情
-     篩選（會員等級/標籤）+ 排序（消費總額）由 customers.js 驅動
+     篩選（會員等級/標籤）+ 排序（註冊日期/消費總額）由 customers.js 驅動
 -->
 
 <!-- 桌面：清除條件按鈕（有篩選或排序時顯示） -->
@@ -23,6 +23,10 @@
             <th>客戶姓名</th>
             <th>手機號碼</th>
             <th>電子信箱</th>
+            <!-- 註冊日期：ISO 字串排序（YYYY-MM-DD） -->
+            <th class="sortable-th" data-sort-key="registeredAt">
+              註冊日期 <i class="fas fa-sort sort-icon ms-1"></i>
+            </th>
             <!-- 會員等級：多選篩選（欄內 OR，與標籤 AND 疊加） -->
             <th class="filter-th" data-filter-key="tier">
               會員等級
@@ -53,7 +57,7 @@
         </thead>
         <tbody id="customersTableBody">
           <tr>
-            <td colspan="7" class="text-center py-4">
+            <td colspan="8" class="text-center py-4">
               <div class="spinner-border spinner-border-sm me-2"
                    style="color: var(--admin-brand-accent);"></div>
               <span class="text-muted">載入會員資料中...</span>

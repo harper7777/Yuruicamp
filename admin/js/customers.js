@@ -8,7 +8,7 @@
  *   - phone（手機）、email（信箱）、tier（會員等級）、points（點數）：按鈕儲存 + Enter 鍵儲存
  *   - tags（標籤）：下拉 checkbox 多選 + 新增 / 刪除標籤
  * 主列為唯讀摘要（桌面 table / 手機卡片）；展開後才可編輯，儲存後同步更新主列
- * 篩選：會員等級/標籤（欄內 OR，兩欄 AND 疊加）；排序：消費總額（三段式）
+ * 篩選：會員等級/標籤（欄內 OR，兩欄 AND 疊加）；排序：註冊日期/消費總額（三段式）
  */
 
 // ─────────────────────────────────────────────
@@ -55,6 +55,17 @@ function getTagBadge(tag) {
 function formatPhoneDisplay(phone) {
   if (!phone) { return '—'; }
   return String(phone).replace(/[\s-]/g, '');
+}
+
+/**
+ * 將 ISO 日期轉成 YYYY-MM-DD 顯示
+ * Format ISO date for display — e.g. "2023-08-15"
+ * @param {string} isoDate
+ * @returns {string}
+ */
+function formatRegisteredDate(isoDate) {
+  if (!isoDate) { return '—'; }
+  return String(isoDate).slice(0, 10);
 }
 
 /**
@@ -248,6 +259,30 @@ function updateCustomerClearButtonUI() {
 }
 
 /**
+ * 依欄位型別比較兩筆客戶資料（供排序用）
+ * Compare customer field values for sorting
+ * @param {string} key - 欄位名稱
+ * @param {*} valA
+ * @param {*} valB
+ * @returns {number} -1 | 0 | 1
+ */
+function compareCustomerValues(key, valA, valB) {
+  if (key === 'totalSpent') {
+    var numA = Number(valA) || 0;
+    var numB = Number(valB) || 0;
+    if (numA < numB) { return -1; }
+    if (numA > numB) { return  1; }
+    return 0;
+  }
+  // 日期 / 字串欄：registeredAt（ISO YYYY-MM-DD 可直接字串比較）
+  var strA = String(valA || '');
+  var strB = String(valB || '');
+  if (strA < strB) { return -1; }
+  if (strA > strB) { return  1; }
+  return 0;
+}
+
+/**
  * 先篩選再排序，然後重新渲染列表
  */
 function applyCustomerFiltersAndSort() {
@@ -271,16 +306,14 @@ function applyCustomerFiltersAndSort() {
     });
   }
 
-  // 消費總額排序
+  // 註冊日期 / 消費總額排序
   if (customerSortStack.length > 0) {
     data.sort(function (a, b) {
       for (var i = 0; i < customerSortStack.length; i++) {
         var key = customerSortStack[i].key;
         var dir = customerSortStack[i].dir === 'asc' ? 1 : -1;
-        var valA = a[key] || 0;
-        var valB = b[key] || 0;
-        if (valA < valB) { return -1 * dir; }
-        if (valA > valB) { return  1 * dir; }
+        var cmp = compareCustomerValues(key, a[key], b[key]);
+        if (cmp !== 0) { return cmp * dir; }
       }
       return 0;
     });
@@ -346,7 +379,7 @@ window.initCustomers = function () {
   }).fail(function () {
     var errHtml = '<i class="fas fa-exclamation-triangle me-2"></i>載入客戶數據失敗';
     $('#customersTableBody').html(
-      '<tr><td colspan="7" class="text-center py-4 text-danger">' + errHtml + '</td></tr>'
+      '<tr><td colspan="8" class="text-center py-4 text-danger">' + errHtml + '</td></tr>'
     );
     $('#customersCardList').html('<div class="alert alert-danger m-3">' + errHtml + '</div>');
   });
@@ -1030,7 +1063,7 @@ function renderCustomersList(customers) {
       ? '<i class="fas fa-inbox me-2"></i>沒有符合條件的會員'
       : '目前沒有客戶資料';
     $('#customersTableBody').html(
-      '<tr><td colspan="7" class="text-center text-muted py-4">' + emptyMsg + '</td></tr>'
+      '<tr><td colspan="8" class="text-center text-muted py-4">' + emptyMsg + '</td></tr>'
     );
     $('#customersCardList').html(
       '<div class="text-center text-muted py-4">' + emptyMsg + '</div>'
@@ -1048,6 +1081,7 @@ function renderCustomersList(customers) {
     var tierDisplay      = c.tier || '一般';
     var spentDisplay     = 'NT$ ' + c.totalSpent.toLocaleString();
     var emailDisplay     = c.email || '—';
+    var registeredDisplay = formatRegisteredDate(c.registeredAt);
     var tagsHtml         = (c.tags && c.tags.length > 0)
       ? c.tags.map(getTagBadge).join('')
       : '<span class="text-muted small">無標籤</span>';
@@ -1073,6 +1107,7 @@ function renderCustomersList(customers) {
         '<td class="cell-name">' + c.name + '</td>' +
         '<td class="cell-phone">' + phoneDisplay + '</td>' +
         '<td class="cell-email">' + emailDisplay + '</td>' +
+        '<td class="cell-registered">' + registeredDisplay + '</td>' +
         '<td class="cell-tier">' + tierDisplay + '</td>' +
         '<td class="cell-spent text-end fw-bold text-success">' + spentDisplay + '</td>' +
         '<td class="cell-tags">' + tagsHtml + '</td>' +
@@ -1081,7 +1116,7 @@ function renderCustomersList(customers) {
         '</td>' +
       '</tr>' +
       '<tr class="customer-detail-row">' +
-        '<td colspan="7" class="p-0">' +
+        '<td colspan="8" class="p-0">' +
           '<div id="' + collapseId + '" class="collapse">' + detailHtml + '</div>' +
         '</td>' +
       '</tr>';
@@ -1104,6 +1139,10 @@ function renderCustomersList(customers) {
           '<div class="card-field card-field-email">' +
             '<div class="card-label">電子信箱</div>' +
             '<div class="card-value text-muted">' + emailDisplay + '</div>' +
+          '</div>' +
+          '<div class="card-field card-field-registered">' +
+            '<div class="card-label">註冊日期</div>' +
+            '<div class="card-value">' + registeredDisplay + '</div>' +
           '</div>' +
           '<div class="card-field card-field-tier">' +
             '<div class="card-label">會員等級</div>' +
