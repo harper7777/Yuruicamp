@@ -8,7 +8,7 @@
  *   3. 訂單狀態支援 3 種：未出貨 / 已出貨 / 已退貨
  *   4. 點擊訂單編號開啟 modal，modal 內顯示訂單紀錄時間軸
  *   5. 點擊出貨按鈕後更新 orderStatus 並 push 新 history 紀錄
- *   6. 欄位排序（可疊加）：訂單編號、訂單日期、總金額
+ *   6. 欄位排序（可疊加）：訂單日期、總金額
  *   7. 多選篩選：付款狀態、訂單狀態（漏斗 icon + checkbox Dropdown）
  *
  * 使用 jQuery Event Namespace (.orders) 防止重複導覽時事件堆疊
@@ -19,11 +19,13 @@
 // ─────────────────────────────────────────────
 
 /**
- * 排序堆疊：依點擊時間順序排列
- * 每個元素：{ key: 'id' | 'createdAt' | 'total', dir: 'asc' | 'desc' }
- * 初始值設為日期降冪（最新訂單在最上面）
+ * 使用者明確設定的排序堆疊（空陣列 = 使用隱含預設排序）
+ * 每個元素：{ key: 'createdAt' | 'total', dir: 'asc' | 'desc' }
  */
-var sortStack = [{ key: 'createdAt', dir: 'desc' }];
+var sortStack = [];
+
+/** 隱含預設：最新訂單在最上面（sortStack 為空時套用） */
+var DEFAULT_ORDER_SORT = [{ key: 'createdAt', dir: 'desc' }];
 
 /**
  * 篩選條件：各欄位目前勾選的值
@@ -52,13 +54,15 @@ var orderDateState = { days: 30, startDate: null, endDate: null };
 
 window.initOrders = function () {
   // 移除舊有事件，防止切換頁面時事件重複綁定
-  // 同時清除 bookings 的事件：兩個模組共用 .sortable-th / .filter-icon / .filter-dropdown 選擇器，
-  // 若 bookings 事件殘留，點擊漏斗 icon 會被雙重觸發（toggle 兩次 = 無效果）
+  // 多個模組共用 .sortable-th / .filter-icon / .filter-dropdown 選擇器，
+  // 若其他頁事件殘留，點擊漏斗 icon 會被雙重觸發（toggle 兩次 = 無效果）
   $(document).off('.bookings');
   $(document).off('.orders');
+  $(document).off('.movement');
+  $(document).off('.customers');
 
-  // ── 每次進入訂單頁重置排序與篩選狀態（還原預設：日期降冪） ──
-  sortStack      = [{ key: 'createdAt', dir: 'desc' }];
+  // ── 每次進入訂單頁重置排序與篩選狀態（排序回到隱含預設：日期降冪） ──
+  sortStack      = [];
   filterState    = { paymentStatus: [], orderStatus: [], dateStart: null, dateEnd: null };
   // 日期選鈕狀態也同步重置（預設「近 30 天」）
   orderDateState = { days: 30, startDate: null, endDate: null };
@@ -100,22 +104,22 @@ window.initOrders = function () {
         '</td></tr>'
       );
     });
+  } else {
+    applyFiltersAndSort();
   }
 
-  // ── 排序：點擊 .sortable-th 標頭 ──────────────────
-  // 三段式循環：無排序 → asc ↑ → desc ↓ → 移除（回無排序）
-  $(document).on('click.orders', '.sortable-th', function () {
-    var key = $(this).data('sort-key');   // 欄位 key：id / createdAt / total
+  // ── 排序：點擊 .sortable-th 標頭（限定 #ordersTable，避免跨頁衝突）──
+  // 三段式：asc ↑ → desc ↓ → 移除；sortStack 空時用隱含 createdAt desc
+  // 首次點擊某欄只排序該欄（不自動疊加 createdAt，避免日期篩選後點總金額無效）
+  $(document).on('click.orders', '#ordersTable .sortable-th', function () {
+    var key = $(this).data('sort-key');
     var idx = sortStack.findIndex(function (s) { return s.key === key; });
 
     if (idx === -1) {
-      // 此欄尚未在排序堆疊中 → 加入，預設升冪
       sortStack.push({ key: key, dir: 'asc' });
     } else if (sortStack[idx].dir === 'asc') {
-      // 目前升冪 → 改為降冪
       sortStack[idx].dir = 'desc';
     } else {
-      // 目前降冪 → 從堆疊移除（回無排序）
       sortStack.splice(idx, 1);
     }
 
@@ -124,28 +128,28 @@ window.initOrders = function () {
 
   // ── 篩選 Dropdown 開關：點擊漏斗 icon ──────────────
   // 點擊 .filter-icon → 顯示/隱藏同一個 th 內的 .filter-dropdown
-  $(document).on('click.orders', '.filter-icon', function (e) {
+  $(document).on('click.orders', '#ordersTable .filter-icon', function (e) {
     e.stopPropagation();   // 防止冒泡到 document，避免立即被關閉
     var $th = $(this).closest('.filter-th');
     var $dropdown = $th.find('.filter-dropdown');
 
     // 先關閉所有其他已開啟的 Dropdown，再 toggle 當前的
-    $('.filter-dropdown').not($dropdown).addClass('d-none');
+    $('#ordersTable .filter-dropdown').not($dropdown).addClass('d-none');
     $dropdown.toggleClass('d-none');
   });
 
   // ── 點擊 Dropdown 內部（checkbox / label）時，阻止冒泡關閉 ──
-  $(document).on('click.orders', '.filter-dropdown', function (e) {
+  $(document).on('click.orders', '#ordersTable .filter-dropdown', function (e) {
     e.stopPropagation();
   });
 
   // ── 點擊頁面其他地方 → 關閉所有 Dropdown ──────────
   $(document).on('click.orders', function () {
-    $('.filter-dropdown').addClass('d-none');
+    $('#ordersTable .filter-dropdown').addClass('d-none');
   });
 
   // ── 篩選 checkbox 勾選/取消 ────────────────────────
-  $(document).on('change.orders', '.filter-dropdown input[type="checkbox"]', function () {
+  $(document).on('change.orders', '#ordersTable .filter-dropdown input[type="checkbox"]', function () {
     var $th  = $(this).closest('.filter-th');
     var key  = $th.data('filter-key');   // 'paymentStatus' 或 'orderStatus'
 
@@ -159,10 +163,13 @@ window.initOrders = function () {
     applyFiltersAndSort();
   });
 
-  // ── 清除排序按鈕 ───────────────────────────────────
+  // ── 清除條件按鈕：還原預設排序 + 清空欄位篩選 + 還原預設日期（近 30 天）──
   $(document).on('click.orders', '#btnClearSort', function () {
-    sortStack = [{ key: 'createdAt', dir: 'desc' }];   // 還原預設：日期降冪
-    applyFiltersAndSort();
+    sortStack = [];
+    filterState.paymentStatus = [];
+    filterState.orderStatus   = [];
+    // applyOrderDayRange 內部會呼叫 applyFiltersAndSort()
+    applyOrderDayRange(30);
   });
 
   // ── 點擊訂單編號 → 開啟訂單明細 modal ───────────────
@@ -331,6 +338,16 @@ function applyOrderCustomRange(dateStart, dateEnd) {
   filterState.dateEnd      = dateEnd   || null;
   updateOrderPeriodLabel();
   applyFiltersAndSort();
+
+  // 同步 flatpickr 顯示，並確保 input 可見（與 label 格式一致：YYYY-MM-DD 至 YYYY-MM-DD）
+  var pickerEl = document.querySelector('#orderDateRangePicker');
+  if (pickerEl && pickerEl._flatpickr && orderDateState.startDate && orderDateState.endDate) {
+    pickerEl._flatpickr.setDate(
+      [orderDateState.startDate, orderDateState.endDate],
+      false // 不觸發 onChange，避免重複篩選
+    );
+  }
+  $('#orderDateRangePicker').show();
 }
 
 /**
@@ -348,14 +365,25 @@ function updateOrderPeriodLabel() {
   }
 
   // 更新期間文字標籤
+  var $label = $('#orderPeriodLabel');
+
+  // custom 模式：日期已由 flatpickr input 顯示，隱藏 label 避免重複
+  if (days === 'custom') {
+    $label.addClass('d-none').text('');
+    return;
+  }
+
+  $label.removeClass('d-none');
+
   if (days === 'all') {
-    $('#orderPeriodLabel').text('全部期間');
+    $label.text('全部期間');
   } else if (orderDateState.startDate && orderDateState.endDate) {
-    $('#orderPeriodLabel').text(
-      fmtOrderDate(orderDateState.startDate) + ' ～ ' + fmtOrderDate(orderDateState.endDate)
+    // 格式與 flatpickr 一致：YYYY-MM-DD 至 YYYY-MM-DD
+    $label.text(
+      fmtOrderDateISO(orderDateState.startDate) + ' 至 ' + fmtOrderDateISO(orderDateState.endDate)
     );
   } else {
-    $('#orderPeriodLabel').text('');
+    $label.text('');
   }
 }
 
@@ -395,15 +423,31 @@ function initOrderFlatpickr() {
  *  - 點擊「近 7 天 / 近 30 天 / 近 3 個月」：
  *      • 若該按鈕已 active → toggle off，回到「全部期間」(applyOrderDayRange('all'))
  *      • 否則 → 套用對應天數 (applyOrderDayRange(days))
- *  - 點擊「自定義」：顯示 flatpickr input 並觸發開啟
+ *  - 點擊「自定義」：切換 custom 模式、隱藏期間 label、顯示 flatpickr 並開啟
  */
+function enterOrderCustomMode() {
+  // 切換為 custom 模式，讓 updateOrderPeriodLabel() 隱藏 #orderPeriodLabel
+  orderDateState.days = 'custom';
+  updateOrderPeriodLabel();
+
+  // 預填目前篩選區間，避免從固定期間切換時 input 與 label 各顯示各的
+  var pickerEl = document.querySelector('#orderDateRangePicker');
+  if (pickerEl && pickerEl._flatpickr && orderDateState.startDate && orderDateState.endDate) {
+    pickerEl._flatpickr.setDate(
+      [orderDateState.startDate, orderDateState.endDate],
+      false // 不觸發 onClose，避免重複篩選
+    );
+  }
+
+  $('#orderDateRangePicker').show().trigger('click');
+}
+
 function setupOrderPeriodFilter() {
   $(document).on('click.orders', '#orderPeriodBtns button[data-days]', function () {
     var days = $(this).data('days');
 
     if (days === 'custom') {
-      // 顯示 flatpickr input 並開啟選擇器
-      $('#orderDateRangePicker').show().trigger('click');
+      enterOrderCustomMode();
     } else if (days === 'month') {
       // 本月按鈕：已 active 則 toggle off 回全部期間，否則套用本月範圍
       // 必須在 parseInt 之前處理，因為 parseInt('month', 10) === NaN
@@ -425,6 +469,34 @@ function setupOrderPeriodFilter() {
 // ─────────────────────────────────────────────
 // 核心資料管線
 // ─────────────────────────────────────────────
+
+/**
+ * 取得實際用於排序的堆疊（空 sortStack → 隱含預設 createdAt desc）
+ */
+function getEffectiveSortStack() {
+  return sortStack.length > 0 ? sortStack : DEFAULT_ORDER_SORT;
+}
+
+/**
+ * 依欄位型別比較兩筆值，回傳 -1 / 0 / 1
+ * @param {string} key
+ * @param {*} valA
+ * @param {*} valB
+ */
+function compareOrderValues(key, valA, valB) {
+  if (key === 'total') {
+    var numA = Number(valA) || 0;
+    var numB = Number(valB) || 0;
+    if (numA < numB) return -1;
+    if (numA > numB) return 1;
+    return 0;
+  }
+  var strA = String(valA || '');
+  var strB = String(valB || '');
+  if (strA < strB) return -1;
+  if (strA > strB) return 1;
+  return 0;
+}
 
 /**
  * 依目前的 filterState 篩選、依 sortStack 排序，再重新渲染表格
@@ -463,21 +535,17 @@ function applyFiltersAndSort() {
   }
 
   // ── Step 2：排序 ──────────────────────────────────
-  // 依 sortStack 的優先順序逐層比較（多鍵穩定排序）
-  if (sortStack.length > 0) {
-    data.sort(function (a, b) {
-      for (var i = 0; i < sortStack.length; i++) {
-        var key  = sortStack[i].key;
-        var dir  = sortStack[i].dir === 'asc' ? 1 : -1;
-        var valA = a[key];
-        var valB = b[key];
-        if (valA < valB) return -1 * dir;
-        if (valA > valB) return  1 * dir;
-        // 相等時繼續比下一層
-      }
-      return 0;
-    });
-  }
+  // 依有效排序堆疊逐層比較（多鍵穩定排序，支援疊加）
+  var stackToUse = getEffectiveSortStack();
+  data.sort(function (a, b) {
+    for (var i = 0; i < stackToUse.length; i++) {
+      var key = stackToUse[i].key;
+      var dir = stackToUse[i].dir === 'asc' ? 1 : -1;
+      var cmp = compareOrderValues(key, a[key], b[key]);
+      if (cmp !== 0) return cmp * dir;
+    }
+    return 0;
+  });
 
   // ── Step 3：渲染 + 更新 UI ────────────────────────
   renderOrdersTable(data);
@@ -490,34 +558,40 @@ function applyFiltersAndSort() {
 // ─────────────────────────────────────────────
 
 /**
- * 依 sortStack 更新欄位標頭的箭頭 icon 和「清除排序」按鈕的顯隱
+ * 依 sortStack 更新欄位標頭的箭頭 icon 和「清除條件」按鈕的顯隱
  */
 function updateSortUI() {
   // 所有排序 icon 先重置為雙箭頭（灰色、未排序狀態）
-  $('.sort-icon')
+  $('#ordersTable .sort-icon')
     .removeClass('fa-sort-up fa-sort-down sort-active')
     .addClass('fa-sort');
 
-  // 依 sortStack 設定對應欄位的箭頭方向和顏色
-  sortStack.forEach(function (s) {
-    var $icon = $('.sortable-th[data-sort-key="' + s.key + '"] .sort-icon');
+  // 依有效排序堆疊設定對應欄位的箭頭方向和顏色
+  getEffectiveSortStack().forEach(function (s) {
+    var $icon = $('#ordersTable .sortable-th[data-sort-key="' + s.key + '"] .sort-icon');
     $icon
       .removeClass('fa-sort')
       .addClass(s.dir === 'asc' ? 'fa-sort-up' : 'fa-sort-down')
       .addClass('sort-active');   // 換成品牌色
   });
 
-  // 有排序條件時顯示「清除排序」按鈕；否則隱藏
-  // sortStack 長度 > 1 或第一層不是預設的日期降冪 → 視為「有排序」
-  var isDefault = (
-    sortStack.length === 1 &&
-    sortStack[0].key === 'createdAt' &&
-    sortStack[0].dir === 'desc'
+  // 預設排序：使用者尚未明確修改 sortStack（隱含 createdAt desc）
+  var isDefaultSort = sortStack.length === 0;
+
+  // 欄位篩選：付款狀態 / 訂單狀態任一有勾選
+  var hasColumnFilter = (
+    filterState.paymentStatus.length > 0 ||
+    filterState.orderStatus.length > 0
   );
-  if (isDefault || sortStack.length === 0) {
-    $('#btnClearSort').addClass('d-none');
-  } else {
+
+  // 日期篩選：預設為「近 30 天」
+  var isDefaultDate = orderDateState.days === 30;
+
+  // 任一條件成立 → 顯示「清除條件」
+  if (!isDefaultSort || hasColumnFilter || !isDefaultDate) {
     $('#btnClearSort').removeClass('d-none');
+  } else {
+    $('#btnClearSort').addClass('d-none');
   }
 }
 
@@ -529,7 +603,7 @@ function updateSortUI() {
 function updateFilterUI() {
   // 遍歷兩個可篩選的欄位（漏斗 icon + 紅點）
   ['paymentStatus', 'orderStatus'].forEach(function (key) {
-    var $th   = $('.filter-th[data-filter-key="' + key + '"]');
+    var $th   = $('#ordersTable .filter-th[data-filter-key="' + key + '"]');
     var $icon = $th.find('.filter-icon');
     var $dot  = $th.find('.filter-dot');
 

@@ -17,7 +17,7 @@ var EDIT_PERMISSION_SELECTORS = {
   products: '[data-bs-target="#addProductModal"]:not(.edit-product-btn), .edit-product-btn, .stock-confirm-btn, .stock-step-btn, #submitAddProduct',
   customers: '.tier-edit-btn, .points-edit-btn, .coupons-edit-btn, .tier-save-btn, .tier-cancel-btn, .points-save-btn, .coupons-save-btn',
   discounts: '#submitAddCoupon, .btn-toggle-coupon, .btn-delete-coupon, #generateCouponCode, #addCouponForm input, #addCouponForm select, #addCouponForm textarea, #addCouponForm button:not(.btn-close)',
-  reviews: '.btn-reply-toggle, .btn-submit-reply, .review-card textarea',
+  reviews: '.btn-open-reply-modal, #btnSubmitReviewReply, #btnDeleteReviewReply, #reviewReplyTextarea',
   bookings: '.btn-confirm-booking, .btn-cancel-booking',
   permissions: '#addEmployeeBtn, .btn-edit-employee, .btn-toggle-employee, #employeeModal input:not([readonly]), #employeeModal button:not(.btn-close):not([data-bs-dismiss]), #saveEmployeeBtn, .perm-view-cb, .perm-edit-cb, #empIsSuperAdmin',
 };

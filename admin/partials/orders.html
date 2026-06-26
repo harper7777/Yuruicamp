@@ -6,20 +6,17 @@
 
 <div class="card shadow-sm border-0">
 
-  <!-- 卡片頂部：標題 + 日期篩選 + 清除排序按鈕 -->
+  <!-- 卡片頂部：日期篩選 + 清除條件按鈕 -->
   <!-- 舊的 #orderStatusFilter select 已移除，篩選功能改由欄位標頭的漏斗 icon 負責 -->
   <div class="card-header bg-white border-0
-              d-flex justify-content-between align-items-center flex-wrap gap-2 py-3">
-    <h6 class="fw-semibold mb-0">
-      <i class="fas fa-shopping-bag me-2 text-muted"></i>訂單列表
-    </h6>
+              d-flex justify-content-start align-items-center flex-wrap gap-2 py-3">
 
-    <!-- 右側工具列：日期篩選 + 清除排序按鈕 -->
-    <div class="d-flex align-items-center flex-wrap gap-2">
+    <!-- 工具列：日期篩選 + 清除條件按鈕 -->
+    <div class="d-flex align-items-center flex-nowrap gap-2">
 
       <!-- 日期篩選器：快速選鈕 + flatpickr 自定義 + 期間文字 -->
       <!-- 與分析報表頁風格一致；由 orders.js setupOrderPeriodFilter / initOrderFlatpickr 驅動 -->
-      <div class="d-flex align-items-center flex-wrap gap-2">
+      <div class="d-flex align-items-center flex-nowrap gap-2">
         <div class="btn-group btn-group-sm" id="orderPeriodBtns" role="group">
           <button type="button" class="btn btn-outline-secondary" data-days="7">近 7 天</button>
           <button type="button" class="btn btn-outline-secondary active" data-days="30">近 30 天</button>
@@ -31,16 +28,16 @@
         </div>
         <!-- flatpickr input：預設 hidden，點「自定義」才顯示 -->
         <input type="text" id="orderDateRangePicker"
-               class="form-control form-control-sm"
-               style="max-width: 230px; display: none;"
+               class="form-control form-control-sm flex-shrink-0"
+               style="width: 230px; display: none; white-space: nowrap;"
                placeholder="開始日期 ~ 結束日期" readonly>
         <!-- 期間文字：由 updateOrderPeriodLabel() 動態更新 -->
         <span class="text-muted small" id="orderPeriodLabel"></span>
       </div>
 
-      <!-- 清除排序按鈕：只有在排序堆疊不為空時才顯示，由 updateSortUI() 控制 d-none -->
+      <!-- 清除條件按鈕：有篩選或非預設排序時才顯示，由 updateSortUI() 控制 d-none -->
       <button id="btnClearSort" class="btn btn-sm btn-outline-secondary d-none">
-        <i class="fas fa-rotate-left me-1"></i>清除排序
+        <i class="fas fa-rotate-left me-1"></i>清除條件
       </button>
 
     </div>
@@ -54,10 +51,8 @@
           <tr>
             <!-- 排序欄位：加 .sortable-th class 和 data-sort-key，orders.js 監聽點擊 -->
 
-            <!-- 訂單編號：字串排序（字典序） -->
-            <th class="sortable-th" data-sort-key="id">
-              訂單編號 <i class="fas fa-sort sort-icon ms-1"></i>
-            </th>
+            <!-- 訂單編號：不可排序 -->
+            <th>訂單編號</th>
 
             <!-- 訂單日期：字串排序（ISO 格式 YYYY-MM-DD 可直接比大小） -->
             <th class="sortable-th" data-sort-key="createdAt">

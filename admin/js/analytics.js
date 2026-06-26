@@ -148,18 +148,28 @@ function loadAllAnalyticsData(callback) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 期間篩選器
+// 期間篩選器（邏輯對齊 orders.js）
 // ═══════════════════════════════════════════════════════════════
+
+/**
+ * 將 Date 物件格式化成 YYYY-MM-DD 字串（與 flatpickr / orders.js 一致）
+ * Format a Date as YYYY-MM-DD (matches flatpickr and orders.js)
+ */
+function fmtAnalyticsDateISO(d) {
+  if (!d) return null;
+  return d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0');
+}
 
 /**
  * 依 days 設定 state 的 startDate / endDate
  * @param {Object} state - shopState 或 bookingState
- * @param {number} days  - 天數（例：7 / 30 / 90）
+ * @param {number|string} days - 天數（7 / 30 / 90）或 'month'
  */
 function applyDayRange(state, days) {
   if (days === 'month') {
     // 本月：從本月 1 日到今天
-    // new Date(year, month, 1) 的 month 是 0-indexed，getMonth() 回傳值剛好吻合
     var now   = new Date();
     var start = new Date(now.getFullYear(), now.getMonth(), 1);
     state.days      = 'month';
@@ -176,54 +186,109 @@ function applyDayRange(state, days) {
 }
 
 /**
- * 設定期間篩選器的按鈕點擊事件
- * @param {string}   btnGroupId  - 按鈕群組的 DOM id
- * @param {string}   pickerId    - flatpickr input 的 DOM id
- * @param {Object}   state       - 對應的篩選狀態物件
- * @param {string}   labelId     - 期間說明文字的 DOM id
- * @param {Function} refreshFn  - 狀態更新後要呼叫的刷新函式
+ * 套用快速天數篩選，更新 UI 並刷新圖表
+ * Apply a preset day range, refresh label/buttons, then re-render charts
+ */
+function applyAnalyticsDayRange(btnGroupId, pickerId, labelId, state, days, refreshFn) {
+  applyDayRange(state, days);
+  // 非 custom 模式：收起 flatpickr input（與 orders.js 一致）
+  if (days !== 'custom') {
+    $('#' + pickerId).hide();
+  }
+  updatePeriodLabel(btnGroupId, labelId, state);
+  refreshFn();
+}
+
+/**
+ * 接受兩個 YYYY-MM-DD 字串，設定為自定義日期範圍並刷新圖表
+ * Set a custom date range from ISO strings and refresh charts
+ */
+function applyAnalyticsCustomRange(btnGroupId, pickerId, labelId, state, dateStart, dateEnd, refreshFn) {
+  state.days      = 'custom';
+  state.startDate = dateStart ? new Date(dateStart + 'T00:00:00') : null;
+  state.endDate   = dateEnd   ? new Date(dateEnd   + 'T00:00:00') : null;
+  updatePeriodLabel(btnGroupId, labelId, state);
+  refreshFn();
+
+  // 同步 flatpickr 顯示，並確保 input 可見
+  var pickerEl = document.querySelector('#' + pickerId);
+  if (pickerEl && pickerEl._flatpickr && state.startDate && state.endDate) {
+    pickerEl._flatpickr.setDate(
+      [state.startDate, state.endDate],
+      false // 不觸發 onChange，避免重複刷新
+    );
+  }
+  $('#' + pickerId).show();
+}
+
+/**
+ * 進入自定義日期模式：隱藏 label、只亮「自定義」、預填 flatpickr
+ * Enter custom date mode — hide label, activate custom btn, prefill picker
+ */
+function enterAnalyticsCustomMode(btnGroupId, pickerId, labelId, state) {
+  state.days = 'custom';
+  updatePeriodLabel(btnGroupId, labelId, state);
+
+  var pickerEl = document.querySelector('#' + pickerId);
+  if (pickerEl && pickerEl._flatpickr && state.startDate && state.endDate) {
+    pickerEl._flatpickr.setDate(
+      [state.startDate, state.endDate],
+      false
+    );
+  }
+
+  $('#' + pickerId).show().trigger('click');
+}
+
+/**
+ * 設定期間篩選器的按鈕點擊事件（對齊 orders.js setupOrderPeriodFilter）
  */
 function setupPeriodFilter(btnGroupId, pickerId, state, labelId, refreshFn) {
   $(document).on('click.analytics', '#' + btnGroupId + ' button[data-days]', function () {
     var days = $(this).data('days');
 
-    // 更新 active 樣式
-    $('#' + btnGroupId + ' button').removeClass('active');
-    $(this).addClass('active');
-
     if (days === 'custom') {
-      // 顯示 flatpickr 日期選擇器 input
-      $('#' + pickerId).show().trigger('click');
+      enterAnalyticsCustomMode(btnGroupId, pickerId, labelId, state);
     } else if (days === 'month') {
-      // 本月按鈕：必須在 parseInt 之前處理，因為 parseInt('month', 10) === NaN
-      // 分析報表頁不做 toggle off，點了就鎖定（與其他快速選鈕一致）
-      $('#' + pickerId).hide();
-      applyDayRange(state, 'month');
-      updatePeriodLabel(labelId, state);
-      refreshFn();
+      // 本月：必須在 parseInt 之前處理（parseInt('month', 10) === NaN）
+      applyAnalyticsDayRange(btnGroupId, pickerId, labelId, state, 'month', refreshFn);
     } else {
-      $('#' + pickerId).hide();
-      applyDayRange(state, parseInt(days, 10));
-      updatePeriodLabel(labelId, state);
-      refreshFn();
+      applyAnalyticsDayRange(btnGroupId, pickerId, labelId, state, parseInt(days, 10), refreshFn);
     }
   });
 
-  // 初始顯示期間文字
-  updatePeriodLabel(labelId, state);
+  // 初始顯示期間文字與按鈕 active 狀態
+  updatePeriodLabel(btnGroupId, labelId, state);
 }
 
 /**
- * 更新期間說明文字（例：2026/05/22 ～ 2026/06/21）
+ * 更新期間文字標籤與按鈕 active 樣式（對齊 orders.js updateOrderPeriodLabel）
  */
-function updatePeriodLabel(labelId, state) {
-  if (!state.startDate || !state.endDate) return;
-  var fmt = function (d) {
-    return d.getFullYear() + '/' +
-      String(d.getMonth() + 1).padStart(2, '0') + '/' +
-      String(d.getDate()).padStart(2, '0');
-  };
-  $('#' + labelId).text(fmt(state.startDate) + ' ～ ' + fmt(state.endDate));
+function updatePeriodLabel(btnGroupId, labelId, state) {
+  var days = state.days;
+
+  // 更新按鈕群 active 狀態
+  $('#' + btnGroupId + ' button').removeClass('active');
+  $('#' + btnGroupId + ' button[data-days="' + days + '"]').addClass('active');
+
+  var $label = $('#' + labelId);
+
+  // custom 模式：日期已由 flatpickr input 顯示，隱藏 label 避免重複
+  if (days === 'custom') {
+    $label.addClass('d-none').text('');
+    return;
+  }
+
+  $label.removeClass('d-none');
+
+  if (state.startDate && state.endDate) {
+    // 格式與 flatpickr 一致：YYYY-MM-DD 至 YYYY-MM-DD
+    $label.text(
+      fmtAnalyticsDateISO(state.startDate) + ' 至 ' + fmtAnalyticsDateISO(state.endDate)
+    );
+  } else {
+    $label.text('');
+  }
 }
 
 /**
@@ -244,13 +309,14 @@ function initFlatpickr() {
     dateFormat: 'Y-m-d',
     locale: locale,
     onClose: function (selectedDates) {
-      // 兩個日期都選完才觸發更新
+      // 必須兩個日期都選完才觸發；只選一個就關閉時維持上一次狀態
       if (selectedDates.length === 2) {
-        shopState.startDate = selectedDates[0];
-        shopState.endDate   = selectedDates[1];
-        shopState.days      = 'custom';
-        updatePeriodLabel('shopPeriodLabel', shopState);
-        refreshShopSection();
+        var start = fmtAnalyticsDateISO(selectedDates[0]);
+        var end   = fmtAnalyticsDateISO(selectedDates[1]);
+        applyAnalyticsCustomRange(
+          'shopPeriodBtns', 'shopDateRangePicker', 'shopPeriodLabel',
+          shopState, start, end, refreshShopSection
+        );
       }
     }
   });
@@ -262,18 +328,19 @@ function initFlatpickr() {
     locale: locale,
     onClose: function (selectedDates) {
       if (selectedDates.length === 2) {
-        bookingState.startDate = selectedDates[0];
-        bookingState.endDate   = selectedDates[1];
-        bookingState.days      = 'custom';
-        updatePeriodLabel('bookingPeriodLabel', bookingState);
-        refreshBookingSection();
+        var start = fmtAnalyticsDateISO(selectedDates[0]);
+        var end   = fmtAnalyticsDateISO(selectedDates[1]);
+        applyAnalyticsCustomRange(
+          'bookingPeriodBtns', 'bookingDateRangePicker', 'bookingPeriodLabel',
+          bookingState, start, end, refreshBookingSection
+        );
       }
     }
   });
 
   // 更新初始文字（flatpickr 初始化後才確保 state 有值）
-  updatePeriodLabel('shopPeriodLabel', shopState);
-  updatePeriodLabel('bookingPeriodLabel', bookingState);
+  updatePeriodLabel('shopPeriodBtns', 'shopPeriodLabel', shopState);
+  updatePeriodLabel('bookingPeriodBtns', 'bookingPeriodLabel', bookingState);
 }
 
 // ═══════════════════════════════════════════════════════════════

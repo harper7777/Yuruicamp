@@ -38,26 +38,27 @@
   <div class="tab-pane fade show active"
        id="shopTabPane" role="tabpanel" aria-labelledby="shopTab">
 
-    <!-- ── 期間篩選器 ── -->
+    <!-- ── 期間篩選器（結構與 orders.html 一致）── -->
     <div class="d-flex align-items-center flex-wrap gap-2 mb-4">
-      <span class="text-muted small me-1">期間：</span>
-      <!-- 快速選鈕（data-days 由 analytics.js 讀取）-->
-      <div class="btn-group btn-group-sm" id="shopPeriodBtns" role="group">
-        <button type="button" class="btn btn-outline-secondary" data-days="7">近 7 天</button>
-        <button type="button" class="btn btn-outline-secondary active" data-days="30">近 30 天</button>
-        <button type="button" class="btn btn-outline-secondary" data-days="month">本月</button>
-        <button type="button" class="btn btn-outline-secondary" data-days="90">近 3 個月</button>
-        <button type="button" class="btn btn-outline-secondary" data-days="custom">
-          <i class="fas fa-calendar-alt me-1"></i>自定義
-        </button>
+      <div class="d-flex align-items-center flex-nowrap gap-2">
+        <!-- 快速選鈕（data-days 由 analytics.js 讀取）-->
+        <div class="btn-group btn-group-sm" id="shopPeriodBtns" role="group">
+          <button type="button" class="btn btn-outline-secondary" data-days="7">近 7 天</button>
+          <button type="button" class="btn btn-outline-secondary active" data-days="30">近 30 天</button>
+          <button type="button" class="btn btn-outline-secondary" data-days="month">本月</button>
+          <button type="button" class="btn btn-outline-secondary" data-days="90">近 3 個月</button>
+          <button type="button" class="btn btn-outline-secondary" data-days="custom">
+            <i class="fas fa-calendar-alt me-1"></i>自定義
+          </button>
+        </div>
+        <!-- flatpickr input：預設 hidden，點「自定義」才顯示 -->
+        <input type="text" id="shopDateRangePicker"
+               class="form-control form-control-sm flex-shrink-0"
+               style="width: 230px; display: none; white-space: nowrap;"
+               placeholder="開始日期 ~ 結束日期" readonly>
+        <!-- 期間文字：由 updatePeriodLabel() 動態更新 -->
+        <span class="text-muted small" id="shopPeriodLabel"></span>
       </div>
-      <!-- flatpickr 隱藏 input，點「自定義」後顯示 -->
-      <input type="text" id="shopDateRangePicker"
-             class="form-control form-control-sm"
-             style="max-width: 230px; display: none;"
-             placeholder="開始日期 ~ 結束日期" readonly>
-      <!-- 目前篩選期間文字說明 -->
-      <span class="text-muted small" id="shopPeriodLabel"></span>
     </div>
 
     <!-- ── 圖表區：折線圖（左 8/12）+ 甜甜圈（右 4/12） ── -->
@@ -240,23 +241,26 @@
   <div class="tab-pane fade"
        id="bookingTabPane" role="tabpanel" aria-labelledby="bookingTab">
 
-    <!-- ── 期間篩選器 ── -->
+    <!-- ── 期間篩選器（結構與 orders.html 一致）── -->
     <div class="d-flex align-items-center flex-wrap gap-2 mb-4">
-      <span class="text-muted small me-1">期間：</span>
-      <div class="btn-group btn-group-sm" id="bookingPeriodBtns" role="group">
-        <button type="button" class="btn btn-outline-secondary" data-days="7">近 7 天</button>
-        <button type="button" class="btn btn-outline-secondary active" data-days="30">近 30 天</button>
-        <button type="button" class="btn btn-outline-secondary" data-days="month">本月</button>
-        <button type="button" class="btn btn-outline-secondary" data-days="90">近 3 個月</button>
-        <button type="button" class="btn btn-outline-secondary" data-days="custom">
-          <i class="fas fa-calendar-alt me-1"></i>自定義
-        </button>
+      <div class="d-flex align-items-center flex-nowrap gap-2">
+        <div class="btn-group btn-group-sm" id="bookingPeriodBtns" role="group">
+          <button type="button" class="btn btn-outline-secondary" data-days="7">近 7 天</button>
+          <button type="button" class="btn btn-outline-secondary active" data-days="30">近 30 天</button>
+          <button type="button" class="btn btn-outline-secondary" data-days="month">本月</button>
+          <button type="button" class="btn btn-outline-secondary" data-days="90">近 3 個月</button>
+          <button type="button" class="btn btn-outline-secondary" data-days="custom">
+            <i class="fas fa-calendar-alt me-1"></i>自定義
+          </button>
+        </div>
+        <!-- flatpickr input：預設 hidden，點「自定義」才顯示 -->
+        <input type="text" id="bookingDateRangePicker"
+               class="form-control form-control-sm flex-shrink-0"
+               style="width: 230px; display: none; white-space: nowrap;"
+               placeholder="開始日期 ~ 結束日期" readonly>
+        <!-- 期間文字：由 updatePeriodLabel() 動態更新 -->
+        <span class="text-muted small" id="bookingPeriodLabel"></span>
       </div>
-      <input type="text" id="bookingDateRangePicker"
-             class="form-control form-control-sm"
-             style="max-width: 230px; display: none;"
-             placeholder="開始日期 ~ 結束日期" readonly>
-      <span class="text-muted small" id="bookingPeriodLabel"></span>
     </div>
 
     <!-- ── 圖表區上半：折線圖（左 8/12）+ 甜甜圈（右 4/12） ── -->

@@ -11,7 +11,7 @@
   <!-- Font Awesome 6 圖示庫 -->
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- flatpickr 日期選擇器 CSS（供 analytics 頁面期間篩選器使用） -->
+  <!-- flatpickr 日期選擇器 CSS（供各頁面期間篩選器使用） -->
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <!-- 後台專屬樣式 -->
@@ -198,17 +198,8 @@
         <h5 class="mb-0 fw-semibold" id="pageTitle">分析報表</h5>
       </div>
 
-      <!-- 右側：通知鈴鐺 + 管理員頭像下拉 -->
+      <!-- 右側：管理員頭像下拉 -->
       <div class="d-flex align-items-center gap-2">
-
-        <!-- 通知鈴鐺（數字 Badge 代表未讀通知） -->
-        <button class="btn position-relative" type="button" title="通知">
-          <i class="fas fa-bell fs-5 text-secondary"></i>
-          <span class="position-absolute top-0 start-100 translate-middle
-                       badge rounded-pill bg-danger" id="notifBadge">
-            3
-          </span>
-        </button>
 
         <!-- 管理員頭像下拉選單 -->
         <div class="dropdown">

@@ -9,7 +9,11 @@
     "productName": "Coleman 六人帳篷",
     "createdAt": "2026-06-01 14:32",
     "replied": false,
-    "replyText": ""
+    "replyText": "",
+    "replyAt": null,
+    "repliedBy": null,
+    "repliedByName": null,
+    "replyUpdatedAt": null
   },
   {
     "id": "R002",
@@ -21,7 +25,11 @@
     "productName": "充氣式睡墊 L號",
     "createdAt": "2026-06-02 10:15",
     "replied": true,
-    "replyText": "感謝您的五星好評！祝露營愉快，歡迎再次選購。"
+    "replyText": "感謝您的五星好評！祝露營愉快，歡迎再次選購。",
+    "replyAt": "2026-06-02 11:00",
+    "repliedBy": "01",
+    "repliedByName": "王老闆",
+    "replyUpdatedAt": null
   },
   {
     "id": "R003",
@@ -33,7 +41,11 @@
     "productName": "MSR 超輕量帳篷",
     "createdAt": "2026-06-03 08:44",
     "replied": false,
-    "replyText": ""
+    "replyText": "",
+    "replyAt": null,
+    "repliedBy": null,
+    "repliedByName": null,
+    "replyUpdatedAt": null
   },
   {
     "id": "R004",
@@ -45,7 +57,11 @@
     "productName": "折疊桌椅組",
     "createdAt": "2026-05-29 18:22",
     "replied": true,
-    "replyText": "謝謝您的愛用！我們的產品採用航空級鋁合金，輕量又耐用。期待您再次光顧！"
+    "replyText": "謝謝您的愛用！我們的產品採用航空級鋁合金，輕量又耐用。期待您再次光顧！",
+    "replyAt": "2026-05-30 09:15",
+    "repliedBy": "01",
+    "repliedByName": "王老闆",
+    "replyUpdatedAt": null
   },
   {
     "id": "R005",
@@ -57,6 +73,10 @@
     "productName": "防水登山背包 45L",
     "createdAt": "2026-06-03 11:05",
     "replied": false,
-    "replyText": ""
+    "replyText": "",
+    "replyAt": null,
+    "repliedBy": null,
+    "repliedByName": null,
+    "replyUpdatedAt": null
   }
 ]

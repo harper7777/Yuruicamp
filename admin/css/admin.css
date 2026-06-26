@@ -259,15 +259,142 @@ button[data-permission-disabled="true"] {
   flex-shrink: 0;
 }
 
-/* ===== Accordion 客戶卡片 ===== */
-.accordion-button:not(.collapsed) {
-  background-color: rgba(36, 77, 77, 0.06);
-  color: #1a3838;
+/* ===== 客戶列表：表格 + 可展開列（對齊範例圖） ===== */
+.customer-list-table thead th {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #6c757d;
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.customer-list-table tbody td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+  font-size: 0.88rem;
+}
+
+.customer-summary-row {
+  cursor: pointer;
+}
+
+.customer-summary-row td.cell-name {
+  color: var(--admin-brand-accent, #244d4d);
+  font-weight: 500;
+}
+
+.customer-summary-row td.cell-email {
+  color: #6c757d;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.customer-summary-row td.cell-spent {
+  white-space: nowrap;
+}
+
+/* 展開箭頭 / Expand chevron */
+.customer-row-chevron {
+  font-size: 0.75rem;
+  color: #adb5bd;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.customer-summary-row.is-expanded .customer-row-chevron,
+.customer-mobile-card.is-expanded .customer-row-chevron {
+  transform: rotate(180deg);
+  color: var(--admin-brand-accent, #244d4d);
+}
+
+/* 只有摘要列（標題列）才有 hover 回饋 / Hover only on summary rows */
+.customer-list-table.table-hover > tbody > tr.customer-summary-row:not(.is-expanded):hover > * {
+  background-color: rgba(36, 77, 77, 0.04);
+}
+
+/* 展開詳情列取消 table-hover 整列高亮 / Disable hover highlight on detail row */
+.customer-list-table.table-hover > tbody > tr.customer-detail-row:hover > * {
+  --bs-table-bg-state: #f0f2f5;
+  --bs-table-color-state: var(--bs-table-color);
+  background-color: #f0f2f5 !important;
   box-shadow: none;
 }
 
-.accordion-button:focus {
-  box-shadow: none;
+/* 展開中的標題列：白色底 + 品牌色底線 / Expanded summary as header */
+.customer-summary-row.is-expanded > * {
+  background-color: #fff !important;
+  border-bottom: 2px solid var(--admin-brand-accent, #244d4d);
+}
+
+.customer-detail-row > td {
+  padding: 0 !important;
+  border-top: none;
+  background: #f0f2f5 !important;
+}
+
+/* 詳情內容：白色卡片浮在灰色底上 / Detail panel as inset card */
+.customer-detail-panel {
+  margin: 0.75rem 1rem 1rem;
+  padding: 1rem;
+  background: #fff;
+  border: 1px solid #e3e6ea;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.customer-detail-table th {
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* 詳情內容列 hover / Row hover inside detail panel */
+.customer-detail-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.customer-detail-table tbody tr:hover {
+  background-color: rgba(36, 77, 77, 0.04);
+}
+
+/* 手機版卡片 / Mobile card layout */
+.customer-mobile-card {
+  border-bottom: 1px solid #eee;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.customer-mobile-card.is-expanded {
+  background-color: #fff;
+  border-bottom: 2px solid var(--admin-brand-accent, #244d4d);
+}
+
+.customer-mobile-card .mobile-card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1rem;
+}
+
+.customer-mobile-card .card-label {
+  font-size: 0.7rem;
+  color: #6c757d;
+  margin-bottom: 0.15rem;
+}
+
+.customer-mobile-card .card-field-name,
+.customer-mobile-card .card-field-tags {
+  grid-column: 1 / -1;
+}
+
+.customer-mobile-detail {
+  background: #f0f2f5;
+  border-bottom: 1px solid #eee;
+  padding: 0 0.75rem 0.75rem;
+}
+
+.customer-mobile-detail .customer-detail-panel {
+  margin: 0;
 }
 
 /* ===== 行內編輯 Input ===== */
@@ -299,12 +426,6 @@ button[data-permission-disabled="true"] {
 
 #adminTopbar img[role="button"]:hover {
   border-color: var(--admin-brand-accent);
-}
-
-/* ===== 通知 Badge ===== */
-#notifBadge {
-  font-size: 0.65rem;
-  padding: 2px 5px;
 }
 
 /* ===== 登入頁樣式 ===== */
@@ -610,4 +731,81 @@ button[data-permission-disabled="true"] {
 
 .section-fade-in {
   animation: fadeInUp 0.3s ease forwards;
+}
+
+/* ===== 評論管理 ===== */
+/* 工具列：固定兩列（Tab 一列、搜尋/篩選一列） */
+.reviews-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.reviews-toolbar-row {
+  width: 100%;
+}
+
+.reviews-toolbar-filters {
+  flex-wrap: nowrap;
+}
+
+.reviews-search-input {
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.reviews-filter-select {
+  width: auto;
+  flex-shrink: 0;
+}
+
+/* 窄螢幕：第 2 列允許換行，但仍維持在 Tab 下方獨立一列 */
+@media (max-width: 767.98px) {
+  .reviews-toolbar-filters {
+    flex-wrap: wrap;
+  }
+
+  .reviews-search-input {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* 待回覆：一般優先（橘色左邊框） */
+.review-card-pending {
+  border-left: 4px solid #fd7e14 !important;
+}
+
+/* 待回覆 + 低分：需優先處理（紅色左邊框） */
+.review-card-urgent {
+  border-left: 4px solid #dc3545 !important;
+}
+
+.review-card .review-card-stars {
+  white-space: nowrap;
+}
+
+.review-card .review-buyer-comment {
+  padding: 0.75rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.review-photo-thumb {
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.review-photo-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.review-modal-summary {
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
