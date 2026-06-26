@@ -38,8 +38,19 @@ function _initHamburgerMenu() {
   const hamburger = document.querySelector('.navbar-hamburger');
   const offcanvas = document.querySelector('.navbar-offcanvas');
   const backdrop = document.querySelector('.offcanvas-backdrop');
+  const body = document.body;
 
   if (!hamburger || !offcanvas) return;
+
+  function _lockBodyScroll() {
+    body.classList.add('offcanvas-open');
+    body.style.overflow = 'hidden';
+  }
+
+  function _unlockBodyScroll() {
+    body.classList.remove('offcanvas-open');
+    body.style.overflow = '';
+  }
 
   // 點擊漢堡圖示 → 關閉其他 dialog 後打開左側導覽
   hamburger.addEventListener('click', () => {
@@ -47,7 +58,7 @@ function _initHamburgerMenu() {
     offcanvas.classList.add('active');
     if (backdrop) backdrop.classList.add('active');
     hamburger.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden'; // 防止背景滾動
+    _lockBodyScroll();
   });
 
   // 點擊關閉按鈕 → 收合側邊欄
@@ -65,7 +76,7 @@ function _initHamburgerMenu() {
     offcanvas.classList.remove('active');
     if (backdrop) backdrop.classList.remove('active');
     hamburger.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = ''; // 恢復背景滾動
+    _unlockBodyScroll();
   }
 
   /**
