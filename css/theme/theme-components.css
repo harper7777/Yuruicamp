@@ -45,7 +45,7 @@
 }
 
 .yr-theme .product-card-image-wrap {
-  background: linear-gradient(180deg, #f6f1e6 0%, #eef3ea 100%);
+  background: linear-gradient(180deg, var(--yr-theme-surface-muted) 0%, var(--yr-theme-brand-pale) 100%);
 }
 
 .yr-theme .product-card:hover .product-card-image-wrap img {
@@ -70,7 +70,7 @@
   border: 1px solid var(--yr-theme-border);
   background: var(--yr-theme-surface);
   border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(69, 73, 65, 0.06);
+  box-shadow: var(--yr-theme-shadow-sm);
 }
 
 .yr-theme .filter-group-title,
@@ -82,14 +82,14 @@
 .yr-theme .product-sort-select {
   border: 1px solid var(--yr-theme-border);
   border-radius: 10px;
-  background: #fffefb;
+  background: var(--yr-theme-surface);
   color: var(--yr-theme-text);
 }
 
 .yr-theme .product-sort-select:focus,
 .yr-theme .filter-price-inputs input:focus {
   border-color: var(--yr-theme-brand);
-  box-shadow: 0 0 0 3px rgba(124, 139, 118, 0.16);
+  box-shadow: 0 0 0 3px rgba(96, 118, 87, 0.16);
 }
 
 .yr-theme .filter-category-btn {
@@ -100,8 +100,8 @@
 }
 
 .yr-theme .filter-category-btn.active {
-  background: #eef3ea;
-  border-color: #cfdbca;
+  background: var(--yr-theme-brand-pale);
+  border-color: var(--yr-theme-brand-soft);
   color: var(--yr-theme-brand-strong);
 }
 
@@ -168,7 +168,7 @@
 }
 
 .yr-icon {
-  color: #7b8577;
+  color: var(--yr-theme-brand-strong);
   font-size: 1rem;
   line-height: 1;
 }
@@ -181,17 +181,17 @@
   align-items: center;
   justify-content: center;
   background: transparent;
-  color: #738071;
+  color: var(--yr-theme-brand-strong);
 }
 
 .yr-icon-button:hover,
 .yr-icon-button:focus-visible {
-  color: #566554;
-  background: #eef2ea;
+  color: var(--yr-theme-brand-hover);
+  background: var(--yr-theme-brand-pale);
 }
 
 .yr-rating-stars {
-  color: #a88c64;
+  color: var(--yr-theme-accent);
   display: inline-flex;
   align-items: center;
   gap: 0.15rem;
@@ -203,12 +203,12 @@
   gap: 0.4rem;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #374151;
+  color: var(--yr-theme-text);
   margin-bottom: 0.75rem;
 }
 
 .yr-product-feature-heading i {
-  color: #7b8577;
+  color: var(--yr-theme-brand-strong);
   font-size: 1rem;
 }
 
@@ -224,12 +224,12 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #746f67;
+  color: var(--yr-theme-text-subtle);
   font-size: 0.8125rem;
 }
 
 .yr-payment-method i {
-  color: #7b8577;
+  color: var(--yr-theme-brand-strong);
   font-size: 1rem;
 }
 
@@ -238,7 +238,7 @@
 .navbar-user-dropdown .dropdown-item i,
 .navbar-logout-btn i,
 .cart-drawer__title i {
-  color: #738071;
+  color: var(--yr-theme-brand-strong);
   font-size: 1rem;
 }
 
@@ -246,10 +246,34 @@
 .navbar-search-btn.navbar-search-toggle:focus-visible i,
 .navbar-cart-btn:hover > i,
 .navbar-cart-btn:focus-visible > i {
-  color: #566554;
+  color: var(--yr-theme-brand-hover);
 }
 
-@media (max-width: 1023.98px) {
+.yr-theme #header .navbar-offcanvas {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.yr-theme #header .navbar-offcanvas.active {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.yr-theme #header .offcanvas-backdrop {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.yr-theme #header .offcanvas-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+@media (max-width: 1024px) {
   .yr-theme #header .navbar-offcanvas {
     position: fixed;
     top: 16px;
@@ -260,14 +284,14 @@
     max-width: calc(100vw - 32px);
     height: auto;
     max-height: calc(100dvh - 32px);
-    background: rgba(250, 247, 237, 0.88);
+    background: rgba(252, 248, 239, 0.88);
     backdrop-filter: blur(20px) saturate(120%);
     -webkit-backdrop-filter: blur(20px) saturate(120%);
-    border: 1px solid rgba(116, 132, 111, 0.18);
+    border: 1px solid rgba(96, 118, 87, 0.18);
     border-radius: 24px;
     box-shadow:
-      0 24px 60px rgba(40, 44, 37, 0.18),
-      0 4px 16px rgba(40, 44, 37, 0.08);
+      0 24px 60px rgba(48, 55, 47, 0.18),
+      0 4px 16px rgba(48, 55, 47, 0.08);
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -293,7 +317,7 @@
     display: block;
     position: fixed;
     inset: 0;
-    background: rgba(35, 39, 32, 0.48);
+    background: rgba(48, 55, 47, 0.48);
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
     opacity: 0;
@@ -338,7 +362,7 @@
     align-items: center;
     background: transparent;
     border-radius: 14px;
-    color: #5c6658;
+    color: var(--yr-theme-text-muted);
     display: flex;
     min-height: 52px;
     padding: 0 16px;
@@ -350,15 +374,15 @@
 
   .yr-theme #header .navbar-offcanvas .navbar-items a:focus-visible,
   .yr-theme #header .navbar-offcanvas .navbar-items a.active {
-    background: rgba(116, 132, 111, 0.12);
-    color: #4f5f4b;
+    background: rgba(96, 118, 87, 0.12);
+    color: var(--yr-theme-brand-hover);
     outline: none;
     transform: translateX(4px);
   }
 
   .yr-theme #header .navbar-offcanvas .navbar-items a:active {
-    background: rgba(116, 132, 111, 0.16);
-    color: #4f5f4b;
+    background: rgba(96, 118, 87, 0.16);
+    color: var(--yr-theme-brand-hover);
   }
 
   .yr-theme #header .offcanvas-close {
@@ -366,7 +390,7 @@
     background: transparent;
     border: none;
     border-radius: 50%;
-    color: #596553;
+    color: var(--yr-theme-brand-strong);
     display: inline-flex;
     height: 40px;
     justify-content: center;
@@ -375,8 +399,8 @@
   }
 
   .yr-theme #header .offcanvas-close:focus-visible {
-    background: rgba(116, 132, 111, 0.12);
-    color: #4f5f4b;
+    background: rgba(96, 118, 87, 0.12);
+    color: var(--yr-theme-brand-hover);
     outline: none;
   }
 
@@ -387,16 +411,16 @@
   }
 }
 
-@media (hover: hover) and (pointer: fine) and (max-width: 1023.98px) {
+@media (hover: hover) and (pointer: fine) and (max-width: 1024px) {
   .yr-theme #header .navbar-offcanvas .navbar-items a:hover {
-    background: rgba(116, 132, 111, 0.12);
-    color: #4f5f4b;
+    background: rgba(96, 118, 87, 0.12);
+    color: var(--yr-theme-brand-hover);
     transform: translateX(4px);
   }
 
   .yr-theme #header .offcanvas-close:hover {
-    background: rgba(116, 132, 111, 0.12);
-    color: #4f5f4b;
+    background: rgba(96, 118, 87, 0.12);
+    color: var(--yr-theme-brand-hover);
   }
 }
 

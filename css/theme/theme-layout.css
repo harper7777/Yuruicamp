@@ -4,7 +4,7 @@
 
 .yr-theme .yr-site-header .navbar {
   min-height: 90px;
-  background: rgba(255, 253, 248, 0.96);
+  background: rgba(255, 254, 250, 0.96);
   border-bottom: 1px solid var(--yr-header-border);
   box-shadow: none;
   backdrop-filter: blur(10px);
@@ -59,7 +59,7 @@
 .yr-theme .yr-site-header__icon-button:focus-visible,
 .yr-theme .yr-site-header .navbar-cart-btn:hover,
 .yr-theme .yr-site-header .navbar-cart-btn:focus-visible {
-  background: #eef2ea;
+  background: var(--yr-theme-brand-pale);
   transform: none;
 }
 
@@ -79,7 +79,7 @@
 
 .yr-theme .yr-site-header__booking-link:hover,
 .yr-theme .yr-site-header__booking-link:focus-visible {
-  color: #fffdf8;
+  color: var(--yr-theme-on-brand);
   background: var(--yr-header-sage);
   border-color: var(--yr-header-sage);
   text-decoration: none;
@@ -87,22 +87,26 @@
 
 .yr-theme .yr-site-header__login-link {
   color: var(--yr-header-text);
-  background: #fffdf8;
-  border: 1px solid #e0d4c6;
+  background: var(--yr-theme-surface);
+  border: 1px solid var(--yr-theme-border);
   border-radius: 8px;
 }
 
 .yr-theme .yr-site-header__login-link:hover,
 .yr-theme .yr-site-header__login-link:focus-visible {
   color: var(--yr-header-text);
-  background: #f3ebdd;
-  border-color: #d1c2b1;
+  background: var(--yr-theme-surface-oat);
+  border-color: var(--yr-theme-border);
 }
 
 .yr-theme .yr-site-header__cart-count {
   background: var(--yr-header-cart-badge);
-  color: #fffdf8;
-  border: 1px solid #fffdf8;
+  color: var(--yr-theme-on-brand);
+  border: 1px solid var(--yr-theme-on-brand);
+}
+
+.yr-theme #header .navbar-hamburger {
+  display: inline-flex;
 }
 
 .yr-theme .yr-products-shell {
@@ -148,7 +152,7 @@
 
 .yr-theme #footer .footer {
   margin-top: 2rem;
-  background: linear-gradient(180deg, var(--yr-theme-surface) 0%, #f4f8f1 100%);
+  background: linear-gradient(180deg, var(--yr-theme-surface) 0%, var(--yr-theme-brand-pale) 100%);
   border-top: 1px solid var(--yr-theme-border);
 }
 
@@ -185,7 +189,7 @@
   }
 }
 
-@media (max-width: 1023.98px) {
+@media (max-width: 1024px) {
   .yr-theme #header .navbar-offcanvas {
     top: 20px;
     bottom: 20px;
@@ -204,7 +208,7 @@
   }
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 768px) {
   .yr-theme #header .navbar-offcanvas {
     top: 16px;
     bottom: 16px;

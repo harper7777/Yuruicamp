@@ -79,6 +79,8 @@ function _initHamburgerMenu() {
     _unlockBodyScroll();
   }
 
+  _closeOffcanvas();
+
   /**
    * Exposes the main navigation close action so cart/search can avoid overlapping dialogs.
    */
