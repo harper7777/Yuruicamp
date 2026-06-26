@@ -481,6 +481,11 @@
 }
 
 .yr-branches-page .yr-branches-modal__media {
+  width: 100%;
+  max-width: 620px;
+  display: flex;
+  justify-content: center;
+  margin-inline: auto;
   margin-bottom: 1rem;
   overflow: hidden;
   aspect-ratio: 16 / 8.5;
@@ -493,8 +498,11 @@
 .yr-branches-page .yr-branches-modal__media img {
   display: block;
   width: 100%;
+  max-width: 620px;
+  margin-inline: auto;
   height: 100%;
   object-fit: cover;
+  object-position: center center;
   filter: saturate(0.92);
 }
 
@@ -626,7 +634,14 @@
   }
 
   .yr-branches-page .yr-branches-modal__media {
+    max-width: none;
     max-height: 240px;
+  }
+
+  .yr-branches-page .yr-branches-modal__media img {
+    width: 100%;
+    max-width: none;
+    margin-inline: auto;
   }
 
   .yr-branches-page .yr-branches-modal__footer {
