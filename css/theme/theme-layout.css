@@ -2,6 +2,92 @@
   overflow-x: clip;
 }
 
+.yr-display-heading {
+  font-family: var(--yr-font-family-heading);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: 0.01em;
+}
+
+.yr-ui-text {
+  font-family: var(--yr-font-family-body);
+}
+
+.yr-hero-shell {
+  width: min(calc(100% - 3rem), 93.75rem);
+  margin: 2rem auto 0;
+  border: 1px solid var(--yr-color-border, #e5dbce);
+  border-radius: 2rem;
+  overflow: hidden;
+}
+
+.yr-hero-shell__inner {
+  min-height: clamp(31rem, 58vw, 46rem);
+  padding: clamp(3.5rem, 7vw, 7.5rem) clamp(1.5rem, 5vw, 5rem);
+}
+
+.yr-hero-shell--shop {
+  background: var(--yr-color-surface, #fffdf8);
+}
+
+.yr-hero-shell--booking {
+  background: linear-gradient(135deg, #4f5e4d 0%, #657361 100%);
+}
+
+.yr-hero-shell--guide {
+  background: linear-gradient(
+    135deg,
+    var(--yr-color-surface, #fffdf8) 0%,
+    var(--yr-color-brand-pale, #e1e9dc) 100%
+  );
+}
+
+.yr-hero-cta-primary,
+.yr-hero-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.5rem;
+  padding-inline: 1.5rem;
+  border-radius: 0.875rem;
+  text-decoration: none;
+  font-family: var(--yr-font-family-body);
+}
+
+.yr-hero-cta-primary {
+  border: 1px solid var(--yr-color-brand-strong, #7c8b76);
+  background: var(--yr-color-brand-strong, #7c8b76);
+  color: var(--yr-color-text-on-brand, #fffdf8);
+  font-weight: 700;
+}
+
+.yr-hero-cta-primary:hover {
+  border-color: var(--yr-color-brand-hover, #697763);
+  background: var(--yr-color-brand-hover, #697763);
+  color: var(--yr-color-text-on-brand, #fffdf8);
+}
+
+.yr-hero-cta-secondary {
+  border: 1px solid var(--yr-color-brand-soft, #c7d4c1);
+  background: var(--yr-color-surface, #fffdf8);
+  color: var(--yr-color-brand-hover, #697763);
+  font-weight: 600;
+}
+
+.yr-hero-cta-secondary:hover {
+  border-color: var(--yr-color-brand-strong, #7c8b76);
+  background: var(--yr-color-brand-pale, #e1e9dc);
+  color: var(--yr-color-brand-hover, #697763);
+}
+
+@media (max-width: 768px) {
+  .yr-hero-shell {
+    width: calc(100% - 1.5rem);
+    margin-top: 0.75rem;
+    border-radius: 1.5rem;
+  }
+}
+
 .yr-theme .yr-site-header .navbar {
   min-height: 90px;
   background: rgba(255, 254, 250, 0.96);

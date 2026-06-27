@@ -11,11 +11,6 @@
 }
 
 .rg-hero {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: clamp(72px, 8vw, 96px) clamp(24px, 4vw, 56px);
-  border-radius: 24px;
-  border: 1px solid var(--yc-border, #E2D8CA);
   background: linear-gradient(135deg, #FAF7ED 0%, #E7ECE2 100%);
   box-shadow: 0 8px 20px rgba(63, 70, 61, 0.06);
   text-align: center;
@@ -23,9 +18,10 @@
 
 .rg-hero__title {
   margin: 0 0 16px;
+  font-family: var(--yr-font-family-heading, var(--yc-font-heading, "Noto Serif TC", serif));
   color: var(--yc-text, #3F463D);
   font-size: clamp(2.5rem, 5vw, 3.25rem);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.2;
 }
 
@@ -301,10 +297,6 @@
 }
 
 @media (max-width: 1024px) {
-  .rg-hero {
-    padding: 64px 28px;
-  }
-
   .rg-steps,
   .rg-equip-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -314,11 +306,6 @@
 @media (max-width: 768px) {
   .rg-section {
     padding: 0 20px;
-  }
-
-  .rg-hero {
-    margin: 0 20px;
-    padding: 52px 24px;
   }
 
   .rg-hero__title {
@@ -338,11 +325,6 @@
 
   .rg-section {
     padding: 0 16px;
-  }
-
-  .rg-hero {
-    margin: 0 16px;
-    padding: 40px 20px;
   }
 
   .rg-steps,

@@ -1,50 +1,77 @@
+.yr-camp-search-page .hero-banner {
+  min-height: clamp(34rem, 64vh, 44rem);
+}
+
+.yr-camp-search-page .yr-hero-shell--booking {
+  background: linear-gradient(135deg, #536151 0%, #687565 100%);
+}
+
 .yr-camp-search-page .hero-content {
   width: min(calc(100vw - 3rem), 1200px);
   max-width: none;
   margin: 0 auto;
+  min-height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-block: clamp(4.5rem, 8vw, 7rem);
 }
 
 .yr-camp-search-page .hero-banner .search-bar-section {
-  margin-top: 2.25rem;
+  width: min(100%, 68rem);
+  margin-top: clamp(2.25rem, 5vw, 3rem);
   margin-bottom: 0;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  overflow: visible;
+  padding: 0.625rem;
+  border: 1px solid rgba(229, 219, 206, 0.9);
+  border-radius: 1.25rem;
+  background: var(--yr-color-surface, #fffdf8);
+  box-shadow: 0 12px 30px rgba(48, 55, 47, 0.12);
 }
 
 .yr-camp-search-page .hero-banner .search-bar {
-  width: min(92%, 960px);
-  margin: 0 auto;
-  padding: 0.75rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
   display: grid;
   grid-template-columns:
-    minmax(17rem, 2fr)
+    minmax(15rem, 2fr)
     minmax(8rem, 1fr)
     minmax(9rem, 1fr)
-    minmax(7.5rem, auto);
-  gap: 0.75rem;
+    minmax(8rem, auto);
+  gap: 0.5rem;
   align-items: stretch;
-  border: 1px solid var(--yr-color-border, #e5dbce);
-  border-radius: 1.25rem;
-  background: var(--yr-color-surface, #fffdf8);
-  box-shadow: 0 16px 36px rgb(63 70 61 / 14%);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
-.yr-camp-search-page .hero-banner .search-bar .search-bar__input,
-.yr-camp-search-page .hero-banner .search-bar .search-bar__select,
-.yr-camp-search-page .hero-banner .search-bar .btn {
+.yr-camp-search-page .hero-title {
+  max-width: 16em;
+  margin-inline: auto;
+  margin-bottom: 1rem;
+}
+
+.yr-camp-search-page .hero-subtitle {
+  max-width: 34rem;
+  margin-inline: auto;
+  margin-bottom: 0;
+  color: rgba(255, 253, 248, 0.82);
+}
+
+.yr-camp-search-page .hero-banner .search-field,
+.yr-camp-search-page .hero-banner .search-submit {
   min-height: 3.5rem;
   margin: 0;
-  border-radius: 0.75rem;
+  border-radius: 0.875rem;
 }
 
-.yr-camp-search-page .hero-banner .search-bar__input,
-.yr-camp-search-page .hero-banner .search-bar__select {
+.yr-camp-search-page .hero-banner .search-field {
   width: 100%;
   padding: 0.95rem 1rem;
-  border: 1px solid var(--yr-color-border, #e5dbce);
-  background: var(--yr-color-surface, #fffdf8);
+  border: 0;
+  background: var(--yr-color-surface-muted, #f3ebdd);
   color: var(--yr-color-text, #454941);
   font: inherit;
   box-shadow: none;
@@ -52,24 +79,22 @@
   -webkit-appearance: auto;
 }
 
-.yr-camp-search-page .hero-banner .search-bar__input:hover,
-.yr-camp-search-page .hero-banner .search-bar__select:hover {
-  border-color: var(--yr-color-brand-soft, #c7d4c1);
+.yr-camp-search-page .hero-banner .search-field:hover {
+  background: #f0e8d9;
 }
 
-.yr-camp-search-page .hero-banner .search-bar__input:focus,
-.yr-camp-search-page .hero-banner .search-bar__select:focus {
+.yr-camp-search-page .hero-banner .search-field:focus {
   outline: none;
-  border-color: var(--yr-color-brand-strong, #7c8b76);
+  border-color: transparent;
   box-shadow: 0 0 0 3px var(--yr-color-focus-ring, rgba(116, 132, 111, 0.18));
 }
 
-.yr-camp-search-page .hero-banner .search-bar__input::placeholder {
+.yr-camp-search-page .hero-banner .search-field::placeholder {
   color: var(--yr-color-text-subtle, #827a71);
   opacity: 1;
 }
 
-.yr-camp-search-page .hero-banner .search-bar__select {
+.yr-camp-search-page .hero-banner .search-field.search-bar__select {
   padding-right: 2.35rem;
 }
 
@@ -96,10 +121,12 @@
   justify-content: center;
   gap: 0.45rem;
   border: 1px solid var(--yr-color-brand-strong, #7c8b76);
-  border-radius: 0.75rem;
+  border-radius: 0.875rem;
   background: var(--yr-color-brand-strong, #7c8b76);
   color: var(--yr-color-text-on-brand, #fffdf8);
-  font: inherit;
+  font-family: var(--yr-font-family-body);
+  font-size: inherit;
+  line-height: 1;
   font-weight: 700;
   box-shadow: none;
 }
@@ -271,8 +298,11 @@
     max-width: min(100% - 2.5rem, 1200px);
   }
 
+  .yr-camp-search-page .hero-content {
+    padding-block: clamp(4rem, 8vw, 5.5rem);
+  }
+
   .yr-camp-search-page .hero-banner .search-bar {
-    width: min(94%, 960px);
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -283,11 +313,21 @@
 }
 
 @media (width <= 768px) {
+  .yr-camp-search-page .hero-banner {
+    min-height: clamp(30rem, 62vh, 38rem);
+  }
+
+  .yr-camp-search-page .hero-content {
+    padding-block: clamp(2.5rem, 9vw, 3.25rem);
+  }
+
   .yr-camp-search-page .hero-banner .search-bar {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
 
   .yr-camp-search-page .hero-banner #dateRange,
+  .yr-camp-search-page .hero-banner #guestCount,
+  .yr-camp-search-page .hero-banner #regionFilter,
   .yr-camp-search-page .hero-banner #searchBtn {
     grid-column: 1 / -1;
   }
@@ -301,13 +341,11 @@
 
   .yr-camp-search-page .hero-banner .search-bar-section {
     margin-top: 1.75rem;
+    padding: 0.5rem;
   }
 
   .yr-camp-search-page .hero-banner .search-bar {
-    width: calc(100% - 0.25rem);
-    padding: 0.75rem;
     grid-template-columns: 1fr;
-    border-radius: 1rem;
   }
 
   .yr-camp-search-page .hero-banner #dateRange,
