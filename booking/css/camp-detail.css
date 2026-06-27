@@ -76,24 +76,91 @@
   color: #6d6a62;
 }
 
+.yr-camp-detail-page .zone-list {
+  display: grid;
+  gap: 0.75rem;
+  max-height: none;
+  overflow: visible;
+  padding: 0.25rem 0 0;
+}
+
 .yr-camp-detail-page .zone-card {
-  border-color: #e2d8ca;
-  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-height: 11.25rem;
+  padding: 1rem;
+  border: 1px solid #e2d8ca;
+  border-radius: 1rem;
   background: #fffdf8;
 }
 
 .yr-camp-detail-page .zone-card.is-selected {
-  border-color: #74846f;
-  background: #e7ece2;
+  border-color: #7c8b76;
+  background: #e1e9dc;
+  box-shadow: 0 0 0 1px rgba(124, 139, 118, 0.12);
+}
+
+.yr-camp-detail-page .zone-card__info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  min-height: 4.2rem;
+}
+
+.yr-camp-detail-page .zone-card__info strong {
+  display: block;
+  color: #3f463d;
+  font-size: 1rem;
+  line-height: 1.4;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.yr-camp-detail-page .zone-card__info span {
+  display: block;
+  color: #6d6a62;
+  font-size: 0.85rem;
+  line-height: 1.35;
 }
 
 .yr-camp-detail-page .zone-card__price,
 .yr-camp-detail-page .price-summary__amount {
   color: #62715e;
+  font-variant-numeric: tabular-nums;
 }
 
 .yr-camp-detail-page .zone-card__stock {
   color: #6d6a62;
+}
+
+.yr-camp-detail-page .zone-select-btn {
+  margin-top: auto;
+  min-height: 3.25rem;
+  width: 100%;
+  border: 1px solid #c7d4c1;
+  border-radius: 0.75rem;
+  background: #fffdf8;
+  color: #7c8b76;
+  box-shadow: none;
+}
+
+.yr-camp-detail-page .zone-select-btn:hover {
+  border-color: #9ead96;
+  background: #e1e9dc;
+  color: #697763;
+}
+
+.yr-camp-detail-page .zone-select-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(116, 132, 111, 0.18);
+}
+
+.yr-camp-detail-page .zone-card.is-selected .zone-select-btn {
+  border-color: #7c8b76;
+  background: #7c8b76;
+  color: #fffdf8;
 }
 
 .yr-camp-detail-page .zone-table-wrap {
@@ -105,16 +172,60 @@
 }
 
 .yr-camp-detail-page .zone-table thead th {
-  background: #f5efe5;
+  background: #f3ebdd;
+  color: #454941;
+  border-bottom: 1px solid #e5dbce;
+  font-weight: 700;
 }
 
 .yr-camp-detail-page .zone-table td,
 .yr-camp-detail-page .zone-table th {
   border-color: #e2d8ca;
+  vertical-align: middle;
+}
+
+.yr-camp-detail-page .zone-table th:nth-child(1),
+.yr-camp-detail-page .zone-table td:nth-child(1) {
+  text-align: left;
+}
+
+.yr-camp-detail-page .zone-table th:nth-child(2),
+.yr-camp-detail-page .zone-table td:nth-child(2),
+.yr-camp-detail-page .zone-table th:nth-child(5),
+.yr-camp-detail-page .zone-table td:nth-child(5) {
+  text-align: center;
+}
+
+.yr-camp-detail-page .zone-table th:nth-child(3),
+.yr-camp-detail-page .zone-table td:nth-child(3),
+.yr-camp-detail-page .zone-table th:nth-child(4),
+.yr-camp-detail-page .zone-table td:nth-child(4) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 .yr-camp-detail-page .btn--primary {
-  border-radius: 10px;
+  border-radius: 0.75rem;
+}
+
+.yr-camp-detail-page #confirmBookingBtn.btn--primary {
+  border-color: #73816e;
+  background: #73816e;
+  color: #fffdf9;
+}
+
+.yr-camp-detail-page #confirmBookingBtn.btn--primary:hover:not(:disabled) {
+  border-color: #62705d;
+  background: #62705d;
+  color: #fffdf9;
+}
+
+.yr-camp-detail-page #confirmBookingBtn.btn--primary:disabled {
+  border-color: transparent;
+  background: #bcc4b8;
+  color: rgba(255, 253, 248, 0.82);
+  cursor: not-allowed;
+  opacity: 1;
 }
 
 @media (width <= 900px) {
