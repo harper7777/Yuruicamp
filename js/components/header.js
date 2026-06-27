@@ -179,6 +179,49 @@ function _renderSearchWrapper() {
   `;
 }
 
+function _formatProviderLabel(provider) {
+  const value = String(provider || '').trim().toLowerCase();
+  if (!value) return '';
+  if (window.YuruiAuth && typeof window.YuruiAuth.getProviderLabel === 'function') {
+    return window.YuruiAuth.getProviderLabel(value);
+  }
+  if (value === 'line') return 'LINE';
+  if (value === 'facebook') return 'Facebook';
+  if (value === 'google') return 'Google';
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function _isPlaceholderAccountName(name, providerLabel) {
+  const value = String(name || '').trim();
+  const provider = String(providerLabel || '').trim();
+  if (!value) return true;
+  if (['用戶', '會員', '會員中心'].includes(value)) return true;
+  if (!provider) return false;
+  return value === provider || value === `${provider} 會員` || value === `${provider}會員`;
+}
+
+function _getAccountPrimaryLabel(user) {
+  const rawName = String((user && (user.displayName || user.name)) || '').trim();
+  const providerLabel = _formatProviderLabel(user && user.provider);
+  if (_isPlaceholderAccountName(rawName, providerLabel)) {
+    return '會員中心';
+  }
+  return rawName;
+}
+
+function _getAccountProviderLabel(user) {
+  const providerLabel = _formatProviderLabel(user && user.provider);
+  return providerLabel ? `${providerLabel} 登入` : '';
+}
+
+function _getAccountAvatarMarkup(user, primaryLabel) {
+  const name = String((user && (user.displayName || user.name)) || '').trim();
+  if (name && primaryLabel && primaryLabel !== '會員中心') {
+    return primaryLabel.charAt(0).toUpperCase();
+  }
+  return '<i class="bi bi-person" aria-hidden="true"></i>';
+}
+
 function _renderUserBlock(context) {
   const memberHref = context === 'camp' ? '/booking/pages/member-center.html' : '/pages/member-center.html';
   return `
@@ -190,12 +233,15 @@ function _renderUserBlock(context) {
       onclick="window.openModal('loginModal')"
     >登入</button>
     <div class="navbar-user-menu yr-site-user-menu" hidden>
-      <div class="user-info">
-        <div class="user-avatar" title="個人資料">?</div>
-        <span class="user-name">用戶</span>
-        <span class="user-menu-chevron">⌄</span>
-      </div>
-      <div class="navbar-user-dropdown" hidden>
+      <button class="user-info yr-site-account-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="navbarUserDropdown">
+        <span class="user-avatar yr-site-account-avatar" title="個人資料" aria-hidden="true"><i class="bi bi-person" aria-hidden="true"></i></span>
+        <span class="user-copy yr-site-account-copy">
+          <span class="user-name yr-site-account-name">會員中心</span>
+          <span class="user-provider yr-site-account-provider">Google 登入</span>
+        </span>
+        <span class="user-menu-chevron yr-site-account-chevron" aria-hidden="true"><i class="bi bi-chevron-down" aria-hidden="true"></i></span>
+      </button>
+      <div class="navbar-user-dropdown" id="navbarUserDropdown" hidden>
         <a href="${memberHref}" class="dropdown-item">
           <i class="bi bi-person" aria-hidden="true"></i> 會員中心
         </a>
@@ -514,6 +560,7 @@ window.closeMainHeaderDialogs = () => {
   root.querySelector('.navbar-search-toggle')?.setAttribute('aria-expanded', 'false');
   root.querySelector('.navbar-search-dropdown')?.classList.remove('active');
   root.querySelector('.navbar-user-dropdown')?.setAttribute('hidden', '');
+  root.querySelector('.navbar-user-menu .user-info')?.setAttribute('aria-expanded', 'false');
   window.closeDrawer?.();
   document.querySelectorAll('#loginModal.active, #personalizationModal.active').forEach((modal) => {
     modal.classList.remove('active');
@@ -576,16 +623,40 @@ window.updateNavbarLoginState = () => {
   if (user) {
     loginBtn.hidden = true;
     userMenu.hidden = false;
+    const dropdown = userMenu.querySelector('.navbar-user-dropdown');
     const userName = userMenu.querySelector('.user-name');
+    const userProvider = userMenu.querySelector('.user-provider');
     const userAvatar = userMenu.querySelector('.user-avatar');
-    if (userName) userName.textContent = user.name;
-    if (userAvatar) userAvatar.textContent = (user.avatar || user.name.charAt(0)).toUpperCase();
+    const userInfo = userMenu.querySelector('.user-info');
+    const primaryLabel = _getAccountPrimaryLabel(user);
+    const providerLabel = _getAccountProviderLabel(user);
+    if (userName) userName.textContent = primaryLabel;
+    if (userProvider) {
+      userProvider.textContent = providerLabel;
+      userProvider.hidden = !providerLabel;
+    }
+    if (userAvatar) {
+      const avatarMarkup = _getAccountAvatarMarkup(user, primaryLabel);
+      if (avatarMarkup.indexOf('<') === 0) {
+        userAvatar.innerHTML = avatarMarkup;
+      } else {
+        userAvatar.textContent = avatarMarkup;
+      }
+    }
+    if (dropdown) dropdown.hidden = true;
+    if (userInfo) {
+      userInfo.setAttribute('aria-expanded', 'false');
+    }
     _initUserMenuDropdown(userMenu);
     return;
   }
 
   loginBtn.hidden = false;
   userMenu.hidden = true;
+  const dropdown = userMenu.querySelector('.navbar-user-dropdown');
+  const userInfo = userMenu.querySelector('.user-info');
+  if (dropdown) dropdown.hidden = true;
+  if (userInfo) userInfo.setAttribute('aria-expanded', 'false');
 };
 
 function _bindAuthStateEvents() {
@@ -611,7 +682,9 @@ function _initUserMenuDropdown(userMenu) {
 
   userInfo.addEventListener('click', (event) => {
     event.stopPropagation();
-    dropdown.hidden = !dropdown.hidden;
+    const willOpen = dropdown.hidden;
+    dropdown.hidden = !willOpen;
+    userInfo.setAttribute('aria-expanded', String(willOpen));
   });
 
   if (logoutBtn) {
@@ -624,12 +697,14 @@ function _initUserMenuDropdown(userMenu) {
   document.addEventListener('click', (event) => {
     if (!event.target.closest('.navbar-user-menu')) {
       dropdown.hidden = true;
+      userInfo.setAttribute('aria-expanded', 'false');
     }
   });
 
   dropdown.querySelectorAll('.dropdown-item').forEach((item) => {
     item.addEventListener('click', () => {
       dropdown.hidden = true;
+      userInfo.setAttribute('aria-expanded', 'false');
     });
   });
 }
@@ -637,8 +712,10 @@ function _initUserMenuDropdown(userMenu) {
 function _closeNavbarUserDropdown() {
   const root = _resolveHeaderRoot()?.root;
   if (!root) return;
+  const userInfo = root.querySelector('.navbar-user-menu .user-info');
   const dropdown = root.querySelector('.navbar-user-dropdown');
   if (dropdown) dropdown.hidden = true;
+  if (userInfo) userInfo.setAttribute('aria-expanded', 'false');
 }
 
 window.handleLogout = () => {
