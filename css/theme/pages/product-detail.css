@@ -268,8 +268,12 @@
 }
 
 .yr-product-detail-page #productSpecTable > div > div:first-child {
-  background-color: var(--yr-color-surface-oat) !important;
-  color: var(--yr-color-brand-strong) !important;
+  background-color: color-mix(
+    in srgb,
+    var(--yr-color-surface-muted) 25%,
+    var(--yr-color-surface) 75%
+  ) !important;
+  color: var(--yr-color-text) !important;
 }
 
 .yr-product-detail-page #productSpecTable > div > div:last-child {
@@ -277,7 +281,7 @@
   color: var(--yr-color-text-muted) !important;
 }
 
-.yr-product-detail-page .product-tab-panel[data-panel="description"] .yr-pd-tab-grid > div:last-child > h3 {
+.yr-product-detail-page .product-tab-panel[data-panel="description"] .yr-pd-tab-grid > div > h3 {
   color: var(--yr-color-brand-strong) !important;
 }
 
