@@ -684,9 +684,8 @@ function renderOrdersTable(orders) {
     var date = order.createdAt.split(' ')[0] || '';
 
     // 訂單編號：可點擊連結樣式
-    var idLink = '<span class="order-id-link text-primary fw-semibold" ' +
+    var idLink = '<span class="admin-cell-link order-id-link" ' +
                  'data-order-id="' + order.id + '" ' +
-                 'style="cursor:pointer; text-decoration:underline dotted;" ' +
                  'title="點擊查看訂單明細">' +
                  order.id + '</span>';
 
@@ -695,7 +694,7 @@ function renderOrdersTable(orders) {
            '<td>' + idLink + '</td>' +
            '<td>' + date + '</td>' +
            '<td class="fw-semibold">' + order.buyerName + '</td>' +
-           '<td class="fw-semibold">NT$ ' + order.total.toLocaleString() + '</td>' +
+           '<td class="admin-cell-amount">NT$ ' + order.total.toLocaleString() + '</td>' +
            '<td>' + payBadge + '</td>' +
            '<td>' + statusBadge + '</td>' +
            '<td>' + actionBtn + '</td>' +
@@ -761,7 +760,7 @@ window.showOrderModal = function (order) {
   // 訂單紀錄時間軸
   var historyHtml = (order.history || []).map(function (entry) {
     return '<li class="d-flex align-items-start gap-2 mb-1">' +
-           '<i class="fas fa-circle mt-1" style="font-size:6px; color:var(--admin-brand-accent); flex-shrink:0;"></i>' +
+           '<i class="fas fa-circle mt-1" style="font-size:5px; color:var(--admin-brand-accent); flex-shrink:0;"></i>' +
            '<span><span class="text-muted me-2">' + entry.time + '</span>' + entry.action + '</span>' +
            '</li>';
   }).join('');

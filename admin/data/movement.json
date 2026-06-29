@@ -1,262 +1,1689 @@
 [
   {
-    "id": "MV001",
-    "date": "2026-06-01",
+    "id": "MV082",
+    "date": "2026-03-05",
     "items": [
       {
-        "productName": "Coleman 六人帳篷",
-        "quantity": 3,
-        "fromStore": "台北旗艦店",
-        "toStore": "台中中港店"
+        "productName": "折疊式焚火台",
+        "quantity": 1,
+        "fromStore": "租借主倉",
+        "toStore": "損耗",
+        "type": "損耗"
       }
     ],
     "employeeId": "01"
   },
   {
-    "id": "MV002",
-    "date": "2026-06-01",
+    "id": "MV030",
+    "date": "2026-03-09",
     "items": [
       {
-        "productName": "MSR 超輕量帳篷",
+        "productName": "營柱與營繩組",
+        "quantity": 4,
+        "fromStore": "分店 A",
+        "toStore": "分店 B",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV006",
+    "date": "2026-03-10",
+    "items": [
+      {
+        "productName": "防水登山背包 45L",
+        "quantity": 7,
+        "fromStore": "進貨",
+        "toStore": "租借主倉",
+        "type": "進貨"
+      },
+      {
+        "productName": "LED 露營燈",
+        "quantity": 12,
+        "fromStore": "湖畔星空營地",
+        "toStore": "溪谷森林營地",
+        "type": "營地互轉"
+      },
+      {
+        "productName": "Snow Peak 客廳帳",
+        "quantity": 10,
+        "fromStore": "商店主倉",
+        "toStore": "分店 C",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV063",
+    "date": "2026-03-10",
+    "items": [
+      {
+        "productName": "充氣式睡墊 L號",
+        "quantity": 4,
+        "fromStore": "分店 C",
+        "toStore": "溪谷森林營地",
+        "type": "調撥"
+      },
+      {
+        "productName": "充電式頭燈",
+        "quantity": 11,
+        "fromStore": "分店 C",
+        "toStore": "分店 A",
+        "type": "移轉"
+      },
+      {
+        "productName": "露營拖車",
+        "quantity": 4,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV088",
+    "date": "2026-03-10",
+    "items": [
+      {
+        "productName": "Snow Peak 鈦合金杯組",
+        "quantity": 3,
+        "fromStore": "分店 B",
+        "toStore": "損耗",
+        "type": "損耗"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV037",
+    "date": "2026-03-11",
+    "items": [
+      {
+        "productName": "Coleman 氣化爐",
         "quantity": 2,
-        "fromStore": "高雄左營店",
-        "toStore": "台北旗艦店"
+        "fromStore": "分店 C",
+        "toStore": "分店 A",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV057",
+    "date": "2026-03-11",
+    "items": [
+      {
+        "productName": "防水戶外手錶",
+        "quantity": 8,
+        "fromStore": "商店主倉",
+        "toStore": "雲海高原營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV048",
+    "date": "2026-03-13",
+    "items": [
+      {
+        "productName": "充電式頭燈",
+        "quantity": 11,
+        "fromStore": "商店主倉",
+        "toStore": "溪谷森林營地",
+        "type": "調撥"
+      },
+      {
+        "productName": "充氣式睡墊 L號",
+        "quantity": 6,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV059",
+    "date": "2026-03-14",
+    "items": [
+      {
+        "productName": "65L 重裝背包",
+        "quantity": 6,
+        "fromStore": "商店主倉",
+        "toStore": "海岸微風營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV093",
+    "date": "2026-03-14",
+    "items": [
+      {
+        "productName": "充電式頭燈",
+        "quantity": 2,
+        "fromStore": "分店 C",
+        "toStore": "損耗",
+        "type": "損耗"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV020",
+    "date": "2026-03-15",
+    "items": [
+      {
+        "productName": "露營貼紙組",
+        "quantity": 11,
+        "fromStore": "分店 A",
+        "toStore": "分店 C",
+        "type": "移轉"
+      },
+      {
+        "productName": "折疊式焚火台",
+        "quantity": 5,
+        "fromStore": "湖畔星空營地",
+        "toStore": "松林野營基地",
+        "type": "營地互轉"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV053",
+    "date": "2026-03-16",
+    "items": [
+      {
+        "productName": "折疊桌椅組",
+        "quantity": 1,
+        "fromStore": "分店 A",
+        "toStore": "湖畔星空營地",
+        "type": "調撥"
+      },
+      {
+        "productName": "折疊桌椅組",
+        "quantity": 1,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      },
+      {
+        "productName": "折疊式焚火台",
+        "quantity": 12,
+        "fromStore": "湖畔星空營地",
+        "toStore": "雲海高原營地",
+        "type": "營地互轉"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV012",
+    "date": "2026-03-17",
+    "items": [
+      {
+        "productName": "快煮鍋 1.5L",
+        "quantity": 3,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      },
+      {
+        "productName": "露營拖車",
+        "quantity": 11,
+        "fromStore": "分店 B",
+        "toStore": "分店 A",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV068",
+    "date": "2026-03-17",
+    "items": [
+      {
+        "productName": "戶外淋浴袋",
+        "quantity": 8,
+        "fromStore": "湖畔星空營地",
+        "toStore": "溪谷森林營地",
+        "type": "營地互轉"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV092",
+    "date": "2026-03-19",
+    "items": [
+      {
+        "productName": "Snow Peak 客廳帳",
+        "quantity": 2,
+        "fromStore": "租借主倉",
+        "toStore": "損耗",
+        "type": "損耗"
+      },
+      {
+        "productName": "65L 重裝背包",
+        "quantity": 4,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      },
+      {
+        "productName": "Snow Peak 鈦合金杯組",
+        "quantity": 6,
+        "fromStore": "湖畔星空營地",
+        "toStore": "溪谷森林營地",
+        "type": "營地互轉"
       }
     ],
     "employeeId": "02"
   },
   {
     "id": "MV003",
-    "date": "2026-06-02",
+    "date": "2026-03-20",
     "items": [
       {
-        "productName": "四季保暖睡袋",
-        "quantity": 5,
-        "fromStore": "台中中港店",
-        "toStore": "雲海高原營地"
+        "productName": "防水登山背包 45L",
+        "quantity": 6,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV094",
+    "date": "2026-03-20",
+    "items": [
+      {
+        "productName": "Coleman 氣化爐",
+        "quantity": 1,
+        "fromStore": "海岸微風營地",
+        "toStore": "損耗",
+        "type": "損耗"
       }
     ],
     "employeeId": "01"
   },
   {
-    "id": "MV004",
-    "date": "2026-06-02",
+    "id": "MV060",
+    "date": "2026-03-21",
     "items": [
       {
-        "productName": "羽絨登山睡袋",
-        "quantity": 4,
-        "fromStore": "台北旗艦店",
-        "toStore": "湖畔星空營地"
+        "productName": "快煮鍋 1.5L",
+        "quantity": 1,
+        "fromStore": "分店 A",
+        "toStore": "雲海高原營地",
+        "type": "調撥"
+      },
+      {
+        "productName": "折疊式焚火台",
+        "quantity": 12,
+        "fromStore": "分店 B",
+        "toStore": "分店 C",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV008",
+    "date": "2026-03-22",
+    "items": [
+      {
+        "productName": "防蚊帳篷內帳",
+        "quantity": 9,
+        "fromStore": "進貨",
+        "toStore": "租借主倉",
+        "type": "進貨"
       }
     ],
     "employeeId": "02"
   },
   {
-    "id": "MV005",
-    "date": "2026-06-03",
+    "id": "MV046",
+    "date": "2026-03-26",
     "items": [
       {
-        "productName": "雙口瓦斯爐",
-        "quantity": 6,
-        "fromStore": "高雄左營店",
-        "toStore": "溪谷森林營地"
+        "productName": "防水登山背包 45L",
+        "quantity": 12,
+        "fromStore": "商店主倉",
+        "toStore": "雲海高原營地",
+        "type": "調撥"
+      },
+      {
+        "productName": "折疊蛋捲桌",
+        "quantity": 1,
+        "fromStore": "松林野營基地",
+        "toStore": "損耗",
+        "type": "損耗"
+      },
+      {
+        "productName": "快煮鍋 1.5L",
+        "quantity": 4,
+        "fromStore": "分店 B",
+        "toStore": "分店 A",
+        "type": "移轉"
       }
     ],
     "employeeId": "01"
   },
   {
-    "id": "MV006",
-    "date": "2026-06-03",
+    "id": "MV013",
+    "date": "2026-03-27",
     "items": [
       {
-        "productName": "不鏽鋼鍋具組",
+        "productName": "戶外淋浴袋",
+        "quantity": 10,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV054",
+    "date": "2026-03-27",
+    "items": [
+      {
+        "productName": "行動電源站",
+        "quantity": 1,
+        "fromStore": "商店主倉",
+        "toStore": "湖畔星空營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV072",
+    "date": "2026-03-29",
+    "items": [
+      {
+        "productName": "雙層防風外套",
+        "quantity": 10,
+        "fromStore": "溪谷森林營地",
+        "toStore": "雲海高原營地",
+        "type": "營地互轉"
+      },
+      {
+        "productName": "雙層防風外套",
+        "quantity": 5,
+        "fromStore": "分店 B",
+        "toStore": "商店主倉",
+        "type": "移轉"
+      },
+      {
+        "productName": "Snow Peak 鈦合金杯組",
+        "quantity": 3,
+        "fromStore": "分店 B",
+        "toStore": "損耗",
+        "type": "損耗"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV096",
+    "date": "2026-03-31",
+    "items": [
+      {
+        "productName": "防蚊帳篷內帳",
+        "quantity": 1,
+        "fromStore": "租借主倉",
+        "toStore": "損耗",
+        "type": "損耗"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV086",
+    "date": "2026-04-01",
+    "items": [
+      {
+        "productName": "營柱與營繩組",
+        "quantity": 1,
+        "fromStore": "溪谷森林營地",
+        "toStore": "損耗",
+        "type": "損耗"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV040",
+    "date": "2026-04-04",
+    "items": [
+      {
+        "productName": "高背月亮椅",
+        "quantity": 5,
+        "fromStore": "分店 C",
+        "toStore": "商店主倉",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV028",
+    "date": "2026-04-05",
+    "items": [
+      {
+        "productName": "快煮鍋 1.5L",
+        "quantity": 10,
+        "fromStore": "分店 B",
+        "toStore": "商店主倉",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV045",
+    "date": "2026-04-07",
+    "items": [
+      {
+        "productName": "折疊蛋捲桌",
         "quantity": 8,
-        "fromStore": "台中中港店",
-        "toStore": "海岸微風營地"
+        "fromStore": "分店 C",
+        "toStore": "湖畔星空營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV073",
+    "date": "2026-04-07",
+    "items": [
+      {
+        "productName": "Coleman 六人帳篷",
+        "quantity": 11,
+        "fromStore": "雲海高原營地",
+        "toStore": "松林野營基地",
+        "type": "營地互轉"
+      },
+      {
+        "productName": "大型天幕",
+        "quantity": 1,
+        "fromStore": "溪谷森林營地",
+        "toStore": "松林野營基地",
+        "type": "營地互轉"
+      },
+      {
+        "productName": "Coleman 六人帳篷",
+        "quantity": 12,
+        "fromStore": "分店 A",
+        "toStore": "溪谷森林營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV087",
+    "date": "2026-04-11",
+    "items": [
+      {
+        "productName": "保冷冰桶 45L",
+        "quantity": 2,
+        "fromStore": "分店 A",
+        "toStore": "損耗",
+        "type": "損耗"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV033",
+    "date": "2026-04-13",
+    "items": [
+      {
+        "productName": "保溫壺 1L",
+        "quantity": 9,
+        "fromStore": "商店主倉",
+        "toStore": "分店 A",
+        "type": "移轉"
+      },
+      {
+        "productName": "保冷冰桶 45L",
+        "quantity": 2,
+        "fromStore": "松林野營基地",
+        "toStore": "損耗",
+        "type": "損耗"
+      },
+      {
+        "productName": "戶外淋浴袋",
+        "quantity": 3,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV083",
+    "date": "2026-04-14",
+    "items": [
+      {
+        "productName": "防蚊帳篷內帳",
+        "quantity": 2,
+        "fromStore": "分店 B",
+        "toStore": "損耗",
+        "type": "損耗"
+      },
+      {
+        "productName": "Snow Peak 客廳帳",
+        "quantity": 2,
+        "fromStore": "溪谷森林營地",
+        "toStore": "雲海高原營地",
+        "type": "營地互轉"
+      },
+      {
+        "productName": "防水登山背包 45L",
+        "quantity": 1,
+        "fromStore": "分店 A",
+        "toStore": "損耗",
+        "type": "損耗"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV077",
+    "date": "2026-04-15",
+    "items": [
+      {
+        "productName": "防水戶外手錶",
+        "quantity": 7,
+        "fromStore": "海岸微風營地",
+        "toStore": "溪谷森林營地",
+        "type": "營地互轉"
+      },
+      {
+        "productName": "折疊桌椅組",
+        "quantity": 2,
+        "fromStore": "商店主倉",
+        "toStore": "分店 A",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV039",
+    "date": "2026-04-16",
+    "items": [
+      {
+        "productName": "LED 露營燈",
+        "quantity": 9,
+        "fromStore": "分店 A",
+        "toStore": "商店主倉",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV052",
+    "date": "2026-04-16",
+    "items": [
+      {
+        "productName": "輕量吊床",
+        "quantity": 1,
+        "fromStore": "分店 B",
+        "toStore": "雲海高原營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV036",
+    "date": "2026-04-18",
+    "items": [
+      {
+        "productName": "輕量吊床",
+        "quantity": 12,
+        "fromStore": "分店 B",
+        "toStore": "商店主倉",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV090",
+    "date": "2026-04-22",
+    "items": [
+      {
+        "productName": "Snow Peak 客廳帳",
+        "quantity": 2,
+        "fromStore": "商店主倉",
+        "toStore": "損耗",
+        "type": "損耗"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV076",
+    "date": "2026-04-25",
+    "items": [
+      {
+        "productName": "65L 重裝背包",
+        "quantity": 9,
+        "fromStore": "海岸微風營地",
+        "toStore": "松林野營基地",
+        "type": "營地互轉"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV080",
+    "date": "2026-04-26",
+    "items": [
+      {
+        "productName": "MSR 超輕量帳篷",
+        "quantity": 11,
+        "fromStore": "雲海高原營地",
+        "toStore": "松林野營基地",
+        "type": "營地互轉"
       }
     ],
     "employeeId": "02"
   },
   {
     "id": "MV007",
-    "date": "2026-06-04",
+    "date": "2026-04-27",
     "items": [
       {
-        "productName": "露營餐桌椅組",
-        "quantity": 10,
-        "fromStore": "台北旗艦店",
-        "toStore": "松林野營基地"
-      }
-    ],
-    "employeeId": "01"
-  },
-  {
-    "id": "MV008",
-    "date": "2026-06-04",
-    "items": [
-      {
-        "productName": "折疊蛋捲桌",
-        "quantity": 7,
-        "fromStore": "台中中港店",
-        "toStore": "台北旗艦店"
-      }
-    ],
-    "employeeId": "02"
-  },
-  {
-    "id": "MV009",
-    "date": "2026-06-05",
-    "items": [
-      {
-        "productName": "高背月亮椅",
-        "quantity": 9,
-        "fromStore": "高雄左營店",
-        "toStore": "台中中港店"
-      }
-    ],
-    "employeeId": "01"
-  },
-  {
-    "id": "MV010",
-    "date": "2026-06-05",
-    "items": [
-      {
-        "productName": "LED 露營燈",
-        "quantity": 12,
-        "fromStore": "台北旗艦店",
-        "toStore": "高雄左營店"
-      }
-    ],
-    "employeeId": "02"
-  },
-  {
-    "id": "MV011",
-    "date": "2026-06-06",
-    "items": [
-      {
-        "productName": "充電式頭燈",
-        "quantity": 6,
-        "fromStore": "台中中港店",
-        "toStore": "溪谷森林營地"
-      }
-    ],
-    "employeeId": "01"
-  },
-  {
-    "id": "MV012",
-    "date": "2026-06-06",
-    "items": [
-      {
-        "productName": "45L 登山背包",
+        "productName": "Snow Peak 客廳帳",
         "quantity": 3,
-        "fromStore": "高雄左營店",
-        "toStore": "雲海高原營地"
-      }
-    ],
-    "employeeId": "02"
-  },
-  {
-    "id": "MV013",
-    "date": "2026-06-07",
-    "items": [
-      {
-        "productName": "65L 重裝背包",
-        "quantity": 2,
-        "fromStore": "台北旗艦店",
-        "toStore": "海岸微風營地"
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
       }
     ],
     "employeeId": "01"
   },
   {
-    "id": "MV014",
-    "date": "2026-06-07",
+    "id": "MV097",
+    "date": "2026-04-28",
     "items": [
       {
-        "productName": "露營拖車",
-        "quantity": 4,
-        "fromStore": "台中中港店",
-        "toStore": "湖畔星空營地"
-      }
-    ],
-    "employeeId": "02"
-  },
-  {
-    "id": "MV015",
-    "date": "2026-06-08",
-    "items": [
-      {
-        "productName": "大型天幕",
-        "quantity": 5,
-        "fromStore": "高雄左營店",
-        "toStore": "松林野營基地"
+        "productName": "碳纖維登山杖",
+        "quantity": 2,
+        "fromStore": "松林野營基地",
+        "toStore": "損耗",
+        "type": "損耗"
       }
     ],
     "employeeId": "01"
   },
   {
     "id": "MV016",
-    "date": "2026-06-08",
+    "date": "2026-04-29",
     "items": [
       {
-        "productName": "營柱與營繩組",
-        "quantity": 14,
-        "fromStore": "台北旗艦店",
-        "toStore": "台中中港店"
+        "productName": "高背月亮椅",
+        "quantity": 12,
+        "fromStore": "進貨",
+        "toStore": "租借主倉",
+        "type": "進貨"
+      },
+      {
+        "productName": "羽絨睡袋 -10°C",
+        "quantity": 2,
+        "fromStore": "分店 B",
+        "toStore": "損耗",
+        "type": "損耗"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV098",
+    "date": "2026-05-01",
+    "items": [
+      {
+        "productName": "雙層防風外套",
+        "quantity": 1,
+        "fromStore": "分店 A",
+        "toStore": "損耗",
+        "type": "損耗"
       }
     ],
     "employeeId": "02"
   },
   {
-    "id": "MV017",
-    "date": "2026-06-09",
+    "id": "MV085",
+    "date": "2026-05-02",
     "items": [
       {
-        "productName": "防潮睡墊",
+        "productName": "雙層防風外套",
+        "quantity": 1,
+        "fromStore": "海岸微風營地",
+        "toStore": "損耗",
+        "type": "損耗"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV021",
+    "date": "2026-05-06",
+    "items": [
+      {
+        "productName": "高背月亮椅",
+        "quantity": 11,
+        "fromStore": "分店 A",
+        "toStore": "商店主倉",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV091",
+    "date": "2026-05-07",
+    "items": [
+      {
+        "productName": "折疊蛋捲桌",
+        "quantity": 3,
+        "fromStore": "租借主倉",
+        "toStore": "損耗",
+        "type": "損耗"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV043",
+    "date": "2026-05-08",
+    "items": [
+      {
+        "productName": "戶外淋浴袋",
+        "quantity": 12,
+        "fromStore": "分店 B",
+        "toStore": "雲海高原營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV074",
+    "date": "2026-05-08",
+    "items": [
+      {
+        "productName": "防水戶外手錶",
+        "quantity": 2,
+        "fromStore": "溪谷森林營地",
+        "toStore": "海岸微風營地",
+        "type": "營地互轉"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV031",
+    "date": "2026-05-09",
+    "items": [
+      {
+        "productName": "快煮鍋 1.5L",
+        "quantity": 8,
+        "fromStore": "分店 B",
+        "toStore": "分店 C",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV022",
+    "date": "2026-05-10",
+    "items": [
+      {
+        "productName": "露營貼紙組",
+        "quantity": 9,
+        "fromStore": "分店 B",
+        "toStore": "分店 C",
+        "type": "移轉"
+      },
+      {
+        "productName": "LED 露營燈",
         "quantity": 7,
-        "fromStore": "台中中港店",
-        "toStore": "高雄左營店"
+        "fromStore": "分店 B",
+        "toStore": "雲海高原營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV081",
+    "date": "2026-05-10",
+    "items": [
+      {
+        "productName": "快煮鍋 1.5L",
+        "quantity": 1,
+        "fromStore": "溪谷森林營地",
+        "toStore": "損耗",
+        "type": "損耗"
+      },
+      {
+        "productName": "Coleman 氣化爐",
+        "quantity": 6,
+        "fromStore": "分店 C",
+        "toStore": "商店主倉",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV029",
+    "date": "2026-05-11",
+    "items": [
+      {
+        "productName": "大型天幕",
+        "quantity": 8,
+        "fromStore": "商店主倉",
+        "toStore": "分店 B",
+        "type": "移轉"
+      },
+      {
+        "productName": "防蚊帳篷內帳",
+        "quantity": 6,
+        "fromStore": "雲海高原營地",
+        "toStore": "海岸微風營地",
+        "type": "營地互轉"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV041",
+    "date": "2026-05-11",
+    "items": [
+      {
+        "productName": "MSR 超輕量帳篷",
+        "quantity": 5,
+        "fromStore": "分店 C",
+        "toStore": "溪谷森林營地",
+        "type": "調撥"
+      },
+      {
+        "productName": "折疊式焚火台",
+        "quantity": 1,
+        "fromStore": "海岸微風營地",
+        "toStore": "雲海高原營地",
+        "type": "營地互轉"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV069",
+    "date": "2026-05-12",
+    "items": [
+      {
+        "productName": "折疊桌椅組",
+        "quantity": 10,
+        "fromStore": "溪谷森林營地",
+        "toStore": "海岸微風營地",
+        "type": "營地互轉"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV044",
+    "date": "2026-05-13",
+    "items": [
+      {
+        "productName": "Snow Peak 客廳帳",
+        "quantity": 9,
+        "fromStore": "商店主倉",
+        "toStore": "松林野營基地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV100",
+    "date": "2026-05-13",
+    "items": [
+      {
+        "productName": "65L 重裝背包",
+        "quantity": 2,
+        "fromStore": "分店 C",
+        "toStore": "損耗",
+        "type": "損耗"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV078",
+    "date": "2026-05-15",
+    "items": [
+      {
+        "productName": "四季保暖睡袋",
+        "quantity": 6,
+        "fromStore": "溪谷森林營地",
+        "toStore": "雲海高原營地",
+        "type": "營地互轉"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV014",
+    "date": "2026-05-16",
+    "items": [
+      {
+        "productName": "LED 露營燈",
+        "quantity": 6,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV050",
+    "date": "2026-05-19",
+    "items": [
+      {
+        "productName": "戶外淋浴袋",
+        "quantity": 1,
+        "fromStore": "分店 A",
+        "toStore": "湖畔星空營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV061",
+    "date": "2026-05-20",
+    "items": [
+      {
+        "productName": "戶外淋浴袋",
+        "quantity": 6,
+        "fromStore": "分店 A",
+        "toStore": "松林野營基地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV095",
+    "date": "2026-05-22",
+    "items": [
+      {
+        "productName": "保冷冰桶 45L",
+        "quantity": 3,
+        "fromStore": "溪谷森林營地",
+        "toStore": "損耗",
+        "type": "損耗"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV056",
+    "date": "2026-05-24",
+    "items": [
+      {
+        "productName": "折疊式焚火台",
+        "quantity": 12,
+        "fromStore": "分店 C",
+        "toStore": "雲海高原營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV004",
+    "date": "2026-05-26",
+    "items": [
+      {
+        "productName": "折疊式焚火台",
+        "quantity": 5,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      },
+      {
+        "productName": "充電式頭燈",
+        "quantity": 10,
+        "fromStore": "進貨",
+        "toStore": "租借主倉",
+        "type": "進貨"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV009",
+    "date": "2026-05-26",
+    "items": [
+      {
+        "productName": "防水登山背包 45L",
+        "quantity": 7,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV027",
+    "date": "2026-05-26",
+    "items": [
+      {
+        "productName": "防水戶外手錶",
+        "quantity": 11,
+        "fromStore": "分店 B",
+        "toStore": "商店主倉",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV065",
+    "date": "2026-05-26",
+    "items": [
+      {
+        "productName": "折疊式焚火台",
+        "quantity": 12,
+        "fromStore": "分店 A",
+        "toStore": "湖畔星空營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV070",
+    "date": "2026-05-26",
+    "items": [
+      {
+        "productName": "高背月亮椅",
+        "quantity": 10,
+        "fromStore": "海岸微風營地",
+        "toStore": "雲海高原營地",
+        "type": "營地互轉"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV034",
+    "date": "2026-05-27",
+    "items": [
+      {
+        "productName": "保溫壺 1L",
+        "quantity": 3,
+        "fromStore": "商店主倉",
+        "toStore": "分店 A",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV026",
+    "date": "2026-05-28",
+    "items": [
+      {
+        "productName": "保冷冰桶 45L",
+        "quantity": 11,
+        "fromStore": "分店 B",
+        "toStore": "分店 C",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV038",
+    "date": "2026-05-29",
+    "items": [
+      {
+        "productName": "快煮鍋 1.5L",
+        "quantity": 10,
+        "fromStore": "商店主倉",
+        "toStore": "分店 A",
+        "type": "移轉"
+      },
+      {
+        "productName": "保冷冰桶 45L",
+        "quantity": 9,
+        "fromStore": "進貨",
+        "toStore": "租借主倉",
+        "type": "進貨"
+      },
+      {
+        "productName": "羽絨睡袋 -10°C",
+        "quantity": 5,
+        "fromStore": "分店 C",
+        "toStore": "分店 B",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV066",
+    "date": "2026-05-29",
+    "items": [
+      {
+        "productName": "戶外淋浴袋",
+        "quantity": 7,
+        "fromStore": "海岸微風營地",
+        "toStore": "溪谷森林營地",
+        "type": "營地互轉"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV005",
+    "date": "2026-05-31",
+    "items": [
+      {
+        "productName": "折疊桌椅組",
+        "quantity": 5,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV071",
+    "date": "2026-05-31",
+    "items": [
+      {
+        "productName": "MSR 超輕量帳篷",
+        "quantity": 11,
+        "fromStore": "海岸微風營地",
+        "toStore": "雲海高原營地",
+        "type": "營地互轉"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV084",
+    "date": "2026-05-31",
+    "items": [
+      {
+        "productName": "雙層防風外套",
+        "quantity": 3,
+        "fromStore": "分店 B",
+        "toStore": "損耗",
+        "type": "損耗"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV051",
+    "date": "2026-06-02",
+    "items": [
+      {
+        "productName": "四季保暖睡袋",
+        "quantity": 5,
+        "fromStore": "分店 B",
+        "toStore": "雲海高原營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV011",
+    "date": "2026-06-03",
+    "items": [
+      {
+        "productName": "防蚊帳篷內帳",
+        "quantity": 8,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      },
+      {
+        "productName": "四季保暖睡袋",
+        "quantity": 5,
+        "fromStore": "商店主倉",
+        "toStore": "松林野營基地",
+        "type": "調撥"
+      },
+      {
+        "productName": "保冷冰桶 45L",
+        "quantity": 9,
+        "fromStore": "分店 A",
+        "toStore": "湖畔星空營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV089",
+    "date": "2026-06-03",
+    "items": [
+      {
+        "productName": "羽絨睡袋 -10°C",
+        "quantity": 2,
+        "fromStore": "松林野營基地",
+        "toStore": "損耗",
+        "type": "損耗"
+      },
+      {
+        "productName": "大型天幕",
+        "quantity": 1,
+        "fromStore": "租借主倉",
+        "toStore": "損耗",
+        "type": "損耗"
+      },
+      {
+        "productName": "大型天幕",
+        "quantity": 9,
+        "fromStore": "商店主倉",
+        "toStore": "分店 A",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV010",
+    "date": "2026-06-05",
+    "items": [
+      {
+        "productName": "羽絨睡袋 -10°C",
+        "quantity": 11,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV067",
+    "date": "2026-06-05",
+    "items": [
+      {
+        "productName": "折疊式焚火台",
+        "quantity": 9,
+        "fromStore": "溪谷森林營地",
+        "toStore": "海岸微風營地",
+        "type": "營地互轉"
+      },
+      {
+        "productName": "充氣式睡墊 L號",
+        "quantity": 8,
+        "fromStore": "分店 A",
+        "toStore": "分店 C",
+        "type": "移轉"
+      },
+      {
+        "productName": "折疊式焚火台",
+        "quantity": 3,
+        "fromStore": "分店 C",
+        "toStore": "松林野營基地",
+        "type": "調撥"
       }
     ],
     "employeeId": "01"
   },
   {
     "id": "MV018",
+    "date": "2026-06-08",
+    "items": [
+      {
+        "productName": "LED 露營燈",
+        "quantity": 5,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      },
+      {
+        "productName": "折疊桌椅組",
+        "quantity": 12,
+        "fromStore": "分店 C",
+        "toStore": "溪谷森林營地",
+        "type": "調撥"
+      },
+      {
+        "productName": "行動電源站",
+        "quantity": 8,
+        "fromStore": "雲海高原營地",
+        "toStore": "海岸微風營地",
+        "type": "營地互轉"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV099",
+    "date": "2026-06-08",
+    "items": [
+      {
+        "productName": "Coleman 六人帳篷",
+        "quantity": 1,
+        "fromStore": "分店 B",
+        "toStore": "損耗",
+        "type": "損耗"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV042",
     "date": "2026-06-09",
     "items": [
       {
-        "productName": "行動電源站",
-        "quantity": 2,
-        "fromStore": "台北旗艦店",
-        "toStore": "雲海高原營地"
+        "productName": "65L 重裝背包",
+        "quantity": 1,
+        "fromStore": "商店主倉",
+        "toStore": "溪谷森林營地",
+        "type": "調撥"
       }
     ],
-    "employeeId": "02"
+    "employeeId": "03"
   },
   {
     "id": "MV019",
-    "date": "2026-06-10",
+    "date": "2026-06-11",
     "items": [
       {
-        "productName": "保冷冰桶 45L",
-        "quantity": 6,
-        "fromStore": "高雄左營店",
-        "toStore": "海岸微風營地"
+        "productName": "營柱與營繩組",
+        "quantity": 4,
+        "fromStore": "分店 C",
+        "toStore": "商店主倉",
+        "type": "移轉"
       }
     ],
     "employeeId": "01"
   },
   {
-    "id": "MV020",
-    "date": "2026-06-10",
+    "id": "MV079",
+    "date": "2026-06-13",
+    "items": [
+      {
+        "productName": "折疊蛋捲桌",
+        "quantity": 10,
+        "fromStore": "海岸微風營地",
+        "toStore": "松林野營基地",
+        "type": "營地互轉"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV035",
+    "date": "2026-06-14",
+    "items": [
+      {
+        "productName": "雙層防風外套",
+        "quantity": 7,
+        "fromStore": "分店 A",
+        "toStore": "商店主倉",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV075",
+    "date": "2026-06-15",
+    "items": [
+      {
+        "productName": "行動電源站",
+        "quantity": 7,
+        "fromStore": "海岸微風營地",
+        "toStore": "溪谷森林營地",
+        "type": "營地互轉"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV055",
+    "date": "2026-06-16",
     "items": [
       {
         "productName": "Snow Peak 客廳帳",
         "quantity": 3,
-        "fromStore": "台中中港店",
-        "toStore": "湖畔星空營地"
+        "fromStore": "商店主倉",
+        "toStore": "雲海高原營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV047",
+    "date": "2026-06-18",
+    "items": [
+      {
+        "productName": "MSR 超輕量帳篷",
+        "quantity": 2,
+        "fromStore": "分店 B",
+        "toStore": "溪谷森林營地",
+        "type": "調撥"
       }
     ],
     "employeeId": "02"
+  },
+  {
+    "id": "MV024",
+    "date": "2026-06-20",
+    "items": [
+      {
+        "productName": "保溫壺 1L",
+        "quantity": 5,
+        "fromStore": "商店主倉",
+        "toStore": "分店 B",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV001",
+    "date": "2026-06-21",
+    "items": [
+      {
+        "productName": "四季保暖睡袋",
+        "quantity": 3,
+        "fromStore": "進貨",
+        "toStore": "租借主倉",
+        "type": "進貨"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV017",
+    "date": "2026-06-22",
+    "items": [
+      {
+        "productName": "保冷冰桶 45L",
+        "quantity": 3,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV025",
+    "date": "2026-06-22",
+    "items": [
+      {
+        "productName": "大型天幕",
+        "quantity": 8,
+        "fromStore": "分店 B",
+        "toStore": "分店 A",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV015",
+    "date": "2026-06-23",
+    "items": [
+      {
+        "productName": "充電式頭燈",
+        "quantity": 8,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      }
+    ],
+    "employeeId": "03"
+  },
+  {
+    "id": "MV002",
+    "date": "2026-06-24",
+    "items": [
+      {
+        "productName": "防水戶外手錶",
+        "quantity": 11,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV032",
+    "date": "2026-06-24",
+    "items": [
+      {
+        "productName": "大型天幕",
+        "quantity": 3,
+        "fromStore": "商店主倉",
+        "toStore": "分店 B",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV062",
+    "date": "2026-06-24",
+    "items": [
+      {
+        "productName": "折疊蛋捲桌",
+        "quantity": 10,
+        "fromStore": "商店主倉",
+        "toStore": "湖畔星空營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV064",
+    "date": "2026-06-24",
+    "items": [
+      {
+        "productName": "保溫壺 1L",
+        "quantity": 4,
+        "fromStore": "分店 A",
+        "toStore": "雲海高原營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV049",
+    "date": "2026-06-27",
+    "items": [
+      {
+        "productName": "防蚊帳篷內帳",
+        "quantity": 4,
+        "fromStore": "分店 C",
+        "toStore": "海岸微風營地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "01"
+  },
+  {
+    "id": "MV023",
+    "date": "2026-06-28",
+    "items": [
+      {
+        "productName": "防水戶外手錶",
+        "quantity": 6,
+        "fromStore": "分店 B",
+        "toStore": "分店 C",
+        "type": "移轉"
+      }
+    ],
+    "employeeId": "02"
+  },
+  {
+    "id": "MV058",
+    "date": "2026-06-28",
+    "items": [
+      {
+        "productName": "充電式頭燈",
+        "quantity": 10,
+        "fromStore": "分店 B",
+        "toStore": "溪谷森林營地",
+        "type": "調撥"
+      },
+      {
+        "productName": "高背月亮椅",
+        "quantity": 2,
+        "fromStore": "進貨",
+        "toStore": "商店主倉",
+        "type": "進貨"
+      },
+      {
+        "productName": "Coleman 氣化爐",
+        "quantity": 1,
+        "fromStore": "分店 A",
+        "toStore": "松林野營基地",
+        "type": "調撥"
+      }
+    ],
+    "employeeId": "01"
   }
 ]

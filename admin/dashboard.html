@@ -206,7 +206,7 @@
           <!-- 頭像按鈕（使用字首縮寫代替圖片） -->
           <div class="rounded-circle d-flex align-items-center justify-content-center
                       text-white fw-bold"
-               style="width:36px; height:36px;
+               style="width:24px; height:24px;
                       background-color: var(--admin-brand-accent);
                       cursor: pointer;"
                role="button"
@@ -437,6 +437,35 @@
   </div>
 
   <!-- ============================================================
+       全域 Modal：會員資料變更確認（由 customers.js 控制）
+       ============================================================ -->
+  <div class="modal fade" id="customerEditConfirmModal" tabindex="-1"
+       aria-labelledby="customerEditConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="customerEditConfirmModalLabel">
+            <i class="fas fa-user-edit me-2"></i>確認會員資料變更
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted small mb-2">以下欄位將一併儲存：</p>
+          <div id="customerEditChangeSummary"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            返回編輯
+          </button>
+          <button type="button" id="customerEditConfirmBtn" class="btn btn-success">
+            <i class="fas fa-check me-1"></i>確認儲存
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
        全域 Modal：取消預約確認（靜態放在 dashboard，由 bookings.js 控制）
        ============================================================ -->
   <div class="modal fade" id="bookingCancelModal" tabindex="-1"
@@ -578,25 +607,25 @@
               <div class="vstack gap-2" id="editBranchPresetList">
 
                 <div class="input-group input-group-sm edit-branch-row" data-branch-id="main">
-                  <span class="input-group-text" style="min-width:80px;">商店主倉</span>
+                  <span class="input-group-text" style="min-width:60px;">商店主倉</span>
                   <input type="number" class="form-control edit-branch-quantity-input"
                          min="0" value="0" aria-label="商店主倉存放數量">
                 </div>
 
                 <div class="input-group input-group-sm edit-branch-row" data-branch-id="branch-001">
-                  <span class="input-group-text" style="min-width:80px;">分店 A</span>
+                  <span class="input-group-text" style="min-width:60px;">分店 A</span>
                   <input type="number" class="form-control edit-branch-quantity-input"
                          min="0" value="0" aria-label="分店 A 存放數量">
                 </div>
 
                 <div class="input-group input-group-sm edit-branch-row" data-branch-id="branch-002">
-                  <span class="input-group-text" style="min-width:80px;">分店 B</span>
+                  <span class="input-group-text" style="min-width:60px;">分店 B</span>
                   <input type="number" class="form-control edit-branch-quantity-input"
                          min="0" value="0" aria-label="分店 B 存放數量">
                 </div>
 
                 <div class="input-group input-group-sm edit-branch-row" data-branch-id="branch-003">
-                  <span class="input-group-text" style="min-width:80px;">分店 C</span>
+                  <span class="input-group-text" style="min-width:60px;">分店 C</span>
                   <input type="number" class="form-control edit-branch-quantity-input"
                          min="0" value="0" aria-label="分店 C 存放數量">
                 </div>
@@ -639,7 +668,7 @@
                   <!-- 租借主倉固定列（編輯時永遠顯示） -->
                   <!-- Rental main warehouse fixed row: always visible in edit mode -->
                   <div class="input-group input-group-sm mb-2" id="rentalEditMainRow">
-                    <span class="input-group-text" style="min-width:90px;">租借主倉</span>
+                    <span class="input-group-text" style="min-width:64px;">租借主倉</span>
                     <input type="number" class="form-control" id="rentalEditMainQty"
                            min="0" value="0" aria-label="租借主倉存放數量">
                   </div>
@@ -649,35 +678,35 @@
                   <div class="vstack gap-2 mb-2" id="rentalCampPresetList">
 
                     <div class="input-group input-group-sm rental-camp-preset-row" data-camp-id="camp-001">
-                      <span class="input-group-text" style="min-width:90px;">湖畔星空營地</span>
+                      <span class="input-group-text" style="min-width:64px;">湖畔星空營地</span>
                       <input type="number" class="form-control rental-camp-quantity-input"
                              min="0" value="0"
                              aria-label="湖畔星空營地存放數量">
                     </div>
 
                     <div class="input-group input-group-sm rental-camp-preset-row" data-camp-id="camp-002">
-                      <span class="input-group-text" style="min-width:90px;">松林野營基地</span>
+                      <span class="input-group-text" style="min-width:64px;">松林野營基地</span>
                       <input type="number" class="form-control rental-camp-quantity-input"
                              min="0" value="0"
                              aria-label="松林野營基地存放數量">
                     </div>
 
                     <div class="input-group input-group-sm rental-camp-preset-row" data-camp-id="camp-003">
-                      <span class="input-group-text" style="min-width:90px;">溪谷森林營地</span>
+                      <span class="input-group-text" style="min-width:64px;">溪谷森林營地</span>
                       <input type="number" class="form-control rental-camp-quantity-input"
                              min="0" value="0"
                              aria-label="溪谷森林營地存放數量">
                     </div>
 
                     <div class="input-group input-group-sm rental-camp-preset-row" data-camp-id="camp-004">
-                      <span class="input-group-text" style="min-width:90px;">雲海高原營地</span>
+                      <span class="input-group-text" style="min-width:64px;">雲海高原營地</span>
                       <input type="number" class="form-control rental-camp-quantity-input"
                              min="0" value="0"
                              aria-label="雲海高原營地存放數量">
                     </div>
 
                     <div class="input-group input-group-sm rental-camp-preset-row" data-camp-id="camp-005">
-                      <span class="input-group-text" style="min-width:90px;">海岸微風營地</span>
+                      <span class="input-group-text" style="min-width:64px;">海岸微風營地</span>
                       <input type="number" class="form-control rental-camp-quantity-input"
                              min="0" value="0"
                              aria-label="海岸微風營地存放數量">
@@ -728,6 +757,7 @@
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh-tw.js"></script>
 
   <!-- 後台自訂 JS（permissions.js 須在 core.js 之前，提供 ADMIN_SECTIONS 與員工資料） -->
+  <script src="../js/validators.js"></script>
   <script src="js/permissions.js"></script>
   <script src="js/core.js"></script>
   <script src="js/analytics.js"></script>

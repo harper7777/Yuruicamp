@@ -296,7 +296,7 @@ function renderReplyBlock(review) {
 
   var metaParts = [];
   if (review.replyAt) metaParts.push('回覆於 ' + escapeHtml(review.replyAt));
-  if (review.repliedByName) metaParts.push(escapeHtml(review.repliedByName));
+  // 不顯示回覆人員姓名 / Do not show responder name on UI
   if (review.replyUpdatedAt) metaParts.push('（已編輯 ' + escapeHtml(review.replyUpdatedAt) + '）');
 
   return '<div class="reply-display mt-3 p-3 bg-light border-start border-3 border-success rounded-end">' +
