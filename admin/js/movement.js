@@ -533,10 +533,10 @@ function renderMovementTable(records) {
 
     return '<tr data-movement-id="' + escapeMovementHtml(record.id) + '">' +
       '<td>' +
-      '<button type="button" class="btn btn-link p-0 fw-semibold movement-detail-link" ' +
+      '<span class="admin-cell-link movement-detail-link" ' +
       'data-movement-id="' + escapeMovementHtml(record.id) + '">' +
       escapeMovementHtml(record.id) +
-      '</button>' +
+      '</span>' +
       '</td>' +
       '<td>' + escapeMovementHtml(record.date) + '</td>' +
       '<td>' + escapeMovementHtml(record.employeeId || '—') + '</td>' +

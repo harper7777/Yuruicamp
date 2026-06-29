@@ -766,18 +766,17 @@ function renderBookingsTable(bookings) {
 
     // ── 預約單號連結 ──
     var idLink =
-      '<span class="booking-id-link text-primary fw-semibold" ' +
+      '<span class="admin-cell-link booking-id-link" ' +
       'data-booking-id="' + booking.id + '" ' +
-      'style="cursor:pointer; text-decoration:underline dotted;" ' +
       'title="點擊查看預約明細">' + booking.id + '</span>';
 
     // ── 顧客姓名超連結 ──
     var customerLink =
-      '<a href="#" class="booking-customer-link text-decoration-underline" ' +
+      '<span class="admin-cell-link booking-customer-link" ' +
       'data-customer-id="' + booking.customer_id + '" ' +
       'title="查看顧客檔案">' +
       getCustomerName(booking.customer_id) +
-      '</a>';
+      '</span>';
 
     // ── <tr> 包含新增的 data-region 和 data-has-rental 屬性 ──
     return '<tr data-booking-id="' + booking.id + '"' +
@@ -789,7 +788,7 @@ function renderBookingsTable(bookings) {
            '<td>' + idLink + '</td>' +
            '<td>' + dateStr + '</td>' +
            '<td>' + customerLink + '</td>' +
-           '<td>' + amountStr + '</td>' +
+           '<td class="admin-cell-amount">' + amountStr + '</td>' +
            '<td>' + campStr + '</td>' +
            '<td class="text-center">' + rentalBadge + '</td>' +
            '<td>' + payBadge + '</td>' +
@@ -937,7 +936,7 @@ function showBookingModal(booking) {
   var historyHtml = (booking.history || []).map(function (entry) {
     return '<li class="d-flex align-items-start gap-2 mb-1">' +
            '<i class="fas fa-circle mt-1" ' +
-           'style="font-size:6px; color:var(--admin-brand-accent); flex-shrink:0;"></i>' +
+           'style="font-size:5px; color:var(--admin-brand-accent); flex-shrink:0;"></i>' +
            '<span><span class="text-muted me-2">' + entry.time + '</span>' +
            entry.action + '</span>' +
            '</li>';

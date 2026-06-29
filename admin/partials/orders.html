@@ -29,7 +29,7 @@
         <!-- flatpickr input：預設 hidden，點「自定義」才顯示 -->
         <input type="text" id="orderDateRangePicker"
                class="form-control form-control-sm flex-shrink-0"
-               style="width: 230px; display: none; white-space: nowrap;"
+               style="width: 176px; display: none; white-space: nowrap;"
                placeholder="開始日期 ~ 結束日期" readonly>
         <!-- 期間文字：由 updateOrderPeriodLabel() 動態更新 -->
         <span class="text-muted small" id="orderPeriodLabel"></span>
@@ -46,7 +46,7 @@
   <!-- 表格容器 -->
   <div class="card-body p-0">
     <div class="table-responsive">
-      <table class="table table-hover mb-0" id="ordersTable">
+      <table class="table table-hover mb-0 admin-data-table" id="ordersTable">
         <thead class="table-light">
           <tr>
             <!-- 排序欄位：加 .sortable-th class 和 data-sort-key，orders.js 監聽點擊 -->

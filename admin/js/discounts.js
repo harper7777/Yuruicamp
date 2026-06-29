@@ -149,17 +149,18 @@ window.initDiscounts = function () {
     }
 
     // --- 折扣欄位顯示文字 ---
-    // 金額：折抵 NT$ 200；折數：8 折
+    // 金額：NT$ 200；折數：8 折
     var discountDisplay = isPercent
       ? discountRaw + ' 折'
-      : '折抵 NT$ ' + Math.floor(discountRaw);
+      : 'NT$ ' + Math.floor(discountRaw).toLocaleString();
 
     // --- 組合新表格列 ---
     // startVal / endVal 直接傳入 formatDateDisplay()，空值自動顯示 "—"
+    var discountCellClass = isPercent ? '' : ' class="admin-cell-amount"';
     var newRow =
       '<tr data-coupon-code="' + code + '" data-coupon-status="active">' +
       '<td><code class="fw-bold">' + code + '</code></td>' +
-      '<td>' + discountDisplay + '</td>' +
+      '<td' + discountCellClass + '>' + discountDisplay + '</td>' +
       '<td class="text-center">' + quantity + '</td>' +
       '<td class="text-center">0</td>' +
       '<td class="text-center">' + quantity + '</td>' +
@@ -216,7 +217,7 @@ function renderCouponsTable(coupons) {
 
     return '<tr data-coupon-code="' + coupon.code + '" data-coupon-status="' + coupon.status + '">' +
       '<td><code class="fw-bold">' + coupon.code + '</code></td>' +
-      '<td>折抵 NT$ ' + coupon.discount + '</td>' +
+      '<td class="admin-cell-amount">NT$ ' + coupon.discount.toLocaleString() + '</td>' +
       '<td class="text-center">' + coupon.quantity + '</td>' +
       '<td class="text-center">' + coupon.used + '</td>' +
       '<td class="text-center">' + remainDisplay + '</td>' +
