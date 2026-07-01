@@ -1,113 +1,30 @@
 <!-- partials/customers.html
      客戶管理頁面
      由 core.js 的 $.load() 注入到 #contentArea
-     桌面：表格 + 可展開列；手機：卡片 + 可展開詳情
-     篩選（會員等級/標籤）+ 排序（註冊日期/消費總額）由 customers.js 驅動
+     手風琴列表由 customers.js 的 $.getJSON() 動態產生
 -->
 
-<div class="card shadow-sm border-0">
-
-  <!-- 桌面：清除條件（有篩選或排序時才顯示 card-header） -->
-  <div class="card-header bg-white border-0 d-none justify-content-end align-items-center py-3"
-       id="customerClearHeader">
-    <button type="button" id="btnClearCustomerConditions"
-            class="btn btn-sm btn-outline-secondary d-none">
-      <i class="fas fa-rotate-left me-1"></i>清除條件
-    </button>
-  </div>
-
-  <!-- 桌面：表格（md 以上） -->
-  <div class="card-body p-0 d-none d-md-block">
-    <div class="table-responsive">
-      <table class="table table-hover mb-0 admin-data-table customer-list-table" id="customersTable">
-        <thead class="table-light">
-          <tr>
-            <th>客戶姓名</th>
-            <th>手機號碼</th>
-            <th>電子信箱</th>
-            <!-- 註冊日期：ISO 字串排序（YYYY-MM-DD） -->
-            <th class="sortable-th" data-sort-key="registeredAt">
-              註冊日期 <i class="fas fa-sort sort-icon ms-1"></i>
-            </th>
-            <!-- 會員等級：多選篩選（欄內 OR，與標籤 AND 疊加） -->
-            <th class="filter-th" data-filter-key="tier">
-              會員等級
-              <i class="fas fa-filter filter-icon ms-1"></i>
-              <span class="filter-dot d-none"></span>
-              <div class="filter-dropdown d-none">
-                <label><input type="checkbox" value="一般"> 一般</label>
-                <label><input type="checkbox" value="VIP"> VIP</label>
-                <label><input type="checkbox" value="SVIP"> SVIP</label>
-              </div>
-            </th>
-            <!-- 消費總額：三段式排序 -->
-            <th class="sortable-th" data-sort-key="totalSpent">
-              消費總額 <i class="fas fa-sort sort-icon ms-1"></i>
-            </th>
-            <!-- 標籤：多選篩選（選項由 tagColorMap 動態填入） -->
-            <th class="filter-th" data-filter-key="tags">
-              標籤
-              <i class="fas fa-filter filter-icon ms-1"></i>
-              <span class="filter-dot d-none"></span>
-              <div class="filter-dropdown d-none" id="customerTagsFilterDropdown">
-                <!-- buildCustomerTagsFilterOptions() 動態填入 -->
-              </div>
-            </th>
-            <!-- 展開箭頭欄（無標題，僅提示可展開） -->
-            <th class="cell-expand" style="width:2rem" aria-label="展開"></th>
-          </tr>
-        </thead>
-        <tbody id="customersTableBody">
-          <tr>
-            <td colspan="8" class="text-center py-4">
-              <div class="spinner-border spinner-border-sm me-2"
-                   style="color: var(--admin-brand-accent);"></div>
-              <span class="text-muted">載入會員資料中...</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+<section class="yr-admin-customers-module">
+  <!-- 頁面標題列 -->
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+      <h6 class="fw-semibold mb-1">
+        <i class="fas fa-users me-2 text-muted"></i>會員列表
+      </h6>
+      <small class="text-muted">點擊任意會員展開詳細資料與購買紀錄</small>
     </div>
   </div>
 
-  <!-- 手機：篩選列 + 卡片列表 -->
-  <div class="d-md-none">
-    <div id="customersMobileFilters" class="border-bottom p-3 bg-light">
-      <div class="mb-2">
-        <label class="form-label small text-muted mb-1">會員等級</label>
-        <div class="d-flex flex-wrap gap-2" id="mobileTierFilters">
-          <label class="small"><input type="checkbox" class="mobile-tier-cb" value="一般"> 一般</label>
-          <label class="small"><input type="checkbox" class="mobile-tier-cb" value="VIP"> VIP</label>
-          <label class="small"><input type="checkbox" class="mobile-tier-cb" value="SVIP"> SVIP</label>
-        </div>
-      </div>
-      <div class="mb-2">
-        <label class="form-label small text-muted mb-1">標籤</label>
-        <div class="d-flex flex-wrap gap-2" id="mobileTagsFilters">
-          <!-- 動態填入 -->
-        </div>
-      </div>
-      <div class="mb-2">
-        <label class="form-label small text-muted mb-1" for="mobileCustomerSort">消費總額排序</label>
-        <select id="mobileCustomerSort" class="form-select form-select-sm">
-          <option value="">預設（不排序）</option>
-          <option value="asc">低 → 高</option>
-          <option value="desc">高 → 低</option>
-        </select>
-      </div>
-      <div>
-        <button type="button" id="btnClearCustomerConditionsMobile"
-                class="btn btn-sm btn-outline-secondary d-none w-100">
-          <i class="fas fa-rotate-left me-1"></i>清除條件
-        </button>
-      </div>
-    </div>
-    <div id="customersCardList">
-      <div class="text-center py-5">
-        <div class="spinner-border spinner-border-sm me-2"
-             style="color: var(--admin-brand-accent);"></div>
-        <span class="text-muted">載入會員資料中...</span>
-      </div>
+  <!-- Accordion 手風琴容器
+       每位會員為一個 accordion-item
+       由 customers.js 的 renderCustomersAccordion() 動態填入
+  -->
+  <div class="accordion" id="customersAccordion">
+    <!-- 初始載入提示 -->
+    <div class="text-center py-5" id="customersLoadingIndicator">
+      <div class="spinner-border spinner-border-sm me-2"
+           style="color: var(--admin-brand-accent);"></div>
+      <span class="text-muted">載入會員資料中...</span>
     </div>
   </div>
-</div>
+</section>

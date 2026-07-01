@@ -3,13 +3,11 @@
 ## 既有專案安全改版、Token 導入、測試與交付
 
 > 本文件只負責說明「如何把 Yuruicamp 設計系統安全套用到既有專案」。  
-> 品牌定位、正式色碼、元件視覺、頁面規範、攝影、響應式與可及性，以《Yuruicamp｜全站設計系統母規範 v3.2》為唯一依據。  
-
+> 品牌定位、正式色碼、元件視覺、頁面規範、攝影、響應式與可及性，以《Yuruicamp｜全站設計系統母規範 v3.2》為唯一依據。
 
 ---
 
-
-#  最高修改原則
+# 最高修改原則
 
 改版目標：
 
@@ -32,7 +30,7 @@
 
 ---
 
-#  修改前盤點
+# 修改前盤點
 
 開始修改前，必須完整閱讀所有相關 CSS，確認以下項目。
 
@@ -134,7 +132,7 @@
 
 ```css
 :root {
-  --yc-bg: #F8F5EE;
+  --yc-bg: #f8f5ee;
 
   /* Temporary compatibility alias — 後續移除 */
   --color-bg: var(--yc-bg);
@@ -159,10 +157,10 @@ base.css 最前方
 
 ```css
 /* base.css */
---yc-cta: #E2D39A;
+--yc-cta: #e2d39a;
 
 /* booking.css */
---yc-cta: #F4E7B9; /* 禁止：頁面不得自行改寫核心 CTA */
+--yc-cta: #f4e7b9; /* 禁止：頁面不得自行改寫核心 CTA */
 ```
 
 頁面差異應建立語意 Token，而不是覆寫核心品牌色。
@@ -174,12 +172,12 @@ base.css 最前方
 母規範 v3.2 的 CTA 色系為：
 
 ```css
---yc-cta: #E2D39A;
---yc-cta-hover: #D4C27E;
---yc-cta-active: #C4AF62;
---yc-cta-soft: #FBF3D1;
---yc-cta-line: #D9C98F;
---yc-on-cta: #4A4537;
+--yc-cta: #e2d39a;
+--yc-cta-hover: #d4c27e;
+--yc-cta-active: #c4af62;
+--yc-cta-soft: #fbf3d1;
+--yc-cta-line: #d9c98f;
+--yc-on-cta: #4a4537;
 ```
 
 遷移時必須同步處理：
@@ -277,12 +275,12 @@ base.css 最前方
 
 格式：
 
-| 舊色碼／變數 | 出現位置 | 語意 | 新 Token | 處理方式 |
-|---|---|---|---|---|
-| `#244d4d` | Header、Footer | 舊深綠 | `--yc-header-bg`／`--yc-footer-bg` | 分開替換 |
-| `#ffffff` | Card、Modal | Surface | `--yc-surface` | 依用途替換 |
-| `#333333` | 標題、內文 | Text | `--yc-text`／`--yc-text-secondary` | 依文字層級拆分 |
-| 舊橘色／陶土色 | Button | Conversion | `--yc-cta`／`--yc-cta-soft` | 僅限交易行動，並改用深色文字 |
+| 舊色碼／變數   | 出現位置       | 語意       | 新 Token                           | 處理方式                     |
+| -------------- | -------------- | ---------- | ---------------------------------- | ---------------------------- |
+| `#244d4d`      | Header、Footer | 舊深綠     | `--yc-header-bg`／`--yc-footer-bg` | 分開替換                     |
+| `#ffffff`      | Card、Modal    | Surface    | `--yc-surface`                     | 依用途替換                   |
+| `#333333`      | 標題、內文     | Text       | `--yc-text`／`--yc-text-secondary` | 依文字層級拆分               |
+| 舊橘色／陶土色 | Button         | Conversion | `--yc-cta`／`--yc-cta-soft`        | 僅限交易行動，並改用深色文字 |
 
 禁止將相同舊色碼一次替換成單一新色，因為舊色可能同時承擔多種語意。
 
@@ -379,14 +377,14 @@ base.css 最前方
 
 實作時依操作語意套用樣式：
 
-| 操作 | 視覺層級 |
-|---|---|
-| 搜尋、預訂、購買、結帳、付款、送出 | Conversion CTA |
-| 查看詳情、閱讀、探索、修改條件 | Brand Action |
-| 返回、繼續瀏覽、查看其他選擇 | Secondary |
-| 重複卡片中的加入購物車／查看日期 | Soft Conversion |
-| 清除、關閉、稍後再看 | Text Action |
-| 取消訂單、刪除 | Error／Danger |
+| 操作                               | 視覺層級        |
+| ---------------------------------- | --------------- |
+| 搜尋、預訂、購買、結帳、付款、送出 | Conversion CTA  |
+| 查看詳情、閱讀、探索、修改條件     | Brand Action    |
+| 返回、繼續瀏覽、查看其他選擇       | Secondary       |
+| 重複卡片中的加入購物車／查看日期   | Soft Conversion |
+| 清除、關閉、稍後再看               | Text Action     |
+| 取消訂單、刪除                     | Error／Danger   |
 
 不要根據按鈕出現在哪個頁面決定顏色。
 

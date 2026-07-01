@@ -1,1023 +1,61 @@
 [
   {
-    "id": "BK-0022",
-    "customer_id": "U022",
-    "submitted_at": "2026-03-02 17:26:48",
+    "id": "BK-0001",
+    "customer_id": "U003",
+    "submitted_at": "2026-05-20 09:15:00",
+    "payment_status": "paid",
+    "status": "completed",
+    "equipment_returned": true,
+    "booking_info": {
+      "campground_id": "C001",
+      "campground_name": "雲海仙境露營區",
+      "region": "北部",
+      "check_in": "2026-05-25",
+      "check_out": "2026-05-27",
+      "total_days": 2,
+      "weekday_count": 2,
+      "holiday_count": 0,
+      "guest_count": 4
+    },
+    "selected_zones": [
+      { "zone_id": "Z001", "zone_type": "草皮區", "quantity": 1, "subtotal": 2000 }
+    ],
+    "selected_rentals": [
+      { "equipment_id": "E001", "name": "極限防水黑膠帳篷", "quantity": 1, "subtotal": 900 }
+    ],
+    "summary": {
+      "zone_total": 2000,
+      "rental_total": 900,
+      "applied_discount": 100,
+      "final_amount": 2800
+    },
+    "history": [
+      { "time": "2026-05-20 09:15:00", "action": "預約單已送出" },
+      { "time": "2026-05-20 09:15:00", "action": "已付款" },
+      { "time": "2026-05-20 14:00:00", "action": "已確認預約" },
+      { "time": "2026-05-27 12:00:00", "action": "已完成" }
+    ]
+  },
+  {
+    "id": "BK-0002",
+    "customer_id": "U001",
+    "submitted_at": "2026-05-28 16:40:00",
     "payment_status": "refunded",
     "status": "cancelled",
     "equipment_returned": false,
     "booking_info": {
-      "campground_id": "C008",
-      "campground_name": "台中武陵溪流野營",
+      "campground_id": "C002",
+      "campground_name": "溪谷秘境野營地",
       "region": "中部",
-      "check_in": "2026-03-31",
-      "check_out": "2026-04-02",
-      "total_days": 2,
-      "weekday_count": 2,
-      "holiday_count": 0,
-      "guest_count": 5
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z012",
-        "zone_type": "碎石區",
-        "quantity": 1,
-        "subtotal": 1900
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E001",
-        "name": "極限防水黑膠帳篷",
-        "quantity": 2,
-        "subtotal": 1800
-      }
-    ],
-    "summary": {
-      "zone_total": 1900,
-      "rental_total": 1800,
-      "applied_discount": 0,
-      "final_amount": 3700
-    },
-    "history": [
-      {
-        "time": "2026-03-02 17:26:48",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-03-02 17:26:48",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-03-07 17:26:48",
-        "action": "已取消（原因：顧客臨時有事）"
-      },
-      {
-        "time": "2026-03-04 17:26:48",
-        "action": "已退款"
-      }
-    ]
-  },
-  {
-    "id": "BK-0019",
-    "customer_id": "U019",
-    "submitted_at": "2026-03-03 13:32:46",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C006",
-      "campground_name": "阿里山雲霧繚繞營地",
-      "region": "南部",
-      "check_in": "2026-03-26",
-      "check_out": "2026-03-27",
-      "total_days": 1,
-      "weekday_count": 0,
-      "holiday_count": 0,
-      "guest_count": 6
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z009",
-        "zone_type": "棧板區",
-        "quantity": 1,
-        "subtotal": 1700
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 1700,
-      "rental_total": 0,
-      "applied_discount": 59,
-      "final_amount": 1641
-    },
-    "history": [
-      {
-        "time": "2026-03-03 13:32:46",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-03-03 13:32:46",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-03-03 19:23:46",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-03-12 13:32:46",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0027",
-    "customer_id": "U027",
-    "submitted_at": "2026-03-03 14:08:38",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C007",
-      "campground_name": "宜蘭礁溪湯泉露營",
-      "region": "北部",
-      "check_in": "2026-03-24",
-      "check_out": "2026-03-25",
-      "total_days": 1,
-      "weekday_count": 1,
-      "holiday_count": 0,
-      "guest_count": 5
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z010",
-        "zone_type": "草皮區",
-        "quantity": 1,
-        "subtotal": 2200
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E003",
-        "name": "兒童戲水漂浮套件",
-        "quantity": 1,
-        "subtotal": 300
-      }
-    ],
-    "summary": {
-      "zone_total": 2200,
-      "rental_total": 300,
-      "applied_discount": 0,
-      "final_amount": 2500
-    },
-    "history": [
-      {
-        "time": "2026-03-03 14:08:38",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-03-03 14:08:38",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-03-03 14:51:38",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-03-14 14:08:38",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0025",
-    "customer_id": "U025",
-    "submitted_at": "2026-03-09 16:21:53",
-    "payment_status": "paid",
-    "status": "pending",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C003",
-      "campground_name": "太平山森林豪華露營",
-      "region": "北部",
-      "check_in": "2026-03-26",
-      "check_out": "2026-03-29",
-      "total_days": 3,
-      "weekday_count": 0,
-      "holiday_count": 1,
-      "guest_count": 2
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z005",
-        "zone_type": "免搭帳／豪華露營 (Glamping)",
-        "quantity": 2,
-        "subtotal": 30000
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E007",
-        "name": "防潮帳篷地墊組",
-        "quantity": 2,
-        "subtotal": 800
-      }
-    ],
-    "summary": {
-      "zone_total": 30000,
-      "rental_total": 800,
-      "applied_discount": 62,
-      "final_amount": 30738
-    },
-    "history": [
-      {
-        "time": "2026-03-09 16:21:53",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-03-09 16:21:53",
-        "action": "已付款"
-      }
-    ]
-  },
-  {
-    "id": "BK-0029",
-    "customer_id": "U029",
-    "submitted_at": "2026-03-09 19:21:19",
-    "payment_status": "paid",
-    "status": "pending",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C007",
-      "campground_name": "宜蘭礁溪湯泉露營",
-      "region": "北部",
-      "check_in": "2026-03-21",
-      "check_out": "2026-03-23",
-      "total_days": 2,
-      "weekday_count": 1,
-      "holiday_count": 1,
-      "guest_count": 6
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z010",
-        "zone_type": "草皮區",
-        "quantity": 1,
-        "subtotal": 4400
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E002",
-        "name": "高山保暖睡袋 (-10°C)",
-        "quantity": 2,
-        "subtotal": 600
-      },
-      {
-        "equipment_id": "E004",
-        "name": "攜帶式燒烤爐組",
-        "quantity": 2,
-        "subtotal": 1000
-      }
-    ],
-    "summary": {
-      "zone_total": 4400,
-      "rental_total": 1600,
-      "applied_discount": 0,
-      "final_amount": 6000
-    },
-    "history": [
-      {
-        "time": "2026-03-09 19:21:19",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-03-09 19:21:19",
-        "action": "已付款"
-      }
-    ]
-  },
-  {
-    "id": "BK-0023",
-    "customer_id": "U023",
-    "submitted_at": "2026-03-11 14:58:48",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C001",
-      "campground_name": "雲海仙境露營區",
-      "region": "北部",
-      "check_in": "2026-03-29",
-      "check_out": "2026-03-31",
+      "check_in": "2026-06-07",
+      "check_out": "2026-06-09",
       "total_days": 2,
       "weekday_count": 0,
       "holiday_count": 2,
       "guest_count": 2
     },
     "selected_zones": [
-      {
-        "zone_id": "Z002",
-        "zone_type": "雨棚區",
-        "quantity": 1,
-        "subtotal": 3600
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 3600,
-      "rental_total": 0,
-      "applied_discount": 71,
-      "final_amount": 3529
-    },
-    "history": [
-      {
-        "time": "2026-03-11 14:58:48",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-03-11 14:58:48",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-03-11 16:33:48",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-03-17 14:58:48",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0020",
-    "customer_id": "U020",
-    "submitted_at": "2026-03-17 14:43:51",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C003",
-      "campground_name": "太平山森林豪華露營",
-      "region": "北部",
-      "check_in": "2026-04-15",
-      "check_out": "2026-04-17",
-      "total_days": 2,
-      "weekday_count": 1,
-      "holiday_count": 0,
-      "guest_count": 2
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z005",
-        "zone_type": "免搭帳／豪華露營 (Glamping)",
-        "quantity": 1,
-        "subtotal": 10000
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 10000,
-      "rental_total": 0,
-      "applied_discount": 0,
-      "final_amount": 10000
-    },
-    "history": [
-      {
-        "time": "2026-03-17 14:43:51",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-03-17 14:43:51",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-03-17 22:11:51",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-03-22 14:43:51",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0011",
-    "customer_id": "U011",
-    "submitted_at": "2026-03-17 17:31:43",
-    "payment_status": "paid",
-    "status": "confirmed",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C006",
-      "campground_name": "阿里山雲霧繚繞營地",
-      "region": "南部",
-      "check_in": "2026-03-28",
-      "check_out": "2026-03-31",
-      "total_days": 3,
-      "weekday_count": 0,
-      "holiday_count": 1,
-      "guest_count": 6
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z009",
-        "zone_type": "棧板區",
-        "quantity": 1,
-        "subtotal": 5100
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E001",
-        "name": "極限防水黑膠帳篷",
-        "quantity": 2,
-        "subtotal": 1800
-      }
-    ],
-    "summary": {
-      "zone_total": 5100,
-      "rental_total": 1800,
-      "applied_discount": 81,
-      "final_amount": 6819
-    },
-    "history": [
-      {
-        "time": "2026-03-17 17:31:43",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-03-17 17:31:43",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-03-17 18:23:43",
-        "action": "已確認預約"
-      }
-    ]
-  },
-  {
-    "id": "BK-0041",
-    "customer_id": "U041",
-    "submitted_at": "2026-03-18 08:08:13",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C001",
-      "campground_name": "雲海仙境露營區",
-      "region": "北部",
-      "check_in": "2026-03-30",
-      "check_out": "2026-03-31",
-      "total_days": 1,
-      "weekday_count": 0,
-      "holiday_count": 1,
-      "guest_count": 6
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z001",
-        "zone_type": "草皮區",
-        "quantity": 1,
-        "subtotal": 1000
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E006",
-        "name": "海上獨木舟（雙人）",
-        "quantity": 2,
-        "subtotal": 3200
-      },
-      {
-        "equipment_id": "E003",
-        "name": "兒童戲水漂浮套件",
-        "quantity": 1,
-        "subtotal": 300
-      }
-    ],
-    "summary": {
-      "zone_total": 1000,
-      "rental_total": 3500,
-      "applied_discount": 0,
-      "final_amount": 4500
-    },
-    "history": [
-      {
-        "time": "2026-03-18 08:08:13",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-03-18 08:08:13",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-03-18 13:03:13",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-03-31 08:08:13",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0035",
-    "customer_id": "U035",
-    "submitted_at": "2026-03-19 17:20:06",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C002",
-      "campground_name": "溪谷秘境野營地",
-      "region": "中部",
-      "check_in": "2026-04-02",
-      "check_out": "2026-04-04",
-      "total_days": 2,
-      "weekday_count": 0,
-      "holiday_count": 0,
-      "guest_count": 2
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z004",
-        "zone_type": "棧板區",
-        "quantity": 1,
-        "subtotal": 2600
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E004",
-        "name": "攜帶式燒烤爐組",
-        "quantity": 1,
-        "subtotal": 500
-      }
-    ],
-    "summary": {
-      "zone_total": 2600,
-      "rental_total": 500,
-      "applied_discount": 87,
-      "final_amount": 3013
-    },
-    "history": [
-      {
-        "time": "2026-03-19 17:20:06",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-03-19 17:20:06",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-03-19 21:07:06",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-03-23 17:20:06",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0015",
-    "customer_id": "U015",
-    "submitted_at": "2026-03-21 19:02:22",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C003",
-      "campground_name": "太平山森林豪華露營",
-      "region": "北部",
-      "check_in": "2026-04-06",
-      "check_out": "2026-04-08",
-      "total_days": 2,
-      "weekday_count": 0,
-      "holiday_count": 1,
-      "guest_count": 5
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z005",
-        "zone_type": "免搭帳／豪華露營 (Glamping)",
-        "quantity": 2,
-        "subtotal": 20000
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E002",
-        "name": "高山保暖睡袋 (-10°C)",
-        "quantity": 1,
-        "subtotal": 300
-      },
-      {
-        "equipment_id": "E001",
-        "name": "極限防水黑膠帳篷",
-        "quantity": 2,
-        "subtotal": 1800
-      }
-    ],
-    "summary": {
-      "zone_total": 20000,
-      "rental_total": 2100,
-      "applied_discount": 0,
-      "final_amount": 22100
-    },
-    "history": [
-      {
-        "time": "2026-03-21 19:02:22",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-03-21 19:02:22",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-03-21 20:13:22",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-03-25 19:02:22",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0046",
-    "customer_id": "U046",
-    "submitted_at": "2026-03-23 10:30:33",
-    "payment_status": "paid",
-    "status": "confirmed",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C001",
-      "campground_name": "雲海仙境露營區",
-      "region": "北部",
-      "check_in": "2026-03-28",
-      "check_out": "2026-03-31",
-      "total_days": 3,
-      "weekday_count": 2,
-      "holiday_count": 3,
-      "guest_count": 3
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z001",
-        "zone_type": "草皮區",
-        "quantity": 2,
-        "subtotal": 6000
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E001",
-        "name": "極限防水黑膠帳篷",
-        "quantity": 2,
-        "subtotal": 1800
-      }
-    ],
-    "summary": {
-      "zone_total": 6000,
-      "rental_total": 1800,
-      "applied_discount": 135,
-      "final_amount": 7665
-    },
-    "history": [
-      {
-        "time": "2026-03-23 10:30:33",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-03-23 10:30:33",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-03-23 14:48:33",
-        "action": "已確認預約"
-      }
-    ]
-  },
-  {
-    "id": "BK-0034",
-    "customer_id": "U034",
-    "submitted_at": "2026-03-25 14:58:02",
-    "payment_status": "paid",
-    "status": "confirmed",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C002",
-      "campground_name": "溪谷秘境野營地",
-      "region": "中部",
-      "check_in": "2026-04-19",
-      "check_out": "2026-04-21",
-      "total_days": 2,
-      "weekday_count": 2,
-      "holiday_count": 2,
-      "guest_count": 2
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z003",
-        "zone_type": "碎石區",
-        "quantity": 1,
-        "subtotal": 2400
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E006",
-        "name": "海上獨木舟（雙人）",
-        "quantity": 1,
-        "subtotal": 1600
-      }
-    ],
-    "summary": {
-      "zone_total": 2400,
-      "rental_total": 1600,
-      "applied_discount": 0,
-      "final_amount": 4000
-    },
-    "history": [
-      {
-        "time": "2026-03-25 14:58:02",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-03-25 14:58:02",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-03-25 16:25:02",
-        "action": "已確認預約"
-      }
-    ]
-  },
-  {
-    "id": "BK-0009",
-    "customer_id": "U009",
-    "submitted_at": "2026-04-06 10:16:20",
-    "payment_status": "paid",
-    "status": "pending",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C001",
-      "campground_name": "雲海仙境露營區",
-      "region": "北部",
-      "check_in": "2026-04-22",
-      "check_out": "2026-04-25",
-      "total_days": 3,
-      "weekday_count": 2,
-      "holiday_count": 1,
-      "guest_count": 6
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z002",
-        "zone_type": "雨棚區",
-        "quantity": 1,
-        "subtotal": 5400
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 5400,
-      "rental_total": 0,
-      "applied_discount": 0,
-      "final_amount": 5400
-    },
-    "history": [
-      {
-        "time": "2026-04-06 10:16:20",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-04-06 10:16:20",
-        "action": "已付款"
-      }
-    ]
-  },
-  {
-    "id": "BK-0033",
-    "customer_id": "U033",
-    "submitted_at": "2026-04-10 15:02:43",
-    "payment_status": "paid",
-    "status": "pending",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C008",
-      "campground_name": "台中武陵溪流野營",
-      "region": "中部",
-      "check_in": "2026-05-09",
-      "check_out": "2026-05-12",
-      "total_days": 3,
-      "weekday_count": 0,
-      "holiday_count": 0,
-      "guest_count": 3
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z012",
-        "zone_type": "碎石區",
-        "quantity": 1,
-        "subtotal": 2850
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 2850,
-      "rental_total": 0,
-      "applied_discount": 0,
-      "final_amount": 2850
-    },
-    "history": [
-      {
-        "time": "2026-04-10 15:02:43",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-04-10 15:02:43",
-        "action": "已付款"
-      }
-    ]
-  },
-  {
-    "id": "BK-0047",
-    "customer_id": "U047",
-    "submitted_at": "2026-04-11 21:06:18",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C006",
-      "campground_name": "阿里山雲霧繚繞營地",
-      "region": "南部",
-      "check_in": "2026-05-05",
-      "check_out": "2026-05-08",
-      "total_days": 3,
-      "weekday_count": 2,
-      "holiday_count": 0,
-      "guest_count": 2
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z009",
-        "zone_type": "棧板區",
-        "quantity": 2,
-        "subtotal": 10200
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E006",
-        "name": "海上獨木舟（雙人）",
-        "quantity": 2,
-        "subtotal": 3200
-      }
-    ],
-    "summary": {
-      "zone_total": 10200,
-      "rental_total": 3200,
-      "applied_discount": 0,
-      "final_amount": 13400
-    },
-    "history": [
-      {
-        "time": "2026-04-11 21:06:18",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-04-11 21:06:18",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-04-12 04:29:18",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-04-24 21:06:18",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0017",
-    "customer_id": "U017",
-    "submitted_at": "2026-04-12 13:07:22",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C003",
-      "campground_name": "太平山森林豪華露營",
-      "region": "北部",
-      "check_in": "2026-04-24",
-      "check_out": "2026-04-26",
-      "total_days": 2,
-      "weekday_count": 1,
-      "holiday_count": 1,
-      "guest_count": 6
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z005",
-        "zone_type": "免搭帳／豪華露營 (Glamping)",
-        "quantity": 2,
-        "subtotal": 20000
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 20000,
-      "rental_total": 0,
-      "applied_discount": 63,
-      "final_amount": 19937
-    },
-    "history": [
-      {
-        "time": "2026-04-12 13:07:22",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-04-12 13:07:22",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-04-12 20:41:22",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-04-19 13:07:22",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0032",
-    "customer_id": "U032",
-    "submitted_at": "2026-04-12 18:00:58",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C004",
-      "campground_name": "南台灣星空草原營地",
-      "region": "南部",
-      "check_in": "2026-04-27",
-      "check_out": "2026-04-29",
-      "total_days": 2,
-      "weekday_count": 0,
-      "holiday_count": 1,
-      "guest_count": 2
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z006",
-        "zone_type": "草皮區",
-        "quantity": 2,
-        "subtotal": 4400
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E002",
-        "name": "高山保暖睡袋 (-10°C)",
-        "quantity": 1,
-        "subtotal": 300
-      }
-    ],
-    "summary": {
-      "zone_total": 4400,
-      "rental_total": 300,
-      "applied_discount": 0,
-      "final_amount": 4700
-    },
-    "history": [
-      {
-        "time": "2026-04-12 18:00:58",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-04-12 18:00:58",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-04-12 20:09:58",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-04-23 18:00:58",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0004",
-    "customer_id": "U004",
-    "submitted_at": "2026-04-12 21:33:31",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C002",
-      "campground_name": "溪谷秘境野營地",
-      "region": "中部",
-      "check_in": "2026-04-26",
-      "check_out": "2026-04-28",
-      "total_days": 2,
-      "weekday_count": 2,
-      "holiday_count": 2,
-      "guest_count": 2
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z003",
-        "zone_type": "碎石區",
-        "quantity": 1,
-        "subtotal": 2400
-      }
+      { "zone_id": "Z003", "zone_type": "碎石區", "quantity": 1, "subtotal": 2400 }
     ],
     "selected_rentals": [],
     "summary": {
@@ -1027,694 +65,16 @@
       "final_amount": 2400
     },
     "history": [
-      {
-        "time": "2026-04-12 21:33:31",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-04-12 21:33:31",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-04-13 04:58:31",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-04-16 21:33:31",
-        "action": "已完成"
-      }
+      { "time": "2026-05-28 16:40:00", "action": "預約單已送出" },
+      { "time": "2026-05-28 16:40:00", "action": "已付款" },
+      { "time": "2026-05-30 10:00:00", "action": "已取消（原因：顧客臨時有事，無法前往）" },
+      { "time": "2026-05-30 10:00:00", "action": "已退款" }
     ]
   },
   {
-    "id": "BK-0005",
-    "customer_id": "U005",
-    "submitted_at": "2026-04-20 15:30:59",
-    "payment_status": "paid",
-    "status": "pending",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C004",
-      "campground_name": "南台灣星空草原營地",
-      "region": "南部",
-      "check_in": "2026-05-09",
-      "check_out": "2026-05-10",
-      "total_days": 1,
-      "weekday_count": 0,
-      "holiday_count": 1,
-      "guest_count": 4
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z006",
-        "zone_type": "草皮區",
-        "quantity": 2,
-        "subtotal": 2200
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E003",
-        "name": "兒童戲水漂浮套件",
-        "quantity": 2,
-        "subtotal": 600
-      },
-      {
-        "equipment_id": "E004",
-        "name": "攜帶式燒烤爐組",
-        "quantity": 2,
-        "subtotal": 1000
-      }
-    ],
-    "summary": {
-      "zone_total": 2200,
-      "rental_total": 1600,
-      "applied_discount": 0,
-      "final_amount": 3800
-    },
-    "history": [
-      {
-        "time": "2026-04-20 15:30:59",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-04-20 15:30:59",
-        "action": "已付款"
-      }
-    ]
-  },
-  {
-    "id": "BK-0050",
-    "customer_id": "U050",
-    "submitted_at": "2026-04-21 13:31:16",
-    "payment_status": "refunded",
-    "status": "cancelled",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C001",
-      "campground_name": "雲海仙境露營區",
-      "region": "北部",
-      "check_in": "2026-05-13",
-      "check_out": "2026-05-15",
-      "total_days": 2,
-      "weekday_count": 2,
-      "holiday_count": 2,
-      "guest_count": 3
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z001",
-        "zone_type": "草皮區",
-        "quantity": 1,
-        "subtotal": 2000
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 2000,
-      "rental_total": 0,
-      "applied_discount": 0,
-      "final_amount": 2000
-    },
-    "history": [
-      {
-        "time": "2026-04-21 13:31:16",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-04-21 13:31:16",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-04-26 13:31:16",
-        "action": "已取消（原因：遇颱風警報）"
-      },
-      {
-        "time": "2026-04-25 13:31:16",
-        "action": "已退款"
-      }
-    ]
-  },
-  {
-    "id": "BK-0049",
-    "customer_id": "U049",
-    "submitted_at": "2026-04-21 18:10:07",
-    "payment_status": "paid",
-    "status": "confirmed",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C008",
-      "campground_name": "台中武陵溪流野營",
-      "region": "中部",
-      "check_in": "2026-05-15",
-      "check_out": "2026-05-17",
-      "total_days": 2,
-      "weekday_count": 1,
-      "holiday_count": 0,
-      "guest_count": 4
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z012",
-        "zone_type": "碎石區",
-        "quantity": 2,
-        "subtotal": 3800
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E002",
-        "name": "高山保暖睡袋 (-10°C)",
-        "quantity": 2,
-        "subtotal": 600
-      }
-    ],
-    "summary": {
-      "zone_total": 3800,
-      "rental_total": 600,
-      "applied_discount": 166,
-      "final_amount": 4234
-    },
-    "history": [
-      {
-        "time": "2026-04-21 18:10:07",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-04-21 18:10:07",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-04-21 23:26:07",
-        "action": "已確認預約"
-      }
-    ]
-  },
-  {
-    "id": "BK-0028",
-    "customer_id": "U028",
-    "submitted_at": "2026-04-22 19:19:09",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C007",
-      "campground_name": "宜蘭礁溪湯泉露營",
-      "region": "北部",
-      "check_in": "2026-05-19",
-      "check_out": "2026-05-22",
-      "total_days": 3,
-      "weekday_count": 0,
-      "holiday_count": 1,
-      "guest_count": 5
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z010",
-        "zone_type": "草皮區",
-        "quantity": 1,
-        "subtotal": 6600
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E002",
-        "name": "高山保暖睡袋 (-10°C)",
-        "quantity": 2,
-        "subtotal": 600
-      }
-    ],
-    "summary": {
-      "zone_total": 6600,
-      "rental_total": 600,
-      "applied_discount": 0,
-      "final_amount": 7200
-    },
-    "history": [
-      {
-        "time": "2026-04-22 19:19:09",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-04-22 19:19:09",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-04-23 00:46:09",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-04-27 19:19:09",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0013",
-    "customer_id": "U013",
-    "submitted_at": "2026-04-23 10:11:58",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C008",
-      "campground_name": "台中武陵溪流野營",
-      "region": "中部",
-      "check_in": "2026-05-10",
-      "check_out": "2026-05-13",
-      "total_days": 3,
-      "weekday_count": 3,
-      "holiday_count": 3,
-      "guest_count": 3
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z012",
-        "zone_type": "碎石區",
-        "quantity": 2,
-        "subtotal": 5700
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E004",
-        "name": "攜帶式燒烤爐組",
-        "quantity": 2,
-        "subtotal": 1000
-      },
-      {
-        "equipment_id": "E003",
-        "name": "兒童戲水漂浮套件",
-        "quantity": 2,
-        "subtotal": 600
-      }
-    ],
-    "summary": {
-      "zone_total": 5700,
-      "rental_total": 1600,
-      "applied_discount": 131,
-      "final_amount": 7169
-    },
-    "history": [
-      {
-        "time": "2026-04-23 10:11:58",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-04-23 10:11:58",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-04-23 13:20:58",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-04-26 10:11:58",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0001",
-    "customer_id": "U001",
-    "submitted_at": "2026-04-24 10:20:45",
-    "payment_status": "refunded",
-    "status": "cancelled",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C007",
-      "campground_name": "宜蘭礁溪湯泉露營",
-      "region": "北部",
-      "check_in": "2026-05-13",
-      "check_out": "2026-05-15",
-      "total_days": 2,
-      "weekday_count": 1,
-      "holiday_count": 2,
-      "guest_count": 4
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z010",
-        "zone_type": "草皮區",
-        "quantity": 2,
-        "subtotal": 8800
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E002",
-        "name": "高山保暖睡袋 (-10°C)",
-        "quantity": 2,
-        "subtotal": 600
-      }
-    ],
-    "summary": {
-      "zone_total": 8800,
-      "rental_total": 600,
-      "applied_discount": 82,
-      "final_amount": 9318
-    },
-    "history": [
-      {
-        "time": "2026-04-24 10:20:45",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-04-24 10:20:45",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-04-26 10:20:45",
-        "action": "已取消（原因：顧客臨時有事）"
-      },
-      {
-        "time": "2026-04-29 10:20:45",
-        "action": "已退款"
-      }
-    ]
-  },
-  {
-    "id": "BK-0044",
-    "customer_id": "U044",
-    "submitted_at": "2026-04-25 16:34:44",
-    "payment_status": "paid",
-    "status": "confirmed",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C004",
-      "campground_name": "南台灣星空草原營地",
-      "region": "南部",
-      "check_in": "2026-05-03",
-      "check_out": "2026-05-05",
-      "total_days": 2,
-      "weekday_count": 1,
-      "holiday_count": 0,
-      "guest_count": 5
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z006",
-        "zone_type": "草皮區",
-        "quantity": 2,
-        "subtotal": 4400
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E001",
-        "name": "極限防水黑膠帳篷",
-        "quantity": 1,
-        "subtotal": 900
-      }
-    ],
-    "summary": {
-      "zone_total": 4400,
-      "rental_total": 900,
-      "applied_discount": 0,
-      "final_amount": 5300
-    },
-    "history": [
-      {
-        "time": "2026-04-25 16:34:44",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-04-25 16:34:44",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-04-25 21:21:44",
-        "action": "已確認預約"
-      }
-    ]
-  },
-  {
-    "id": "BK-0042",
-    "customer_id": "U042",
-    "submitted_at": "2026-04-26 12:51:05",
-    "payment_status": "refunded",
-    "status": "cancelled",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C006",
-      "campground_name": "阿里山雲霧繚繞營地",
-      "region": "南部",
-      "check_in": "2026-05-01",
-      "check_out": "2026-05-03",
-      "total_days": 2,
-      "weekday_count": 0,
-      "holiday_count": 0,
-      "guest_count": 4
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z009",
-        "zone_type": "棧板區",
-        "quantity": 2,
-        "subtotal": 6800
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 6800,
-      "rental_total": 0,
-      "applied_discount": 82,
-      "final_amount": 6718
-    },
-    "history": [
-      {
-        "time": "2026-04-26 12:51:05",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-04-26 12:51:05",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-04-30 12:51:05",
-        "action": "已取消（原因：遇颱風警報）"
-      },
-      {
-        "time": "2026-04-27 12:51:05",
-        "action": "已退款"
-      }
-    ]
-  },
-  {
-    "id": "BK-0036",
-    "customer_id": "U036",
-    "submitted_at": "2026-04-28 09:35:03",
-    "payment_status": "paid",
-    "status": "confirmed",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C004",
-      "campground_name": "南台灣星空草原營地",
-      "region": "南部",
-      "check_in": "2026-05-04",
-      "check_out": "2026-05-06",
-      "total_days": 2,
-      "weekday_count": 2,
-      "holiday_count": 2,
-      "guest_count": 4
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z006",
-        "zone_type": "草皮區",
-        "quantity": 1,
-        "subtotal": 2200
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E003",
-        "name": "兒童戲水漂浮套件",
-        "quantity": 1,
-        "subtotal": 300
-      },
-      {
-        "equipment_id": "E008",
-        "name": "溯溪裝備套組",
-        "quantity": 2,
-        "subtotal": 1400
-      }
-    ],
-    "summary": {
-      "zone_total": 2200,
-      "rental_total": 1700,
-      "applied_discount": 0,
-      "final_amount": 3900
-    },
-    "history": [
-      {
-        "time": "2026-04-28 09:35:03",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-04-28 09:35:03",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-04-28 10:18:03",
-        "action": "已確認預約"
-      }
-    ]
-  },
-  {
-    "id": "BK-0030",
-    "customer_id": "U030",
-    "submitted_at": "2026-05-03 18:42:51",
-    "payment_status": "paid",
-    "status": "pending",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C003",
-      "campground_name": "太平山森林豪華露營",
-      "region": "北部",
-      "check_in": "2026-05-27",
-      "check_out": "2026-05-29",
-      "total_days": 2,
-      "weekday_count": 1,
-      "holiday_count": 0,
-      "guest_count": 3
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z005",
-        "zone_type": "免搭帳／豪華露營 (Glamping)",
-        "quantity": 2,
-        "subtotal": 20000
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 20000,
-      "rental_total": 0,
-      "applied_discount": 0,
-      "final_amount": 20000
-    },
-    "history": [
-      {
-        "time": "2026-05-03 18:42:51",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-05-03 18:42:51",
-        "action": "已付款"
-      }
-    ]
-  },
-  {
-    "id": "BK-0010",
-    "customer_id": "U010",
-    "submitted_at": "2026-05-04 08:41:45",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C005",
-      "campground_name": "花蓮海岸風露營區",
-      "region": "東部",
-      "check_in": "2026-05-23",
-      "check_out": "2026-05-24",
-      "total_days": 1,
-      "weekday_count": 1,
-      "holiday_count": 0,
-      "guest_count": 5
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z007",
-        "zone_type": "草皮區",
-        "quantity": 2,
-        "subtotal": 2800
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 2800,
-      "rental_total": 0,
-      "applied_discount": 0,
-      "final_amount": 2800
-    },
-    "history": [
-      {
-        "time": "2026-05-04 08:41:45",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-05-04 08:41:45",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-05-04 14:35:45",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-05-12 08:41:45",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0008",
-    "customer_id": "U008",
-    "submitted_at": "2026-05-11 14:22:43",
-    "payment_status": "paid",
-    "status": "confirmed",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C007",
-      "campground_name": "宜蘭礁溪湯泉露營",
-      "region": "北部",
-      "check_in": "2026-06-04",
-      "check_out": "2026-06-05",
-      "total_days": 1,
-      "weekday_count": 1,
-      "holiday_count": 1,
-      "guest_count": 2
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z010",
-        "zone_type": "草皮區",
-        "quantity": 2,
-        "subtotal": 4400
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E006",
-        "name": "海上獨木舟（雙人）",
-        "quantity": 2,
-        "subtotal": 3200
-      }
-    ],
-    "summary": {
-      "zone_total": 4400,
-      "rental_total": 3200,
-      "applied_discount": 151,
-      "final_amount": 7449
-    },
-    "history": [
-      {
-        "time": "2026-05-11 14:22:43",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-05-11 14:22:43",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-05-11 17:55:43",
-        "action": "已確認預約"
-      }
-    ]
-  },
-  {
-    "id": "BK-0002",
-    "customer_id": "U002",
-    "submitted_at": "2026-05-17 10:29:32",
+    "id": "BK-0003",
+    "customer_id": "U006",
+    "submitted_at": "2026-06-01 11:20:00",
     "payment_status": "paid",
     "status": "confirmed",
     "equipment_returned": false,
@@ -1722,735 +82,18 @@
       "campground_id": "C003",
       "campground_name": "太平山森林豪華露營",
       "region": "北部",
-      "check_in": "2026-05-24",
-      "check_out": "2026-05-25",
-      "total_days": 1,
-      "weekday_count": 1,
-      "holiday_count": 0,
-      "guest_count": 3
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z005",
-        "zone_type": "免搭帳／豪華露營 (Glamping)",
-        "quantity": 2,
-        "subtotal": 10000
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E007",
-        "name": "防潮帳篷地墊組",
-        "quantity": 2,
-        "subtotal": 800
-      }
-    ],
-    "summary": {
-      "zone_total": 10000,
-      "rental_total": 800,
-      "applied_discount": 76,
-      "final_amount": 10724
-    },
-    "history": [
-      {
-        "time": "2026-05-17 10:29:32",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-05-17 10:29:32",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-05-17 17:44:32",
-        "action": "已確認預約"
-      }
-    ]
-  },
-  {
-    "id": "BK-0018",
-    "customer_id": "U018",
-    "submitted_at": "2026-05-21 13:19:25",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C007",
-      "campground_name": "宜蘭礁溪湯泉露營",
-      "region": "北部",
-      "check_in": "2026-06-10",
-      "check_out": "2026-06-12",
-      "total_days": 2,
-      "weekday_count": 1,
-      "holiday_count": 2,
-      "guest_count": 5
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z010",
-        "zone_type": "草皮區",
-        "quantity": 1,
-        "subtotal": 4400
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E004",
-        "name": "攜帶式燒烤爐組",
-        "quantity": 1,
-        "subtotal": 500
-      }
-    ],
-    "summary": {
-      "zone_total": 4400,
-      "rental_total": 500,
-      "applied_discount": 0,
-      "final_amount": 4900
-    },
-    "history": [
-      {
-        "time": "2026-05-21 13:19:25",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-05-21 13:19:25",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-05-21 18:21:25",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-05-28 13:19:25",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0014",
-    "customer_id": "U014",
-    "submitted_at": "2026-05-23 18:32:26",
-    "payment_status": "paid",
-    "status": "pending",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C008",
-      "campground_name": "台中武陵溪流野營",
-      "region": "中部",
-      "check_in": "2026-06-14",
-      "check_out": "2026-06-15",
-      "total_days": 1,
-      "weekday_count": 0,
-      "holiday_count": 1,
-      "guest_count": 4
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z012",
-        "zone_type": "碎石區",
-        "quantity": 2,
-        "subtotal": 1900
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 1900,
-      "rental_total": 0,
-      "applied_discount": 0,
-      "final_amount": 1900
-    },
-    "history": [
-      {
-        "time": "2026-05-23 18:32:26",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-05-23 18:32:26",
-        "action": "已付款"
-      }
-    ]
-  },
-  {
-    "id": "BK-0021",
-    "customer_id": "U021",
-    "submitted_at": "2026-05-23 19:31:34",
-    "payment_status": "paid",
-    "status": "confirmed",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C006",
-      "campground_name": "阿里山雲霧繚繞營地",
-      "region": "南部",
-      "check_in": "2026-06-16",
-      "check_out": "2026-06-19",
-      "total_days": 3,
-      "weekday_count": 1,
-      "holiday_count": 1,
-      "guest_count": 3
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z009",
-        "zone_type": "棧板區",
-        "quantity": 1,
-        "subtotal": 5100
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 5100,
-      "rental_total": 0,
-      "applied_discount": 0,
-      "final_amount": 5100
-    },
-    "history": [
-      {
-        "time": "2026-05-23 19:31:34",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-05-23 19:31:34",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-05-23 22:37:34",
-        "action": "已確認預約"
-      }
-    ]
-  },
-  {
-    "id": "BK-0007",
-    "customer_id": "U007",
-    "submitted_at": "2026-05-26 19:32:25",
-    "payment_status": "refunded",
-    "status": "cancelled",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C002",
-      "campground_name": "溪谷秘境野營地",
-      "region": "中部",
-      "check_in": "2026-06-13",
-      "check_out": "2026-06-15",
-      "total_days": 2,
-      "weekday_count": 2,
-      "holiday_count": 0,
-      "guest_count": 5
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z004",
-        "zone_type": "棧板區",
-        "quantity": 2,
-        "subtotal": 5200
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E003",
-        "name": "兒童戲水漂浮套件",
-        "quantity": 1,
-        "subtotal": 300
-      },
-      {
-        "equipment_id": "E006",
-        "name": "海上獨木舟（雙人）",
-        "quantity": 1,
-        "subtotal": 1600
-      }
-    ],
-    "summary": {
-      "zone_total": 5200,
-      "rental_total": 1900,
-      "applied_discount": 0,
-      "final_amount": 7100
-    },
-    "history": [
-      {
-        "time": "2026-05-26 19:32:25",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-05-26 19:32:25",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-05-28 19:32:25",
-        "action": "已取消（原因：行程變更）"
-      },
-      {
-        "time": "2026-05-30 19:32:25",
-        "action": "已退款"
-      }
-    ]
-  },
-  {
-    "id": "BK-0016",
-    "customer_id": "U016",
-    "submitted_at": "2026-05-27 09:26:20",
-    "payment_status": "refunded",
-    "status": "cancelled",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C005",
-      "campground_name": "花蓮海岸風露營區",
-      "region": "東部",
-      "check_in": "2026-06-26",
-      "check_out": "2026-06-28",
-      "total_days": 2,
-      "weekday_count": 0,
-      "holiday_count": 2,
-      "guest_count": 3
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z007",
-        "zone_type": "草皮區",
-        "quantity": 2,
-        "subtotal": 5600
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 5600,
-      "rental_total": 0,
-      "applied_discount": 0,
-      "final_amount": 5600
-    },
-    "history": [
-      {
-        "time": "2026-05-27 09:26:20",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-05-27 09:26:20",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-05-28 09:26:20",
-        "action": "已取消（原因：顧客臨時有事）"
-      },
-      {
-        "time": "2026-05-31 09:26:20",
-        "action": "已退款"
-      }
-    ]
-  },
-  {
-    "id": "BK-0043",
-    "customer_id": "U043",
-    "submitted_at": "2026-05-27 17:24:22",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C006",
-      "campground_name": "阿里山雲霧繚繞營地",
-      "region": "南部",
-      "check_in": "2026-06-11",
-      "check_out": "2026-06-13",
-      "total_days": 2,
-      "weekday_count": 0,
-      "holiday_count": 0,
-      "guest_count": 5
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z009",
-        "zone_type": "棧板區",
-        "quantity": 1,
-        "subtotal": 3400
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E004",
-        "name": "攜帶式燒烤爐組",
-        "quantity": 1,
-        "subtotal": 500
-      }
-    ],
-    "summary": {
-      "zone_total": 3400,
-      "rental_total": 500,
-      "applied_discount": 0,
-      "final_amount": 3900
-    },
-    "history": [
-      {
-        "time": "2026-05-27 17:24:22",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-05-27 17:24:22",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-05-27 21:47:22",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-06-05 17:24:22",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0045",
-    "customer_id": "U045",
-    "submitted_at": "2026-05-29 19:27:30",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C008",
-      "campground_name": "台中武陵溪流野營",
-      "region": "中部",
-      "check_in": "2026-06-05",
-      "check_out": "2026-06-07",
-      "total_days": 2,
-      "weekday_count": 0,
-      "holiday_count": 0,
-      "guest_count": 6
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z012",
-        "zone_type": "碎石區",
-        "quantity": 1,
-        "subtotal": 1900
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E004",
-        "name": "攜帶式燒烤爐組",
-        "quantity": 2,
-        "subtotal": 1000
-      }
-    ],
-    "summary": {
-      "zone_total": 1900,
-      "rental_total": 1000,
-      "applied_discount": 0,
-      "final_amount": 2900
-    },
-    "history": [
-      {
-        "time": "2026-05-29 19:27:30",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-05-29 19:27:30",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-05-29 21:21:30",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-06-09 19:27:30",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0038",
-    "customer_id": "U038",
-    "submitted_at": "2026-05-31 14:59:17",
-    "payment_status": "paid",
-    "status": "pending",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C003",
-      "campground_name": "太平山森林豪華露營",
-      "region": "北部",
-      "check_in": "2026-06-17",
-      "check_out": "2026-06-19",
-      "total_days": 2,
-      "weekday_count": 1,
-      "holiday_count": 2,
-      "guest_count": 3
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z005",
-        "zone_type": "免搭帳／豪華露營 (Glamping)",
-        "quantity": 2,
-        "subtotal": 20000
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 20000,
-      "rental_total": 0,
-      "applied_discount": 0,
-      "final_amount": 20000
-    },
-    "history": [
-      {
-        "time": "2026-05-31 14:59:17",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-05-31 14:59:17",
-        "action": "已付款"
-      }
-    ]
-  },
-  {
-    "id": "BK-0040",
-    "customer_id": "U040",
-    "submitted_at": "2026-06-03 12:04:19",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C002",
-      "campground_name": "溪谷秘境野營地",
-      "region": "中部",
-      "check_in": "2026-06-09",
-      "check_out": "2026-06-11",
-      "total_days": 2,
-      "weekday_count": 2,
-      "holiday_count": 0,
-      "guest_count": 6
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z004",
-        "zone_type": "棧板區",
-        "quantity": 1,
-        "subtotal": 2600
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 2600,
-      "rental_total": 0,
-      "applied_discount": 0,
-      "final_amount": 2600
-    },
-    "history": [
-      {
-        "time": "2026-06-03 12:04:19",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-06-03 12:04:19",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-06-03 14:58:19",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-06-13 12:04:19",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0048",
-    "customer_id": "U048",
-    "submitted_at": "2026-06-03 14:16:51",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C008",
-      "campground_name": "台中武陵溪流野營",
-      "region": "中部",
       "check_in": "2026-06-20",
       "check_out": "2026-06-22",
       "total_days": 2,
-      "weekday_count": 2,
-      "holiday_count": 1,
-      "guest_count": 3
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z012",
-        "zone_type": "碎石區",
-        "quantity": 2,
-        "subtotal": 3800
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E003",
-        "name": "兒童戲水漂浮套件",
-        "quantity": 2,
-        "subtotal": 600
-      }
-    ],
-    "summary": {
-      "zone_total": 3800,
-      "rental_total": 600,
-      "applied_discount": 0,
-      "final_amount": 4400
-    },
-    "history": [
-      {
-        "time": "2026-06-03 14:16:51",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-06-03 14:16:51",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-06-03 17:22:51",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-06-12 14:16:51",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0012",
-    "customer_id": "U012",
-    "submitted_at": "2026-06-04 14:53:50",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C001",
-      "campground_name": "雲海仙境露營區",
-      "region": "北部",
-      "check_in": "2026-06-13",
-      "check_out": "2026-06-15",
-      "total_days": 2,
-      "weekday_count": 0,
-      "holiday_count": 1,
-      "guest_count": 6
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z001",
-        "zone_type": "草皮區",
-        "quantity": 1,
-        "subtotal": 2000
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E002",
-        "name": "高山保暖睡袋 (-10°C)",
-        "quantity": 2,
-        "subtotal": 600
-      }
-    ],
-    "summary": {
-      "zone_total": 2000,
-      "rental_total": 600,
-      "applied_discount": 0,
-      "final_amount": 2600
-    },
-    "history": [
-      {
-        "time": "2026-06-04 14:53:50",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-06-04 14:53:50",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-06-04 21:10:50",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-06-13 14:53:50",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0037",
-    "customer_id": "U037",
-    "submitted_at": "2026-06-07 15:08:54",
-    "payment_status": "paid",
-    "status": "completed",
-    "equipment_returned": true,
-    "booking_info": {
-      "campground_id": "C007",
-      "campground_name": "宜蘭礁溪湯泉露營",
-      "region": "北部",
-      "check_in": "2026-07-06",
-      "check_out": "2026-07-09",
-      "total_days": 3,
-      "weekday_count": 0,
-      "holiday_count": 3,
-      "guest_count": 2
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z010",
-        "zone_type": "草皮區",
-        "quantity": 1,
-        "subtotal": 6600
-      }
-    ],
-    "selected_rentals": [],
-    "summary": {
-      "zone_total": 6600,
-      "rental_total": 0,
-      "applied_discount": 0,
-      "final_amount": 6600
-    },
-    "history": [
-      {
-        "time": "2026-06-07 15:08:54",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-06-07 15:08:54",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-06-07 22:04:54",
-        "action": "已確認預約"
-      },
-      {
-        "time": "2026-06-12 15:08:54",
-        "action": "已完成"
-      }
-    ]
-  },
-  {
-    "id": "BK-0031",
-    "customer_id": "U031",
-    "submitted_at": "2026-06-13 14:22:11",
-    "payment_status": "paid",
-    "status": "confirmed",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C003",
-      "campground_name": "太平山森林豪華露營",
-      "region": "北部",
-      "check_in": "2026-07-07",
-      "check_out": "2026-07-09",
-      "total_days": 2,
       "weekday_count": 0,
       "holiday_count": 2,
       "guest_count": 2
     },
     "selected_zones": [
-      {
-        "zone_id": "Z005",
-        "zone_type": "免搭帳／豪華露營 (Glamping)",
-        "quantity": 1,
-        "subtotal": 10000
-      }
+      { "zone_id": "Z005", "zone_type": "免搭帳／豪華露營 (Glamping)", "quantity": 1, "subtotal": 10000 }
     ],
     "selected_rentals": [
-      {
-        "equipment_id": "E003",
-        "name": "兒童戲水漂浮套件",
-        "quantity": 2,
-        "subtotal": 600
-      }
+      { "equipment_id": "E002", "name": "高山保暖睡袋 (-10°C)", "quantity": 2, "subtotal": 600 }
     ],
     "summary": {
       "zone_total": 10000,
@@ -2459,291 +102,255 @@
       "final_amount": 10600
     },
     "history": [
-      {
-        "time": "2026-06-13 14:22:11",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-06-13 14:22:11",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-06-13 16:07:11",
-        "action": "已確認預約"
-      }
+      { "time": "2026-06-01 11:20:00", "action": "預約單已送出" },
+      { "time": "2026-06-01 11:20:00", "action": "已付款" },
+      { "time": "2026-06-01 15:30:00", "action": "已確認預約" }
     ]
   },
   {
-    "id": "BK-0026",
-    "customer_id": "U026",
-    "submitted_at": "2026-06-13 17:06:45",
-    "payment_status": "refunded",
-    "status": "cancelled",
+    "id": "BK-0004",
+    "customer_id": "U008",
+    "submitted_at": "2026-06-03 09:05:00",
+    "payment_status": "paid",
+    "status": "pending",
     "equipment_returned": false,
     "booking_info": {
-      "campground_id": "C003",
-      "campground_name": "太平山森林豪華露營",
-      "region": "北部",
-      "check_in": "2026-06-20",
-      "check_out": "2026-06-21",
-      "total_days": 1,
-      "weekday_count": 1,
-      "holiday_count": 1,
-      "guest_count": 3
+      "campground_id": "C004",
+      "campground_name": "南台灣星空草原營地",
+      "region": "南部",
+      "check_in": "2026-06-28",
+      "check_out": "2026-06-30",
+      "total_days": 2,
+      "weekday_count": 0,
+      "holiday_count": 2,
+      "guest_count": 6
     },
     "selected_zones": [
-      {
-        "zone_id": "Z005",
-        "zone_type": "免搭帳／豪華露營 (Glamping)",
-        "quantity": 2,
-        "subtotal": 10000
-      }
+      { "zone_id": "Z006", "zone_type": "草皮區", "quantity": 2, "subtotal": 2200 }
     ],
     "selected_rentals": [],
     "summary": {
-      "zone_total": 10000,
+      "zone_total": 2200,
       "rental_total": 0,
       "applied_discount": 0,
-      "final_amount": 10000
+      "final_amount": 2200
     },
     "history": [
-      {
-        "time": "2026-06-13 17:06:45",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-06-13 17:06:45",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-06-16 17:06:45",
-        "action": "已取消（原因：行程變更）"
-      },
-      {
-        "time": "2026-06-16 17:06:45",
-        "action": "已退款"
-      }
+      { "time": "2026-06-03 09:05:00", "action": "預約單已送出" },
+      { "time": "2026-06-03 09:05:00", "action": "已付款" }
     ]
   },
   {
-    "id": "BK-0024",
-    "customer_id": "U024",
-    "submitted_at": "2026-06-21 09:39:57",
+    "id": "BK-0005",
+    "customer_id": "U005",
+    "submitted_at": "2026-06-04 14:30:00",
     "payment_status": "paid",
     "status": "confirmed",
     "equipment_returned": false,
     "booking_info": {
-      "campground_id": "C008",
-      "campground_name": "台中武陵溪流野營",
-      "region": "中部",
-      "check_in": "2026-07-06",
-      "check_out": "2026-07-09",
-      "total_days": 3,
-      "weekday_count": 1,
-      "holiday_count": 3,
-      "guest_count": 2
+      "campground_id": "C005",
+      "campground_name": "花蓮海岸風露營區",
+      "region": "東部",
+      "check_in": "2026-06-21",
+      "check_out": "2026-06-23",
+      "total_days": 2,
+      "weekday_count": 0,
+      "holiday_count": 2,
+      "guest_count": 4
     },
     "selected_zones": [
-      {
-        "zone_id": "Z012",
-        "zone_type": "碎石區",
-        "quantity": 2,
-        "subtotal": 5700
-      }
+      { "zone_id": "Z007", "zone_type": "草皮區", "quantity": 1, "subtotal": 2800 }
     ],
-    "selected_rentals": [],
+    "selected_rentals": [
+      { "equipment_id": "E006", "name": "海上獨木舟（雙人）", "quantity": 1, "subtotal": 1600 }
+    ],
     "summary": {
-      "zone_total": 5700,
-      "rental_total": 0,
-      "applied_discount": 0,
-      "final_amount": 5700
+      "zone_total": 2800,
+      "rental_total": 1600,
+      "applied_discount": 100,
+      "final_amount": 4300
     },
     "history": [
-      {
-        "time": "2026-06-21 09:39:57",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-06-21 09:39:57",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-06-21 12:11:57",
-        "action": "已確認預約"
-      }
+      { "time": "2026-06-04 14:30:00", "action": "預約單已送出" },
+      { "time": "2026-06-04 14:30:00", "action": "已付款" },
+      { "time": "2026-06-05 09:00:00", "action": "已確認預約" }
     ]
   },
   {
     "id": "BK-0006",
-    "customer_id": "U006",
-    "submitted_at": "2026-06-27 10:23:35",
+    "customer_id": "U010",
+    "submitted_at": "2026-06-05 10:00:00",
     "payment_status": "paid",
-    "status": "confirmed",
+    "status": "pending",
     "equipment_returned": false,
     "booking_info": {
       "campground_id": "C006",
       "campground_name": "阿里山雲霧繚繞營地",
       "region": "南部",
-      "check_in": "2026-07-24",
-      "check_out": "2026-07-26",
+      "check_in": "2026-07-04",
+      "check_out": "2026-07-06",
+      "total_days": 2,
+      "weekday_count": 0,
+      "holiday_count": 2,
+      "guest_count": 4
+    },
+    "selected_zones": [
+      { "zone_id": "Z009", "zone_type": "棧板區", "quantity": 1, "subtotal": 3400 }
+    ],
+    "selected_rentals": [
+      { "equipment_id": "E007", "name": "防潮帳篷地墊組", "quantity": 2, "subtotal": 800 }
+    ],
+    "summary": {
+      "zone_total": 3400,
+      "rental_total": 800,
+      "applied_discount": 0,
+      "final_amount": 4200
+    },
+    "history": [
+      { "time": "2026-06-05 10:00:00", "action": "預約單已送出" },
+      { "time": "2026-06-05 10:00:00", "action": "已付款" }
+    ]
+  },
+  {
+    "id": "BK-0007",
+    "customer_id": "U002",
+    "submitted_at": "2026-05-15 08:30:00",
+    "payment_status": "paid",
+    "status": "completed",
+    "equipment_returned": false,
+    "booking_info": {
+      "campground_id": "C007",
+      "campground_name": "宜蘭礁溪湯泉露營",
+      "region": "北部",
+      "check_in": "2026-05-17",
+      "check_out": "2026-05-18",
+      "total_days": 1,
+      "weekday_count": 0,
+      "holiday_count": 1,
+      "guest_count": 2
+    },
+    "selected_zones": [
+      { "zone_id": "Z010", "zone_type": "草皮區", "quantity": 1, "subtotal": 2200 }
+    ],
+    "selected_rentals": [],
+    "summary": {
+      "zone_total": 2200,
+      "rental_total": 0,
+      "applied_discount": 0,
+      "final_amount": 2200
+    },
+    "history": [
+      { "time": "2026-05-15 08:30:00", "action": "預約單已送出" },
+      { "time": "2026-05-15 08:30:00", "action": "已付款" },
+      { "time": "2026-05-15 10:00:00", "action": "已確認預約" },
+      { "time": "2026-05-18 12:00:00", "action": "已完成" }
+    ]
+  },
+  {
+    "id": "BK-0008",
+    "customer_id": "U007",
+    "submitted_at": "2026-06-06 20:15:00",
+    "payment_status": "refunded",
+    "status": "cancelled",
+    "equipment_returned": false,
+    "booking_info": {
+      "campground_id": "C008",
+      "campground_name": "台中武陵溪流野營",
+      "region": "中部",
+      "check_in": "2026-06-14",
+      "check_out": "2026-06-16",
+      "total_days": 2,
+      "weekday_count": 2,
+      "holiday_count": 0,
+      "guest_count": 3
+    },
+    "selected_zones": [
+      { "zone_id": "Z012", "zone_type": "碎石區", "quantity": 1, "subtotal": 1900 }
+    ],
+    "selected_rentals": [
+      { "equipment_id": "E008", "name": "溯溪裝備套組", "quantity": 2, "subtotal": 1400 }
+    ],
+    "summary": {
+      "zone_total": 1900,
+      "rental_total": 1400,
+      "applied_discount": 50,
+      "final_amount": 3250
+    },
+    "history": [
+      { "time": "2026-06-06 20:15:00", "action": "預約單已送出" },
+      { "time": "2026-06-06 20:15:00", "action": "已付款" },
+      { "time": "2026-06-07 09:00:00", "action": "已取消（原因：遇颱風警報，安全考量取消）" },
+      { "time": "2026-06-07 09:00:00", "action": "已退款" }
+    ]
+  },
+  {
+    "id": "BK-0009",
+    "customer_id": "U009",
+    "submitted_at": "2026-06-08 13:45:00",
+    "payment_status": "paid",
+    "status": "confirmed",
+    "equipment_returned": false,
+    "booking_info": {
+      "campground_id": "C002",
+      "campground_name": "溪谷秘境野營地",
+      "region": "中部",
+      "check_in": "2026-06-28",
+      "check_out": "2026-06-30",
+      "total_days": 2,
+      "weekday_count": 0,
+      "holiday_count": 2,
+      "guest_count": 5
+    },
+    "selected_zones": [
+      { "zone_id": "Z004", "zone_type": "棧板區", "quantity": 2, "subtotal": 2600 }
+    ],
+    "selected_rentals": [
+      { "equipment_id": "E003", "name": "兒童戲水漂浮套件", "quantity": 2, "subtotal": 600 },
+      { "equipment_id": "E004", "name": "攜帶式燒烤爐組", "quantity": 1, "subtotal": 500 }
+    ],
+    "summary": {
+      "zone_total": 2600,
+      "rental_total": 1100,
+      "applied_discount": 50,
+      "final_amount": 3650
+    },
+    "history": [
+      { "time": "2026-06-08 13:45:00", "action": "預約單已送出" },
+      { "time": "2026-06-08 13:45:00", "action": "已付款" },
+      { "time": "2026-06-08 16:00:00", "action": "已確認預約" }
+    ]
+  },
+  {
+    "id": "BK-0010",
+    "customer_id": "U004",
+    "submitted_at": "2026-06-10 17:20:00",
+    "payment_status": "paid",
+    "status": "pending",
+    "equipment_returned": false,
+    "booking_info": {
+      "campground_id": "C001",
+      "campground_name": "雲海仙境露營區",
+      "region": "北部",
+      "check_in": "2026-07-05",
+      "check_out": "2026-07-07",
       "total_days": 2,
       "weekday_count": 0,
       "holiday_count": 2,
       "guest_count": 3
     },
     "selected_zones": [
-      {
-        "zone_id": "Z009",
-        "zone_type": "棧板區",
-        "quantity": 2,
-        "subtotal": 6800
-      }
+      { "zone_id": "Z002", "zone_type": "雨棚區", "quantity": 1, "subtotal": 3600 }
     ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E004",
-        "name": "攜帶式燒烤爐組",
-        "quantity": 2,
-        "subtotal": 1000
-      }
-    ],
+    "selected_rentals": [],
     "summary": {
-      "zone_total": 6800,
-      "rental_total": 1000,
-      "applied_discount": 129,
-      "final_amount": 7671
-    },
-    "history": [
-      {
-        "time": "2026-06-27 10:23:35",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-06-27 10:23:35",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-06-27 15:38:35",
-        "action": "已確認預約"
-      }
-    ]
-  },
-  {
-    "id": "BK-0003",
-    "customer_id": "U003",
-    "submitted_at": "2026-06-27 17:58:27",
-    "payment_status": "paid",
-    "status": "confirmed",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C007",
-      "campground_name": "宜蘭礁溪湯泉露營",
-      "region": "北部",
-      "check_in": "2026-07-13",
-      "check_out": "2026-07-14",
-      "total_days": 1,
-      "weekday_count": 0,
-      "holiday_count": 0,
-      "guest_count": 6
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z010",
-        "zone_type": "草皮區",
-        "quantity": 1,
-        "subtotal": 2200
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E007",
-        "name": "防潮帳篷地墊組",
-        "quantity": 1,
-        "subtotal": 400
-      },
-      {
-        "equipment_id": "E008",
-        "name": "溯溪裝備套組",
-        "quantity": 2,
-        "subtotal": 1400
-      }
-    ],
-    "summary": {
-      "zone_total": 2200,
-      "rental_total": 1800,
-      "applied_discount": 57,
-      "final_amount": 3943
-    },
-    "history": [
-      {
-        "time": "2026-06-27 17:58:27",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-06-27 17:58:27",
-        "action": "已付款"
-      },
-      {
-        "time": "2026-06-27 22:11:27",
-        "action": "已確認預約"
-      }
-    ]
-  },
-  {
-    "id": "BK-0039",
-    "customer_id": "U039",
-    "submitted_at": "2026-06-28 17:08:20",
-    "payment_status": "paid",
-    "status": "pending",
-    "equipment_returned": false,
-    "booking_info": {
-      "campground_id": "C008",
-      "campground_name": "台中武陵溪流野營",
-      "region": "中部",
-      "check_in": "2026-07-06",
-      "check_out": "2026-07-09",
-      "total_days": 3,
-      "weekday_count": 0,
-      "holiday_count": 3,
-      "guest_count": 2
-    },
-    "selected_zones": [
-      {
-        "zone_id": "Z012",
-        "zone_type": "碎石區",
-        "quantity": 2,
-        "subtotal": 5700
-      }
-    ],
-    "selected_rentals": [
-      {
-        "equipment_id": "E006",
-        "name": "海上獨木舟（雙人）",
-        "quantity": 2,
-        "subtotal": 3200
-      },
-      {
-        "equipment_id": "E008",
-        "name": "溯溪裝備套組",
-        "quantity": 2,
-        "subtotal": 1400
-      }
-    ],
-    "summary": {
-      "zone_total": 5700,
-      "rental_total": 4600,
+      "zone_total": 3600,
+      "rental_total": 0,
       "applied_discount": 0,
-      "final_amount": 10300
+      "final_amount": 3600
     },
     "history": [
-      {
-        "time": "2026-06-28 17:08:20",
-        "action": "預約單已送出"
-      },
-      {
-        "time": "2026-06-28 17:08:20",
-        "action": "已付款"
-      }
+      { "time": "2026-06-10 17:20:00", "action": "預約單已送出" },
+      { "time": "2026-06-10 17:20:00", "action": "已付款" }
     ]
   }
 ]

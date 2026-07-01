@@ -1,367 +1,390 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Yuruicamp 結帳頁面 - 安全快速完成購物" />
-    <meta name="theme-color" content="#244d4d" />
-    <title>結帳 - Yuruicamp 露營選物</title>
-    <!-- 預先連線外部資源，減少 DNS 查詢延遲 / Preconnect to reduce DNS lookup latency -->
-    <link rel="preconnect" href="https://picsum.photos" />
-    <link rel="dns-prefetch" href="https://picsum.photos" />
-    <link rel="stylesheet" href="../css/main.css" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏕️</text></svg>"
-    />
-  </head>
-  <body>
-    <div id="header"></div>
-    <!-- ===================================================
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Yuruicamp 結帳頁面 - 安全快速完成購物">
+  <meta name="theme-color" content="#244d4d">
+  <title>結帳 - Yuruicamp 露營選物</title>
+  <!-- 預先連線外部資源，減少 DNS 查詢延遲 / Preconnect to reduce DNS lookup latency -->
+  <link rel="preconnect" href="https://picsum.photos">
+  <link rel="dns-prefetch" href="https://picsum.photos">
+  <link rel="stylesheet" href="../css/main.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/theme/theme-tokens.css">
+  <link rel="stylesheet" href="../css/theme/theme-base.css">
+  <link rel="stylesheet" href="../css/theme/theme-components.css">
+  <link rel="stylesheet" href="../css/theme/theme-layout.css">
+  <link rel="stylesheet" href="../css/theme/theme-header.css">
+  <link rel="stylesheet" href="../css/theme/pages/checkout.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/yuruicamp-favicon.svg">
+</head>
+<body class="yr-theme yr-checkout-page">
+
+  <div id="header" data-header-context="shop"></div>
+  <!-- ===================================================
        頁面主體 Main Content
        =================================================== -->
-    <main class="container u-migrated-056">
-      <!-- 頁面標題 Page Title -->
-      <div class="u-migrated-025">
-        <h1 class="u-migrated-057">📋 結帳</h1>
-        <!-- 步驟進度條 Step progress indicator -->
-        <div class="u-migrated-058">
-          <span class="u-migrated-059">🛒 購物車</span>
-          <span>›</span>
-          <span class="u-migrated-059">📋 結帳</span>
-          <span>›</span>
-          <span>✅ 完成</span>
-        </div>
-      </div>
+  <main class="container yr-checkout-main" style="padding-top:2rem;padding-bottom:4rem;">
 
-      <!-- ===== 兩欄佈局：左側表單 + 右側摘要 ===== -->
-      <div class="checkout-layout">
-        <!-- ===== 左側：結帳表單（3個手風琴面板）===== -->
-        <div class="checkout-form-column">
-          <!-- ========================================
+    <!-- 頁面標題 Page Title -->
+    <div class="yr-checkout-heading" style="margin-bottom:2rem;">
+      <h1 style="font-size:1.75rem;font-weight:800;color:#1a1a1a;margin:0 0 0.5rem 0;"><i class="bi bi-card-checklist" aria-hidden="true"></i> 結帳</h1>
+      <!-- 步驟進度條 Step progress indicator -->
+      <div class="yr-checkout-steps" style="display:flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:#6b7280;">
+        <span class="yr-checkout-step is-active" style="color:#244d4d;font-weight:700;"><i class="bi bi-bag" aria-hidden="true"></i> 購物車</span>
+        <span><i class="bi bi-chevron-right" aria-hidden="true"></i></span>
+        <span class="yr-checkout-step is-active" style="color:#244d4d;font-weight:700;"><i class="bi bi-card-checklist" aria-hidden="true"></i> 填寫資料</span>
+        <span><i class="bi bi-chevron-right" aria-hidden="true"></i></span>
+        <span class="yr-checkout-step"><i class="bi bi-check-circle" aria-hidden="true"></i> 完成訂單</span>
+      </div>
+    </div>
+
+    <!-- ===== 兩欄佈局：左側表單 + 右側摘要 ===== -->
+    <div class="checkout-layout">
+
+      <!-- ===== 左側：結帳表單（3個手風琴面板）===== -->
+      <div class="checkout-form-column">
+
+        <!-- ========================================
              面板 1：買家資訊 Buyer Info Panel
              ======================================== -->
-          <div class="checkout-panel open" id="panel-buyer">
-            <div class="checkout-panel-header u-migrated-060" data-panel="buyer">
-              <div class="u-migrated-061">
-                <div class="u-migrated-062">1</div>
-                <span class="u-migrated-063">買家資訊</span>
-              </div>
-              <span class="panel-arrow u-migrated-064">▼</span>
+        <div class="checkout-panel open" id="panel-buyer">
+          <div class="checkout-panel-header" data-panel="buyer"
+               style="display:flex;align-items:center;justify-content:space-between;padding:1.125rem 1.25rem;cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:12px 12px 0 0;">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+              <div class="yr-checkout-panel-index" style="width:28px;height:28px;border-radius:50%;background:#244d4d;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;">1</div>
+              <span style="font-weight:700;color:#1a1a1a;font-size:1rem;">買家資訊</span>
             </div>
-            <div class="checkout-panel-body u-migrated-065">
-              <div class="u-migrated-066">
-                <div>
-                  <label class="u-migrated-067"> 姓名 <span class="u-migrated-068">*</span> </label>
-                  <input
-                    class="u-migrated-069"
-                    type="text"
-                    id="buyerName"
-                    name="buyerName"
-                    placeholder="王小明"
-                    required
-                  />
-                </div>
-                <div>
-                  <label class="u-migrated-067"> 電話 <span class="u-migrated-068">*</span> </label>
-                  <input
-                    class="u-migrated-069"
-                    type="tel"
-                    id="buyerPhone"
-                    name="buyerPhone"
-                    placeholder="0912-345-678"
-                    pattern="^(\+886|886|0)[1-9][0-9\-\s()]{7,12}$"
-                    title="請輸入台灣電話格式，例如 0912-345-678 或 +886912345678"
-                    required
-                  />
-                </div>
-              </div>
-              <div class="u-migrated-030">
-                <label class="u-migrated-067"> Email <span class="u-migrated-068">*</span> </label>
-                <input
-                  class="u-migrated-069"
-                  type="email"
-                  id="buyerEmail"
-                  name="buyerEmail"
-                  placeholder="your@email.com"
-                  required
-                />
-              </div>
-              <div class="u-migrated-070">
-                <label class="u-migrated-067"> 備註（選填） </label>
-                <!-- 重點：#confirmOrderBtn 會把此欄位同步為 orders.json 的 userNote。 -->
-                <textarea
-                  class="u-migrated-071"
-                  id="buyerNote"
-                  name="buyerNote"
-                  placeholder="有什麼需要告知賣家的嗎？"
-                  rows="2"
-                ></textarea>
-              </div>
-              <!-- 帶入會員資料按鈕 Fill from profile button -->
-              <button id="fillProfileBtn" type="button" class="btn btn-secondary u-migrated-072">
-                👤 帶入會員資料
-              </button>
-            </div>
+            <span class="panel-arrow" style="font-size:1.2rem;transition:transform 0.2s;color:#6b7280;"><i class="bi bi-chevron-down" aria-hidden="true"></i></span>
           </div>
-          <!-- /panel-buyer -->
+          <div class="checkout-panel-body"
+               style="background:#fff;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px;padding:1.5rem;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+              <div>
+                <label style="display:block;font-weight:600;font-size:0.875rem;color:#374151;margin-bottom:0.4rem;">
+                  姓名 <span style="color:#ef4444;">*</span>
+                </label>
+                <input type="text"
+                       id="buyerName"
+                       name="buyerName"
+                       placeholder="王小明"
+                       required
+                       style="width:100%;padding:0.6rem 0.875rem;border:1px solid #d1d5db;border-radius:6px;font-size:0.9rem;box-sizing:border-box;outline:none;transition:border-color 0.2s;">
+              </div>
+              <div>
+                <label style="display:block;font-weight:600;font-size:0.875rem;color:#374151;margin-bottom:0.4rem;">
+                  電話 <span style="color:#ef4444;">*</span>
+                </label>
+                <input type="tel"
+                       id="buyerPhone"
+                       name="buyerPhone"
+                       placeholder="0912-345-678"
+                       pattern="^(\+886|886|0)[1-9][0-9\-\s()]{7,12}$"
+                       title="請輸入台灣電話格式，例如 0912-345-678 或 +886912345678"
+                       required
+                       style="width:100%;padding:0.6rem 0.875rem;border:1px solid #d1d5db;border-radius:6px;font-size:0.9rem;box-sizing:border-box;outline:none;transition:border-color 0.2s;">
+              </div>
+            </div>
+            <div style="margin-bottom:1rem;">
+              <label style="display:block;font-weight:600;font-size:0.875rem;color:#374151;margin-bottom:0.4rem;">
+                Email <span style="color:#ef4444;">*</span>
+              </label>
+              <input type="email"
+                     id="buyerEmail"
+                     name="buyerEmail"
+                     placeholder="your@email.com"
+                     required
+                     style="width:100%;padding:0.6rem 0.875rem;border:1px solid #d1d5db;border-radius:6px;font-size:0.9rem;box-sizing:border-box;outline:none;transition:border-color 0.2s;">
+            </div>
+            <div style="margin-bottom:0.5rem;">
+              <label style="display:block;font-weight:600;font-size:0.875rem;color:#374151;margin-bottom:0.4rem;">
+                備註（選填）
+              </label>
+              <!-- 重點：#confirmOrderBtn 會把此欄位同步為 orders.json 的 userNote。 -->
+              <textarea id="buyerNote"
+                        name="buyerNote"
+                        placeholder="有什麼需要告知賣家的嗎？"
+                        rows="2"
+                        style="width:100%;padding:0.6rem 0.875rem;border:1px solid #d1d5db;border-radius:6px;font-size:0.9rem;resize:vertical;box-sizing:border-box;outline:none;font-family:inherit;"></textarea>
+            </div>
+            <!-- 帶入會員資料按鈕 Fill from profile button -->
+            <button id="fillProfileBtn"
+                    type="button"
+                    class="btn btn-secondary yr-member-fill-btn"
+                    style="font-size:0.875rem;padding:0.5rem 1rem;">
+              <i class="bi bi-person" aria-hidden="true"></i> 帶入會員資料
+            </button>
+          </div>
+        </div><!-- /panel-buyer -->
 
-          <div class="u-migrated-073"></div>
+        <div style="height:0.75rem;"></div>
 
-          <!-- ========================================
+        <!-- ========================================
              面板 2：物流選擇 Shipping Method Panel
              ======================================== -->
-          <div class="checkout-panel" id="panel-shipping">
-            <div class="checkout-panel-header u-migrated-074" data-panel="shipping">
-              <div class="u-migrated-061">
-                <div class="u-migrated-062">2</div>
-                <span class="u-migrated-063">物流選擇</span>
-              </div>
-              <span class="panel-arrow u-migrated-075">▼</span>
+        <div class="checkout-panel" id="panel-shipping">
+          <div class="checkout-panel-header" data-panel="shipping"
+               style="display:flex;align-items:center;justify-content:space-between;padding:1.125rem 1.25rem;cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:12px;">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+              <div class="yr-checkout-panel-index" style="width:28px;height:28px;border-radius:50%;background:#244d4d;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;">2</div>
+              <span style="font-weight:700;color:#1a1a1a;font-size:1rem;">物流選擇</span>
             </div>
-            <div class="checkout-panel-body u-migrated-076">
-              <!-- 物流選項：宅配 -->
-              <label class="radio-option u-migrated-077">
-                <!-- 重點：被選取時會同步為 orders.json 的 shippingMethod = delivery。 -->
-                <input
-                  class="u-migrated-078"
-                  type="radio"
-                  name="shippingMethod"
-                  value="delivery"
-                  id="shippingDelivery"
-                  checked
-                />
-                <div>
-                  <div class="u-migrated-079">🚚 宅配到府</div>
-                  <div class="u-migrated-080">黑貓宅急便，2-4 個工作天到達</div>
-                  <div class="u-migrated-081">運費 NT$60（滿 NT$3000 免運）</div>
-                </div>
-              </label>
-
-              <!-- 物流選項：門市取貨 -->
-              <label class="radio-option u-migrated-082">
-                <!-- 重點：被選取時會同步為 orders.json 的 shippingMethod = store，shippingAddress 預設台北門市。 -->
-                <input
-                  class="u-migrated-078"
-                  type="radio"
-                  name="shippingMethod"
-                  value="store"
-                  id="shippingStore"
-                />
-                <div>
-                  <div class="u-migrated-079">🏪 門市取貨</div>
-                  <div class="u-migrated-080">全台 Yuruicamp 門市，7-10 個工作天</div>
-                  <div class="u-migrated-083">免運費</div>
-                </div>
-              </label>
-
-              <!-- 送達地址（宅配時顯示）Delivery address (shown for delivery) -->
-              <div class="u-migrated-084" id="deliveryAddressSection">
-                <label class="u-migrated-067"> 送達地址 <span class="u-migrated-068">*</span> </label>
-                <input
-                  class="u-migrated-069"
-                  type="text"
-                  id="deliveryAddress"
-                  name="deliveryAddress"
-                  placeholder="台北市信義區信義路五段 100 號"
-                />
-              </div>
-            </div>
+            <span class="panel-arrow" style="font-size:1.2rem;transition:transform 0.2s;color:#6b7280;transform:rotate(-90deg);"><i class="bi bi-chevron-down" aria-hidden="true"></i></span>
           </div>
-          <!-- /panel-shipping -->
+          <div class="checkout-panel-body"
+               style="display:none;background:#fff;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px;padding:1.5rem;">
 
-          <div class="u-migrated-073"></div>
+            <!-- 物流選項：宅配 -->
+            <label class="radio-option" style="display:flex;align-items:flex-start;gap:0.875rem;padding:1rem;border:2px solid #244d4d;border-radius:8px;cursor:pointer;margin-bottom:0.75rem;background:#f0faf8;">
+              <!-- 重點：被選取時會同步為 orders.json 的 shippingMethod = delivery。 -->
+              <input type="radio"
+                     name="shippingMethod"
+                     value="delivery"
+                     id="shippingDelivery"
+                     checked
+                     style="margin-top:0.15rem;accent-color:#244d4d;width:18px;height:18px;flex-shrink:0;">
+              <div>
+                <div style="font-weight:700;color:#1a1a1a;font-size:0.95rem;"><i class="bi bi-truck" aria-hidden="true"></i> 宅配到府</div>
+                <div style="font-size:0.85rem;color:#6b7280;margin-top:0.25rem;">黑貓宅急便，2-4 個工作天到達</div>
+                <div style="font-size:0.85rem;color:#244d4d;font-weight:600;margin-top:0.25rem;">運費 NT$60（滿 NT$3000 免運）</div>
+              </div>
+            </label>
 
-          <!-- ========================================
+            <!-- 物流選項：門市取貨 -->
+            <label class="radio-option" style="display:flex;align-items:flex-start;gap:0.875rem;padding:1rem;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;background:#fff;">
+              <!-- 重點：被選取時會同步為 orders.json 的 shippingMethod = store，shippingAddress 預設台北門市。 -->
+              <input type="radio"
+                     name="shippingMethod"
+                     value="store"
+                     id="shippingStore"
+                     style="margin-top:0.15rem;accent-color:#244d4d;width:18px;height:18px;flex-shrink:0;">
+              <div>
+                <div style="font-weight:700;color:#1a1a1a;font-size:0.95rem;"><i class="bi bi-shop" aria-hidden="true"></i> 門市取貨</div>
+                <div style="font-size:0.85rem;color:#6b7280;margin-top:0.25rem;">全台 Yuruicamp 門市，7-10 個工作天</div>
+                <div style="font-size:0.85rem;color:#16a34a;font-weight:600;margin-top:0.25rem;">免運費</div>
+              </div>
+            </label>
+
+            <!-- 送達地址（宅配時顯示）Delivery address (shown for delivery) -->
+            <div id="deliveryAddressSection" style="margin-top:1rem;">
+              <label style="display:block;font-weight:600;font-size:0.875rem;color:#374151;margin-bottom:0.4rem;">
+                送達地址 <span style="color:#ef4444;">*</span>
+              </label>
+              <input type="text"
+                     id="deliveryAddress"
+                     name="deliveryAddress"
+                     placeholder="台北市信義區信義路五段 100 號"
+                     style="width:100%;padding:0.6rem 0.875rem;border:1px solid #d1d5db;border-radius:6px;font-size:0.9rem;box-sizing:border-box;outline:none;transition:border-color 0.2s;">
+            </div>
+
+          </div>
+        </div><!-- /panel-shipping -->
+
+        <div style="height:0.75rem;"></div>
+
+        <!-- ========================================
              面板 3：付款方式 Payment Method Panel
              ======================================== -->
-          <div class="checkout-panel" id="panel-payment">
-            <div class="checkout-panel-header u-migrated-074" data-panel="payment">
-              <div class="u-migrated-061">
-                <div class="u-migrated-062">3</div>
-                <span class="u-migrated-063">付款方式</span>
-              </div>
-              <span class="panel-arrow u-migrated-075">▼</span>
+        <div class="checkout-panel" id="panel-payment">
+          <div class="checkout-panel-header" data-panel="payment"
+               style="display:flex;align-items:center;justify-content:space-between;padding:1.125rem 1.25rem;cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:12px;">
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+              <div class="yr-checkout-panel-index" style="width:28px;height:28px;border-radius:50%;background:#244d4d;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;">3</div>
+              <span style="font-weight:700;color:#1a1a1a;font-size:1rem;">付款方式</span>
             </div>
-            <div class="checkout-panel-body u-migrated-076">
-              <!-- 付款選項：信用卡 -->
-              <label class="radio-option u-migrated-077">
-                <!-- 重點：被選取時會同步為 orders.json 的 payment = credit-card。 -->
-                <input
-                  class="u-migrated-078"
-                  type="radio"
-                  name="paymentMethod"
-                  value="credit"
-                  id="payCredit"
-                  checked
-                />
-                <div>
-                  <div class="u-migrated-079">💳 信用卡付款</div>
-                  <div class="u-migrated-080">支援 VISA / MasterCard / JCB，可分期</div>
-                </div>
-              </label>
+            <span class="panel-arrow" style="font-size:1.2rem;transition:transform 0.2s;color:#6b7280;transform:rotate(-90deg);"><i class="bi bi-chevron-down" aria-hidden="true"></i></span>
+          </div>
+          <div class="checkout-panel-body"
+               style="display:none;background:#fff;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px;padding:1.5rem;">
 
-              <!-- 付款選項：LINE Pay -->
-              <label class="radio-option u-migrated-085">
-                <!-- 重點：被選取時會同步為 orders.json 的 payment = line-pay。 -->
-                <input
-                  class="u-migrated-078"
-                  type="radio"
-                  name="paymentMethod"
-                  value="linepay"
-                  id="payLine"
-                />
-                <div>
-                  <div class="u-migrated-079"><span class="u-migrated-086">LINE</span> Pay</div>
-                  <div class="u-migrated-080">使用 LINE Pay 電子錢包付款，快速便利</div>
-                </div>
-              </label>
+            <!-- 付款選項：信用卡 -->
+            <label class="radio-option" style="display:flex;align-items:flex-start;gap:0.875rem;padding:1rem;border:2px solid #244d4d;border-radius:8px;cursor:pointer;margin-bottom:0.75rem;background:#f0faf8;">
+              <!-- 重點：被選取時會同步為 orders.json 的 payment = credit-card。 -->
+              <input type="radio"
+                     name="paymentMethod"
+                     value="credit"
+                     id="payCredit"
+                     checked
+                     style="margin-top:0.15rem;accent-color:#244d4d;width:18px;height:18px;flex-shrink:0;">
+              <div>
+                <div style="font-weight:700;color:#1a1a1a;font-size:0.95rem;"><i class="bi bi-credit-card" aria-hidden="true"></i> 信用卡付款</div>
+                <div style="font-size:0.85rem;color:#6b7280;margin-top:0.25rem;">支援 VISA / MasterCard / JCB，可分期</div>
+              </div>
+            </label>
 
-              <!-- 付款選項：貨到付款 -->
-              <label class="radio-option u-migrated-082">
-                <!-- 重點：被選取時會同步為 orders.json 的 payment = cod。 -->
-                <input class="u-migrated-078" type="radio" name="paymentMethod" value="cod" id="payCod" />
-                <div>
-                  <div class="u-migrated-079">💵 貨到付款</div>
-                  <div class="u-migrated-080">收到商品時以現金付款（限宅配）</div>
+            <!-- 付款選項：LINE Pay -->
+            <label class="radio-option" style="display:flex;align-items:flex-start;gap:0.875rem;padding:1rem;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;margin-bottom:0.75rem;background:#fff;">
+              <!-- 重點：被選取時會同步為 orders.json 的 payment = line-pay。 -->
+              <input type="radio"
+                     name="paymentMethod"
+                     value="linepay"
+                     id="payLine"
+                     style="margin-top:0.15rem;accent-color:#244d4d;width:18px;height:18px;flex-shrink:0;">
+              <div>
+                <div style="font-weight:700;color:#1a1a1a;font-size:0.95rem;">
+                  <i class="bi bi-phone" aria-hidden="true"></i> 行動支付（LINE Pay）
                 </div>
-              </label>
+                <div style="font-size:0.85rem;color:#6b7280;margin-top:0.25rem;">使用 LINE Pay 電子錢包付款，快速便利</div>
+              </div>
+            </label>
 
-              <!-- 信用卡資訊（選擇信用卡時顯示）Credit card info (shown when credit selected) -->
-              <div class="u-migrated-087" id="creditCardSection">
-                <div class="u-migrated-088">信用卡資訊</div>
-                <div class="u-migrated-089">
-                  <label class="u-migrated-090">卡號</label>
-                  <input
-                    class="u-migrated-091"
-                    type="text"
-                    id="cardNumber"
-                    placeholder="1234 5678 9012 3456"
-                    maxlength="19"
-                  />
+            <!-- 付款選項：貨到付款 -->
+            <label class="radio-option" style="display:flex;align-items:flex-start;gap:0.875rem;padding:1rem;border:2px solid #e5e7eb;border-radius:8px;cursor:pointer;background:#fff;">
+              <!-- 重點：被選取時會同步為 orders.json 的 payment = cod。 -->
+              <input type="radio"
+                     name="paymentMethod"
+                     value="cod"
+                     id="payCod"
+                     style="margin-top:0.15rem;accent-color:#244d4d;width:18px;height:18px;flex-shrink:0;">
+              <div>
+                <div style="font-weight:700;color:#1a1a1a;font-size:0.95rem;"><i class="bi bi-cash" aria-hidden="true"></i> 貨到付款</div>
+                <div style="font-size:0.85rem;color:#6b7280;margin-top:0.25rem;">收到商品時以現金付款（限宅配）</div>
+              </div>
+            </label>
+
+            <!-- 信用卡資訊（選擇信用卡時顯示）Credit card info (shown when credit selected) -->
+            <div id="creditCardSection" style="margin-top:1.25rem;padding:1.25rem;background:#f9fafb;border-radius:8px;border:1px solid #e5e7eb;">
+              <div style="font-size:0.875rem;font-weight:600;color:#374151;margin-bottom:1rem;">信用卡資訊</div>
+              <div style="margin-bottom:0.875rem;">
+                <label style="display:block;font-size:0.8rem;color:#6b7280;margin-bottom:0.35rem;">卡號</label>
+                <input type="text"
+                       id="cardNumber"
+                       placeholder="1234 5678 9012 3456"
+                       maxlength="19"
+                       style="width:100%;padding:0.6rem 0.875rem;border:1px solid #d1d5db;border-radius:6px;font-size:0.9rem;box-sizing:border-box;outline:none;letter-spacing:0.05em;">
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.875rem;">
+                <div>
+                  <label style="display:block;font-size:0.8rem;color:#6b7280;margin-bottom:0.35rem;">到期日</label>
+                  <input type="text"
+                         id="cardExpiry"
+                         placeholder="MM / YY"
+                         maxlength="7"
+                         style="width:100%;padding:0.6rem 0.875rem;border:1px solid #d1d5db;border-radius:6px;font-size:0.9rem;box-sizing:border-box;outline:none;">
                 </div>
-                <div class="u-migrated-092">
-                  <div>
-                    <label class="u-migrated-090">到期日</label>
-                    <input
-                      class="u-migrated-093"
-                      type="text"
-                      id="cardExpiry"
-                      placeholder="MM / YY"
-                      maxlength="7"
-                    />
-                  </div>
-                  <div>
-                    <label class="u-migrated-090">CVV</label>
-                    <input class="u-migrated-093" type="text" id="cardCvv" placeholder="123" maxlength="4" />
-                  </div>
+                <div>
+                  <label style="display:block;font-size:0.8rem;color:#6b7280;margin-bottom:0.35rem;">CVV</label>
+                  <input type="text"
+                         id="cardCvv"
+                         placeholder="123"
+                         maxlength="4"
+                         style="width:100%;padding:0.6rem 0.875rem;border:1px solid #d1d5db;border-radius:6px;font-size:0.9rem;box-sizing:border-box;outline:none;">
                 </div>
               </div>
+            </div>
+
+          </div>
+        </div><!-- /panel-payment -->
+
+      </div><!-- /checkout-form-column -->
+
+      <!-- ===== 右側：訂單摘要 Order Summary (Sticky) ===== -->
+      <div class="checkout-summary-column">
+        <div class="yr-checkout-summary-card" style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1.5rem;position:sticky;top:calc(var(--yr-header-height, 88px) + 24px);align-self:start;">
+
+          <h3 style="font-size:1.05rem;font-weight:700;color:#1a1a1a;margin:0 0 1.25rem 0;">訂單摘要</h3>
+
+          <!-- 商品清單 Order item list (rendered by JS) -->
+          <div id="checkoutItemsList"
+               style="max-height:300px;overflow-y:auto;margin-bottom:1.25rem;border-bottom:1px solid #f0f0f0;padding-bottom:1.25rem;">
+            <!-- 由 JS 動態渲染 -->
+          </div>
+
+          <!-- 折扣碼 Coupon Code -->
+          <div style="margin-bottom:1.25rem;">
+            <label style="display:block;font-size:0.875rem;font-weight:600;color:#374151;margin-bottom:0.5rem;"><i class="bi bi-tag" aria-hidden="true"></i> 折扣碼</label>
+            <div style="display:flex;gap:0.5rem;">
+              <input type="text"
+                     id="checkoutCouponInput"
+                     list="checkoutCouponCodeOptions"
+                     placeholder="輸入或選取折扣碼"
+                     style="flex:1;padding:0.55rem 0.75rem;border:1px solid #d1d5db;border-radius:6px;font-size:0.875rem;outline:none;"
+                     maxlength="20">
+              <!-- 重點：選項與購物車共用 data/users.json 的 coupons.code，確保兩頁可選 code 一致 -->
+              <datalist id="checkoutCouponCodeOptions"></datalist>
+              <button id="checkoutApplyCouponBtn"
+                      type="button"
+                      class="btn btn-secondary"
+                      style="padding:0.55rem 0.875rem;font-size:0.875rem;white-space:nowrap;">
+                套用
+              </button>
+            </div>
+            <!-- 重點：成功套用的 coupon 會轉成文字顯示於此，結帳頁仍可繼續套用其他 coupon -->
+            <div id="checkoutAppliedCouponTexts" style="font-size:0.8rem;margin-top:0.4rem;color:#16a34a;line-height:1.6;display:none;"></div>
+            <div id="checkoutCouponMsg" style="font-size:0.8rem;margin-top:0.35rem;display:none;"></div>
+          </div>
+
+          <hr style="border:none;border-top:1px solid #f0f0f0;margin:0 0 1rem 0;">
+
+          <!-- 金額明細 Price breakdown -->
+          <div style="display:flex;flex-direction:column;gap:0.625rem;margin-bottom:1rem;">
+            <div style="display:flex;justify-content:space-between;font-size:0.875rem;">
+              <span style="color:#6b7280;">商品小計</span>
+              <span id="checkoutSubtotal" style="font-weight:600;color:#374151;">NT$0</span>
+            </div>
+            <div id="checkoutDiscountRow" style="display:none;justify-content:space-between;font-size:0.875rem;">
+              <span style="color:#16a34a;"><i class="bi bi-tag" aria-hidden="true"></i> 折扣優惠</span>
+              <span id="checkoutDiscount" style="font-weight:600;color:#16a34a;">-NT$0</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.875rem;">
+              <span style="color:#6b7280;">運費</span>
+              <span id="checkoutShipping" style="font-weight:600;color:#374151;">NT$60</span>
             </div>
           </div>
-          <!-- /panel-payment -->
 
-          <!-- 重點：點擊後由 checkout.js 產生不重複 orderNumber，並依畫面商品、金額、物流、付款與備註建立訂單快照。 -->
-          <div class="u-migrated-094">
-            <button id="confirmOrderBtn" type="button" class="btn btn-primary btn-block u-migrated-095">
-              🔒 確認結帳
-            </button>
-            <p class="u-migrated-096">點擊確認即表示您同意 Yuruicamp 的服務條款與隱私政策</p>
+          <hr style="border:none;border-top:2px solid #e5e7eb;margin:0 0 1rem 0;">
+
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+            <span style="font-weight:700;color:#1a1a1a;font-size:1rem;">合計</span>
+            <span id="checkoutTotal" style="font-weight:800;color:#244d4d;font-size:1.4rem;">NT$0</span>
           </div>
+
+          <!-- 安全保障 Security indicators -->
+          <div style="border-top:1px solid #f0f0f0;padding-top:1rem;text-align:center;">
+            <p style="font-size:0.78rem;color:#9ca3af;margin:0 0 0.25rem 0;"><i class="bi bi-shield-lock" aria-hidden="true"></i> SSL 加密保護，安全付款</p>
+            <p style="font-size:0.78rem;color:#9ca3af;margin:0;"><i class="bi bi-box-seam" aria-hidden="true"></i> 7天無理由退換貨保障</p>
+          </div>
+
         </div>
-        <!-- /checkout-form-column -->
+      </div><!-- /checkout-summary-column -->
 
-        <!-- ===== 右側：訂單摘要 Order Summary (Sticky) ===== -->
-        <div class="checkout-summary-column">
-          <div class="u-migrated-097">
-            <h3 class="u-migrated-098">訂單摘要</h3>
-
-            <!-- 商品清單 Order item list (rendered by JS) -->
-            <div class="u-migrated-099" id="checkoutItemsList">
-              <!-- 由 JS 動態渲染 -->
-            </div>
-
-            <!-- 折扣碼 Coupon Code -->
-            <div class="u-migrated-100">
-              <label class="u-migrated-101">🏷️ 折扣碼</label>
-              <div class="u-migrated-102">
-                <input
-                  class="u-migrated-103"
-                  type="text"
-                  id="checkoutCouponInput"
-                  list="checkoutCouponCodeOptions"
-                  placeholder="輸入或選取折扣碼"
-                  maxlength="20"
-                />
-                <!-- 重點：選項與購物車共用 data/users.json 的 coupons.code，確保兩頁可選 code 一致 -->
-                <datalist id="checkoutCouponCodeOptions"></datalist>
-                <button id="checkoutApplyCouponBtn" type="button" class="btn btn-secondary u-migrated-104">
-                  套用
-                </button>
-              </div>
-              <!-- 重點：成功套用的 coupon 會轉成文字顯示於此，結帳頁仍可繼續套用其他 coupon -->
-              <div class="u-migrated-105" id="checkoutAppliedCouponTexts"></div>
-              <div class="u-migrated-106" id="checkoutCouponMsg"></div>
-            </div>
-
-            <hr class="u-migrated-107" />
-
-            <!-- 金額明細 Price breakdown -->
-            <div class="u-migrated-108">
-              <div class="u-migrated-109">
-                <span class="u-migrated-110">商品小計</span>
-                <span class="u-migrated-111" id="checkoutSubtotal">NT$0</span>
-              </div>
-              <div class="u-migrated-112" id="checkoutDiscountRow">
-                <span class="u-migrated-113">🏷️ 折扣優惠</span>
-                <span class="u-migrated-114" id="checkoutDiscount">-NT$0</span>
-              </div>
-              <div class="u-migrated-109">
-                <span class="u-migrated-110">運費</span>
-                <span class="u-migrated-111" id="checkoutShipping">NT$60</span>
-              </div>
-            </div>
-
-            <hr class="u-migrated-115" />
-
-            <div class="u-migrated-116">
-              <span class="u-migrated-063">合計</span>
-              <span class="u-migrated-117" id="checkoutTotal">NT$0</span>
-            </div>
-
-            <!-- 安全保障 Security indicators -->
-            <div class="u-migrated-118">
-              <p class="u-migrated-119">🔒 SSL 加密保護，安全付款</p>
-              <p class="u-migrated-120">📦 7天無理由退換貨保障</p>
-            </div>
-          </div>
-        </div>
-        <!-- /checkout-summary-column -->
+      <!-- 重點：點擊後由 checkout.js 產生不重複 orderNumber，並依畫面商品、金額、物流、付款與備註建立訂單快照。 -->
+      <div class="yr-checkout-submit-wrap" style="margin-top:1.5rem;">
+        <button id="confirmOrderBtn"
+                type="button"
+                class="btn btn-primary btn-block"
+                style="font-size:1.1rem;padding:1.125rem;font-weight:700;">
+          <i class="bi bi-shield-lock" aria-hidden="true"></i> 確認結帳
+        </button>
+        <p style="text-align:center;font-size:0.78rem;color:#9ca3af;margin-top:0.75rem;">
+          點擊確認即表示您同意 Yuruicamp 的服務條款與隱私政策
+        </p>
       </div>
-      <!-- /checkout-layout -->
-    </main>
 
-    <div id="footer"></div>
-    <!-- ===================================================
+    </div><!-- /checkout-layout -->
+
+  </main>
+
+  
+ <div id="footer"></div>
+  <!-- ===================================================
        Script 載入
        =================================================== -->
-    <script src="../js/config.js" defer></script>
-    <script src="../js/storage.js" defer></script>
-    <script src="../js/state.js" defer></script>
-    <script src="../js/formatters.js" defer></script>
-    <script src="../js/validators.js" defer></script>
-    <script src="../js/cart-service.js" defer></script>
-    <script src="../js/api-mock.js" defer></script>
-    <script src="../js/components/toast.js" defer></script>
-    <script src="../js/components/modal.js" defer></script>
-    <script src="../js/components/header.js" defer></script>
-    <script src="../js/components/cart.js" defer></script>
-    <script src="../js/components/coupons.js" defer></script>
-    <script src="../js/pages/checkout.js" defer></script>
-    <script src="../js/main.js" defer></script>
-  </body>
+  <script src="../js/config.js" defer></script>
+  <script src="../js/storage.js" defer></script>
+  <script src="../js/state.js" defer></script>
+  <script src="../js/formatters.js" defer></script>
+  <script src="../js/validators.js" defer></script>
+  <script src="../js/cart-service.js" defer></script>
+  <script src="../js/api-mock.js" defer></script>
+  <script src="../js/components/toast.js" defer></script>
+  <script src="../js/components/modal.js" defer></script>
+  <script src="../js/components/header.js" defer></script>
+  <script src="../js/components/cart.js" defer></script>
+  <script src="../js/components/coupons.js" defer></script>
+  <script src="../js/pages/checkout.js" defer></script>
+  <script src="../js/main.js" defer></script>
+
+</body>
 </html>

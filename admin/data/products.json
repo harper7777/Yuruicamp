@@ -2,541 +2,171 @@
   {
     "id": "P001",
     "rentalId": "R001",
-    "rentalEnabled": true,
+    "thumbnail": "../assets/images/tent-01.jpg",
     "name": "Coleman 六人帳篷",
     "category": "帳篷",
     "spec": "深橄欖綠",
     "price": 3200,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 5,
+    "total-stock": 4,
     "branch": {
-      "main": 2,
-      "branch-001": 2,
-      "branch-002": 0,
+      "main": 1,
+      "branch-001": 1,
+      "branch-002": 1,
       "branch-003": 1
-    }
+    },
+    "status": "active"
   },
   {
     "id": "P002",
     "rentalId": "R002",
-    "rentalEnabled": true,
+    "thumbnail": "../assets/images/tent-01.jpg",
     "name": "MSR 超輕量帳篷",
     "category": "帳篷",
     "spec": "沙漠卡其",
     "price": 9800,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 14,
+    "total-stock": 5,
     "branch": {
-      "main": 2,
-      "branch-001": 7,
-      "branch-002": 4,
+      "main": 1,
+      "branch-001": 2,
+      "branch-002": 1,
       "branch-003": 1
-    }
+    },
+    "status": "active"
   },
   {
     "id": "P003",
     "rentalId": "R018",
-    "rentalEnabled": true,
+    "thumbnail": "../assets/images/tent-01.jpg",
     "name": "充氣式睡墊 L號",
     "category": "睡袋",
     "spec": "藍灰色",
     "price": 1200,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 15,
+    "total-stock": 16,
     "branch": {
-      "main": 2,
-      "branch-001": 8,
-      "branch-002": 2,
-      "branch-003": 3
-    }
+      "main": 1,
+      "branch-001": 5,
+      "branch-002": 5,
+      "branch-003": 5
+    },
+    "status": "active"
   },
   {
     "id": "P004",
     "rentalId": "R005",
-    "rentalEnabled": true,
+    "thumbnail": "../assets/images/tent-01.jpg",
     "name": "羽絨睡袋 -10°C",
     "category": "睡袋",
     "spec": "碳黑",
     "price": 2800,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 11,
+    "total-stock": 3,
     "branch": {
-      "main": 2,
-      "branch-001": 6,
-      "branch-002": 3,
+      "main": 1,
+      "branch-001": 1,
+      "branch-002": 1,
       "branch-003": 0
-    }
+    },
+    "status": "active"
   },
   {
     "id": "P005",
     "rentalId": "R006",
-    "rentalEnabled": true,
+    "thumbnail": "../assets/images/tent-01.jpg",
     "name": "Coleman 氣化爐",
     "category": "炊具",
     "spec": "標準版",
     "price": 5000,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 11,
+    "total-stock": 13,
     "branch": {
-      "main": 3,
-      "branch-001": 0,
-      "branch-002": 2,
-      "branch-003": 6
-    }
+      "main": 1,
+      "branch-001": 4,
+      "branch-002": 4,
+      "branch-003": 4
+    },
+    "status": "active"
   },
   {
     "id": "P006",
     "rentalId": "R007",
-    "rentalEnabled": true,
+    "thumbnail": "../assets/images/tent-01.jpg",
     "name": "Snow Peak 鈦合金杯組",
     "category": "炊具",
     "spec": "鈦金屬原色",
     "price": 1800,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 10,
+    "total-stock": 21,
     "branch": {
-      "main": 2,
-      "branch-001": 1,
-      "branch-002": 2,
-      "branch-003": 5
-    }
+      "main": 1,
+      "branch-001": 7,
+      "branch-002": 7,
+      "branch-003": 6
+    },
+    "status": "active"
   },
   {
     "id": "P007",
     "rentalId": "R011",
-    "rentalEnabled": true,
+    "thumbnail": "../assets/images/tent-01.jpg",
     "name": "LED 露營燈",
     "category": "燈具",
     "spec": "暖白光",
     "price": 800,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 14,
+    "total-stock": 5,
     "branch": {
-      "main": 2,
-      "branch-001": 4,
-      "branch-002": 4,
-      "branch-003": 4
-    }
+      "main": 1,
+      "branch-001": 2,
+      "branch-002": 1,
+      "branch-003": 1
+    },
+    "status": "active"
   },
   {
     "id": "P008",
     "rentalId": "R013",
-    "rentalEnabled": true,
+    "thumbnail": "../assets/images/tent-01.jpg",
     "name": "防水登山背包 45L",
     "category": "背包",
     "spec": "森林綠",
     "price": 1600,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 17,
+    "total-stock": 8,
     "branch": {
-      "main": 2,
-      "branch-001": 4,
-      "branch-002": 5,
-      "branch-003": 6
-    }
+      "main": 1,
+      "branch-001": 3,
+      "branch-002": 2,
+      "branch-003": 2
+    },
+    "status": "active"
   },
   {
     "id": "P009",
     "rentalId": "R008",
-    "rentalEnabled": true,
+    "thumbnail": "../assets/images/tent-01.jpg",
     "name": "折疊桌椅組",
     "category": "其他",
     "spec": "鋁合金輕量版",
     "price": 2800,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 26,
+    "total-stock": 6,
     "branch": {
-      "main": 3,
-      "branch-001": 8,
-      "branch-002": 8,
-      "branch-003": 7
-    }
+      "main": 1,
+      "branch-001": 2,
+      "branch-002": 2,
+      "branch-003": 1
+    },
+    "status": "active"
   },
   {
     "id": "P010",
     "rentalId": null,
-    "rentalEnabled": false,
+    "thumbnail": "../assets/images/tent-01.jpg",
     "name": "保溫壺 1L",
     "category": "其他",
     "spec": "消光黑",
     "price": 880,
-    "status": "disabled",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 12,
+    "total-stock": 1,
     "branch": {
       "main": 1,
       "branch-001": 0,
       "branch-002": 0,
       "branch-003": 0
-    }
-  },
-  {
-    "id": "P011",
-    "rentalId": "R003",
-    "rentalEnabled": true,
-    "name": "Snow Peak 客廳帳",
-    "category": "帳篷",
-    "spec": "象牙白",
-    "price": 8500,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 10,
-    "branch": {
-      "main": 1,
-      "branch-001": 7,
-      "branch-002": 2,
-      "branch-003": 0
-    }
-  },
-  {
-    "id": "P012",
-    "rentalId": "R004",
-    "rentalEnabled": true,
-    "name": "四季保暖睡袋",
-    "category": "睡袋",
-    "spec": "深藍",
-    "price": 2200,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 21,
-    "branch": {
-      "main": 1,
-      "branch-001": 6,
-      "branch-002": 6,
-      "branch-003": 8
-    }
-  },
-  {
-    "id": "P013",
-    "rentalId": "R009",
-    "rentalEnabled": true,
-    "name": "折疊蛋捲桌",
-    "category": "其他",
-    "spec": "胡桃木紋",
-    "price": 1500,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 9,
-    "branch": {
-      "main": 2,
-      "branch-001": 5,
-      "branch-002": 2,
-      "branch-003": 0
-    }
-  },
-  {
-    "id": "P014",
-    "rentalId": "R010",
-    "rentalEnabled": true,
-    "name": "高背月亮椅",
-    "category": "其他",
-    "spec": "軍綠",
-    "price": 980,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 15,
-    "branch": {
-      "main": 2,
-      "branch-001": 4,
-      "branch-002": 4,
-      "branch-003": 5
-    }
-  },
-  {
-    "id": "P015",
-    "rentalId": "R012",
-    "rentalEnabled": true,
-    "name": "充電式頭燈",
-    "category": "燈具",
-    "spec": "USB-C",
-    "price": 650,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 12,
-    "branch": {
-      "main": 1,
-      "branch-001": 8,
-      "branch-002": 0,
-      "branch-003": 3
-    }
-  },
-  {
-    "id": "P016",
-    "rentalId": "R014",
-    "rentalEnabled": true,
-    "name": "65L 重裝背包",
-    "category": "背包",
-    "spec": "岩石灰",
-    "price": 4200,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 12,
-    "branch": {
-      "main": 3,
-      "branch-001": 1,
-      "branch-002": 8,
-      "branch-003": 0
-    }
-  },
-  {
-    "id": "P017",
-    "rentalId": "R015",
-    "rentalEnabled": true,
-    "name": "露營拖車",
-    "category": "其他",
-    "spec": "折疊式",
-    "price": 3600,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 11,
-    "branch": {
-      "main": 3,
-      "branch-001": 3,
-      "branch-002": 1,
-      "branch-003": 4
-    }
-  },
-  {
-    "id": "P018",
-    "rentalId": "R016",
-    "rentalEnabled": true,
-    "name": "大型天幕",
-    "category": "帳篷",
-    "spec": "4x4m",
-    "price": 2400,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 18,
-    "branch": {
-      "main": 3,
-      "branch-001": 5,
-      "branch-002": 6,
-      "branch-003": 4
-    }
-  },
-  {
-    "id": "P019",
-    "rentalId": "R017",
-    "rentalEnabled": true,
-    "name": "營柱與營繩組",
-    "category": "其他",
-    "spec": "標準套組",
-    "price": 450,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 10,
-    "branch": {
-      "main": 2,
-      "branch-001": 1,
-      "branch-002": 3,
-      "branch-003": 4
-    }
-  },
-  {
-    "id": "P020",
-    "rentalId": "R019",
-    "rentalEnabled": true,
-    "name": "行動電源站",
-    "category": "其他",
-    "spec": "500Wh",
-    "price": 12800,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 16,
-    "branch": {
-      "main": 3,
-      "branch-001": 0,
-      "branch-002": 8,
-      "branch-003": 5
-    }
-  },
-  {
-    "id": "P021",
-    "rentalId": "R020",
-    "rentalEnabled": true,
-    "name": "保冷冰桶 45L",
-    "category": "其他",
-    "spec": "深藍",
-    "price": 1900,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 12,
-    "branch": {
-      "main": 1,
-      "branch-001": 3,
-      "branch-002": 5,
-      "branch-003": 3
-    }
-  },
-  {
-    "id": "P022",
-    "rentalId": "R021",
-    "rentalEnabled": true,
-    "name": "雙層防風外套",
-    "category": "其他",
-    "spec": "L號",
-    "price": 3200,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 15,
-    "branch": {
-      "main": 1,
-      "branch-001": 5,
-      "branch-002": 6,
-      "branch-003": 3
-    }
-  },
-  {
-    "id": "P023",
-    "rentalId": "R022",
-    "rentalEnabled": true,
-    "name": "快煮鍋 1.5L",
-    "category": "炊具",
-    "spec": "不鏽鋼",
-    "price": 1100,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 25,
-    "branch": {
-      "main": 1,
-      "branch-001": 8,
-      "branch-002": 8,
-      "branch-003": 8
-    }
-  },
-  {
-    "id": "P024",
-    "rentalId": "R023",
-    "rentalEnabled": true,
-    "name": "碳纖維登山杖",
-    "category": "其他",
-    "spec": "一對",
-    "price": 1400,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 15,
-    "branch": {
-      "main": 3,
-      "branch-001": 0,
-      "branch-002": 8,
-      "branch-003": 4
-    }
-  },
-  {
-    "id": "P025",
-    "rentalId": "R024",
-    "rentalEnabled": true,
-    "name": "防水戶外手錶",
-    "category": "其他",
-    "spec": "GPS版",
-    "price": 5600,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 13,
-    "branch": {
-      "main": 2,
-      "branch-001": 7,
-      "branch-002": 3,
-      "branch-003": 1
-    }
-  },
-  {
-    "id": "P026",
-    "rentalId": "R025",
-    "rentalEnabled": true,
-    "name": "輕量吊床",
-    "category": "其他",
-    "spec": "雙人",
-    "price": 890,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 9,
-    "branch": {
-      "main": 2,
-      "branch-001": 1,
-      "branch-002": 2,
-      "branch-003": 4
-    }
-  },
-  {
-    "id": "P027",
-    "rentalId": "R026",
-    "rentalEnabled": true,
-    "name": "戶外淋浴袋",
-    "category": "其他",
-    "spec": "20L",
-    "price": 680,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 15,
-    "branch": {
-      "main": 2,
-      "branch-001": 0,
-      "branch-002": 6,
-      "branch-003": 7
-    }
-  },
-  {
-    "id": "P028",
-    "rentalId": "R027",
-    "rentalEnabled": true,
-    "name": "折疊式焚火台",
-    "category": "炊具",
-    "spec": "不鏽鋼",
-    "price": 2100,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 24,
-    "branch": {
-      "main": 3,
-      "branch-001": 6,
-      "branch-002": 8,
-      "branch-003": 7
-    }
-  },
-  {
-    "id": "P029",
-    "rentalId": "R028",
-    "rentalEnabled": true,
-    "name": "防蚊帳篷內帳",
-    "category": "帳篷",
-    "spec": "通用型",
-    "price": 750,
-    "status": "active",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 14,
-    "branch": {
-      "main": 2,
-      "branch-001": 5,
-      "branch-002": 6,
-      "branch-003": 1
-    }
-  },
-  {
-    "id": "P030",
-    "rentalId": null,
-    "rentalEnabled": false,
-    "name": "露營貼紙組",
-    "category": "其他",
-    "spec": "50入",
-    "price": 199,
-    "status": "disabled",
-    "thumbnail": "../assets/images/tent-01.jpg",
-    "total-stock": 13,
-    "branch": {
-      "main": 1,
-      "branch-001": 0,
-      "branch-002": 0,
-      "branch-003": 0
-    }
+    },
+    "status": "disabled"
   }
 ]

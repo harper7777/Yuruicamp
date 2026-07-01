@@ -1046,6 +1046,91 @@
   resize: vertical;
 }
 
+/* Booking member page scoped overrides */
+.yr-booking-member-page #memberCenterMount {
+  max-width: min(100% - 3rem, 1200px);
+  margin: 0 auto;
+}
+
+.yr-booking-member-page .mc-page {
+  background: #faf7ed;
+}
+
+.yr-booking-member-page .mc-sidebar,
+.yr-booking-member-page .mc-card-box,
+.yr-booking-member-page .mc-stat-card,
+.yr-booking-member-page .rec-item,
+.yr-booking-member-page .coupon-ticket,
+.yr-booking-member-page .coupon-card,
+.yr-booking-member-page .bk-modal-box {
+  border: 1px solid #e2d8ca;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgb(63 70 61 / 5%);
+}
+
+.yr-booking-member-page .mc-sidebar-user {
+  background: linear-gradient(135deg, #f7f1e7 0%, #e7ece2 100%);
+}
+
+.yr-booking-member-page .mc-sidebar-avatar {
+  background: #e7ece2;
+  color: #62715e;
+}
+
+.yr-booking-member-page .mc-sidebar-name {
+  color: #3f463d;
+}
+
+.yr-booking-member-page .mc-sidebar-email {
+  color: #6d6a62;
+}
+
+.yr-booking-member-page .mc-nav-item.active {
+  background: #e7ece2;
+  border-left-color: #62715e;
+  color: #62715e;
+}
+
+.yr-booking-member-page .mc-tab-mobile,
+.yr-booking-member-page .order-status-tab {
+  border-radius: 10px;
+}
+
+.yr-booking-member-page .order-status-tab.active {
+  background: #62715e;
+  border-color: #62715e;
+}
+
+.yr-booking-member-page .rec-item__status,
+.yr-booking-member-page .bk-status-badge {
+  border-radius: 8px;
+}
+
+.yr-booking-member-page .status--cancelled,
+.yr-booking-member-page .bk-status-cancelled {
+  background: #f3e7e1;
+  color: #9a675d;
+}
+
+.yr-booking-member-page .bk-detail-row--danger {
+  color: #9a675d;
+}
+
+.yr-booking-member-page .bk-detail-support a {
+  border-color: #74846f;
+  color: #62715e;
+}
+
+.yr-booking-member-page .bk-detail-support a:hover {
+  background: #e7ece2;
+}
+
+@media (width <= 390px) {
+  .yr-booking-member-page #memberCenterMount {
+    max-width: calc(100% - 2rem);
+  }
+}
+
 #reviewContent:focus {
   border-color: var(--bk-primary);
   outline: none;

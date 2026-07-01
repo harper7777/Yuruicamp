@@ -14,10 +14,10 @@
 // ==========================================================
 var EDIT_PERMISSION_SELECTORS = {
   orders: '.btn-ship-order',
-  products: '[data-bs-target="#addProductModal"], .edit-product-name, .stock-edit-btn, .stock-confirm-btn, .stock-cancel-btn, .stock-step-btn, #submitAddProduct',
-  customers: '.phone-edit-btn, .email-edit-btn, .birthday-edit-btn, .tier-edit-btn, .points-edit-btn, .tags-edit-btn, .tags-done-btn, .tags-cancel-btn, .tag-add-btn, .tag-delete-btn, .customer-edit-confirm-btn, .customer-edit-cancel-all-btn, #customerEditConfirmBtn',
+  products: '[data-bs-target="#addProductModal"]:not(.edit-product-btn), .edit-product-btn, .stock-confirm-btn, .stock-step-btn, #submitAddProduct',
+  customers: '.tier-edit-btn, .points-edit-btn, .coupons-edit-btn, .tier-save-btn, .tier-cancel-btn, .points-save-btn, .coupons-save-btn',
   discounts: '#submitAddCoupon, .btn-toggle-coupon, .btn-delete-coupon, #generateCouponCode, #addCouponForm input, #addCouponForm select, #addCouponForm textarea, #addCouponForm button:not(.btn-close)',
-  reviews: '.btn-open-reply-modal, #btnSubmitReviewReply, #btnDeleteReviewReply, #reviewReplyTextarea',
+  reviews: '.btn-reply-toggle, .btn-submit-reply, .review-card textarea',
   bookings: '.btn-confirm-booking, .btn-cancel-booking',
   permissions: '#addEmployeeBtn, .btn-edit-employee, .btn-toggle-employee, #employeeModal input:not([readonly]), #employeeModal button:not(.btn-close):not([data-bs-dismiss]), #saveEmployeeBtn, .perm-view-cb, .perm-edit-cb, #empIsSuperAdmin',
 };

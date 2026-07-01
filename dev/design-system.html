@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yuruicamp Design System</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/yuruicamp-favicon.svg">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="./styles/design-tokens.css">
+  <link rel="stylesheet" href="./styles/design-components.css">
+</head>
+<body class="yr-page">
+  <div class="yr-container">
+    <header class="yr-section">
+      <p class="yr-eyebrow">Yuruicamp</p>
+      <h1 class="yr-display-title">Design System Sandbox</h1>
+      <p class="yr-body-lg">這是與正式站點隔離的設計系統測試頁，只引用 design tokens 與 design components。</p>
+      <p class="yr-body-sm">新版色彩概念回到奶油白空間基底，搭配鼠尾草綠品牌層級，以及亞麻與燕麥色的柔和中性輔助。</p>
+    </header>
+
+    <section class="yr-section">
+      <h2 class="yr-section-title">A. 奶油與表面色</h2>
+      <div class="yr-color-grid">
+        <article class="yr-color-swatch yr-color-swatch--bg"><div class="yr-color-swatch__sample yr-sample--bg"></div><div class="yr-color-swatch__meta"><strong>奶油背景</strong><span>--yr-color-bg</span></div></article>
+        <article class="yr-color-swatch"><div class="yr-color-swatch__sample yr-sample--surface"></div><div class="yr-color-swatch__meta"><strong>Surface</strong><span>--yr-color-surface</span></div></article>
+        <article class="yr-color-swatch"><div class="yr-color-swatch__sample yr-sample--surface-muted"></div><div class="yr-color-swatch__meta"><strong>奶茶</strong><span>--yr-color-surface-muted</span></div></article>
+        <article class="yr-color-swatch"><div class="yr-color-swatch__sample yr-sample--surface-oat"></div><div class="yr-color-swatch__meta"><strong>燕麥</strong><span>--yr-color-surface-oat</span></div></article>
+      </div>
+    </section>
+
+    <section class="yr-section">
+      <h2 class="yr-section-title">B. 鼠尾草品牌色</h2>
+      <div class="yr-color-grid yr-color-grid--brand">
+        <article class="yr-color-swatch"><div class="yr-color-swatch__sample yr-sample--brand-pale"></div><div class="yr-color-swatch__meta"><strong>極淺鼠尾草綠</strong><span>--yr-color-brand-pale</span></div></article>
+        <article class="yr-color-swatch"><div class="yr-color-swatch__sample yr-sample--brand-soft"></div><div class="yr-color-swatch__meta"><strong>淺鼠尾草綠</strong><span>--yr-color-brand-soft</span></div></article>
+        <article class="yr-color-swatch"><div class="yr-color-swatch__sample yr-sample--brand"></div><div class="yr-color-swatch__meta"><strong>品牌鼠尾草綠</strong><span>--yr-color-brand</span></div></article>
+        <article class="yr-color-swatch"><div class="yr-color-swatch__sample yr-sample--brand-strong"></div><div class="yr-color-swatch__meta"><strong>深鼠尾草綠</strong><span>--yr-color-brand-strong / --yr-color-brand-hover</span></div></article>
+      </div>
+    </section>
+
+    <section class="yr-section">
+      <h2 class="yr-section-title">C. 亞麻與中性色</h2>
+      <div class="yr-color-grid">
+        <article class="yr-color-swatch"><div class="yr-color-swatch__sample yr-sample--accent"></div><div class="yr-color-swatch__meta"><strong>亞麻米色</strong><span>--yr-color-accent</span></div></article>
+        <article class="yr-color-swatch"><div class="yr-color-swatch__sample yr-sample--border"></div><div class="yr-color-swatch__meta"><strong>邊框</strong><span>--yr-color-border</span></div></article>
+        <article class="yr-color-swatch"><div class="yr-color-swatch__sample yr-sample--text"></div><div class="yr-color-swatch__meta"><strong>主要文字</strong><span>--yr-color-text</span></div></article>
+        <article class="yr-color-swatch"><div class="yr-color-swatch__sample yr-sample--text-muted"></div><div class="yr-color-swatch__meta"><strong>次要文字</strong><span>--yr-color-text-muted / --yr-color-text-subtle</span></div></article>
+      </div>
+    </section>
+
+    <section class="yr-section">
+      <h2 class="yr-section-title">D. 狀態色</h2>
+      <div class="yr-color-grid">
+        <article class="yr-color-swatch"><div class="yr-color-swatch__sample yr-sample--success"></div><div class="yr-color-swatch__meta"><strong>Success</strong><span>--yr-color-success / --yr-color-success-soft</span></div></article>
+        <article class="yr-color-swatch"><div class="yr-color-swatch__sample yr-sample--warning"></div><div class="yr-color-swatch__meta"><strong>Warning</strong><span>--yr-color-warning / --yr-color-warning-soft</span></div></article>
+        <article class="yr-color-swatch"><div class="yr-color-swatch__sample yr-sample--danger"></div><div class="yr-color-swatch__meta"><strong>Danger</strong><span>--yr-color-danger / --yr-color-danger-soft</span></div></article>
+        <article class="yr-color-swatch"><div class="yr-color-swatch__sample yr-sample--info"></div><div class="yr-color-swatch__meta"><strong>Info</strong><span>--yr-color-info / --yr-color-info-soft</span></div></article>
+      </div>
+    </section>
+
+    <section class="yr-section">
+      <h2 class="yr-section-title">標題與內文字級</h2>
+      <div class="yr-stack">
+        <h1 class="yr-display-title">Display Title / 主要視覺標題</h1>
+        <h2 class="yr-heading-xl">Heading XL / 區塊主標題</h2>
+        <h3 class="yr-heading-lg">Heading LG / 次標題</h3>
+        <h4 class="yr-heading-md">Heading MD / 元件標題</h4>
+        <p class="yr-body-lg">Body Large / 用於導言與重要說明文字。</p>
+        <p class="yr-body-md">Body Medium / 一般內文展示，用於主要閱讀內容。</p>
+        <p class="yr-body-sm">Body Small / 用於備註、狀態說明與輔助資訊。</p>
+      </div>
+    </section>
+
+    <section class="yr-section">
+      <h2 class="yr-section-title">按鈕</h2>
+      <div class="yr-inline-group">
+        <button class="yr-btn yr-btn--primary" type="button">主要按鈕</button>
+        <button class="yr-btn yr-btn--secondary" type="button">次要按鈕</button>
+        <button class="yr-btn yr-btn--outline" type="button">外框按鈕</button>
+        <button class="yr-btn yr-btn--danger" type="button">危險操作按鈕</button>
+      </div>
+    </section>
+
+    <section class="yr-section">
+      <h2 class="yr-section-title">卡片</h2>
+      <div class="yr-card-grid">
+        <article class="yr-card">
+          <div class="yr-card__header"><h3 class="yr-heading-md">一般卡片</h3></div>
+          <div class="yr-card__body"><p class="yr-body-md">適合一般資訊模組、說明區塊與摘要內容。</p></div>
+          <div class="yr-card__footer"><button class="yr-btn yr-btn--outline" type="button">查看更多</button></div>
+        </article>
+
+        <article class="yr-card">
+          <div class="yr-card__media yr-card__media--product">商品圖示意</div>
+          <div class="yr-card__body">
+            <span class="yr-badge yr-badge--info">商品卡片</span>
+            <h3 class="yr-heading-md">Snow Peak 輕量露營桌</h3>
+            <p class="yr-body-sm">鋁合金桌板、折疊收納，適合兩到四人露營使用。</p>
+          </div>
+          <div class="yr-card__footer yr-card__footer--split">
+            <strong class="yr-price">NT$ 4,980</strong>
+            <button class="yr-btn yr-btn--primary" type="button">加入購物車</button>
+          </div>
+        </article>
+
+        <article class="yr-card">
+          <div class="yr-card__media yr-card__media--camp">營區圖示意</div>
+          <div class="yr-card__body">
+            <span class="yr-badge yr-badge--success">營區卡片</span>
+            <h3 class="yr-heading-md">松林野營基地</h3>
+            <p class="yr-body-sm">森林系營地、可容納家庭與小團體，附停車與淋浴設施。</p>
+          </div>
+          <div class="yr-card__footer yr-card__footer--split">
+            <strong class="yr-price">NT$ 2,600 / 晚</strong>
+            <button class="yr-btn yr-btn--secondary" type="button">查看營位</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="yr-section">
+      <h2 class="yr-section-title">表單元件</h2>
+      <div class="yr-form-grid">
+        <div class="yr-field">
+          <label class="yr-label" for="demo-input">表單輸入框</label>
+          <input class="yr-input" id="demo-input" type="text" placeholder="請輸入內容">
+        </div>
+        <div class="yr-field">
+          <label class="yr-label" for="demo-select">下拉選單</label>
+          <select class="yr-select" id="demo-select">
+            <option>請選擇項目</option>
+            <option>露營裝備</option>
+            <option>預約營區</option>
+            <option>會員服務</option>
+          </select>
+        </div>
+        <div class="yr-field yr-field--full">
+          <label class="yr-label" for="demo-textarea">文字區域</label>
+          <textarea class="yr-textarea" id="demo-textarea" placeholder="請輸入備註或需求"></textarea>
+        </div>
+        <div class="yr-field">
+          <span class="yr-label">Checkbox</span>
+          <label class="yr-checkbox"><input type="checkbox" checked> 我同意接收活動通知</label>
+          <label class="yr-checkbox"><input type="checkbox"> 我需要露營新手指南</label>
+        </div>
+        <div class="yr-field">
+          <span class="yr-label">Radio</span>
+          <label class="yr-radio"><input type="radio" name="demo-radio" checked> 宅配到府</label>
+          <label class="yr-radio"><input type="radio" name="demo-radio"> 門市自取</label>
+        </div>
+      </div>
+    </section>
+
+    <section class="yr-section">
+      <h2 class="yr-section-title">狀態標籤</h2>
+      <div class="yr-inline-group">
+        <span class="yr-badge yr-badge--success">成功</span>
+        <span class="yr-badge yr-badge--warning">待確認</span>
+        <span class="yr-badge yr-badge--danger">異常</span>
+        <span class="yr-badge yr-badge--info">進行中</span>
+      </div>
+    </section>
+
+    <section class="yr-section">
+      <h2 class="yr-section-title">提示訊息</h2>
+      <div class="yr-stack">
+        <div class="yr-alert yr-alert--success">成功：訂單已建立，系統已同步更新會員紀錄。</div>
+        <div class="yr-alert yr-alert--warning">提醒：目前僅為測試環境，不連動正式站資料。</div>
+        <div class="yr-alert yr-alert--danger">警示：危險操作前請再次確認。</div>
+        <div class="yr-alert yr-alert--info">資訊：設計元件僅引用獨立 tokens 與 components。</div>
+      </div>
+    </section>
+
+    <section class="yr-section">
+      <h2 class="yr-section-title">Modal 靜態展示</h2>
+      <div class="yr-modal-preview">
+        <div class="yr-modal-preview__dialog">
+          <div class="yr-card__header"><h3 class="yr-heading-md">範例 Modal</h3></div>
+          <div class="yr-card__body"><p class="yr-body-md">這是靜態預覽版本，用來確認 modal 的間距、層級、標題與操作按鈕樣式。</p></div>
+          <div class="yr-card__footer yr-card__footer--split">
+            <button class="yr-btn yr-btn--outline" type="button">取消</button>
+            <button class="yr-btn yr-btn--primary" type="button">確認</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="yr-section">
+      <h2 class="yr-section-title">間距與圓角展示</h2>
+      <div class="yr-demo-grid">
+        <div class="yr-demo-block">
+          <h3 class="yr-heading-md">間距</h3>
+          <div class="yr-space-stack">
+            <div class="yr-space-sample yr-space-sample--sm">SM</div>
+            <div class="yr-space-sample yr-space-sample--md">MD</div>
+            <div class="yr-space-sample yr-space-sample--lg">LG</div>
+            <div class="yr-space-sample yr-space-sample--xl">XL</div>
+          </div>
+        </div>
+        <div class="yr-demo-block">
+          <h3 class="yr-heading-md">圓角</h3>
+          <div class="yr-radius-grid">
+            <div class="yr-radius-sample yr-radius-sample--sm">SM</div>
+            <div class="yr-radius-sample yr-radius-sample--md">MD</div>
+            <div class="yr-radius-sample yr-radius-sample--lg">LG</div>
+            <div class="yr-radius-sample yr-radius-sample--pill">PILL</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="yr-section">
+      <h2 class="yr-section-title">Footer 展示</h2>
+      <footer class="yr-footer-demo" aria-label="Design system footer demo">
+        <div class="yr-footer-demo__grid">
+          <section class="yr-footer-demo__column">
+            <h3 class="yr-footer-demo__title">Yuruicamp</h3>
+            <p class="yr-body-md">以奶油白與鼠尾草綠鋪陳療癒的露營生活風景，保留日系選物感與穩定留白。</p>
+            <p class="yr-body-sm">從營地預約、風格選物到戶外靈感，讓每一次出發都更柔和而有秩序。</p>
+          </section>
+
+          <section class="yr-footer-demo__column">
+            <h3 class="yr-footer-demo__title">快速連結</h3>
+            <ul class="yr-footer-demo__list">
+              <li><a class="yr-footer-demo__link" href="#">首頁</a></li>
+              <li><a class="yr-footer-demo__link" href="#">營區預約</a></li>
+              <li><a class="yr-footer-demo__link" href="#">露營選物</a></li>
+              <li><a class="yr-footer-demo__link" href="#">品牌故事</a></li>
+            </ul>
+          </section>
+
+          <section class="yr-footer-demo__column">
+            <h3 class="yr-footer-demo__title">聯絡方式</h3>
+            <ul class="yr-footer-demo__list">
+              <li><a class="yr-footer-demo__link" href="tel:+886-2-2712-3456">+886 2 2712 3456</a></li>
+              <li><a class="yr-footer-demo__link" href="mailto:hello@yuruicamp.tw">hello@yuruicamp.tw</a></li>
+              <li><span class="yr-footer-demo__text">台北市松山區晨光路 18 號</span></li>
+              <li><span class="yr-footer-demo__text">Mon - Fri 10:00 - 18:00</span></li>
+            </ul>
+          </section>
+
+          <section class="yr-footer-demo__column">
+            <h3 class="yr-footer-demo__title">社群媒體</h3>
+            <div class="yr-footer-demo__socials" aria-label="Social media links">
+              <a class="yr-footer-demo__social" href="#" aria-label="Facebook">
+                <i class="bi bi-facebook" aria-hidden="true"></i>
+              </a>
+              <a class="yr-footer-demo__social" href="#" aria-label="Instagram">
+                <i class="bi bi-instagram" aria-hidden="true"></i>
+              </a>
+              <a class="yr-footer-demo__social" href="#" aria-label="LINE">
+                <i class="bi bi-line" aria-hidden="true"></i>
+              </a>
+            </div>
+            <p class="yr-body-sm">以一致的低飽和色調維持穩定品牌感，不使用平台原生高彩度色彩。</p>
+          </section>
+        </div>
+
+        <div class="yr-footer-demo__bottom">
+          <p class="yr-footer-demo__copyright">© 2026 Yuruicamp. All rights reserved.</p>
+          <div class="yr-footer-demo__policies">
+            <a class="yr-footer-demo__link" href="#">隱私政策</a>
+            <a class="yr-footer-demo__link" href="#">使用條款</a>
+            <a class="yr-footer-demo__link" href="#">退換貨政策</a>
+          </div>
+        </div>
+      </footer>
+    </section>
+  </div>
+</body>
+</html>

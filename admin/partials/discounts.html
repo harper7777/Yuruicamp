@@ -4,8 +4,14 @@
      折扣券生成邏輯與列表渲染由 discounts.js 處理
 -->
 
+<section class="yr-admin-discounts-module">
 <!-- ===== 新增優惠券操作區 ===== -->
 <div class="card shadow-sm border-0 mb-4">
+  <div class="card-header bg-white border-0 py-3">
+    <h6 class="fw-semibold mb-0" style="color: var(--admin-brand-accent);">
+      <i class="fas fa-plus-circle me-2"></i>新增優惠券
+    </h6>
+  </div>
   <div class="card-body">
     <div class="row g-3 align-items-end" id="addCouponForm">
 
@@ -95,7 +101,7 @@
   </div>
   <div class="card-body p-0">
     <div class="table-responsive">
-      <table class="table table-hover mb-0 admin-data-table">
+      <table class="table table-hover mb-0">
         <thead class="table-light">
           <tr>
             <th>折扣碼</th>
@@ -123,3 +129,4 @@
     </div>
   </div>
 </div><!-- end card -->
+</section>

@@ -18,13 +18,15 @@
   var DATA_PATHS = {
     users: joinPath(config.dataBasePath, 'users.json'),
     orders: joinPath(config.dataBasePath, 'orders.json'),
-    rentalOrders: joinPath(config.dataBasePath, 'rentalOrders.json')
+    rentalOrders: joinPath(config.dataBasePath, 'rentalOrders.json'),
+    products: joinPath(config.dataBasePath, 'products.json')
   };
 
   var REWARD_POINT_RATE = 0.1;
   var REVIEW_STORAGE_KEY = 'member_center_reviews';
   var MOCK_ORDERS_STORAGE_KEY = 'mockOrders';
   var MOCK_USER_POINT_DELTAS_STORAGE_KEY = 'mockUserPointDeltas';
+  var DEFAULT_PRODUCT_IMAGE_FALLBACK = '../assets/images/products/prod-001/main.webp';
 
   var state = {
     root: null,
@@ -32,6 +34,9 @@
     user: null,
     users: [],
     orders: [],
+    products: [],
+    productsById: new Map(),
+    productImageFallback: '',
     rentalOrders: [],
     activeFilters: {
       purchase: 'all',
@@ -102,6 +107,67 @@
     } catch (error) {
       return fallback;
     }
+  }
+
+  function normalizeIdentifier(value) {
+    if (value == null) return '';
+    return String(value).trim();
+  }
+
+  function resolveDataAssetPath(path) {
+    var value = normalizeIdentifier(path);
+    if (!value) return '';
+    if (/^(?:https?:)?\/\//i.test(value) || value.indexOf('data:') === 0 || value.indexOf('blob:') === 0) {
+      return value;
+    }
+    if (value.charAt(0) === '/') return value;
+
+    try {
+      var dataBaseUrl = new URL(joinPath(config.dataBasePath || '../data', ''), window.location.href);
+      var resolved = new URL(value, dataBaseUrl);
+      return resolved.pathname + resolved.search + resolved.hash;
+    } catch (_error) {
+      return value;
+    }
+  }
+
+  function getItemProductId(item) {
+    if (!item || typeof item !== 'object') return '';
+    return normalizeIdentifier(item.productId || item.id || item.product_id);
+  }
+
+  function getProductPrimaryImage(product) {
+    if (!product || typeof product !== 'object') return '';
+    var image = normalizeIdentifier(product.image || product.imageUrl || product.thumbnail);
+    if (!image && Array.isArray(product.images) && product.images.length > 0) {
+      image = normalizeIdentifier(product.images[0]);
+    }
+    return resolveDataAssetPath(image);
+  }
+
+  function buildProductsById(products) {
+    return (Array.isArray(products) ? products : []).reduce(function (map, product) {
+      var productId = normalizeIdentifier(product && (product.id || product.productId || product.product_id));
+      if (productId) map.set(productId, product);
+      return map;
+    }, new Map());
+  }
+
+  function getOrderImageFallback() {
+    if (state.productImageFallback) return state.productImageFallback;
+
+    var firstCatalogImage = getProductPrimaryImage(state.products[0]);
+    state.productImageFallback = firstCatalogImage || resolveDataAssetPath(DEFAULT_PRODUCT_IMAGE_FALLBACK);
+    return state.productImageFallback;
+  }
+
+  function resolveOrderItemImage(item) {
+    var productId = getItemProductId(item);
+    var product = productId ? state.productsById.get(productId) : null;
+    var latestProductImage = getProductPrimaryImage(product);
+    var snapshotImage = resolveDataAssetPath(item && item.image);
+
+    return latestProductImage || snapshotImage || getOrderImageFallback();
   }
 
   /** 重點：安全讀取 localStorage 陣列，避免 checkout 暫存資料壞掉時影響會員中心。 */
@@ -417,12 +483,13 @@
   function buildThumbsHtml(items) {
     var safeItems = Array.isArray(items) ? items : [];
     if (safeItems.length === 0) return '';
+    var fallbackImage = getOrderImageFallback();
 
     return '<div class="rec-item__thumbs">'
       + safeItems.slice(0, 3).map(function (item) {
-        var image = item.image || 'https://picsum.photos/seed/fallback/80/80';
+        var image = resolveOrderItemImage(item);
         return '<img src="' + escapeHtml(image) + '" alt="' + escapeHtml(item.name || '商品') + '" class="rec-item__thumb"'
-          + ' onerror="this.src=\'https://picsum.photos/seed/fallback/80/80\'">';
+          + ' onerror="this.onerror=null; this.src=\'' + escapeHtml(fallbackImage) + '\'">';
       }).join('')
       + (safeItems.length > 3 ? '<span class="rec-item__more">+' + (safeItems.length - 3) + '</span>' : '')
       + '</div>';
@@ -581,12 +648,14 @@
     if (!order) return;
 
     var status = getStatusInfo(order.status);
+    var fallbackImage = getOrderImageFallback();
     var itemsHtml = (order.items || []).map(function (item) {
       var quantity = Number(item.quantity || 0);
       var subtotal = Number(item.price || 0) * quantity;
+      var image = resolveOrderItemImage(item);
       return '<div class="bk-order-item-row">'
-        + '<img src="' + escapeHtml(item.image || 'https://picsum.photos/seed/fallback/80/80') + '" alt="' + escapeHtml(item.name || '商品') + '" class="bk-order-item-img"'
-        + ' onerror="this.src=\'https://picsum.photos/seed/fallback/80/80\'">'
+        + '<img src="' + escapeHtml(image) + '" alt="' + escapeHtml(item.name || '商品') + '" class="bk-order-item-img"'
+        + ' onerror="this.onerror=null; this.src=\'' + escapeHtml(fallbackImage) + '\'">'
         + '<div>'
         + '<div class="bk-order-item-name">' + escapeHtml(item.name || '未命名商品') + '</div>'
         + '<div class="bk-order-item-qty">x ' + quantity + '，' + formatMoney(subtotal) + '</div>'
@@ -624,12 +693,14 @@
     if (!order) return;
 
     var status = getRentalStatusInfo(order.status);
+    var fallbackImage = getOrderImageFallback();
     var itemsHtml = (order.items || []).map(function (item) {
       var quantity = Number(item.quantity || 0);
       var subtotal = Number(item.price || 0) * quantity;
+      var image = resolveOrderItemImage(item);
       return '<div class="bk-order-item-row">'
-        + '<img src="' + escapeHtml(item.image || 'https://picsum.photos/seed/fallback/80/80') + '" alt="' + escapeHtml(item.name || '商品') + '" class="bk-order-item-img"'
-        + ' onerror="this.src=\'https://picsum.photos/seed/fallback/80/80\'">'
+        + '<img src="' + escapeHtml(image) + '" alt="' + escapeHtml(item.name || '商品') + '" class="bk-order-item-img"'
+        + ' onerror="this.onerror=null; this.src=\'' + escapeHtml(fallbackImage) + '\'">'
         + '<div>'
         + '<div class="bk-order-item-name">' + escapeHtml(item.name || '未命名租借品') + '</div>'
         + '<div class="bk-order-item-qty">x ' + quantity + '，' + formatMoney(subtotal) + '</div>'
@@ -1382,12 +1453,16 @@
     var results = await Promise.all([
       fetchJson(DATA_PATHS.users, []),
       fetchJson(DATA_PATHS.orders, []),
-      fetchJson(DATA_PATHS.rentalOrders, [])
+      fetchJson(DATA_PATHS.rentalOrders, []),
+      fetchJson(DATA_PATHS.products, [])
     ]);
     var memberId = getCurrentMemberId();
 
     state.users = applyUserPointDeltas(results[0]);
     state.user = selectUser(state.users);
+    state.products = Array.isArray(results[3]) ? results[3] : [];
+    state.productsById = buildProductsById(state.products);
+    state.productImageFallback = '';
     state.orders = mergeOrders(results[1], readStorageArray(MOCK_ORDERS_STORAGE_KEY)).filter(function (order) {
       return !order.userId || order.userId === memberId || (state.user && order.userId === state.user.id);
     });

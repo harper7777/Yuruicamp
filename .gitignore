@@ -1,12 +1,11 @@
-# Git 忽略文件
-# Yuruicamp 專案
-
-# 依賴相關
+﻿# Dependencies
 node_modules/
-package-lock.json
-yarn.lock
 
-# IDE 相關
+# Package manager
+# Commit package-lock.json when using npm.
+# Commit yarn.lock when using Yarn.
+
+# IDE and operating system files
 .vscode/
 .idea/
 *.swp
@@ -15,34 +14,31 @@ yarn.lock
 .DS_Store
 Thumbs.db
 
-# 構建輸出
+# Build output
 dist/
 build/
 .cache/
 
-# 日誌文件
+# Logs
 *.log
 logs/
 
-# 環境變量
+# Environment variables
 .env
 .env.local
 .env.*.local
 
-# 臨時文件
+# Temporary files
 *.tmp
 temp/
 
-# 壓縮文件
+# Archives
 *.zip
 *.rar
 *.7z
 
-# 編譯產物
-*.css（若使用自動編譯 SCSS）
-# 保留 main.css 用於生產環境
-!css/main.css
-
-# 影片檔案
+# Large local video not stored in Git
 assets/videos/hero_video.mp4
+
+# Local test directory
 YuruicampTest/

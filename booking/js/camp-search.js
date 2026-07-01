@@ -126,6 +126,10 @@ function renderCampCards(camps) {
       .map(t => `<span class="tag tag--facility">${t}</span>`)
       .join('');
 
+    const imageSrc =
+      camp.image ||
+      `../../assets/images/camps/${camp.campground_id}/main.webp`;
+
     // 建立卡片 HTML / Build card HTML
     const cardHTML = `
       <div class="camp-card"
@@ -135,9 +139,10 @@ function renderCampCards(camps) {
            data-facility="${camp.facility_tags.join(',')}">
 
         <div class="camp-card__image">
-          <img src="https://picsum.photos/seed/${camp.campground_id}/400/250"
+          <img src="${imageSrc}"
                alt="${camp.name}"
-               loading="lazy">
+               loading="lazy"
+               decoding="async">
           <span class="camp-card__badge">${camp.region}</span>
         </div>
 
